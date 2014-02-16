@@ -2,6 +2,7 @@ package ch.bfh.fbi.mobiComp.tinkerforge.tutorial.step03;
 
 import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
+import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 
 import com.tinkerforge.BrickMaster;
 import com.tinkerforge.BrickMaster.StackCurrentListener;
@@ -11,6 +12,12 @@ import com.tinkerforge.Device;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
 
+/**
+ * This example shows how to really access data from the {@link TinkerforgeDevice}s:<br/>
+ * Listensers! 
+ * @author reto
+ *
+ */
 public class MasterBrickApplication extends AbstractTinkerforgeApplication {
 
 	@Override

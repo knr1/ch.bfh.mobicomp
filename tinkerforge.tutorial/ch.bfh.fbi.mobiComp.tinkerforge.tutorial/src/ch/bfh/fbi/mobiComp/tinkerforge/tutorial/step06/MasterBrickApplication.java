@@ -1,6 +1,7 @@
 package ch.bfh.fbi.mobiComp.tinkerforge.tutorial.step06;
 
 import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgent;
+import ch.quantasy.tinkerforge.tinker.application.definition.TinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 
 import com.tinkerforge.BrickMaster;
@@ -11,6 +12,10 @@ import com.tinkerforge.Device;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
 
+/**
+ * @author reto
+ *
+ */
 public class MasterBrickApplication extends AbstractTinkerforgeApplication {
 	private final MasterListener masterListener;
 

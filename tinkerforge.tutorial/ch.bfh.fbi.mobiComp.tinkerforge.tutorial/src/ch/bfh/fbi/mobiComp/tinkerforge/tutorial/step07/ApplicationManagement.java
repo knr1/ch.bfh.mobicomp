@@ -2,9 +2,19 @@ package ch.bfh.fbi.mobiComp.tinkerforge.tutorial.step07;
 
 import java.io.IOException;
 
+import com.tinkerforge.Device;
+
 import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgentIdentifier;
 import ch.quantasy.tinkerforge.tinker.application.definition.TinkerforgeApplication;
-
+/**
+ * This example demonstrates that the designer of a tinkerforge setting is completely free
+ * in separating the different {@link Device}s. Here Two stacks are managed by {@link TheApplication}.
+ * If there are devices found (throughout the different stacks) that are used by the {@link TinkerforgeApplication}s,
+ * they will be used. No matter where they are.
+ * 
+ * @author reto
+ *
+ */
 public class ApplicationManagement {
 	public static void main(final String[] args) throws IOException,
 			InterruptedException {

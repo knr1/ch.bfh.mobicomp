@@ -2,9 +2,21 @@ package ch.bfh.fbi.mobiComp.tinkerforge.tutorial.step05;
 
 import java.io.IOException;
 
+import com.tinkerforge.BrickMaster;
+import com.tinkerforge.Device;
+
 import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgentIdentifier;
 import ch.quantasy.tinkerforge.tinker.application.definition.TinkerforgeApplication;
 
+/**
+ * This shows how to separate the different {@link Device}-logics. It is very important that you...<br/>
+ * Keep It Simple and Small -> KISS
+ * <br/>
+ * This example shows that one can simply switch the address to the {@link BrickMaster}. It does not care where
+ * the {@link Device} is located!
+ * @author reto
+ *
+ */
 public class ApplicationManagement {
 	public static void main(final String[] args) throws IOException,
 			InterruptedException {
