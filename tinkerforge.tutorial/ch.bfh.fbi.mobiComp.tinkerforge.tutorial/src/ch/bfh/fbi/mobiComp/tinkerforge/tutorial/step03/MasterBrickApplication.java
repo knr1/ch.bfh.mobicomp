@@ -13,10 +13,12 @@ import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
 
 /**
- * This example shows how to really access data from the {@link TinkerforgeDevice}s:<br/>
- * Listensers! 
+ * This example shows how to really access data from the
+ * {@link TinkerforgeDevice}s:<br/>
+ * Listensers!
+ * 
  * @author reto
- *
+ * 
  */
 public class MasterBrickApplication extends AbstractTinkerforgeApplication {
 

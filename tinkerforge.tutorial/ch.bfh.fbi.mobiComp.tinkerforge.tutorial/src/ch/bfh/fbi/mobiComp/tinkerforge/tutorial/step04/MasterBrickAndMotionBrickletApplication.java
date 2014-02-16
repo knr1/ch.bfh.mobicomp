@@ -15,11 +15,12 @@ import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
 
 /**
- * This shows how to be interested in different {@link Device}s...
- * Here, the {@link BrickletMotionDetector} is taken into consideration... if any is available.
+ * This shows how to be interested in different {@link Device}s... Here, the
+ * {@link BrickletMotionDetector} is taken into consideration... if any is
+ * available.
  * 
  * @author reto
- *
+ * 
  */
 public class MasterBrickAndMotionBrickletApplication extends
 		AbstractTinkerforgeApplication {
