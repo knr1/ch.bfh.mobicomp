@@ -31,7 +31,6 @@ public class LightApplication extends AbstractTinkerforgeApplication implements
 	private final char HOUSE_CODE = 'A';
 	private final short LEFT = 3;
 	private final short RIGHT = 1;
-	
 
 	private long delayInMilliseconds = 1000 * 60 * 2;
 
@@ -41,7 +40,7 @@ public class LightApplication extends AbstractTinkerforgeApplication implements
 	private final AmbientLightApplication ambientLightApplication;
 
 	private boolean isAmbientDark;
-	
+
 	private boolean leftState;
 	private boolean leftMotionInduced;
 
@@ -58,69 +57,74 @@ public class LightApplication extends AbstractTinkerforgeApplication implements
 	 */
 	public LightApplication() {
 
-		timer = new Timer(true);
+		this.timer = new Timer(true);
 		this.concurrentRemoteSwitchApplication = new ConcurrentRemoteSwitchApplication();
 		this.dualButtonApplication = new DualButtonApplication(this);
 		this.motionDetectionApplication = new MotionDetectionApplication(this);
-		this.ambientLightApplication=new AmbientLightApplication(this);
-		super.addTinkerforgeApplication(this.concurrentRemoteSwitchApplication,dualButtonApplication,
-				motionDetectionApplication,ambientLightApplication);
+		this.ambientLightApplication = new AmbientLightApplication(this);
+		super.addTinkerforgeApplication(this.concurrentRemoteSwitchApplication,
+				this.dualButtonApplication, this.motionDetectionApplication,
+				this.ambientLightApplication);
 
 	}
 
 	@Override
-	public void deviceDisconnected(TinkerforgeStackAgent stackAgent,
-			Device device) {
+	public void deviceDisconnected(final TinkerforgeStackAgent stackAgent,
+			final Device device) {
 	}
 
 	@Override
-	public void deviceConnected(TinkerforgeStackAgent satckAgent, Device device) {
+	public void deviceConnected(final TinkerforgeStackAgent satckAgent,
+			final Device device) {
 		if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.Master) {
 			try {
-				BrickMaster master = ((BrickMaster) device);
-				if (master.isWifiPresent())
+				final BrickMaster master = ((BrickMaster) device);
+				if (master.isWifiPresent()) {
 					master.setWifiPowerMode(BrickMaster.WIFI_POWER_MODE_LOW_POWER);
-			} catch (Exception e) {
+				}
+			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	public void setAmbientDarkState(boolean isAmbientDark){
-		this.isAmbientDark=isAmbientDark;
-		System.out.println("Is it dark?: "+this.isAmbientDark);
+	public void setAmbientDarkState(final boolean isAmbientDark) {
+		this.isAmbientDark = isAmbientDark;
+		System.out.println("Is it dark?: " + this.isAmbientDark);
 	}
-	public boolean isAmbientDark(){
-		return isAmbientDark;
+
+	public boolean isAmbientDark() {
+		return this.isAmbientDark;
 	}
-	public void setDelayInMilliseconds(long delay) {
+
+	public void setDelayInMilliseconds(final long delay) {
 		this.delayInMilliseconds = delay;
 	}
 
 	public long getDelayInMilliseconds() {
-		return delayInMilliseconds;
+		return this.delayInMilliseconds;
 	}
 
-	public void setLeftState(boolean switchState) {
+	public void setLeftState(final boolean switchState) {
 		this.leftState = switchState;
-		cancelTimerTaskLeft();
-		short switchRequest = switchState ? BrickletRemoteSwitch.SWITCH_TO_ON
+		this.cancelTimerTaskLeft();
+		final short switchRequest = switchState ? BrickletRemoteSwitch.SWITCH_TO_ON
 				: BrickletRemoteSwitch.SWITCH_TO_OFF;
-		concurrentRemoteSwitchApplication.setRemoteSwitchSocketC(HOUSE_CODE,
-				LEFT, switchRequest);
+		this.concurrentRemoteSwitchApplication.setRemoteSwitchSocketC(
+				this.HOUSE_CODE, this.LEFT, switchRequest);
 
-		dualButtonApplication.setLeftLEDState(!switchState);
+		this.dualButtonApplication.setLeftLEDState(!switchState);
 	}
 
-	public void setRightState(boolean switchState) {
+	public void setRightState(final boolean switchState) {
 		this.rightState = switchState;
-		cancelTimerTaskRight();
-		short switchRequest = switchState ? BrickletRemoteSwitch.SWITCH_TO_ON
+		this.cancelTimerTaskRight();
+		final short switchRequest = switchState ? BrickletRemoteSwitch.SWITCH_TO_ON
 				: BrickletRemoteSwitch.SWITCH_TO_OFF;
-		concurrentRemoteSwitchApplication.setRemoteSwitchSocketC(HOUSE_CODE,
-				RIGHT, switchRequest);
+		this.concurrentRemoteSwitchApplication.setRemoteSwitchSocketC(
+				this.HOUSE_CODE, this.RIGHT, switchRequest);
 
-		dualButtonApplication.setRightLEDState(!switchState);
+		this.dualButtonApplication.setRightLEDState(!switchState);
 	}
 
 	public boolean getLeftState() {
@@ -133,98 +137,102 @@ public class LightApplication extends AbstractTinkerforgeApplication implements
 	}
 
 	public void initiateTimer() {
-		if (leftMotionInduced)
-			initiateTimerLeft();
-		if (rightMotionInduced)
-			initiateTimerRight();
+		if (this.leftMotionInduced) {
+			this.initiateTimerLeft();
+		}
+		if (this.rightMotionInduced) {
+			this.initiateTimerRight();
+		}
 	}
 
 	public void motionDetected() {
-		if(!isAmbientDark && timerTaskLeft==null && timerTaskRight==null)
+		if (!this.isAmbientDark && (this.timerTaskLeft == null)
+				&& (this.timerTaskRight == null)) {
 			return;
-		if (!getLeftState()) {
-			setLeftState(true);
-			leftMotionInduced = true;
+		}
+		if (!this.getLeftState()) {
+			this.setLeftState(true);
+			this.leftMotionInduced = true;
 
 		} else {
-			if (leftMotionInduced) {
-				cancelTimerTaskLeft();
-				leftMotionInduced = true;
+			if (this.leftMotionInduced) {
+				this.cancelTimerTaskLeft();
+				this.leftMotionInduced = true;
 			}
 		}
 
-		if (!getRightState()) {
-			setRightState(true);
-			rightMotionInduced = true;
+		if (!this.getRightState()) {
+			this.setRightState(true);
+			this.rightMotionInduced = true;
 		} else {
-			if (rightMotionInduced) {
-				cancelTimerTaskRight();
-				rightMotionInduced = true;
+			if (this.rightMotionInduced) {
+				this.cancelTimerTaskRight();
+				this.rightMotionInduced = true;
 			}
 		}
 	}
 
 	private synchronized void cancelTimerTaskLeft() {
-		leftMotionInduced = false;
-		if (timerTaskLeft == null) {
+		this.leftMotionInduced = false;
+		if (this.timerTaskLeft == null) {
 			return;
 		}
 		System.out.println("Task left cancelled");
-		timerTaskLeft.cancel();
-		timer.purge();
-		timerTaskLeft = null;
+		this.timerTaskLeft.cancel();
+		this.timer.purge();
+		this.timerTaskLeft = null;
 
 	}
 
 	private synchronized void cancelTimerTaskRight() {
-		rightMotionInduced = false;
-		if (timerTaskRight == null) {
+		this.rightMotionInduced = false;
+		if (this.timerTaskRight == null) {
 			return;
 		}
 		System.out.println("Task right cancelled");
-		timerTaskRight.cancel();
-		timer.purge();
-		timerTaskRight = null;
+		this.timerTaskRight.cancel();
+		this.timer.purge();
+		this.timerTaskRight = null;
 
 	}
 
 	private synchronized void initiateTimerLeft() {
-		if (timerTaskLeft != null) {
+		if (this.timerTaskLeft != null) {
 			return;
 		}
 		System.out.println("Task left initiated");
-		timerTaskLeft = new DelayedSwitchOffTaskLeft();
-		timer.schedule(timerTaskLeft, delayInMilliseconds);
+		this.timerTaskLeft = new DelayedSwitchOffTaskLeft();
+		this.timer.schedule(this.timerTaskLeft, this.delayInMilliseconds);
 	}
 
 	private synchronized void initiateTimerRight() {
-		if (timerTaskRight != null) {
+		if (this.timerTaskRight != null) {
 			return;
 		}
 		System.out.println("Task right initiated");
-		timerTaskRight = new DelayedSwitchOffTaskRight();
-		timer.schedule(timerTaskRight, delayInMilliseconds);
+		this.timerTaskRight = new DelayedSwitchOffTaskRight();
+		this.timer.schedule(this.timerTaskRight, this.delayInMilliseconds);
 	}
 
 	class DelayedSwitchOffTaskLeft extends TimerTask {
 		@Override
 		public void run() {
-			setLeftState(false);
+			LightApplication.this.setLeftState(false);
 		}
 	}
 
 	class DelayedSwitchOffTaskRight extends TimerTask {
 		@Override
 		public void run() {
-			setRightState(false);
+			LightApplication.this.setRightState(false);
 		}
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		return this==obj;
+	public boolean equals(final Object obj) {
+		return this == obj;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return 0;
