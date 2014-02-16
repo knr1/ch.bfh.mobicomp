@@ -1,7 +1,5 @@
 package ch.quantasy.tinkerforge.tinker.application.definition;
 
-import java.util.Stack;
-
 import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgentIdentifier;
 
@@ -101,15 +99,17 @@ public interface TinkerforgeApplication {
 	public void removeTinkerforgeApplication(TinkerforgeApplication... application);
 
 	/**
-	 * Called prior to the {@link TinkerforgeStackAgent} removal. It is the last chance to act on the connected
-	 * {@link TinkerforgeStackAgent}
+	 * Called prior to the {@link TinkerforgeStackAgent} removal. It is the last
+	 * chance to act on the connected {@link TinkerforgeStackAgent}
+	 * 
 	 * @param tinkerforgeStackAgent
 	 */
 	public void stackAgentIsDisconnecting(TinkerforgeStackAgent tinkerforgeStackAgent);
 
-	
 	/**
-	 * Called prior to the {@link Device} removal. It is the last chance to act on the connected {@link Device}
+	 * Called prior to the {@link Device} removal. It is the last chance to act on
+	 * the connected {@link Device}
+	 * 
 	 * @param tinkerforgeStackAgent
 	 * @param device
 	 */

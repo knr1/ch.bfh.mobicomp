@@ -48,8 +48,6 @@ import com.tinkerforge.BrickletVoltage;
 import com.tinkerforge.BrickletVoltageCurrent;
 import com.tinkerforge.Device;
 import com.tinkerforge.Device.Identity;
-import com.tinkerforge.NotConnectedException;
-import com.tinkerforge.TimeoutException;
 
 /**
  * This enum is used as a convenience to map the Tinker-Bricks and
@@ -60,7 +58,7 @@ import com.tinkerforge.TimeoutException;
  * 
  */
 public enum TinkerforgeDevice {
-		DC (BrickDC.class) , IMU (BrickIMU.class) , Master (BrickMaster.class) , Servo (BrickServo.class) , Stepper (
+	DC (BrickDC.class) , IMU (BrickIMU.class) , Master (BrickMaster.class) , Servo (BrickServo.class) , Stepper (
 			BrickStepper.class) ,
 
 	AmbientLight (BrickletAmbientLight.class) , AnalogIn (BrickletAnalogIn.class) , AnalogOut (BrickletAnalogOut.class) , Barometer (
@@ -82,71 +80,77 @@ public enum TinkerforgeDevice {
 	public final int identifier;
 	public final Class<?> device;
 
-	private TinkerforgeDevice(Class<?> device) {
-		if (device == null)
+	private TinkerforgeDevice(final Class<?> device) {
+		if (device == null) {
 			throw new IllegalArgumentException();
+		}
 		this.device = device;
 		int internalIdentifier = -1;
 		try {
 			internalIdentifier = device.getField("DEVICE_IDENTIFIER").getInt(null);
-		} catch (Exception e) {
-			//No identifier
+		} catch (final Exception e) {
+			// No identifier
 		}
 		this.identifier = internalIdentifier;
 	}
-	
-	public static String toString(Device device) {
+
+	public static String toString(final Device device) {
 		try {
 			return device.getIdentity().toString();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return device.toString();
 		}
 	}
-	
-	public static boolean areEqual(Device device1, Device device2){
-		Identity id1=null;
-		Identity id2=null;
+
+	public static boolean areEqual(final Device device1, final Device device2) {
+		Identity id1 = null;
+		Identity id2 = null;
 		try {
-			 id1=device1.getIdentity();
-		} catch (Exception ex) {
-			
+			id1 = device1.getIdentity();
+		} catch (final Exception ex) {
+
 		}
 		try {
-			id2=device2.getIdentity();
-		} catch (Exception ex) {
-			
+			id2 = device2.getIdentity();
+		} catch (final Exception ex) {
+
 		}
-		if(id1==null && id2==null){
-			return getDevice(device1)==getDevice(device2);
+		if ((id1 == null) && (id2 == null)) {
+			return TinkerforgeDevice.getDevice(device1) == TinkerforgeDevice.getDevice(device2);
 		}
-		if(id1==null || id2==null)
-		{
+		if ((id1 == null) || (id2 == null)) {
 			return false;
 		}
-		if(!id1.uid.equals(id2.uid))
+		if (!id1.uid.equals(id2.uid)) {
 			return false;
-		if(!id1.connectedUid.equals(id2.connectedUid))
+		}
+		if (!id1.connectedUid.equals(id2.connectedUid)) {
 			return false;
-		if(id1.position!=id2.position)
+		}
+		if (id1.position != id2.position) {
 			return false;
+		}
 		return true;
 	}
 
-	public static TinkerforgeDevice getDevice(Device device) {
-		if (device == null)
+	public static TinkerforgeDevice getDevice(final Device device) {
+		if (device == null) {
 			throw new IllegalArgumentException();
-		Class deviceClass = device.getClass();
-		for (TinkerforgeDevice tinkerforgeDevice : TinkerforgeDevice.values()) {
-			if (deviceClass == tinkerforgeDevice.device)
+		}
+		final Class<? extends Device> deviceClass = device.getClass();
+		for (final TinkerforgeDevice tinkerforgeDevice : TinkerforgeDevice.values()) {
+			if (deviceClass == tinkerforgeDevice.device) {
 				return tinkerforgeDevice;
+			}
 		}
 		return null;
 	}
 
-	public static TinkerforgeDevice getDevice(int deviceIdentifier) {
-		for (TinkerforgeDevice tinkerforgeDevice : TinkerforgeDevice.values()) {
-			if (deviceIdentifier == tinkerforgeDevice.identifier)
+	public static TinkerforgeDevice getDevice(final int deviceIdentifier) {
+		for (final TinkerforgeDevice tinkerforgeDevice : TinkerforgeDevice.values()) {
+			if (deviceIdentifier == tinkerforgeDevice.identifier) {
 				return tinkerforgeDevice;
+			}
 		}
 		return null;
 	}

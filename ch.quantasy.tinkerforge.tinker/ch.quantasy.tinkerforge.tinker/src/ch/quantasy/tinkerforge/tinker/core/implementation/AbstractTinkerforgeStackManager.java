@@ -40,8 +40,8 @@ public abstract class AbstractTinkerforgeStackManager {
 	 * 
 	 * @param host
 	 */
-	public AbstractTinkerforgeStackManager(String host) {
-		this(host, DEFAULT_PORT);
+	public AbstractTinkerforgeStackManager(final String host) {
+		this(host, AbstractTinkerforgeStackManager.DEFAULT_PORT);
 	}
 
 	/**
@@ -51,15 +51,16 @@ public abstract class AbstractTinkerforgeStackManager {
 	 * @param host
 	 * @param port
 	 */
-	public AbstractTinkerforgeStackManager(String host, int port) {
-		if (host == null || port < 0)
+	public AbstractTinkerforgeStackManager(final String host, final int port) {
+		if ((host == null) || (port < 0)) {
 			throw new IllegalArgumentException();
+		}
 		this.deviceMap = new HashMap<String, Device>();
 		this.host = host;
 		this.port = port;
 		this.ipConnection = new IPConnection();
-		this.ipConnectionHandler = new IPConnectionHandler(ipConnection);
-		this.deviceEnumerationHandler = new DeviceEnumerationHandler(ipConnection);
+		this.ipConnectionHandler = new IPConnectionHandler(this.ipConnection);
+		this.deviceEnumerationHandler = new DeviceEnumerationHandler(this.ipConnection);
 	}
 
 	/**
@@ -71,11 +72,11 @@ public abstract class AbstractTinkerforgeStackManager {
 	 */
 	protected void connect() throws UnknownHostException, IOException {
 		try {
-			this.ipConnection.connect(host, port);
+			this.ipConnection.connect(this.host, this.port);
 			Thread.sleep(3000);
-		} catch (AlreadyConnectedException e) {
+		} catch (final AlreadyConnectedException e) {
 			// So what
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			// OK, we go on
 		}
 	}
@@ -86,12 +87,14 @@ public abstract class AbstractTinkerforgeStackManager {
 	protected void disconnect() {
 		try {
 			this.ipConnection.disconnect();
-		} catch (NotConnectedException e) {
+		} catch (final NotConnectedException e) {
 			// So what
 		}
 	}
-	public boolean isConnected(){
-		return this.ipConnection!=null && this.ipConnection.getConnectionState()==IPConnection.CONNECTION_STATE_CONNECTED;
+
+	public boolean isConnected() {
+		return (this.ipConnection != null)
+				&& (this.ipConnection.getConnectionState() == IPConnection.CONNECTION_STATE_CONNECTED);
 	}
 
 	/**
@@ -128,13 +131,14 @@ public abstract class AbstractTinkerforgeStackManager {
 	 */
 	protected abstract void deviceDisconnected(Device device);
 
-	public boolean isConnected(Device device) {
-		if (device == null)
+	public boolean isConnected(final Device device) {
+		if (device == null) {
 			throw new IllegalArgumentException();
+		}
 		try {
 			device.getIdentity();
 			return true;
-		} catch (TinkerforgeException e) {
+		} catch (final TinkerforgeException e) {
 			e.printStackTrace();
 		}
 		return false;
@@ -146,31 +150,31 @@ public abstract class AbstractTinkerforgeStackManager {
 	 * @return
 	 */
 	public List<Device> getConnectedDeviceList() {
-		return new ArrayList<Device>(deviceMap.values());
+		return new ArrayList<Device>(this.deviceMap.values());
 	}
 
 	private class IPConnectionHandler implements ConnectedListener, DisconnectedListener {
-		private IPConnection connection;
+		private final IPConnection connection;
 
-		public IPConnectionHandler(IPConnection connection) {
+		public IPConnectionHandler(final IPConnection connection) {
 			this.connection = connection;
 			connection.addConnectedListener(this);
 			connection.addDisconnectedListener(this);
 		}
 
 		@Override
-		public void disconnected(short disconnectReason) {
+		public void disconnected(final short disconnectReason) {
 			System.out.println(disconnectReason);
 			AbstractTinkerforgeStackManager.this.disconnected();
 
 		}
 
 		@Override
-		public void connected(short disconnectReason) {
+		public void connected(final short disconnectReason) {
 			try {
-				connection.enumerate();
+				this.connection.enumerate();
 				AbstractTinkerforgeStackManager.this.connected();
-			} catch (NotConnectedException ex) {
+			} catch (final NotConnectedException ex) {
 				// Well, this should not happen?!
 				// But will treat it gracefully.
 				ex.printStackTrace();
@@ -179,41 +183,43 @@ public abstract class AbstractTinkerforgeStackManager {
 	}
 
 	private class DeviceEnumerationHandler implements EnumerateListener {
-		private IPConnection connection;
+		private final IPConnection connection;
 
-		public DeviceEnumerationHandler(IPConnection connection) {
+		public DeviceEnumerationHandler(final IPConnection connection) {
 			this.connection = connection;
 			this.connection.addEnumerateListener(this);
 		}
 
 		@Override
-		public void enumerate(String uid, String connectedUid, char position, short[] hardwareVersion,
-				short[] firmwareVersion, int deviceIdentifier, short enumerationType) {
-			createDevice(deviceIdentifier, uid);
+		public void enumerate(final String uid, final String connectedUid, final char position,
+				final short[] hardwareVersion, final short[] firmwareVersion, final int deviceIdentifier,
+				final short enumerationType) {
+			this.createDevice(deviceIdentifier, uid);
 			switch (enumerationType) {
 			case 0:
-				deviceConnected(deviceMap.get(uid));
+				AbstractTinkerforgeStackManager.this.deviceConnected(AbstractTinkerforgeStackManager.this.deviceMap.get(uid));
 				break;
 			case 1:
-				deviceReConnected(deviceMap.get(uid));
+				AbstractTinkerforgeStackManager.this.deviceReConnected(AbstractTinkerforgeStackManager.this.deviceMap.get(uid));
 				break;
 			case 2:
-				deviceDisconnected(deviceMap.get(uid));
+				AbstractTinkerforgeStackManager.this
+						.deviceDisconnected(AbstractTinkerforgeStackManager.this.deviceMap.get(uid));
 				break;
 			}
 
 		}
 
-		private void createDevice(int deviceIdentifier, String uid) {
-			if (!deviceMap.containsKey(uid)) {
+		private void createDevice(final int deviceIdentifier, final String uid) {
+			if (!AbstractTinkerforgeStackManager.this.deviceMap.containsKey(uid)) {
 				try {
-					Device device = (Device) TinkerforgeDevice.getDevice(deviceIdentifier).device.getDeclaredConstructor(
-							String.class, IPConnection.class).newInstance(uid, ipConnection);
+					final Device device = (Device) TinkerforgeDevice.getDevice(deviceIdentifier).device.getDeclaredConstructor(
+							String.class, IPConnection.class).newInstance(uid, AbstractTinkerforgeStackManager.this.ipConnection);
 					device.getIdentity();
-					deviceMap.put(uid, device);
-				} catch (TinkerforgeException ex) {
+					AbstractTinkerforgeStackManager.this.deviceMap.put(uid, device);
+				} catch (final TinkerforgeException ex) {
 					ex.printStackTrace();
-				} catch (Exception ex) {
+				} catch (final Exception ex) {
 					ex.printStackTrace();
 				}
 			}

@@ -13,38 +13,38 @@ import ch.quantasy.tinkerforge.tinker.core.implementation.AbstractTinkerforgeSta
 import com.tinkerforge.Device;
 
 public class TinkerforgeStackAgent extends AbstractTinkerforgeStackManager {
-	public static final int DEFAULT_CONNECTION_TIMEOUT_IN_MILLISECONDS=1000*60;
+	public static final int DEFAULT_CONNECTION_TIMEOUT_IN_MILLISECONDS = 1000 * 60;
 	private int connectionTimeoutInMilliseconds;
 	private Timer timer;
-	private Set<TinkerforgeApplication> tinkerforgeApplications;
-	private TinkerforgeStackAgentIdentifier tinkerforgeStackAgentIdentifier;
+	private final Set<TinkerforgeApplication> tinkerforgeApplications;
+	private final TinkerforgeStackAgentIdentifier tinkerforgeStackAgentIdentifier;
 	private Exception actualConnectionException;
 
-	public TinkerforgeStackAgent(TinkerforgeStackAgentIdentifier tinkerforgeStackAgentIdentifier) {
+	public TinkerforgeStackAgent(final TinkerforgeStackAgentIdentifier tinkerforgeStackAgentIdentifier) {
 		super(tinkerforgeStackAgentIdentifier.getHostName(), tinkerforgeStackAgentIdentifier.getPort());
-		this.connectionTimeoutInMilliseconds=DEFAULT_CONNECTION_TIMEOUT_IN_MILLISECONDS;
+		this.connectionTimeoutInMilliseconds = TinkerforgeStackAgent.DEFAULT_CONNECTION_TIMEOUT_IN_MILLISECONDS;
 		this.tinkerforgeStackAgentIdentifier = tinkerforgeStackAgentIdentifier;
-		tinkerforgeApplications = new HashSet<TinkerforgeApplication>();
+		this.tinkerforgeApplications = new HashSet<TinkerforgeApplication>();
 	}
 
 	public int getConnectionTimeoutInMilliseconds() {
-		return connectionTimeoutInMilliseconds;
+		return this.connectionTimeoutInMilliseconds;
 	}
-	
-	public void setConnectionTimeoutInMilliseconds(int connectionTimeoutInMilliseconds) {
+
+	public void setConnectionTimeoutInMilliseconds(final int connectionTimeoutInMilliseconds) {
 		this.connectionTimeoutInMilliseconds = connectionTimeoutInMilliseconds;
 	}
-	
+
 	public Set<TinkerforgeApplication> getTinkerforgeApplications() {
-		return new HashSet<TinkerforgeApplication>(tinkerforgeApplications);
+		return new HashSet<TinkerforgeApplication>(this.tinkerforgeApplications);
 	}
 
 	public Exception getActualConnectionException() {
-		return actualConnectionException;
+		return this.actualConnectionException;
 	}
 
 	public TinkerforgeStackAgentIdentifier getStackAgentIdentifier() {
-		return tinkerforgeStackAgentIdentifier;
+		return this.tinkerforgeStackAgentIdentifier;
 	}
 
 	/**
@@ -52,15 +52,15 @@ public class TinkerforgeStackAgent extends AbstractTinkerforgeStackManager {
 	 * 
 	 * @param tinkerforgeApplication
 	 */
-	public void addTinkerforgeApplication(TinkerforgeApplication tinkerforgeApplication) {
-		if (tinkerforgeApplications.add(tinkerforgeApplication)) {
+	public void addTinkerforgeApplication(final TinkerforgeApplication tinkerforgeApplication) {
+		if (this.tinkerforgeApplications.add(tinkerforgeApplication)) {
 			if (super.isConnected()) {
 				tinkerforgeApplication.stackConnected(this);
-				for (Device device : super.getConnectedDeviceList()) {
+				for (final Device device : super.getConnectedDeviceList()) {
 					tinkerforgeApplication.deviceConnected(this, device);
 				}
 			} else {
-				connect();
+				this.connect();
 			}
 		}
 	}
@@ -70,53 +70,56 @@ public class TinkerforgeStackAgent extends AbstractTinkerforgeStackManager {
 	 * 
 	 * @param tinkerforgeApplication
 	 */
-	public void removeTinkerforgeApplication(TinkerforgeApplication tinkerforgeApplication) {
-		if (tinkerforgeApplications.contains(tinkerforgeApplication)) {
+	public void removeTinkerforgeApplication(final TinkerforgeApplication tinkerforgeApplication) {
+		if (this.tinkerforgeApplications.contains(tinkerforgeApplication)) {
 			tinkerforgeApplication.stackAgentIsDisconnecting(this);
-			for (Device device : super.getConnectedDeviceList()) {
+			for (final Device device : super.getConnectedDeviceList()) {
 				tinkerforgeApplication.deviceIsDisconnecting(this, device);
 			}
 		}
-		if (tinkerforgeApplications.remove(tinkerforgeApplication)) {
+		if (this.tinkerforgeApplications.remove(tinkerforgeApplication)) {
 			tinkerforgeApplication.stackDisconnected(this);
-			for (Device device : super.getConnectedDeviceList()) {
+			for (final Device device : super.getConnectedDeviceList()) {
 				tinkerforgeApplication.deviceDisconnected(this, device);
 			}
-			if (tinkerforgeApplications.isEmpty())
+			if (this.tinkerforgeApplications.isEmpty()) {
 				super.disconnect();
+			}
 		}
 	}
-	
+
 	@Override
 	protected void connect() {
-		timer=new Timer(true);
-		timer.schedule(new TimerTask() {
+		this.timer = new Timer(true);
+		this.timer.schedule(new TimerTask() {
 
 			@Override
 			public void run() {
 				try {
 					TinkerforgeStackAgent.super.connect();
 					TinkerforgeStackAgent.this.actualConnectionException = null;
-					timer.cancel();
-				} catch (UnknownHostException e) {
+					TinkerforgeStackAgent.this.timer.cancel();
+				} catch (final UnknownHostException e) {
 					TinkerforgeStackAgent.this.actualConnectionException = e;
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					TinkerforgeStackAgent.this.actualConnectionException = e;
 				}
 			}
 		}, 0, TinkerforgeStackAgent.this.getConnectionTimeoutInMilliseconds());
 
 	}
-	
+
 	@Override
 	protected void disconnect() {
-		if(timer!=null)timer.cancel();
+		if (this.timer != null) {
+			this.timer.cancel();
+		}
 		super.disconnect();
 	}
 
 	@Override
 	protected void connected() {
-		for (TinkerforgeApplication tinkerforgeApplication : tinkerforgeApplications) {
+		for (final TinkerforgeApplication tinkerforgeApplication : this.tinkerforgeApplications) {
 			tinkerforgeApplication.stackConnected(this);
 		}
 
@@ -124,60 +127,65 @@ public class TinkerforgeStackAgent extends AbstractTinkerforgeStackManager {
 
 	@Override
 	protected void disconnected() {
-		for (TinkerforgeApplication tinkerforgeApplication : tinkerforgeApplications) {
+		for (final TinkerforgeApplication tinkerforgeApplication : this.tinkerforgeApplications) {
 			tinkerforgeApplication.stackDisconnected(this);
 		}
 	}
 
 	@Override
-	protected void deviceConnected(Device device) {
-		for (TinkerforgeApplication tinkerforgeApplication : tinkerforgeApplications) {
+	protected void deviceConnected(final Device device) {
+		for (final TinkerforgeApplication tinkerforgeApplication : this.tinkerforgeApplications) {
 			tinkerforgeApplication.deviceConnected(this, device);
 		}
 	}
 
 	@Override
-	protected void deviceReConnected(Device device) {
-		for (TinkerforgeApplication tinkerforgeApplication : tinkerforgeApplications) {
+	protected void deviceReConnected(final Device device) {
+		for (final TinkerforgeApplication tinkerforgeApplication : this.tinkerforgeApplications) {
 			tinkerforgeApplication.deviceConnected(this, device);
 		}
 	}
 
 	@Override
-	protected void deviceDisconnected(Device device) {
-		for (TinkerforgeApplication tinkerforgeApplication : tinkerforgeApplications) {
+	protected void deviceDisconnected(final Device device) {
+		for (final TinkerforgeApplication tinkerforgeApplication : this.tinkerforgeApplications) {
 			tinkerforgeApplication.deviceDisconnected(this, device);
 		}
 	}
 
 	@Override
 	public String toString() {
-		return "TinkerforgeStackAgent [tinkerforgeStackAgentIdentifier=" + tinkerforgeStackAgentIdentifier + "]";
+		return "TinkerforgeStackAgent [tinkerforgeStackAgentIdentifier=" + this.tinkerforgeStackAgentIdentifier + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((tinkerforgeStackAgentIdentifier == null) ? 0 : tinkerforgeStackAgentIdentifier.hashCode());
+		result = (prime * result)
+				+ ((this.tinkerforgeStackAgentIdentifier == null) ? 0 : this.tinkerforgeStackAgentIdentifier.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (this.getClass() != obj.getClass()) {
 			return false;
-		TinkerforgeStackAgent other = (TinkerforgeStackAgent) obj;
-		if (tinkerforgeStackAgentIdentifier == null) {
-			if (other.tinkerforgeStackAgentIdentifier != null)
+		}
+		final TinkerforgeStackAgent other = (TinkerforgeStackAgent) obj;
+		if (this.tinkerforgeStackAgentIdentifier == null) {
+			if (other.tinkerforgeStackAgentIdentifier != null) {
 				return false;
-		} else if (!tinkerforgeStackAgentIdentifier.equals(other.tinkerforgeStackAgentIdentifier))
+			}
+		} else if (!this.tinkerforgeStackAgentIdentifier.equals(other.tinkerforgeStackAgentIdentifier)) {
 			return false;
+		}
 		return true;
 	}
 

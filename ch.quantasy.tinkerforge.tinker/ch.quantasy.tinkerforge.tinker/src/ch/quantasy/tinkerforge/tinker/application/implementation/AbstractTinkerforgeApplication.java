@@ -5,16 +5,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.tinkerforge.Device;
-
 import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgency;
 import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgentIdentifier;
 import ch.quantasy.tinkerforge.tinker.application.definition.TinkerforgeApplication;
 
+import com.tinkerforge.Device;
+
 public abstract class AbstractTinkerforgeApplication implements TinkerforgeApplication {
-	private Set<TinkerforgeStackAgentIdentifier> tinkerforgeStackAgentIdentifiers;
-	private Set<TinkerforgeApplication> tinkerforgeApplications;
+	private final Set<TinkerforgeStackAgentIdentifier> tinkerforgeStackAgentIdentifiers;
+	private final Set<TinkerforgeApplication> tinkerforgeApplications;
 
 	public AbstractTinkerforgeApplication() {
 		this.tinkerforgeStackAgentIdentifiers = new HashSet<TinkerforgeStackAgentIdentifier>();
@@ -23,28 +23,32 @@ public abstract class AbstractTinkerforgeApplication implements TinkerforgeAppli
 	}
 
 	@Override
-	public void addTinkerforgeApplication(TinkerforgeApplication... applications) {
-		if (applications == null)
+	public void addTinkerforgeApplication(final TinkerforgeApplication... applications) {
+		if (applications == null) {
 			return;
-		for (TinkerforgeApplication application : applications) {
-			if (application == null)
+		}
+		for (final TinkerforgeApplication application : applications) {
+			if (application == null) {
 				continue;
+			}
 			this.tinkerforgeApplications.add(application);
-			for (TinkerforgeStackAgentIdentifier identifier : tinkerforgeStackAgentIdentifiers) {
+			for (final TinkerforgeStackAgentIdentifier identifier : this.tinkerforgeStackAgentIdentifiers) {
 				application.addTinkerforgeStackAgent(identifier);
 			}
 		}
 	}
 
 	@Override
-	public void removeTinkerforgeApplication(TinkerforgeApplication... applications) {
-		if (applications == null)
+	public void removeTinkerforgeApplication(final TinkerforgeApplication... applications) {
+		if (applications == null) {
 			return;
-		for (TinkerforgeApplication application : applications) {
-			if (application == null)
+		}
+		for (final TinkerforgeApplication application : applications) {
+			if (application == null) {
 				continue;
+			}
 			this.tinkerforgeApplications.remove(application);
-			for (TinkerforgeStackAgentIdentifier identifier : tinkerforgeStackAgentIdentifiers) {
+			for (final TinkerforgeStackAgentIdentifier identifier : this.tinkerforgeStackAgentIdentifiers) {
 				application.removeTinkerforgeStackAgent(identifier);
 			}
 		}
@@ -55,57 +59,67 @@ public abstract class AbstractTinkerforgeApplication implements TinkerforgeAppli
 	}
 
 	@Override
-	public void deviceIsDisconnecting(TinkerforgeStackAgent stackAgent, Device device) {
-		System.out.println(this.toString() + " is disconnecting from device " + device +" attached to agent "+ stackAgent);
-				
+	public void deviceIsDisconnecting(final TinkerforgeStackAgent stackAgent, final Device device) {
+		System.out
+				.println(this.toString() + " is disconnecting from device " + device + " attached to agent " + stackAgent);
+
 	}
+
 	@Override
-	public void stackAgentIsDisconnecting(TinkerforgeStackAgent stackAgent) {
+	public void stackAgentIsDisconnecting(final TinkerforgeStackAgent stackAgent) {
 		System.out.println(this.toString() + " is disconnecting from agent " + stackAgent);
 	}
+
 	@Override
-	public void stackDisconnected(TinkerforgeStackAgent stackAgent) {
+	public void stackDisconnected(final TinkerforgeStackAgent stackAgent) {
 		System.out.println(this.toString() + " disconnected from agent " + stackAgent);
 	}
 
 	@Override
-	public void stackConnected(TinkerforgeStackAgent stackAgent) {
+	public void stackConnected(final TinkerforgeStackAgent stackAgent) {
 		System.out.println(this.toString() + " connected to agent " + stackAgent);
 	}
 
 	@Override
-	public void addTinkerforgeStackAgent(TinkerforgeStackAgentIdentifier... tinkerforgeStackAgentIdentifiers) {
-		if (tinkerforgeStackAgentIdentifiers == null)
+	public void addTinkerforgeStackAgent(final TinkerforgeStackAgentIdentifier... tinkerforgeStackAgentIdentifiers) {
+		if (tinkerforgeStackAgentIdentifiers == null) {
 			return;
-		for (TinkerforgeStackAgentIdentifier identifier : tinkerforgeStackAgentIdentifiers) {
-			if (identifier == null)
+		}
+		for (final TinkerforgeStackAgentIdentifier identifier : tinkerforgeStackAgentIdentifiers) {
+			if (identifier == null) {
 				continue;
+			}
 			this.addTinkerforgeStackAgent(TinkerforgeStackAgency.getInstance().getStackAgent(identifier));
 		}
 	}
 
 	@Override
-	public void removeTinkerforgeStackAgent(TinkerforgeStackAgentIdentifier... tinkerforgeStackAgentIdentifiers) {
-		if (tinkerforgeStackAgentIdentifiers == null)
+	public void removeTinkerforgeStackAgent(final TinkerforgeStackAgentIdentifier... tinkerforgeStackAgentIdentifiers) {
+		if (tinkerforgeStackAgentIdentifiers == null) {
 			return;
-		for (TinkerforgeStackAgentIdentifier identifier : tinkerforgeStackAgentIdentifiers) {
-			if (identifier == null)
+		}
+		for (final TinkerforgeStackAgentIdentifier identifier : tinkerforgeStackAgentIdentifiers) {
+			if (identifier == null) {
 				continue;
+			}
 			this.removeTinkerforgeStackAgent(TinkerforgeStackAgency.getInstance().getStackAgent(identifier));
 		}
 	}
 
 	@Override
-	public void removeTinkerforgeStackAgent(TinkerforgeStackAgent... tinkerforgeStackAgents) {
-		if (tinkerforgeStackAgents == null)
+	public void removeTinkerforgeStackAgent(final TinkerforgeStackAgent... tinkerforgeStackAgents) {
+		if (tinkerforgeStackAgents == null) {
 			return;
-		for (TinkerforgeStackAgent agent : tinkerforgeStackAgents) {
-			if (agent == null)
+		}
+		for (final TinkerforgeStackAgent agent : tinkerforgeStackAgents) {
+			if (agent == null) {
 				continue;
-			for (TinkerforgeApplication application : tinkerforgeApplications) {
+			}
+			for (final TinkerforgeApplication application : this.tinkerforgeApplications) {
 				if (agent.getTinkerforgeApplications().contains(application)) {
-					if(application!=this)
-					application.removeTinkerforgeStackAgent(agent);
+					if (application != this) {
+						application.removeTinkerforgeStackAgent(agent);
+					}
 					agent.removeTinkerforgeApplication(application);
 				}
 			}
@@ -113,17 +127,19 @@ public abstract class AbstractTinkerforgeApplication implements TinkerforgeAppli
 	}
 
 	@Override
-	public void addTinkerforgeStackAgent(TinkerforgeStackAgent... tinkerforgeStackAgents) {
-		if (tinkerforgeStackAgents == null)
+	public void addTinkerforgeStackAgent(final TinkerforgeStackAgent... tinkerforgeStackAgents) {
+		if (tinkerforgeStackAgents == null) {
 			return;
-		for (TinkerforgeStackAgent agent : tinkerforgeStackAgents) {
-			if (agent == null)
+		}
+		for (final TinkerforgeStackAgent agent : tinkerforgeStackAgents) {
+			if (agent == null) {
 				continue;
-			for (TinkerforgeApplication application : tinkerforgeApplications) {
-				if(!agent.getTinkerforgeApplications().contains(application))
-				{
-					if(application!=this)
+			}
+			for (final TinkerforgeApplication application : this.tinkerforgeApplications) {
+				if (!agent.getTinkerforgeApplications().contains(application)) {
+					if (application != this) {
 						application.addTinkerforgeStackAgent(agent);
+					}
 					agent.addTinkerforgeApplication(application);
 				}
 			}

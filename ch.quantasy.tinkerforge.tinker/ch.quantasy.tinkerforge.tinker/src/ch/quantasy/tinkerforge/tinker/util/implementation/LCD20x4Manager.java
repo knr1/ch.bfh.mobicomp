@@ -5,23 +5,30 @@ import java.util.Arrays;
 import com.tinkerforge.BrickletLCD20x4;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
+
 /**
- * This class wraps the {@link BrickletLCD20x4} and gives some convenience.
- * You will know if you need it... 
+ * This class wraps the {@link BrickletLCD20x4} and gives some convenience. You
+ * will know if you need it...
+ * 
  * @author reto
- *
+ * 
  */
 public class LCD20x4Manager {
-	
+
 	/**
-	 * Allows to abuse the backlight of the {@link BrickletLCD20x4} as a visual alert.
-	 * @param lcd the {@link BrickletLCD20x4} that shall blink
-	 * @param onTime How long shall the backlight be lit
-	 * @param offTime How long shall the backlight be off
-	 * @param amount How many times shall the blinking happen
+	 * Allows to abuse the backlight of the {@link BrickletLCD20x4} as a visual
+	 * alert.
+	 * 
+	 * @param lcd
+	 *          the {@link BrickletLCD20x4} that shall blink
+	 * @param onTime
+	 *          How long shall the backlight be lit
+	 * @param offTime
+	 *          How long shall the backlight be off
+	 * @param amount
+	 *          How many times shall the blinking happen
 	 */
-	public static void visualAlert(final BrickletLCD20x4 lcd, final int onTime,
-			final int offTime, final int amount) {
+	public static void visualAlert(final BrickletLCD20x4 lcd, final int onTime, final int offTime, final int amount) {
 		if (lcd == null) {
 			return;
 		}
@@ -30,7 +37,7 @@ public class LCD20x4Manager {
 			public void run() {
 				try {
 					final boolean initialStatus = lcd.isBacklightOn();
-					for (int i = 0; i < amount*2; i++) {
+					for (int i = 0; i < (amount * 2); i++) {
 
 						if (lcd.isBacklightOn()) {
 							lcd.backlightOff();
@@ -52,8 +59,9 @@ public class LCD20x4Manager {
 	}
 
 	/**
-	 * A possible visual initialization of the {@link BrickletLCD20x4}
-	 * Flickers and then lights by printing 'Hello'
+	 * A possible visual initialization of the {@link BrickletLCD20x4} Flickers
+	 * and then lights by printing 'Hello'
+	 * 
 	 * @param lcd
 	 */
 	public static void hello(final BrickletLCD20x4 lcd) {
@@ -66,7 +74,7 @@ public class LCD20x4Manager {
 				LCD20x4Manager.visualAlert(lcd, 50, 50, 4);
 				Thread.sleep(500);
 				lcd.backlightOn();
-				write(lcd,(short) 1, (short) 5, "...Hello...");
+				LCD20x4Manager.write(lcd, (short) 1, (short) 5, "...Hello...");
 				Thread.sleep(3000);
 				lcd.clearDisplay();
 			} catch (final Exception ex) {
@@ -76,8 +84,9 @@ public class LCD20x4Manager {
 	}
 
 	/**
-	 * A possible visual shut-down of the {@link BrickletLCD20x4}
-	 * Prints 'Good Bye' then flickers and finally blacks-out.
+	 * A possible visual shut-down of the {@link BrickletLCD20x4} Prints 'Good
+	 * Bye' then flickers and finally blacks-out.
+	 * 
 	 * @param lcd
 	 */
 	public static void goodBye(final BrickletLCD20x4 lcd) {
@@ -103,13 +112,15 @@ public class LCD20x4Manager {
 
 	/**
 	 * Used to clear a complete line
-	 * @param lcd The {@link BrickletLCD20x4} to be used
-	 * @param lineNumber The targeted line-number (0,1,2,3) 
+	 * 
+	 * @param lcd
+	 *          The {@link BrickletLCD20x4} to be used
+	 * @param lineNumber
+	 *          The targeted line-number (0,1,2,3)
 	 * @throws TimeoutException
 	 * @throws NotConnectedException
 	 */
-	public static void clearLine(final BrickletLCD20x4 lcd,
-			final short lineNumber) throws TimeoutException,
+	public static void clearLine(final BrickletLCD20x4 lcd, final short lineNumber) throws TimeoutException,
 			NotConnectedException {
 		if (lcd == null) {
 			return;
@@ -121,15 +132,19 @@ public class LCD20x4Manager {
 
 	/**
 	 * Used to clear a patch of positions within a line
-	 * @param lcd The {@link BrickletLCD20x4} to be used
-	 * @param lineNumber The targeted line-number (0,1,2,3)
-	 * @param start The targeted start-position (0-18) (must be smaller than end)
-	 * @param end The targeted end-position (1-19) (must be bigger than start)
+	 * 
+	 * @param lcd
+	 *          The {@link BrickletLCD20x4} to be used
+	 * @param lineNumber
+	 *          The targeted line-number (0,1,2,3)
+	 * @param start
+	 *          The targeted start-position (0-18) (must be smaller than end)
+	 * @param end
+	 *          The targeted end-position (1-19) (must be bigger than start)
 	 * @throws TimeoutException
 	 * @throws NotConnectedException
 	 */
-	public static void clearPatch(final BrickletLCD20x4 lcd,
-			final short lineNumber, final short start, final short end)
+	public static void clearPatch(final BrickletLCD20x4 lcd, final short lineNumber, final short start, final short end)
 			throws TimeoutException, NotConnectedException {
 		if (lcd == null) {
 			return;
@@ -143,16 +158,20 @@ public class LCD20x4Manager {
 
 	/**
 	 * A convenience method to write a text (even with special symbols)
-	 * @param lcd The {@link BrickletLCD20x4} to be used
-	 * @param line The targeted line-number(0,1,2,3)
-	 * @param position The position where the text shall start
-	 * @param text The {@link String} to be written
+	 * 
+	 * @param lcd
+	 *          The {@link BrickletLCD20x4} to be used
+	 * @param line
+	 *          The targeted line-number(0,1,2,3)
+	 * @param position
+	 *          The position where the text shall start
+	 * @param text
+	 *          The {@link String} to be written
 	 * @throws TimeoutException
 	 * @throws NotConnectedException
 	 */
-	public static final void write(final BrickletLCD20x4 lcd, final short line,
-			final short position, final String text) throws TimeoutException,
-			NotConnectedException {
+	public static final void write(final BrickletLCD20x4 lcd, final short line, final short position, final String text)
+			throws TimeoutException, NotConnectedException {
 		if (lcd == null) {
 			return;
 		}
@@ -160,7 +179,8 @@ public class LCD20x4Manager {
 	}
 
 	// Maps a normal UTF-16 encoded string to the LCD charset
-	// This has been copied from somewhere else... But I cannot remember from where.
+	// This has been copied from somewhere else... But I cannot remember from
+	// where.
 	private static String utf16ToKS0066U(final String utf16) {
 		String ks0066u = "";
 		char c;
@@ -208,7 +228,7 @@ public class LCD20x4Manager {
 				case 0x00b0:
 					c = (char) 0xdf;
 					break; // DEGREE SIGN maps to KATAKANA SEMI-VOICED SOUND
-							// MARK
+				// MARK
 				case 0x03b1:
 					c = (char) 0xe0;
 					break; // GREEK SMALL LETTER ALPHA
