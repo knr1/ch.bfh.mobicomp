@@ -1,4 +1,4 @@
 ch.bfh.mobicomp
 ===============
 
-Base Repository for the subject of Mobile Computing 
+Base Repository for the subject of Internet of Things in the module: Mobile Computing 
