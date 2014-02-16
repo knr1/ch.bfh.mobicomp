@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 
 import viewer.FridgeViewer;
-import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgentIdentifier;
 
 public class FridgeItSimulation {
@@ -19,7 +18,8 @@ public class FridgeItSimulation {
 			fridgeViewer = new FridgeViewer();
 			System.out
 					.println("Connecting to the Tinkerforge Brick-Stack via brickd");
-			fridgeViewer.addTinkerforgeStackAgent(FRIDGE_VIEWER);
+			fridgeViewer
+					.addTinkerforgeStackAgent(FridgeItSimulation.FRIDGE_VIEWER);
 			System.out.println("Writing the ambient temperature: 0°C");
 			fridgeViewer.setAmbientTemp((short) 0);
 			System.out.println("Writing door status: 'open'");
@@ -40,7 +40,8 @@ public class FridgeItSimulation {
 			Thread.sleep(4000);
 		} finally {
 			System.out.println("Disconnecting Tinkerforge Brick-Stack");
-			fridgeViewer.removeTinkerforgeStackAgent(FRIDGE_VIEWER);
+			fridgeViewer
+					.removeTinkerforgeStackAgent(FridgeItSimulation.FRIDGE_VIEWER);
 		}
 	}
 }

@@ -26,7 +26,7 @@ import fridgeit.FridgeIt;
  */
 public class AmbientLightApplication extends AbstractTinkerforgeApplication
 		implements IlluminanceReachedListener {
-	private FridgeIt fridgeIt;
+	private final FridgeIt fridgeIt;
 	private BrickletAmbientLight ambientLightBricklet;
 	private boolean latestAnswerIsItDark;
 	private int ambientHistereseMin = 7;
@@ -38,30 +38,33 @@ public class AmbientLightApplication extends AbstractTinkerforgeApplication
 	 * @param frdidgeIt
 	 *            The Application to be informed onChange
 	 */
-	public AmbientLightApplication(FridgeIt frdidgeIt) {
+	public AmbientLightApplication(final FridgeIt frdidgeIt) {
 		this.fridgeIt = frdidgeIt;
 	}
 
 	@Override
-	public void deviceDisconnected(TinkerforgeStackAgent tinkerforgeStackAgent,
-			Device device) {
-		if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.AmbientLight
-				&& device.equals(ambientLightBricklet)) {
+	public void deviceDisconnected(
+			final TinkerforgeStackAgent tinkerforgeStackAgent,
+			final Device device) {
+		if ((TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.AmbientLight)
+				&& device.equals(this.ambientLightBricklet)) {
 			((BrickletAmbientLight) device)
 					.removeIlluminanceReachedListener(this);
-			ambientLightBricklet = null;
+			this.ambientLightBricklet = null;
 		}
 	}
 
 	@Override
-	public void deviceConnected(TinkerforgeStackAgent tinkerforgeStackAgent,
-			Device device) {
+	public void deviceConnected(
+			final TinkerforgeStackAgent tinkerforgeStackAgent,
+			final Device device) {
 		if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.AmbientLight) {
-			if (ambientLightBricklet != null)
+			if (this.ambientLightBricklet != null) {
 				return;
-			ambientLightBricklet = (BrickletAmbientLight) device;
-			ambientLightBricklet.addIlluminanceReachedListener(this);
-			setAmbientHisteres();
+			}
+			this.ambientLightBricklet = (BrickletAmbientLight) device;
+			this.ambientLightBricklet.addIlluminanceReachedListener(this);
+			this.setAmbientHisteres();
 		}
 	}
 
@@ -69,7 +72,7 @@ public class AmbientLightApplication extends AbstractTinkerforgeApplication
 	 * @return The histerese threshold max for 'dark'.
 	 */
 	public int getAmbientHistereseMax() {
-		return ambientHistereseMax / 10;
+		return this.ambientHistereseMax / 10;
 	}
 
 	/**
@@ -77,7 +80,7 @@ public class AmbientLightApplication extends AbstractTinkerforgeApplication
 	 * @return The histerese threshold min for 'dark'.
 	 */
 	public int getAmbientHistereseMin() {
-		return ambientHistereseMin / 10;
+		return this.ambientHistereseMin / 10;
 	}
 
 	/**
@@ -87,9 +90,9 @@ public class AmbientLightApplication extends AbstractTinkerforgeApplication
 	 * 
 	 * @param ambientHistereseMaxInLux
 	 */
-	public void setAmbientHistereseMax(int ambientHistereseMaxInLux) {
+	public void setAmbientHistereseMax(final int ambientHistereseMaxInLux) {
 		this.ambientHistereseMax = ambientHistereseMaxInLux * 10;
-		setAmbientHisteres();
+		this.setAmbientHisteres();
 	}
 
 	/**
@@ -99,64 +102,71 @@ public class AmbientLightApplication extends AbstractTinkerforgeApplication
 	 * 
 	 * @param ambientHistereseMaxInLux
 	 */
-	public void setAmbientHistereseMin(int ambientHistereseMinInLux) {
+	public void setAmbientHistereseMin(final int ambientHistereseMinInLux) {
 		this.ambientHistereseMin = ambientHistereseMinInLux * 10;
-		setAmbientHisteres();
+		this.setAmbientHisteres();
 	}
 
 	private void setAmbientHisteres() {
-		if (ambientLightBricklet == null)
+		if (this.ambientLightBricklet == null) {
 			return;
+		}
 		try {
-			ambientLightBricklet.setIlluminanceCallbackThreshold(
+			this.ambientLightBricklet.setIlluminanceCallbackThreshold(
 					BrickletAmbientLight.THRESHOLD_OPTION_OUTSIDE,
-					(short) (ambientHistereseMin),
-					(short) (ambientHistereseMax));
-			ambientLightBricklet.setDebouncePeriod(1000 * 10);
+					(short) (this.ambientHistereseMin),
+					(short) (this.ambientHistereseMax));
+			this.ambientLightBricklet.setDebouncePeriod(1000 * 10);
 
-			this.fridgeIt.setAmbientDarkState(ambientLightBricklet
+			this.fridgeIt.setAmbientDarkState(this.ambientLightBricklet
 					.getIlluminance() < this.ambientHistereseMin);
 
-		} catch (TimeoutException e) {
+		} catch (final TimeoutException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (NotConnectedException e) {
+		} catch (final NotConnectedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void illuminanceReached(int illuminance) {
-		if (latestAnswerIsItDark == illuminance < ambientHistereseMax)
+	public void illuminanceReached(final int illuminance) {
+		if (this.latestAnswerIsItDark == (illuminance < this.ambientHistereseMax)) {
 			return;
+		}
 		this.latestAnswerIsItDark = !this.latestAnswerIsItDark;
-		fridgeIt.setAmbientDarkState(latestAnswerIsItDark);
+		this.fridgeIt.setAmbientDarkState(this.latestAnswerIsItDark);
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((fridgeIt == null) ? 0 : fridgeIt.hashCode());
+		result = (prime * result)
+				+ ((this.fridgeIt == null) ? 0 : this.fridgeIt.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (this.getClass() != obj.getClass()) {
 			return false;
-		AmbientLightApplication other = (AmbientLightApplication) obj;
-		if (fridgeIt == null) {
-			if (other.fridgeIt != null)
+		}
+		final AmbientLightApplication other = (AmbientLightApplication) obj;
+		if (this.fridgeIt == null) {
+			if (other.fridgeIt != null) {
 				return false;
-		} else if (!fridgeIt.equals(other.fridgeIt))
+			}
+		} else if (!this.fridgeIt.equals(other.fridgeIt)) {
 			return false;
+		}
 		return true;
 	}
 

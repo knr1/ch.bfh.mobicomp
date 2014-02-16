@@ -28,17 +28,18 @@ public class FridgeIt extends AbstractTinkerforgeApplication {
 	// Why is it not 0? Old cheese might be glowing in the dark ;-)
 	public static final int LIGHT_IS_SWITCHED_ON = 8;
 	public static final int LIGHT_IS_SWITCHED_OFF = 7;
-	
-	// A heuristic value representing the distance from the sensors to the door in mm
+
+	// A heuristic value representing the distance from the sensors to the door
+	// in mm
 	public static final int DOOR_IS_CLOSED = 50;
 	private static final int DOOR_IS_OPENED = 60;
 
 	private final FridgeViewer fridgeViewer;
 
-	private AmbientLightApplication ambientLight;
-	private DistanceApplication distance;
-	private HumidityApplication humidity;
-	private TemperatureApplication temperature;
+	private final AmbientLightApplication ambientLight;
+	private final DistanceApplication distance;
+	private final HumidityApplication humidity;
+	private final TemperatureApplication temperature;
 
 	/**
 	 * The {@link FridgeSensor} and the {@link FridgeViewer} are instantiated
@@ -53,25 +54,27 @@ public class FridgeIt extends AbstractTinkerforgeApplication {
 		this.distance = new DistanceApplication(this);
 		this.humidity = new HumidityApplication(this);
 		this.temperature = new TemperatureApplication(this);
-		super.addTinkerforgeApplication(fridgeViewer);
-		super.addTinkerforgeApplication(ambientLight,distance,humidity,temperature);
-		
+		super.addTinkerforgeApplication(this.fridgeViewer);
+		super.addTinkerforgeApplication(this.ambientLight, this.distance,
+				this.humidity, this.temperature);
+
 		this.ambientLight.setAmbientHistereseMax(FridgeIt.LIGHT_IS_SWITCHED_ON);
-		this.ambientLight.setAmbientHistereseMin(FridgeIt.LIGHT_IS_SWITCHED_OFF);
-		
+		this.ambientLight
+				.setAmbientHistereseMin(FridgeIt.LIGHT_IS_SWITCHED_OFF);
+
 		this.distance.setDistanceHistereseMin(FridgeIt.DOOR_IS_CLOSED);
 		this.distance.setDistanceHistereseMax(FridgeIt.DOOR_IS_OPENED);
 	}
 
-	public void setHumidity(int humidityInPercent) {
+	public void setHumidity(final int humidityInPercent) {
 		this.fridgeViewer.setHumidity(humidityInPercent / 10.0);
 	}
 
-	public void setObjectIRTemperature(int temperature) {
+	public void setObjectIRTemperature(final int temperature) {
 		this.fridgeViewer.setObjectTemp(temperature);
 	}
 
-	public void setAmbientTemperature(int temperature) {
+	public void setAmbientTemperature(final int temperature) {
 		this.fridgeViewer.setAmbientTemp(temperature);
 	}
 
@@ -82,8 +85,8 @@ public class FridgeIt extends AbstractTinkerforgeApplication {
 	 * The histerese-threshold must be set in the
 	 * {@link AmbientLightApplication}.
 	 */
-	public void setAmbientDarkState(boolean latestAnswerIsItDark) {
-		fridgeViewer.setLightStatus(!latestAnswerIsItDark);
+	public void setAmbientDarkState(final boolean latestAnswerIsItDark) {
+		this.fridgeViewer.setLightStatus(!latestAnswerIsItDark);
 	}
 
 	/**
@@ -93,78 +96,93 @@ public class FridgeIt extends AbstractTinkerforgeApplication {
 	 * @author reto
 	 * 
 	 */
-	public void setDoorShutState(boolean latestAnswerIsItClosed) {
+	public void setDoorShutState(final boolean latestAnswerIsItClosed) {
 		FridgeIt.this.fridgeViewer.setDoorStatus(!latestAnswerIsItClosed);
 	}
 
 	@Override
-	public void deviceDisconnected(TinkerforgeStackAgent tinkerforgeStackAgent,
-			Device device) {
+	public void deviceDisconnected(
+			final TinkerforgeStackAgent tinkerforgeStackAgent,
+			final Device device) {
 		// We do not care here...
 
 	}
 
 	@Override
-	public void deviceConnected(TinkerforgeStackAgent tinkerforgeStackAgent,
-			Device device) {
+	public void deviceConnected(
+			final TinkerforgeStackAgent tinkerforgeStackAgent,
+			final Device device) {
 		// We do not care here...
 
 	}
-
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((ambientLight == null) ? 0 : ambientLight.hashCode());
-		result = prime * result
-				+ ((distance == null) ? 0 : distance.hashCode());
-		result = prime * result
-				+ ((fridgeViewer == null) ? 0 : fridgeViewer.hashCode());
-		result = prime * result
-				+ ((humidity == null) ? 0 : humidity.hashCode());
-		result = prime * result
-				+ ((temperature == null) ? 0 : temperature.hashCode());
+		result = (prime * result)
+				+ ((this.ambientLight == null) ? 0 : this.ambientLight
+						.hashCode());
+		result = (prime * result)
+				+ ((this.distance == null) ? 0 : this.distance.hashCode());
+		result = (prime * result)
+				+ ((this.fridgeViewer == null) ? 0 : this.fridgeViewer
+						.hashCode());
+		result = (prime * result)
+				+ ((this.humidity == null) ? 0 : this.humidity.hashCode());
+		result = (prime * result)
+				+ ((this.temperature == null) ? 0 : this.temperature.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (this.getClass() != obj.getClass()) {
 			return false;
-		FridgeIt other = (FridgeIt) obj;
-		if (ambientLight == null) {
-			if (other.ambientLight != null)
+		}
+		final FridgeIt other = (FridgeIt) obj;
+		if (this.ambientLight == null) {
+			if (other.ambientLight != null) {
 				return false;
-		} else if (!ambientLight.equals(other.ambientLight))
+			}
+		} else if (!this.ambientLight.equals(other.ambientLight)) {
 			return false;
-		if (distance == null) {
-			if (other.distance != null)
+		}
+		if (this.distance == null) {
+			if (other.distance != null) {
 				return false;
-		} else if (!distance.equals(other.distance))
+			}
+		} else if (!this.distance.equals(other.distance)) {
 			return false;
-		if (fridgeViewer == null) {
-			if (other.fridgeViewer != null)
+		}
+		if (this.fridgeViewer == null) {
+			if (other.fridgeViewer != null) {
 				return false;
-		} else if (!fridgeViewer.equals(other.fridgeViewer))
+			}
+		} else if (!this.fridgeViewer.equals(other.fridgeViewer)) {
 			return false;
-		if (humidity == null) {
-			if (other.humidity != null)
+		}
+		if (this.humidity == null) {
+			if (other.humidity != null) {
 				return false;
-		} else if (!humidity.equals(other.humidity))
+			}
+		} else if (!this.humidity.equals(other.humidity)) {
 			return false;
-		if (temperature == null) {
-			if (other.temperature != null)
+		}
+		if (this.temperature == null) {
+			if (other.temperature != null) {
 				return false;
-		} else if (!temperature.equals(other.temperature))
+			}
+		} else if (!this.temperature.equals(other.temperature)) {
 			return false;
+		}
 		return true;
 	}
 
-	
 }

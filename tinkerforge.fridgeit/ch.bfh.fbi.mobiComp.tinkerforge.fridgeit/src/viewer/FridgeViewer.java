@@ -36,10 +36,10 @@ public class FridgeViewer extends AbstractTinkerforgeApplication {
 
 	@Override
 	public void stackAgentIsDisconnecting(
-			TinkerforgeStackAgent tinkerforgeStackAgent) {
+			final TinkerforgeStackAgent tinkerforgeStackAgent) {
 		// We do not care
 	}
-	
+
 	/**
 	 * Before really disconnecting, the viewer will say good-bye to the human. <br/>
 	 * It will do a click (if the {@link BrickletDualRelay} is connected <br/>
@@ -47,21 +47,23 @@ public class FridgeViewer extends AbstractTinkerforgeApplication {
 	 */
 	@Override
 	public void deviceIsDisconnecting(
-			TinkerforgeStackAgent tinkerforgeStackAgent, Device device) {
-		if(TinkerforgeDevice.areEqual(this.lcd, device)){
+			final TinkerforgeStackAgent tinkerforgeStackAgent,
+			final Device device) {
+		if (TinkerforgeDevice.areEqual(this.lcd, device)) {
 			this.clickyAlert(200, 1);
 			LCD20x4Manager.goodBye(this.lcd);
 		}
-		
-	}	
+
+	}
 
 	/**
 	 * Removes the instances to the 'output'-devices (This is somewhat
 	 * dangerous, but for the sake of the example... it's ok)
 	 */
 	@Override
-	public void deviceDisconnected(TinkerforgeStackAgent tinkerforgeStackAgent,
-			Device device) {
+	public void deviceDisconnected(
+			final TinkerforgeStackAgent tinkerforgeStackAgent,
+			final Device device) {
 
 		if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.LCD20x4) {
 			this.lcd = null;
@@ -80,8 +82,9 @@ public class FridgeViewer extends AbstractTinkerforgeApplication {
 	 * @param device
 	 */
 	@Override
-	public void deviceConnected(TinkerforgeStackAgent tinkerforgeStackAgent,
-			Device device) {
+	public void deviceConnected(
+			final TinkerforgeStackAgent tinkerforgeStackAgent,
+			final Device device) {
 		if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.LCD20x4) {
 			this.lcd = (BrickletLCD20x4) device;
 			this.initLCD();
@@ -287,7 +290,7 @@ public class FridgeViewer extends AbstractTinkerforgeApplication {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		return obj == this;
 	}
 }

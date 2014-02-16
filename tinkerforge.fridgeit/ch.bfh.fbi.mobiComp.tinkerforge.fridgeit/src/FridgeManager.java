@@ -9,20 +9,20 @@ public class FridgeManager {
 	// Assumes to be connected via USB
 	public final TinkerforgeStackAgentIdentifier FRIDGE_VIEWER = new TinkerforgeStackAgentIdentifier(
 			"localhost");
-	private TinkerforgeApplication fridgeIt;
+	private final TinkerforgeApplication fridgeIt;
 
 	public FridgeManager() {
-		fridgeIt = new FridgeIt();
+		this.fridgeIt = new FridgeIt();
 	}
 
 	public void start() {
-		fridgeIt.addTinkerforgeStackAgent(FRIDGE_VIEWER);
-		fridgeIt.addTinkerforgeStackAgent(FRIDGE_SENSOR);
+		this.fridgeIt.addTinkerforgeStackAgent(this.FRIDGE_VIEWER);
+		this.fridgeIt.addTinkerforgeStackAgent(this.FRIDGE_SENSOR);
 	}
 
 	public void stop() {
-		fridgeIt.removeTinkerforgeStackAgent(FRIDGE_SENSOR);
-		fridgeIt.removeTinkerforgeStackAgent(FRIDGE_VIEWER);
+		this.fridgeIt.removeTinkerforgeStackAgent(this.FRIDGE_SENSOR);
+		this.fridgeIt.removeTinkerforgeStackAgent(this.FRIDGE_VIEWER);
 	}
 
 	/**
@@ -33,7 +33,7 @@ public class FridgeManager {
 	 * @throws Exception
 	 */
 	public static void main(final String[] args) throws Exception {
-		FridgeManager manager = new FridgeManager();
+		final FridgeManager manager = new FridgeManager();
 		manager.start();
 		System.in.read();
 		manager.stop();

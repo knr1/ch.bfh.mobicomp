@@ -19,18 +19,18 @@ import fridgeit.FridgeIt;
  * @author reto
  * 
  */
-public class TemperatureApplication extends AbstractTinkerforgeApplication implements
-		ObjectTemperatureListener, AmbientTemperatureListener {
-	private FridgeIt fridgeIt;
+public class TemperatureApplication extends AbstractTinkerforgeApplication
+		implements ObjectTemperatureListener, AmbientTemperatureListener {
+	private final FridgeIt fridgeIt;
 
-	public TemperatureApplication(FridgeIt fridgeIt) {
+	public TemperatureApplication(final FridgeIt fridgeIt) {
 		this.fridgeIt = fridgeIt;
 	}
 
-	
 	@Override
-	public void deviceDisconnected(TinkerforgeStackAgent tinkerforgeStackAgent,
-			Device device) {
+	public void deviceDisconnected(
+			final TinkerforgeStackAgent tinkerforgeStackAgent,
+			final Device device) {
 		if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.TemperatureIR) {
 			final BrickletTemperatureIR tempIR = (BrickletTemperatureIR) device;
 			tempIR.removeObjectTemperatureListener(this);
@@ -47,8 +47,9 @@ public class TemperatureApplication extends AbstractTinkerforgeApplication imple
 	}
 
 	@Override
-	public void deviceConnected(TinkerforgeStackAgent tinkerforgeStackAgent,
-			Device device) {
+	public void deviceConnected(
+			final TinkerforgeStackAgent tinkerforgeStackAgent,
+			final Device device) {
 		if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.TemperatureIR) {
 			final BrickletTemperatureIR tempIR = (BrickletTemperatureIR) device;
 			tempIR.addObjectTemperatureListener(this);
@@ -68,7 +69,7 @@ public class TemperatureApplication extends AbstractTinkerforgeApplication imple
 	 */
 	@Override
 	public void objectTemperature(final short temperature) {
-		fridgeIt.setObjectIRTemperature(temperature);
+		this.fridgeIt.setObjectIRTemperature(temperature);
 	}
 
 	/**
@@ -76,32 +77,37 @@ public class TemperatureApplication extends AbstractTinkerforgeApplication imple
 	 */
 	@Override
 	public void ambientTemperature(final short temperature) {
-		fridgeIt.setAmbientTemperature(temperature);
+		this.fridgeIt.setAmbientTemperature(temperature);
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((fridgeIt == null) ? 0 : fridgeIt.hashCode());
+		result = (prime * result)
+				+ ((this.fridgeIt == null) ? 0 : this.fridgeIt.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (this.getClass() != obj.getClass()) {
 			return false;
-		TemperatureApplication other = (TemperatureApplication) obj;
-		if (fridgeIt == null) {
-			if (other.fridgeIt != null)
+		}
+		final TemperatureApplication other = (TemperatureApplication) obj;
+		if (this.fridgeIt == null) {
+			if (other.fridgeIt != null) {
 				return false;
-		} else if (!fridgeIt.equals(other.fridgeIt))
+			}
+		} else if (!this.fridgeIt.equals(other.fridgeIt)) {
 			return false;
+		}
 		return true;
 	}
 
