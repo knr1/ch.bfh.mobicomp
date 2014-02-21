@@ -141,11 +141,12 @@ public class AmbientLightApplication extends AbstractTinkerforgeApplication
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = (prime * result)
-				+ ((this.fridgeIt == null) ? 0 : this.fridgeIt.hashCode());
-		return result;
+		if(ambientLightBricklet!=null)
+			try {
+				return ambientLightBricklet.getIdentity().hashCode();
+			} catch (Exception e) {
+			}
+		return 0;
 	}
 
 	@Override
@@ -160,14 +161,7 @@ public class AmbientLightApplication extends AbstractTinkerforgeApplication
 			return false;
 		}
 		final AmbientLightApplication other = (AmbientLightApplication) obj;
-		if (this.fridgeIt == null) {
-			if (other.fridgeIt != null) {
-				return false;
-			}
-		} else if (!this.fridgeIt.equals(other.fridgeIt)) {
-			return false;
-		}
-		return true;
+		return this.fridgeIt==other.fridgeIt;
 	}
 
 }
