@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
+import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgentIdentifier;
+
 public class TinkerforgeStackAgency {
 	private static TinkerforgeStackAgency instance;
 	private final HashMap<TinkerforgeStackAgentIdentifier, TinkerforgeStackAgent> tinkerforgeStackAgents;

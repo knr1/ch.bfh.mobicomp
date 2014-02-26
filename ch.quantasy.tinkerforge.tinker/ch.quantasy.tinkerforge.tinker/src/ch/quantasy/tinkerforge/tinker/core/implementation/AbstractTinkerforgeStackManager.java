@@ -196,13 +196,13 @@ public abstract class AbstractTinkerforgeStackManager {
 				final short enumerationType) {
 			this.createDevice(deviceIdentifier, uid);
 			switch (enumerationType) {
-			case 0:
+			case IPConnection.ENUMERATION_TYPE_AVAILABLE:
 				AbstractTinkerforgeStackManager.this.deviceConnected(AbstractTinkerforgeStackManager.this.deviceMap.get(uid));
 				break;
-			case 1:
+			case IPConnection.ENUMERATION_TYPE_CONNECTED:
 				AbstractTinkerforgeStackManager.this.deviceReConnected(AbstractTinkerforgeStackManager.this.deviceMap.get(uid));
 				break;
-			case 2:
+			case IPConnection.ENUMERATION_TYPE_DISCONNECTED:
 				AbstractTinkerforgeStackManager.this
 						.deviceDisconnected(AbstractTinkerforgeStackManager.this.deviceMap.get(uid));
 				break;

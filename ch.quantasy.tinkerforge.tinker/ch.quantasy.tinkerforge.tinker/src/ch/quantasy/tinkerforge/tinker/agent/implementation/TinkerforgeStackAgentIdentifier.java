@@ -1,4 +1,4 @@
-package ch.quantasy.tinkerforge.tinker.agency.implementation;
+package ch.quantasy.tinkerforge.tinker.agent.implementation;
 
 import ch.quantasy.tinkerforge.tinker.core.implementation.AbstractTinkerforgeStackManager;
 

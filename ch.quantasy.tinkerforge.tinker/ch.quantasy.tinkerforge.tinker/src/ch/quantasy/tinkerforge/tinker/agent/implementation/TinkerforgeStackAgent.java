@@ -1,4 +1,4 @@
-package ch.quantasy.tinkerforge.tinker.agency.implementation;
+package ch.quantasy.tinkerforge.tinker.agent.implementation;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -7,12 +7,13 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ch.quantasy.tinkerforge.tinker.agent.definition.Agent;
 import ch.quantasy.tinkerforge.tinker.application.definition.TinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.core.implementation.AbstractTinkerforgeStackManager;
 
 import com.tinkerforge.Device;
 
-public class TinkerforgeStackAgent extends AbstractTinkerforgeStackManager {
+public class TinkerforgeStackAgent extends AbstractTinkerforgeStackManager implements Agent<TinkerforgeApplication> {
 	public static final int DEFAULT_CONNECTION_TIMEOUT_IN_MILLISECONDS = 1000 * 60;
 	private int connectionTimeoutInMilliseconds;
 	private Timer timer;
@@ -48,12 +49,16 @@ public class TinkerforgeStackAgent extends AbstractTinkerforgeStackManager {
 	}
 
 	/**
-	 * This should not be called directly but by the application itself.
+	 * Connects the application to the stack. If not already done, the connection
+	 * to the physical stack will be established
 	 * 
 	 * @param tinkerforgeApplication
 	 */
-	public void addTinkerforgeApplication(final TinkerforgeApplication tinkerforgeApplication) {
+	public void addApplication(final TinkerforgeApplication tinkerforgeApplication) {
+		if (tinkerforgeApplication == null)
+			return;
 		if (this.tinkerforgeApplications.add(tinkerforgeApplication)) {
+			tinkerforgeApplication.connectedToAgent(this);
 			if (super.isConnected()) {
 				tinkerforgeApplication.stackConnected(this);
 				for (final Device device : super.getConnectedDeviceList()) {
@@ -66,30 +71,38 @@ public class TinkerforgeStackAgent extends AbstractTinkerforgeStackManager {
 	}
 
 	/**
-	 * This should not be called directly but by the application itself.
+	 * Removes the application from the stack. If no application is connected any
+	 * more, the connection to the physical stack will be closed.
 	 * 
 	 * @param tinkerforgeApplication
 	 */
-	public void removeTinkerforgeApplication(final TinkerforgeApplication tinkerforgeApplication) {
+	public void removeApplication(final TinkerforgeApplication tinkerforgeApplication) {
+		if (tinkerforgeApplication == null)
+			return;
+
 		if (this.tinkerforgeApplications.contains(tinkerforgeApplication)) {
-			tinkerforgeApplication.stackAgentIsDisconnecting(this);
+			tinkerforgeApplication.disconnectingFromAgent(this);
 			for (final Device device : super.getConnectedDeviceList()) {
 				tinkerforgeApplication.deviceIsDisconnecting(this, device);
 			}
 		}
 		if (this.tinkerforgeApplications.remove(tinkerforgeApplication)) {
-			tinkerforgeApplication.stackDisconnected(this);
 			for (final Device device : super.getConnectedDeviceList()) {
 				tinkerforgeApplication.deviceDisconnected(this, device);
 			}
-			if (this.tinkerforgeApplications.isEmpty()) {
-				super.disconnect();
-			}
+			tinkerforgeApplication.disconnectedFromAgent(this);
 		}
+
+		if (this.tinkerforgeApplications.isEmpty()) {
+			super.disconnect();
+		}
+
 	}
 
 	@Override
-	protected void connect() {
+	protected synchronized void connect() {
+		if (this.timer != null)
+			return;
 		this.timer = new Timer(true);
 		this.timer.schedule(new TimerTask() {
 
@@ -110,7 +123,7 @@ public class TinkerforgeStackAgent extends AbstractTinkerforgeStackManager {
 	}
 
 	@Override
-	protected void disconnect() {
+	protected synchronized void disconnect() {
 		if (this.timer != null) {
 			this.timer.cancel();
 		}
