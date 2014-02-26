@@ -2,7 +2,8 @@ package ch.bfh.fbi.mobiComp.tinkerforge.tutorial.step07;
 
 import java.io.IOException;
 
-import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgentIdentifier;
+import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgency;
+import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgentIdentifier;
 import ch.quantasy.tinkerforge.tinker.application.definition.TinkerforgeApplication;
 
 import com.tinkerforge.Device;
@@ -28,12 +29,13 @@ public class ApplicationManagement {
 				"localhost");
 
 		final TinkerforgeApplication application = new TheApplication();
-		application.addTinkerforgeStackAgent(identifier1, identifier2);
-
+		TinkerforgeStackAgency.getInstance().getStackAgent(identifier1).addApplication(application);
+		TinkerforgeStackAgency.getInstance().getStackAgent(identifier2).addApplication(application);
+		
 		System.out.println("Press key to exit");
 		System.in.read();
-		application.removeTinkerforgeStackAgent(identifier1);
-		application.removeTinkerforgeStackAgent(identifier2);
-
+		TinkerforgeStackAgency.getInstance().getStackAgent(identifier2).removeApplication(application);
+		TinkerforgeStackAgency.getInstance().getStackAgent(identifier1).removeApplication(application);
+		
 	}
 }

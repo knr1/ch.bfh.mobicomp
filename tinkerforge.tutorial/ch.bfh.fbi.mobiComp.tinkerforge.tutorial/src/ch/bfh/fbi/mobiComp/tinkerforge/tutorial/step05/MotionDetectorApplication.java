@@ -1,6 +1,6 @@
 package ch.bfh.fbi.mobiComp.tinkerforge.tutorial.step05;
 
-import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgent;
+import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 
 import com.tinkerforge.BrickletMotionDetector;

@@ -5,7 +5,7 @@ import sensor.DistanceApplication;
 import sensor.HumidityApplication;
 import sensor.TemperatureApplication;
 import viewer.FridgeViewer;
-import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgent;
+import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 
 import com.tinkerforge.Device;

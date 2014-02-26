@@ -2,7 +2,8 @@ package ch.bfh.fbi.mobiComp.tinkerforge.tutorial.step04;
 
 import java.io.IOException;
 
-import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgentIdentifier;
+import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgency;
+import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgentIdentifier;
 import ch.quantasy.tinkerforge.tinker.application.definition.TinkerforgeApplication;
 
 public class MasterApplication {
@@ -12,10 +13,10 @@ public class MasterApplication {
 				"localhost");
 
 		final TinkerforgeApplication application = new MasterBrickAndMotionBrickletApplication();
-		application.addTinkerforgeStackAgent(identifier);
+		TinkerforgeStackAgency.getInstance().getStackAgent(identifier).addApplication(application);
 		System.out.println("Press key to exit");
 		System.in.read();
-		application.removeTinkerforgeStackAgent(identifier);
+		TinkerforgeStackAgency.getInstance().getStackAgent(identifier).removeApplication(application);
 
 	}
 }

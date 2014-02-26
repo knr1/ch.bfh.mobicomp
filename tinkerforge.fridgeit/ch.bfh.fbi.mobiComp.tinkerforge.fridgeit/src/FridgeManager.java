@@ -1,4 +1,5 @@
-import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgentIdentifier;
+import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgency;
+import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgentIdentifier;
 import ch.quantasy.tinkerforge.tinker.application.definition.TinkerforgeApplication;
 import fridgeit.FridgeIt;
 
@@ -16,13 +17,17 @@ public class FridgeManager {
 	}
 
 	public void start() {
-		this.fridgeIt.addTinkerforgeStackAgent(this.FRIDGE_VIEWER);
-		this.fridgeIt.addTinkerforgeStackAgent(this.FRIDGE_SENSOR);
+		TinkerforgeStackAgency.getInstance().getStackAgent(FRIDGE_VIEWER)
+				.addApplication(fridgeIt);
+		TinkerforgeStackAgency.getInstance().getStackAgent(FRIDGE_SENSOR)
+				.addApplication(fridgeIt);
 	}
 
 	public void stop() {
-		this.fridgeIt.removeTinkerforgeStackAgent(this.FRIDGE_SENSOR);
-		this.fridgeIt.removeTinkerforgeStackAgent(this.FRIDGE_VIEWER);
+		TinkerforgeStackAgency.getInstance().getStackAgent(FRIDGE_VIEWER)
+				.removeApplication(fridgeIt);
+		TinkerforgeStackAgency.getInstance().getStackAgent(FRIDGE_SENSOR)
+				.removeApplication(fridgeIt);
 	}
 
 	/**

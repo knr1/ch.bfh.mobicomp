@@ -2,7 +2,7 @@ package ch.bfh.fbi.mobiComp.tinkerforge.tutorial.step01;
 
 import java.util.Set;
 
-import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgent;
+import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.definition.TinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
@@ -13,6 +13,7 @@ import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
 
 import examples.Brick.Master.ExampleStackStatus;
+
 
 /**
  * This does exactly the same as the example in {@link ExampleStackStatus}.

@@ -2,7 +2,8 @@ package ch.bfh.fbi.mobiComp.tinkerforge.tutorial.step05;
 
 import java.io.IOException;
 
-import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgentIdentifier;
+import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgency;
+import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgentIdentifier;
 import ch.quantasy.tinkerforge.tinker.application.definition.TinkerforgeApplication;
 
 import com.tinkerforge.BrickMaster;
@@ -27,12 +28,12 @@ public class ApplicationManagement {
 
 		final TinkerforgeApplication application = new MasterBrickApplication();
 		final TinkerforgeApplication motion = new MotionDetectorApplication();
-		application.addTinkerforgeStackAgent(identifier);
-		motion.addTinkerforgeStackAgent(identifier);
+		TinkerforgeStackAgency.getInstance().getStackAgent(identifier).addApplication(application);
+		TinkerforgeStackAgency.getInstance().getStackAgent(identifier).addApplication(motion);
 		System.out.println("Press key to exit");
 		System.in.read();
-		application.removeTinkerforgeStackAgent(identifier);
-		motion.removeTinkerforgeStackAgent(identifier);
-
+		TinkerforgeStackAgency.getInstance().getStackAgent(identifier).removeApplication(application);
+		TinkerforgeStackAgency.getInstance().getStackAgent(identifier).removeApplication(motion);
+		
 	}
 }

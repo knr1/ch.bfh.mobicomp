@@ -1,6 +1,6 @@
 package viewer;
 
-import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgent;
+import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import ch.quantasy.tinkerforge.tinker.util.implementation.LCD20x4Manager;
@@ -33,12 +33,6 @@ public class FridgeViewer extends AbstractTinkerforgeApplication {
 	// Used for the 'special' alert
 	private boolean isLightLit;
 	private boolean isDoorClosed;
-
-	@Override
-	public void stackAgentIsDisconnecting(
-			final TinkerforgeStackAgent tinkerforgeStackAgent) {
-		// We do not care
-	}
 
 	/**
 	 * Before really disconnecting, the viewer will say good-bye to the human. <br/>

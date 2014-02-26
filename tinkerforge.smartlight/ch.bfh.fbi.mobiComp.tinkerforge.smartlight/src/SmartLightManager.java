@@ -1,6 +1,7 @@
 import ch.bfh.fbi.mobiComp.tinkerforge.test.LightApplication;
-import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgent;
-import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgentIdentifier;
+import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgency;
+import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
+import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgentIdentifier;
 
 import com.tinkerforge.BrickletAmbientLight;
 import com.tinkerforge.BrickletDualButton;
@@ -64,8 +65,9 @@ public class SmartLightManager {
 		this.lightApplication
 				.setDelayInMilliseconds(SmartLightManager.TIMING_DELAY_IN_MILLISECONDS);
 
-		this.lightApplication.addTinkerforgeStackAgent(this.identifier1,
-				this.identifier2);
+		TinkerforgeStackAgency.getInstance().getStackAgent(identifier1).addApplication(this.lightApplication);
+		TinkerforgeStackAgency.getInstance().getStackAgent(identifier2).addApplication(this.lightApplication);
+		
 	}
 
 	/**
@@ -73,8 +75,9 @@ public class SmartLightManager {
 	 * form the {@link TinkerforgeStackAgent}
 	 */
 	public void stop() {
-		this.lightApplication.removeTinkerforgeStackAgent(this.identifier1,
-				this.identifier2);
+		TinkerforgeStackAgency.getInstance().getStackAgent(identifier1).removeApplication(this.lightApplication);
+		TinkerforgeStackAgency.getInstance().getStackAgent(identifier2).removeApplication(this.lightApplication);
+		
 	}
 
 	/**
