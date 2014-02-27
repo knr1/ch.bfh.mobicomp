@@ -60,10 +60,10 @@ public class FridgeViewer extends AbstractTinkerforgeApplication {
 			final TinkerforgeStackAgent tinkerforgeStackAgent,
 			final Device device) {
 
-		if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.LCD20x4) {
+		if (TinkerforgeDevice.areEqual(this.lcd, device)){
 			this.lcd = null;
 		}
-		if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.DualRelay) {
+		if (TinkerforgeDevice.areEqual(this.relay, device)){
 			this.relay = null;
 		}
 	}
@@ -80,12 +80,15 @@ public class FridgeViewer extends AbstractTinkerforgeApplication {
 	public void deviceConnected(
 			final TinkerforgeStackAgent tinkerforgeStackAgent,
 			final Device device) {
-		if (this.lcd==null && TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.LCD20x4) {
-			this.lcd = (BrickletLCD20x4) device;
-			this.initLCD();
+		if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.LCD20x4) {
+			if(!TinkerforgeDevice.areEqual(this.lcd, device)){
+				this.lcd = (BrickletLCD20x4) device;
+			}
+				this.initLCD();
 		}
-		if (this.relay==null && TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.DualRelay) {
-			this.relay = (BrickletDualRelay) device;
+		if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.DualRelay) {
+			if(this.relay==null)
+					this.relay = (BrickletDualRelay) device;
 			this.initRelay();
 		}
 	}

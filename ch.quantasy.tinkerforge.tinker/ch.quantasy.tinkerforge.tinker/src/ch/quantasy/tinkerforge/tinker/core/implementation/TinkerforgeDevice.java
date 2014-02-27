@@ -121,6 +121,9 @@ public enum TinkerforgeDevice {
 		if ((id1 == null) || (id2 == null)) {
 			return false;
 		}
+		if(id1.deviceIdentifier!=id2.deviceIdentifier){
+			return false;
+		}
 		if (!id1.uid.equals(id2.uid)) {
 			return false;
 		}
@@ -135,7 +138,7 @@ public enum TinkerforgeDevice {
 
 	public static TinkerforgeDevice getDevice(final Device device) {
 		if (device == null) {
-			throw new IllegalArgumentException();
+			return null;
 		}
 		final Class<? extends Device> deviceClass = device.getClass();
 		for (final TinkerforgeDevice tinkerforgeDevice : TinkerforgeDevice.values()) {

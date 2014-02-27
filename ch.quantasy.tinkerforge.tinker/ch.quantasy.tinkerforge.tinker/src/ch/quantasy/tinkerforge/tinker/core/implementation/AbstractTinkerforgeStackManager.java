@@ -201,11 +201,11 @@ public abstract class AbstractTinkerforgeStackManager {
 				}
 				break;
 			case IPConnection.ENUMERATION_TYPE_CONNECTED:
+				System.out.println("Reconnect");
 				if (isNewDevice) {
-					deviceMap.remove(uid);
-				} else {
-					AbstractTinkerforgeStackManager.this.deviceReConnected(AbstractTinkerforgeStackManager.this.deviceMap
-							.get(uid));
+					AbstractTinkerforgeStackManager.this.deviceConnected(AbstractTinkerforgeStackManager.this.deviceMap.get(uid));
+				}else{
+					AbstractTinkerforgeStackManager.this.deviceReConnected(AbstractTinkerforgeStackManager.this.deviceMap.get(uid));
 				}
 				break;
 			case IPConnection.ENUMERATION_TYPE_DISCONNECTED:
@@ -228,8 +228,12 @@ public abstract class AbstractTinkerforgeStackManager {
 				return false;
 			}
 			try {
-				final Device device = (Device) TinkerforgeDevice.getDevice(deviceIdentifier).device.getDeclaredConstructor(
-						String.class, IPConnection.class).newInstance(uid, AbstractTinkerforgeStackManager.this.ipConnection);
+				TinkerforgeDevice tinkerforgeDevice = TinkerforgeDevice.getDevice(deviceIdentifier);
+				if (tinkerforgeDevice == null)
+					return false;
+				final Device device = (Device) tinkerforgeDevice.device
+						.getDeclaredConstructor(String.class, IPConnection.class).newInstance(uid,
+								AbstractTinkerforgeStackManager.this.ipConnection);
 				device.getIdentity();
 				AbstractTinkerforgeStackManager.this.deviceMap.put(uid, device);
 				return true;

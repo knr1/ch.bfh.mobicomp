@@ -95,8 +95,9 @@ public class LCD20x4Manager {
 		if (lcd == null) {
 			return;
 		}
-		synchronized (lcd) {
-			try {
+
+		try {
+			synchronized (lcd) {
 				lcd.clearDisplay();
 				lcd.backlightOn();
 				LCD20x4Manager.write(lcd, (short) 1, (short) 5, "...Good");
@@ -106,10 +107,11 @@ public class LCD20x4Manager {
 				Thread.sleep(500);
 				lcd.backlightOff();
 				lcd.clearDisplay();
-			} catch (final Exception ex) {
-				ex.printStackTrace();
 			}
+		} catch (final Exception ex) {
+			ex.printStackTrace();
 		}
+
 	}
 
 	/**
@@ -177,7 +179,9 @@ public class LCD20x4Manager {
 		if (lcd == null) {
 			return;
 		}
-		lcd.writeLine(line, position, LCD20x4Manager.utf16ToKS0066U(text));
+		synchronized (lcd) {
+			lcd.writeLine(line, position, LCD20x4Manager.utf16ToKS0066U(text));
+		}
 	}
 
 	// Maps a normal UTF-16 encoded string to the LCD charset
