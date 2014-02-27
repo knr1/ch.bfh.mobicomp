@@ -118,71 +118,12 @@ public class FridgeIt extends AbstractTinkerforgeApplication {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = (prime * result)
-				+ ((this.ambientLight == null) ? 0 : this.ambientLight
-						.hashCode());
-		result = (prime * result)
-				+ ((this.distance == null) ? 0 : this.distance.hashCode());
-		result = (prime * result)
-				+ ((this.fridgeViewer == null) ? 0 : this.fridgeViewer
-						.hashCode());
-		result = (prime * result)
-				+ ((this.humidity == null) ? 0 : this.humidity.hashCode());
-		result = (prime * result)
-				+ ((this.temperature == null) ? 0 : this.temperature.hashCode());
-		return result;
+		return 0;
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (this.getClass() != obj.getClass()) {
-			return false;
-		}
-		final FridgeIt other = (FridgeIt) obj;
-		if (this.ambientLight == null) {
-			if (other.ambientLight != null) {
-				return false;
-			}
-		} else if (!this.ambientLight.equals(other.ambientLight)) {
-			return false;
-		}
-		if (this.distance == null) {
-			if (other.distance != null) {
-				return false;
-			}
-		} else if (!this.distance.equals(other.distance)) {
-			return false;
-		}
-		if (this.fridgeViewer == null) {
-			if (other.fridgeViewer != null) {
-				return false;
-			}
-		} else if (!this.fridgeViewer.equals(other.fridgeViewer)) {
-			return false;
-		}
-		if (this.humidity == null) {
-			if (other.humidity != null) {
-				return false;
-			}
-		} else if (!this.humidity.equals(other.humidity)) {
-			return false;
-		}
-		if (this.temperature == null) {
-			if (other.temperature != null) {
-				return false;
-			}
-		} else if (!this.temperature.equals(other.temperature)) {
-			return false;
-		}
-		return true;
+		return this==obj;
 	}
 
 }

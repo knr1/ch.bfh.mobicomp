@@ -42,7 +42,7 @@ public class FridgeItSimulation {
 		} finally {
 			System.out.println("Disconnecting Tinkerforge Brick-Stack");
 			TinkerforgeStackAgency.getInstance().getStackAgent(FRIDGE_VIEWER)
-					.addApplication(fridgeViewer);
+					.removeApplication(fridgeViewer);
 		}
 	}
 }

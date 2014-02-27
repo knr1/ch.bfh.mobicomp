@@ -36,21 +36,23 @@ public class LCD20x4Manager {
 			@Override
 			public void run() {
 				try {
-					final boolean initialStatus = lcd.isBacklightOn();
-					for (int i = 0; i < (amount * 2); i++) {
+					synchronized (lcd) {
+						final boolean initialStatus = lcd.isBacklightOn();
+						for (int i = 0; i < (amount * 2); i++) {
 
-						if (lcd.isBacklightOn()) {
-							lcd.backlightOff();
-							Thread.sleep(offTime);
-						} else {
-							lcd.backlightOn();
-							Thread.sleep(onTime);
+							if (lcd.isBacklightOn()) {
+								lcd.backlightOff();
+								Thread.sleep(offTime);
+							} else {
+								lcd.backlightOn();
+								Thread.sleep(onTime);
+							}
 						}
-					}
-					if (initialStatus) {
-						lcd.backlightOn();
-					} else {
-						lcd.backlightOff();
+						if (initialStatus) {
+							lcd.backlightOn();
+						} else {
+							lcd.backlightOff();
+						}
 					}
 				} catch (final Exception ex) {
 				}

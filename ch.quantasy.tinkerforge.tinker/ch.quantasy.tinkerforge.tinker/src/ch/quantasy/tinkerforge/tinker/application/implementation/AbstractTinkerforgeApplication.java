@@ -25,7 +25,7 @@ public abstract class AbstractTinkerforgeApplication implements TinkerforgeAppli
 			return;
 		}
 		for (final TinkerforgeApplication application : applications) {
-			if (application == null) {
+			if (application == null || application==this) {
 				continue;
 			}
 			this.tinkerforgeApplications.add(application);
