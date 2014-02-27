@@ -164,7 +164,6 @@ public abstract class AbstractTinkerforgeStackManager {
 
 		@Override
 		public void disconnected(final short disconnectReason) {
-			System.out.println(disconnectReason);
 			AbstractTinkerforgeStackManager.this.disconnected();
 
 		}
@@ -194,35 +193,52 @@ public abstract class AbstractTinkerforgeStackManager {
 		public void enumerate(final String uid, final String connectedUid, final char position,
 				final short[] hardwareVersion, final short[] firmwareVersion, final int deviceIdentifier,
 				final short enumerationType) {
-			this.createDevice(deviceIdentifier, uid);
+			boolean isNewDevice = this.createDevice(deviceIdentifier, uid);
 			switch (enumerationType) {
 			case IPConnection.ENUMERATION_TYPE_AVAILABLE:
-				AbstractTinkerforgeStackManager.this.deviceConnected(AbstractTinkerforgeStackManager.this.deviceMap.get(uid));
+				if (isNewDevice) {
+					AbstractTinkerforgeStackManager.this.deviceConnected(AbstractTinkerforgeStackManager.this.deviceMap.get(uid));
+				}
 				break;
 			case IPConnection.ENUMERATION_TYPE_CONNECTED:
-				AbstractTinkerforgeStackManager.this.deviceReConnected(AbstractTinkerforgeStackManager.this.deviceMap.get(uid));
+				if (isNewDevice) {
+					deviceMap.remove(uid);
+				} else {
+					AbstractTinkerforgeStackManager.this.deviceReConnected(AbstractTinkerforgeStackManager.this.deviceMap
+							.get(uid));
+				}
 				break;
 			case IPConnection.ENUMERATION_TYPE_DISCONNECTED:
+				if (isNewDevice) {
+					// That is strange!
+					deviceMap.remove(uid);
+					return;
+				}
 				AbstractTinkerforgeStackManager.this
 						.deviceDisconnected(AbstractTinkerforgeStackManager.this.deviceMap.get(uid));
 				break;
+			default:
+				System.out.println("!!!Unknown cause: " + enumerationType);
 			}
 
 		}
 
-		private void createDevice(final int deviceIdentifier, final String uid) {
-			if (!AbstractTinkerforgeStackManager.this.deviceMap.containsKey(uid)) {
-				try {
-					final Device device = (Device) TinkerforgeDevice.getDevice(deviceIdentifier).device.getDeclaredConstructor(
-							String.class, IPConnection.class).newInstance(uid, AbstractTinkerforgeStackManager.this.ipConnection);
-					device.getIdentity();
-					AbstractTinkerforgeStackManager.this.deviceMap.put(uid, device);
-				} catch (final TinkerforgeException ex) {
-					ex.printStackTrace();
-				} catch (final Exception ex) {
-					ex.printStackTrace();
-				}
+		private boolean createDevice(final int deviceIdentifier, final String uid) {
+			if (AbstractTinkerforgeStackManager.this.deviceMap.containsKey(uid)) {
+				return false;
 			}
+			try {
+				final Device device = (Device) TinkerforgeDevice.getDevice(deviceIdentifier).device.getDeclaredConstructor(
+						String.class, IPConnection.class).newInstance(uid, AbstractTinkerforgeStackManager.this.ipConnection);
+				device.getIdentity();
+				AbstractTinkerforgeStackManager.this.deviceMap.put(uid, device);
+				return true;
+			} catch (final TinkerforgeException ex) {
+				ex.printStackTrace();
+			} catch (final Exception ex) {
+				ex.printStackTrace();
+			}
+			return false;
 		}
 
 	}
