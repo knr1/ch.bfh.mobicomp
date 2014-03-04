@@ -56,25 +56,26 @@ public class ConcurrentLEDStripeApplication extends
 
 	public ConcurrentLEDStripeApplication() {
 		System.out.println("Concurrent");
-		setClockFrequencyOfICsInHz(DEFAULT_CLOCK_FREQUENCY_OF_ICS_IN_HZ);
+		this.setClockFrequencyOfICsInHz(ConcurrentLEDStripeApplication.DEFAULT_CLOCK_FREQUENCY_OF_ICS_IN_HZ);
 		System.out.println("MHz set");
-		setFrameDurationInMilliseconds(DEFAULT_FRAME_DURATION_IN_MILLISECONDS);
+		this.setFrameDurationInMilliseconds(ConcurrentLEDStripeApplication.DEFAULT_FRAME_DURATION_IN_MILLISECONDS);
 		System.out.println("FrameDuration set");
 		this.renderState = RenderState.FREE;
 		System.out.println("RenderState set");
 		this.sendState = SendState.FREE;
 		System.out.println("sendingState set");
-		setNumberOfLEDs(DEFAULT_NUMBER_OF_LEDS);
+		this.setNumberOfLEDs(ConcurrentLEDStripeApplication.DEFAULT_NUMBER_OF_LEDS);
 		System.out.println("NumLEDs set");
 
 	}
 
 	@Override
-	public void deviceConnected(TinkerforgeStackAgent tinkerforgeStackAgent,
-			Device device) {
+	public void deviceConnected(
+			final TinkerforgeStackAgent tinkerforgeStackAgent,
+			final Device device) {
 		if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.LEDStrip) {
-			if (!TinkerforgeDevice.areEqual(ledStrip, device)) {
-				if (ledStrip != null) {
+			if (!TinkerforgeDevice.areEqual(this.ledStrip, device)) {
+				if (this.ledStrip != null) {
 					this.removeTinkerforgeApplication(this);
 				}
 				this.ledStrip = (BrickletLEDStrip) device;
@@ -86,10 +87,11 @@ public class ConcurrentLEDStripeApplication extends
 	}
 
 	@Override
-	public void deviceDisconnected(TinkerforgeStackAgent tinkerforgeStackAgent,
-			Device device) {
+	public void deviceDisconnected(
+			final TinkerforgeStackAgent tinkerforgeStackAgent,
+			final Device device) {
 		if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.LEDStrip) {
-			if (TinkerforgeDevice.areEqual(ledStrip, device)) {
+			if (TinkerforgeDevice.areEqual(this.ledStrip, device)) {
 				this.tearDown();
 				this.ledStrip.removeFrameRenderedListener(this);
 				this.ledStrip = null;
@@ -110,55 +112,61 @@ public class ConcurrentLEDStripeApplication extends
 
 	/**
 	 * Accepts 2-Dimensional arrays of shorts with the length of the LED-Stripe.
-	 * It will copy the content and will return after that. You are free to reuse
-	 * the array again.
+	 * It will copy the content and will return after that. You are free to
+	 * reuse the array again.
+	 * 
 	 * @param numberOfLEDs
 	 */
-	public void setNumberOfLEDs(int numberOfLEDs) {
-		if (numberOfLEDs < 0 || numberOfLEDs > 320)
+	public void setNumberOfLEDs(final int numberOfLEDs) {
+		if ((numberOfLEDs < 0) || (numberOfLEDs > 320)) {
 			throw new IllegalArgumentException();
-		if (numberOfLEDs == this.numberOfLEDs)
+		}
+		if (numberOfLEDs == this.numberOfLEDs) {
 			return;
+		}
 		synchronized (this) {
-			while (sendState != SendState.FREE) {
+			while (this.sendState != SendState.FREE) {
 				try {
-					wait(250);
-				} catch (InterruptedException e) {
+					this.wait(250);
+				} catch (final InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			sendState = SendState.MAINTENANCE;
+			this.sendState = SendState.MAINTENANCE;
 		}
 		this.numberOfLEDs = numberOfLEDs;
 		this.numberOfWrites = (int) Math.ceil((double) this.numberOfLEDs
-				/ NUMBER_OF_LEDS_PER_WRITE);
-		this.frame = new short[NUMBER_OF_COLOR_CHANNELS][this.numberOfWrites][NUMBER_OF_LEDS_PER_WRITE];
+				/ ConcurrentLEDStripeApplication.NUMBER_OF_LEDS_PER_WRITE);
+		this.frame = new short[ConcurrentLEDStripeApplication.NUMBER_OF_COLOR_CHANNELS][this.numberOfWrites][ConcurrentLEDStripeApplication.NUMBER_OF_LEDS_PER_WRITE];
 		synchronized (this) {
-			sendState = SendState.FREE;
-			notifyAll();
+			this.sendState = SendState.FREE;
+			this.notifyAll();
 		}
 	}
 
 	public int getNumberOfLEDs() {
-		return numberOfLEDs;
+		return this.numberOfLEDs;
 	}
 
-	public void setFrameDurationInMilliseconds(int frameDurationInMilliseconds) {
-		if (frameDurationInMilliseconds < 1)
+	public void setFrameDurationInMilliseconds(
+			final int frameDurationInMilliseconds) {
+		if (frameDurationInMilliseconds < 1) {
 			throw new IllegalArgumentException();
+		}
 		this.frameDurationInMilliseconds = frameDurationInMilliseconds;
-		if (this.ledStrip != null)
+		if (this.ledStrip != null) {
 			try {
 				this.ledStrip
 						.setFrameDuration(this.frameDurationInMilliseconds);
-			} catch (TimeoutException e) {
+			} catch (final TimeoutException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (NotConnectedException e) {
+			} catch (final NotConnectedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
 
 	}
 
@@ -166,20 +174,22 @@ public class ConcurrentLEDStripeApplication extends
 		return this.frameDurationInMilliseconds;
 	}
 
-	public void setClockFrequencyOfICsInHz(int clockFrequencyOfICsInHz) {
-		if (clockFrequencyOfICsInHz < 1)
+	public void setClockFrequencyOfICsInHz(final int clockFrequencyOfICsInHz) {
+		if (clockFrequencyOfICsInHz < 1) {
 			throw new IllegalArgumentException();
+		}
 		this.clockFrequencyOfICsInHz = clockFrequencyOfICsInHz;
-		if (this.ledStrip != null)
+		if (this.ledStrip != null) {
 			try {
 				this.ledStrip.setClockFrequency(clockFrequencyOfICsInHz);
-			} catch (TimeoutException e) {
+			} catch (final TimeoutException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (NotConnectedException e) {
+			} catch (final NotConnectedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
 
 	}
 
@@ -188,23 +198,28 @@ public class ConcurrentLEDStripeApplication extends
 	}
 
 	/**
-	 * Returns a new 2-dimensional array of shorts representing all the RGB-LEDs of the strip.
+	 * Returns a new 2-dimensional array of shorts representing all the RGB-LEDs
+	 * of the strip.
 	 * 
 	 * @return 3-channel-array of shorts
 	 */
 	public short[][] getFreshRGBLEDs() {
-		return new short[NUMBER_OF_COLOR_CHANNELS][this.getNumberOfLEDs()];
+		return new short[ConcurrentLEDStripeApplication.NUMBER_OF_COLOR_CHANNELS][this
+				.getNumberOfLEDs()];
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (obj == null)
+	public boolean equals(final Object obj) {
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof ConcurrentLEDStripeApplication))
+		}
+		if (!(obj instanceof ConcurrentLEDStripeApplication)) {
 			return false;
-		if (this == obj)
+		}
+		if (this == obj) {
 			return true;
-		ConcurrentLEDStripeApplication other = (ConcurrentLEDStripeApplication) obj;
+		}
+		final ConcurrentLEDStripeApplication other = (ConcurrentLEDStripeApplication) obj;
 		return TinkerforgeDevice.areEqual(this.ledStrip, other.ledStrip);
 	}
 
@@ -218,44 +233,54 @@ public class ConcurrentLEDStripeApplication extends
 	 * 
 	 * @param rgbLEDs
 	 */
-	public void setRGBLEDs(short[][] rgbLEDs) {
-		if (rgbLEDs == null)
+	public void setRGBLEDs(final short[][] rgbLEDs) {
+		if (rgbLEDs == null) {
 			return;
-		if (rgbLEDs.length != NUMBER_OF_COLOR_CHANNELS)
+		}
+		if (rgbLEDs.length != ConcurrentLEDStripeApplication.NUMBER_OF_COLOR_CHANNELS) {
 			return;
+		}
 
 		synchronized (this) {
-			while (this.ledStrip != null && this.sendState != SendState.FREE) {
+			while ((this.ledStrip != null)
+					&& (this.sendState != SendState.FREE)) {
 				try {
-					wait(250);
-				} catch (InterruptedException e) {
+					this.wait(250);
+				} catch (final InterruptedException e) {
 				}
 
 			}
-			if (this.ledStrip == null)
+			if (this.ledStrip == null) {
 				return;
+			}
 
 			this.sendState = SendState.PREPARING;
 		}
 
-		for (int colorChannel = 0; colorChannel < NUMBER_OF_COLOR_CHANNELS; colorChannel++) {
-			if (rgbLEDs[colorChannel] == null
-					|| rgbLEDs[colorChannel].length != this.numberOfLEDs)
+		for (int colorChannel = 0; colorChannel < ConcurrentLEDStripeApplication.NUMBER_OF_COLOR_CHANNELS; colorChannel++) {
+			if ((rgbLEDs[colorChannel] == null)
+					|| (rgbLEDs[colorChannel].length != this.numberOfLEDs)) {
 				return;
+			}
 		}
 
-		for (int colorChannel = 0; colorChannel < NUMBER_OF_COLOR_CHANNELS; colorChannel++) {
-			for (int write = 0, remaining = this.numberOfLEDs; write < numberOfWrites; write++, remaining -= NUMBER_OF_LEDS_PER_WRITE) {
-				System.arraycopy(rgbLEDs[colorChannel], write
-						* NUMBER_OF_LEDS_PER_WRITE,
-						this.frame[colorChannel][write], 0,
-						(int) Math.min(remaining, NUMBER_OF_LEDS_PER_WRITE));
+		for (int colorChannel = 0; colorChannel < ConcurrentLEDStripeApplication.NUMBER_OF_COLOR_CHANNELS; colorChannel++) {
+			for (int write = 0, remaining = this.numberOfLEDs; write < this.numberOfWrites; write++, remaining -= ConcurrentLEDStripeApplication.NUMBER_OF_LEDS_PER_WRITE) {
+				System.arraycopy(
+						rgbLEDs[colorChannel],
+						write
+								* ConcurrentLEDStripeApplication.NUMBER_OF_LEDS_PER_WRITE,
+						this.frame[colorChannel][write],
+						0,
+						Math.min(
+								remaining,
+								ConcurrentLEDStripeApplication.NUMBER_OF_LEDS_PER_WRITE));
 			}
 		}
 		synchronized (this) {
 			this.sendState = SendState.TO_BE_SENT;
 		}
-		sendRGBLEDFrame();
+		this.sendRGBLEDFrame();
 	}
 
 	/**
@@ -264,14 +289,15 @@ public class ConcurrentLEDStripeApplication extends
 	private void sendRGBLEDFrame() {
 
 		synchronized (this) {
-			if (ledStrip == null) {
+			if (this.ledStrip == null) {
 				this.sendState = SendState.FREE;
-				notifyAll();
+				this.notifyAll();
 				return;
 			}
-			if (renderState == RenderState.RENDERING)
+			if (this.renderState == RenderState.RENDERING) {
 				return;
-			if (sendState != SendState.TO_BE_SENT) {
+			}
+			if (this.sendState != SendState.TO_BE_SENT) {
 				return;
 			}
 			this.sendState = SendState.SENDING;
@@ -280,29 +306,33 @@ public class ConcurrentLEDStripeApplication extends
 		try {
 			for (int write = 0; write < this.numberOfWrites; write++) {
 
-				ledStrip.setRGBValues(write * NUMBER_OF_LEDS_PER_WRITE,
-						(short) NUMBER_OF_LEDS_PER_WRITE, this.frame[0][write],
-						this.frame[1][write], this.frame[2][write]);
+				this.ledStrip
+						.setRGBValues(
+								write
+										* ConcurrentLEDStripeApplication.NUMBER_OF_LEDS_PER_WRITE,
+								(short) ConcurrentLEDStripeApplication.NUMBER_OF_LEDS_PER_WRITE,
+								this.frame[0][write], this.frame[1][write],
+								this.frame[2][write]);
 			}
 
-		} catch (TimeoutException e) {
+		} catch (final TimeoutException e) {
 			// Eh... ok
-		} catch (NotConnectedException e) {
+		} catch (final NotConnectedException e) {
 			// Well...
-		} catch (NullPointerException e) {
+		} catch (final NullPointerException e) {
 			this.renderState = RenderState.FREE;
 		}
 		synchronized (this) {
 			this.sendState = SendState.FREE;
-			notifyAll();
+			this.notifyAll();
 		}
 	}
 
 	@Override
-	public void frameRendered(int length) {
+	public void frameRendered(final int length) {
 		synchronized (this) {
-			if (this.sendState == SendState.FREE
-					&& this.renderState == RenderState.RENDERING) {
+			if ((this.sendState == SendState.FREE)
+					&& (this.renderState == RenderState.RENDERING)) {
 				this.renderState = RenderState.FREE;
 				this.notifyAll();
 			}
