@@ -1,4 +1,4 @@
-package ch.bfh.fbi.mobiComp.tinkerforge.led;
+package ch.quantasy.tinkerforge.led;
 
 import java.io.IOException;
 

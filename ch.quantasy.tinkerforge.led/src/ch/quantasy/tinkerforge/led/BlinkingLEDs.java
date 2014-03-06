@@ -1,4 +1,4 @@
-package ch.bfh.fbi.mobiComp.tinkerforge.led;
+package ch.quantasy.tinkerforge.led;
 
 import java.util.Random;
 import java.util.Timer;
@@ -17,7 +17,10 @@ public class BlinkingLEDs extends AbstractTinkerforgeApplication {
 	public BlinkingLEDs() {
 		this.ledStripeApp = new ConcurrentLEDStripeApplication();
 		super.addTinkerforgeApplication(this.ledStripeApp);
+		this.ledStripeApp.setFrameDurationInMilliseconds(50);
+		this.ledStripeApp.setNumberOfLEDs(64);
 		this.leds = this.ledStripeApp.getFreshRGBLEDs();
+
 	}
 
 	@Override
@@ -32,7 +35,16 @@ public class BlinkingLEDs extends AbstractTinkerforgeApplication {
 					BlinkingLEDs.this.updateLEDs();
 				}
 			}, 0, 1);
-			System.out.println("Started");
+			timer.schedule(new TimerTask() {
+
+				@Override
+				public void run() {
+					if (ledStripeApp.getLagState())
+						System.out.println("Laging!");
+					ledStripeApp.resetLagState();
+
+				}
+			}, 0, 1000);
 		}
 	}
 
@@ -48,33 +60,43 @@ public class BlinkingLEDs extends AbstractTinkerforgeApplication {
 	private short j;
 	private int randomPosition;
 	private final Random random = new Random();
+	private final int MAX_LIGHT = 255;
 
 	private void updateLEDs() {
-		System.out.println(this.i);
 		for (int position = 0; position < this.leds[2].length; position++) {
-			if (this.j < 128) {
+			if (this.j < MAX_LIGHT) {
 				this.leds[2][position] = this.j;
 			} else {
-				this.leds[2][position] = (short) (256 - this.j);
+				this.leds[2][position] = (short) ((MAX_LIGHT * 2) - this.j);
 			}
 		}
 		this.j++;
-		this.j %= 256;
-		this.leds[0][this.i] = 0;
-		this.leds[1][(this.leds[1].length - 1) - this.i] = 0;
+		this.j %= (MAX_LIGHT * 2 + 1);
+
+		
+		for (int x = 0; x < 10; x++) {
+			this.leds[0][(this.i+x)%this.leds[0].length] = 0;
+			this.leds[1][(this.leds[1].length - 1) - ((this.i+x)%this.leds[0].length)] = 0;
+		}
 		this.i++;
 		this.i %= (this.leds[0].length);
-		this.leds[0][this.i] = 255;
-		this.leds[1][(this.leds[1].length - 1) - this.i] = 255;
+		for (int x = 0; x < 10; x++) {
+			this.leds[0][(this.i+x)%this.leds[0].length] = (short)(255-(25*x));
+			this.leds[1][(this.leds[1].length - 1) - ((this.i+x)%this.leds[0].length)] = (short)(255-(25*x));
+		}
+			
+		
+		
+		
 
-		this.leds[0][this.randomPosition] = 0;
-		this.leds[1][this.randomPosition] = 0;
-		this.leds[2][this.randomPosition] = 0;
-		this.randomPosition = this.random.nextInt(50);
-		this.leds[0][this.randomPosition] = 255;
-		this.leds[1][this.randomPosition] = 255;
-		this.leds[2][this.randomPosition] = 255;
-
+		// this.leds[0][this.randomPosition] = 0;
+		// this.leds[1][this.randomPosition] = 0;
+		// this.leds[2][this.randomPosition] = 0;
+		// this.randomPosition =
+		// this.random.nextInt(this.ledStripeApp.getNumberOfLEDs());
+		// this.leds[0][this.randomPosition] = 255;
+		// this.leds[1][this.randomPosition] = 255;
+		// this.leds[2][this.randomPosition] = 255;
 		this.ledStripeApp.setRGBLEDs(this.leds);
 
 	}

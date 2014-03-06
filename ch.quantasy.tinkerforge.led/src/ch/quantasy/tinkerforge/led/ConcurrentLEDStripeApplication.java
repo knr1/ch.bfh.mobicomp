@@ -1,4 +1,4 @@
-package ch.bfh.fbi.mobiComp.tinkerforge.led;
+package ch.quantasy.tinkerforge.led;
 
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
@@ -32,6 +32,7 @@ public class ConcurrentLEDStripeApplication extends
 		FREE, RENDERING;
 	}
 
+	private boolean isLaging;
 	private SendState sendState;
 	private RenderState renderState;
 
@@ -207,6 +208,13 @@ public class ConcurrentLEDStripeApplication extends
 		return new short[ConcurrentLEDStripeApplication.NUMBER_OF_COLOR_CHANNELS][this
 				.getNumberOfLEDs()];
 	}
+	
+	public boolean getLagState(){
+		return isLaging;
+	}
+	public void resetLagState(){
+		isLaging=false;
+	}
 
 	@Override
 	public boolean equals(final Object obj) {
@@ -283,6 +291,7 @@ public class ConcurrentLEDStripeApplication extends
 		this.sendRGBLEDFrame();
 	}
 
+	
 	/**
 	 * Either this method is called via setRGBLEDs or via the render-Listener.
 	 */
@@ -328,14 +337,17 @@ public class ConcurrentLEDStripeApplication extends
 		}
 	}
 
+	
 	@Override
 	public void frameRendered(final int length) {
 		synchronized (this) {
+			this.isLaging=(this.sendState==SendState.SENDING);
 			if ((this.sendState == SendState.FREE)
 					&& (this.renderState == RenderState.RENDERING)) {
 				this.renderState = RenderState.FREE;
 				this.notifyAll();
 			}
+			
 			if (this.sendState == SendState.TO_BE_SENT) {
 				this.renderState = RenderState.FREE;
 				this.sendRGBLEDFrame();
