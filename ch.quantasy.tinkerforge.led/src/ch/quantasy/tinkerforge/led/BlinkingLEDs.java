@@ -11,11 +11,14 @@ import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import com.tinkerforge.Device;
 
 public class BlinkingLEDs extends AbstractTinkerforgeApplication {
-	public ConcurrentLEDStripeApplication ledStripeApp;
+	private ConcurrentLEDStripeApplication ledStripeApp;
+	private RotaryApplication rotaryApp;
 	private final short[][] leds;
 
 	public BlinkingLEDs() {
 		this.ledStripeApp = new ConcurrentLEDStripeApplication();
+		this.rotaryApp=new RotaryApplication(this);
+		super.addTinkerforgeApplication(rotaryApp);
 		super.addTinkerforgeApplication(this.ledStripeApp);
 		this.ledStripeApp.setFrameDurationInMilliseconds(50);
 		this.ledStripeApp.setNumberOfLEDs(64);
@@ -63,6 +66,16 @@ public class BlinkingLEDs extends AbstractTinkerforgeApplication {
 	private final int MAX_LIGHT = 255;
 
 	private void updateLEDs() {
+		
+		this.leds[0][this.randomPosition] = 0;
+		this.leds[1][this.randomPosition] = 0;
+		this.leds[2][this.randomPosition] = 0;
+		this.randomPosition = this.random.nextInt(this.ledStripeApp
+				.getNumberOfLEDs());
+		this.leds[0][this.randomPosition] = 255;
+		this.leds[1][this.randomPosition] = 255;
+		this.leds[2][this.randomPosition] = 255;
+		
 		for (int position = 0; position < this.leds[2].length; position++) {
 			if (this.j < MAX_LIGHT) {
 				this.leds[2][position] = this.j;
@@ -85,20 +98,12 @@ public class BlinkingLEDs extends AbstractTinkerforgeApplication {
 			this.leds[1][(this.leds[1].length - 1) - ((this.i+x)%this.leds[0].length)] = (short)(255-(25*x));
 		}
 			
-		
-		
-		
-
-		// this.leds[0][this.randomPosition] = 0;
-		// this.leds[1][this.randomPosition] = 0;
-		// this.leds[2][this.randomPosition] = 0;
-		// this.randomPosition =
-		// this.random.nextInt(this.ledStripeApp.getNumberOfLEDs());
-		// this.leds[0][this.randomPosition] = 255;
-		// this.leds[1][this.randomPosition] = 255;
-		// this.leds[2][this.randomPosition] = 255;
 		this.ledStripeApp.setRGBLEDs(this.leds);
 
+	}
+	
+	public void changeSpeed(int speedChange){
+		this.ledStripeApp.setFrameDurationInMilliseconds(Math.max(1, ledStripeApp.getFrameDurationInMilliseconds()+speedChange));
 	}
 
 	@Override
