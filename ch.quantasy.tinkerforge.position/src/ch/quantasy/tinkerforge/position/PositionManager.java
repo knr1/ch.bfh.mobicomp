@@ -1,13 +1,8 @@
 package ch.quantasy.tinkerforge.position;
 
-import java.io.IOException;
-
-import javafx.stage.Stage;
 import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgency;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgentIdentifier;
-
-import com.sun.glass.ui.Platform;
 
 public class PositionManager {
 	public static void main(final String[] args) throws Exception {

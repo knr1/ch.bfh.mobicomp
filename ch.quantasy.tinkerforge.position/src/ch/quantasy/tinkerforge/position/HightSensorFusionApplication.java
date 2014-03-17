@@ -1,6 +1,5 @@
 package ch.quantasy.tinkerforge.position;
 
-import javafx.application.Application;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 
