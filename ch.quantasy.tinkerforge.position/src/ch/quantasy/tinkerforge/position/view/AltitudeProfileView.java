@@ -3,7 +3,6 @@ package ch.quantasy.tinkerforge.position.view;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javafx.animation.AnimationTimer;
-import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -29,8 +28,9 @@ public class AltitudeProfileView {
 	private NumberAxis yAxis;
 
 	private NumberAxis initXAxis() {
-		NumberAxis xAxis = new NumberAxis(0, MAX_DATA_POINTS,
-				MAX_DATA_POINTS / 10);
+		final NumberAxis xAxis = new NumberAxis(0,
+				AltitudeProfileView.MAX_DATA_POINTS,
+				AltitudeProfileView.MAX_DATA_POINTS / 10);
 		xAxis.setTickLabelFont(Font.font("Arial", FontWeight.MEDIUM, 18));
 		xAxis.setForceZeroInRange(false);
 		xAxis.setAutoRanging(false);
@@ -39,10 +39,10 @@ public class AltitudeProfileView {
 	}
 
 	private NumberAxis initYAxis() {
-		NumberAxis yAxis = new NumberAxis(800, 802, 0.1);
+		final NumberAxis yAxis = new NumberAxis(800, 802, 0.1);
 		yAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(yAxis) {
 			@Override
-			public String toString(Number object) {
+			public String toString(final Number object) {
 				return String.format("%6.2f", object);
 			}
 		});
@@ -58,11 +58,11 @@ public class AltitudeProfileView {
 	private LineChart<Number, Number> initChart() {
 		// -- Chart
 		final LineChart<Number, Number> lineChart = new LineChart<Number, Number>(
-				xAxis, yAxis) {
+				this.xAxis, this.yAxis) {
 			// Override to remove symbols on each data point
 			@Override
-			protected void dataItemAdded(Series<Number, Number> series,
-					int itemIndex, Data<Number, Number> item) {
+			protected void dataItemAdded(final Series<Number, Number> series,
+					final int itemIndex, final Data<Number, Number> item) {
 			}
 		};
 		lineChart.setAnimated(false);
@@ -71,35 +71,35 @@ public class AltitudeProfileView {
 		return lineChart;
 	}
 
-	private void init(Stage stage) {
-		xAxis = initXAxis();
-		yAxis = initYAxis();
-		LineChart<Number, Number> chart = initChart();
+	private void init(final Stage stage) {
+		this.xAxis = this.initXAxis();
+		this.yAxis = this.initYAxis();
+		final LineChart<Number, Number> chart = this.initChart();
 
 		// Chart Series
-		barometricAltitudeSeries = new LineChart.Series<Number, Number>();
-		barometricAltitudeSeries.setName("Barometric Altitude");
-		chart.getData().add(barometricAltitudeSeries);
+		this.barometricAltitudeSeries = new LineChart.Series<Number, Number>();
+		this.barometricAltitudeSeries.setName("Barometric Altitude");
+		chart.getData().add(this.barometricAltitudeSeries);
 
-		estimatedAltitudeSeries = new LineChart.Series<Number, Number>();
-		estimatedAltitudeSeries.setName("Estimated Altitude");
-		chart.getData().add(estimatedAltitudeSeries);
+		this.estimatedAltitudeSeries = new LineChart.Series<Number, Number>();
+		this.estimatedAltitudeSeries.setName("Estimated Altitude");
+		chart.getData().add(this.estimatedAltitudeSeries);
 
 		stage.setScene(new Scene(chart));
 
 	}
 
-	public AltitudeProfileView(Stage stage){
-		init(stage);
-		prepareTimeline();
+	public AltitudeProfileView(final Stage stage) {
+		this.init(stage);
+		this.prepareTimeline();
 	}
 
 	public static void addEstimatedAltitudeData(final double data) {
-		dataEstimatedAltitude.add(data);
+		AltitudeProfileView.dataEstimatedAltitude.add(data);
 	}
 
 	public static void addBarometricAltitudeData(final double data) {
-		dataBarometricAltitude.add(data);
+		AltitudeProfileView.dataBarometricAltitude.add(data);
 	}
 
 	// Timeline gets called in the JavaFX Main thread
@@ -107,48 +107,63 @@ public class AltitudeProfileView {
 		// Every frame to take any data from queue and add to chart
 		new AnimationTimer() {
 			@Override
-			public void handle(long now) {
-				addDataToSeries();
+			public void handle(final long now) {
+				AltitudeProfileView.this.addDataToSeries();
 			}
 		}.start();
 	}
 
 	private void addDataToSeries() {
 		for (int i = 0; i < 50; i++) { // -- add some new samples to the plot
-			if (dataEstimatedAltitude.isEmpty())
+			if (AltitudeProfileView.dataEstimatedAltitude.isEmpty()) {
 				break;
-			estimatedAltitudeSeries.getData().add(
-					new LineChart.Data<Number, Number>(estimatedAltitudeXSeriesDataPosition++,
-							dataEstimatedAltitude.remove()));
+			}
+			this.estimatedAltitudeSeries
+					.getData()
+					.add(new LineChart.Data<Number, Number>(
+							this.estimatedAltitudeXSeriesDataPosition++,
+							AltitudeProfileView.dataEstimatedAltitude.remove()));
 		}
 		for (int i = 0; i < 50; i++) { // -- add some new samples to the plot
-			if (dataBarometricAltitude.isEmpty())
+			if (AltitudeProfileView.dataBarometricAltitude.isEmpty()) {
 				break;
-			barometricAltitudeSeries.getData().add(
-					new LineChart.Data<Number, Number>(barometricAltitudeXSeriesDataPosition++,
-							dataBarometricAltitude.remove()));
+			}
+			this.barometricAltitudeSeries
+					.getData()
+					.add(new LineChart.Data<Number, Number>(
+							this.barometricAltitudeXSeriesDataPosition++,
+							AltitudeProfileView.dataBarometricAltitude.remove()));
 		}
 		// remove points to keep us at no more than MAX_DATA_POINTS
-		if (estimatedAltitudeSeries.getData().size() > MAX_DATA_POINTS) {
-			estimatedAltitudeSeries.getData().remove(0,
-					estimatedAltitudeSeries.getData().size() - MAX_DATA_POINTS);
+		if (this.estimatedAltitudeSeries.getData().size() > AltitudeProfileView.MAX_DATA_POINTS) {
+			this.estimatedAltitudeSeries.getData().remove(
+					0,
+					this.estimatedAltitudeSeries.getData().size()
+							- AltitudeProfileView.MAX_DATA_POINTS);
 		}
 		// remove points to keep us at no more than MAX_DATA_POINTS
-		if (barometricAltitudeSeries.getData().size() > MAX_DATA_POINTS) {
-			barometricAltitudeSeries.getData().remove(0,
-					barometricAltitudeSeries.getData().size() - MAX_DATA_POINTS);
+		if (this.barometricAltitudeSeries.getData().size() > AltitudeProfileView.MAX_DATA_POINTS) {
+			this.barometricAltitudeSeries.getData().remove(
+					0,
+					this.barometricAltitudeSeries.getData().size()
+							- AltitudeProfileView.MAX_DATA_POINTS);
 		}
 		// update Axis
-		xAxis.setLowerBound(estimatedAltitudeXSeriesDataPosition - MAX_DATA_POINTS);
-		xAxis.setUpperBound(estimatedAltitudeXSeriesDataPosition - 1);
-		if (estimatedAltitudeSeries.getData().size() == 0)
+		this.xAxis.setLowerBound(this.estimatedAltitudeXSeriesDataPosition
+				- AltitudeProfileView.MAX_DATA_POINTS);
+		this.xAxis.setUpperBound(this.estimatedAltitudeXSeriesDataPosition - 1);
+		if (this.estimatedAltitudeSeries.getData().size() == 0) {
 			return;
-		Number number = estimatedAltitudeSeries.getData()
-				.get(estimatedAltitudeSeries.getData().size() - 1).getYValue();
+		}
+		final Number number = this.estimatedAltitudeSeries.getData()
+				.get(this.estimatedAltitudeSeries.getData().size() - 1)
+				.getYValue();
 		// yAxis.setLowerBound((int)(number.doubleValue()+0.5 - 1));
 		// yAxis.setUpperBound((int)(number.doubleValue()+0.5 + 1));
-		yAxis.setLowerBound((int) (number.doubleValue() * 100+0.5) / 100.0 - 1);
-		yAxis.setUpperBound((int) (number.doubleValue() * 100+0.5) / 100.0 + 1);
+		this.yAxis
+				.setLowerBound(((int) ((number.doubleValue() * 100) + 0.5) / 100.0) - 1);
+		this.yAxis
+				.setUpperBound(((int) ((number.doubleValue() * 100) + 0.5) / 100.0) + 1);
 
 	}
 }

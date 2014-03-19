@@ -22,21 +22,23 @@ public class GUIApplication extends Application {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				Stage altitudeStage = new Stage();
-				AltitudeProfileView p = new AltitudeProfileView(altitudeStage);
-				stages.add(altitudeStage);
-				Stage velocityStage = new Stage();
-				VelocityProfileView v = new VelocityProfileView(velocityStage);
-				stages.add(velocityStage);
-				Stage accelerationStage = new Stage();
-				AccelerationProfileView a = new AccelerationProfileView(
+				final Stage altitudeStage = new Stage();
+				final AltitudeProfileView p = new AltitudeProfileView(
+						altitudeStage);
+				GUIApplication.stages.add(altitudeStage);
+				final Stage velocityStage = new Stage();
+				final VelocityProfileView v = new VelocityProfileView(
+						velocityStage);
+				GUIApplication.stages.add(velocityStage);
+				final Stage accelerationStage = new Stage();
+				final AccelerationProfileView a = new AccelerationProfileView(
 						accelerationStage);
-				stages.add(accelerationStage);
-				Stage errorStage = new Stage();
-				ErrorProfileView b = new ErrorProfileView(errorStage);
-				stages.add(errorStage);
+				GUIApplication.stages.add(accelerationStage);
+				final Stage errorStage = new Stage();
+				final ErrorProfileView b = new ErrorProfileView(errorStage);
+				GUIApplication.stages.add(errorStage);
 
-				for (Stage stage : stages) {
+				for (final Stage stage : GUIApplication.stages) {
 					stage.show();
 				}
 			}
@@ -48,7 +50,7 @@ public class GUIApplication extends Application {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				for (Stage stage : stages) {
+				for (final Stage stage : GUIApplication.stages) {
 					stage.close();
 				}
 			}

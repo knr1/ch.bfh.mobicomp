@@ -12,11 +12,11 @@ import com.tinkerforge.TimeoutException;
 public class BarometerApplication extends AbstractTinkerforgeApplication {
 	private BrickletBarometer barometer;
 
-	private long updatePeriodeInMilliseconds = 1;
-	private AltitudeSensorFusionApplication sensorFusionApplication;
+	private final long updatePeriodeInMilliseconds = 1;
+	private final AltitudeSensorFusionApplication sensorFusionApplication;
 
 	public BarometerApplication(
-			AltitudeSensorFusionApplication sensorFusionApplication) {
+			final AltitudeSensorFusionApplication sensorFusionApplication) {
 		super();
 		this.sensorFusionApplication = sensorFusionApplication;
 
@@ -30,14 +30,15 @@ public class BarometerApplication extends AbstractTinkerforgeApplication {
 		if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.Barometer) {
 			if (this.barometer == null) {
 				this.barometer = (BrickletBarometer) device;
-				this.barometer.addAltitudeListener(sensorFusionApplication);
+				this.barometer
+						.addAltitudeListener(this.sensorFusionApplication);
 				// Turn averaging of in the Barometer Bricklet to make sure that
 				// the data is without delay
 				try {
 					this.barometer
 							.setAveraging((short) 0, (short) 0, (short) 0);
 					this.barometer
-							.setAltitudeCallbackPeriod(updatePeriodeInMilliseconds);
+							.setAltitudeCallbackPeriod(this.updatePeriodeInMilliseconds);
 				} catch (final TimeoutException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -55,14 +56,14 @@ public class BarometerApplication extends AbstractTinkerforgeApplication {
 	public void deviceDisconnected(
 			final TinkerforgeStackAgent tinkerforgeStackAgent,
 			final Device device) {
-		if (TinkerforgeDevice.areEqual(barometer, device)) {
-			this.barometer.removeAltitudeListener(sensorFusionApplication);
+		if (TinkerforgeDevice.areEqual(this.barometer, device)) {
+			this.barometer.removeAltitudeListener(this.sensorFusionApplication);
 			try {
 				this.barometer.setAltitudeCallbackPeriod(0);
-			} catch (TimeoutException e) {
+			} catch (final TimeoutException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (NotConnectedException e) {
+			} catch (final NotConnectedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

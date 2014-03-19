@@ -7,17 +7,23 @@ import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent
 
 public class PositionManager {
 	public static void main(final String[] args) throws Exception {
-		TinkerforgeStackAgentIdentifier identifier=new TinkerforgeStackAgentIdentifier("localhost");
-		TinkerforgeStackAgent agent1=TinkerforgeStackAgency.getInstance().getStackAgent(identifier);
-		
-		new Thread(){
-			public void run() {javafx.application.Application.launch(GUIApplication.class,args);}
+		final TinkerforgeStackAgentIdentifier identifier = new TinkerforgeStackAgentIdentifier(
+				"localhost");
+		final TinkerforgeStackAgent agent1 = TinkerforgeStackAgency
+				.getInstance().getStackAgent(identifier);
+
+		new Thread() {
+			@Override
+			public void run() {
+				javafx.application.Application.launch(GUIApplication.class,
+						args);
+			}
 		}.start();
-		AltitudeSensorFusionApplication application=new AltitudeSensorFusionApplication();
+		final AltitudeSensorFusionApplication application = new AltitudeSensorFusionApplication();
 		agent1.addApplication(application);
 		System.in.read();
 		agent1.removeApplication(application);
 		GUIApplication.finish();
-		
+
 	}
 }

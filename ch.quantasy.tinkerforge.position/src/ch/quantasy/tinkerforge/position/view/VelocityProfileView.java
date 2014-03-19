@@ -3,7 +3,6 @@ package ch.quantasy.tinkerforge.position.view;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javafx.animation.AnimationTimer;
-import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -26,8 +25,9 @@ public class VelocityProfileView {
 	private NumberAxis yAxis;
 
 	private NumberAxis initXAxis() {
-		NumberAxis xAxis = new NumberAxis(0, MAX_DATA_POINTS,
-				MAX_DATA_POINTS / 10);
+		final NumberAxis xAxis = new NumberAxis(0,
+				VelocityProfileView.MAX_DATA_POINTS,
+				VelocityProfileView.MAX_DATA_POINTS / 10);
 		xAxis.setTickLabelFont(Font.font("Arial", FontWeight.MEDIUM, 18));
 		xAxis.setForceZeroInRange(false);
 		xAxis.setAutoRanging(false);
@@ -36,10 +36,10 @@ public class VelocityProfileView {
 	}
 
 	private NumberAxis initYAxis() {
-		NumberAxis yAxis = new NumberAxis(800, 802, 0.1);
+		final NumberAxis yAxis = new NumberAxis(800, 802, 0.1);
 		yAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(yAxis) {
 			@Override
-			public String toString(Number object) {
+			public String toString(final Number object) {
 				return String.format("%6.2f", object);
 			}
 		});
@@ -55,11 +55,11 @@ public class VelocityProfileView {
 	private LineChart<Number, Number> initChart() {
 		// -- Chart
 		final LineChart<Number, Number> lineChart = new LineChart<Number, Number>(
-				xAxis, yAxis) {
+				this.xAxis, this.yAxis) {
 			// Override to remove symbols on each data point
 			@Override
-			protected void dataItemAdded(Series<Number, Number> series,
-					int itemIndex, Data<Number, Number> item) {
+			protected void dataItemAdded(final Series<Number, Number> series,
+					final int itemIndex, final Data<Number, Number> item) {
 			}
 		};
 		lineChart.setAnimated(false);
@@ -68,28 +68,28 @@ public class VelocityProfileView {
 		return lineChart;
 	}
 
-	private void init(Stage stage) {
-		xAxis = initXAxis();
-		yAxis = initYAxis();
-		LineChart<Number, Number> chart = initChart();
+	private void init(final Stage stage) {
+		this.xAxis = this.initXAxis();
+		this.yAxis = this.initYAxis();
+		final LineChart<Number, Number> chart = this.initChart();
 
 		// Chart Series
 
-		estimatedVelocitySeries = new LineChart.Series<Number, Number>();
-		estimatedVelocitySeries.setName("Estimated velocity");
-		chart.getData().add(estimatedVelocitySeries);
+		this.estimatedVelocitySeries = new LineChart.Series<Number, Number>();
+		this.estimatedVelocitySeries.setName("Estimated velocity");
+		chart.getData().add(this.estimatedVelocitySeries);
 
 		stage.setScene(new Scene(chart));
 
 	}
 
-	public VelocityProfileView(Stage stage) {
-		init(stage);
-		prepareTimeline();
+	public VelocityProfileView(final Stage stage) {
+		this.init(stage);
+		this.prepareTimeline();
 	}
 
 	public static void addEstimatedVelocityData(final double data) {
-		dataEstimatedVelocity.add(data);
+		VelocityProfileView.dataEstimatedVelocity.add(data);
 	}
 
 	// Timeline gets called in the JavaFX Main thread
@@ -97,29 +97,34 @@ public class VelocityProfileView {
 		// Every frame to take any data from queue and add to chart
 		new AnimationTimer() {
 			@Override
-			public void handle(long now) {
-				addDataToSeries();
+			public void handle(final long now) {
+				VelocityProfileView.this.addDataToSeries();
 			}
 		}.start();
 	}
 
 	private void addDataToSeries() {
 		for (int i = 0; i < 50; i++) { // -- add some new samples to the plot
-			if (dataEstimatedVelocity.isEmpty())
+			if (VelocityProfileView.dataEstimatedVelocity.isEmpty()) {
 				break;
-			estimatedVelocitySeries.getData().add(
-					new LineChart.Data<Number, Number>(xSeriesData++,
-							dataEstimatedVelocity.remove()));
+			}
+			this.estimatedVelocitySeries
+					.getData()
+					.add(new LineChart.Data<Number, Number>(this.xSeriesData++,
+							VelocityProfileView.dataEstimatedVelocity.remove()));
 		}
 
 		// remove points to keep us at no more than MAX_DATA_POINTS
-		if (estimatedVelocitySeries.getData().size() > MAX_DATA_POINTS) {
-			estimatedVelocitySeries.getData().remove(0,
-					estimatedVelocitySeries.getData().size() - MAX_DATA_POINTS);
+		if (this.estimatedVelocitySeries.getData().size() > VelocityProfileView.MAX_DATA_POINTS) {
+			this.estimatedVelocitySeries.getData().remove(
+					0,
+					this.estimatedVelocitySeries.getData().size()
+							- VelocityProfileView.MAX_DATA_POINTS);
 		}
 
 		// update Axis
-		xAxis.setLowerBound(xSeriesData - MAX_DATA_POINTS);
-		xAxis.setUpperBound(xSeriesData - 1);
+		this.xAxis.setLowerBound(this.xSeriesData
+				- VelocityProfileView.MAX_DATA_POINTS);
+		this.xAxis.setUpperBound(this.xSeriesData - 1);
 	}
 }

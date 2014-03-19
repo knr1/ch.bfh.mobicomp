@@ -3,7 +3,6 @@ package ch.quantasy.tinkerforge.position.view;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javafx.animation.AnimationTimer;
-import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -21,13 +20,14 @@ public class AccelerationProfileView {
 	private Series<Number, Number> accelerationSeries;
 	private int xSeriesData = 0;
 	private static ConcurrentLinkedQueue<Number> dataAcceleration = new ConcurrentLinkedQueue<Number>();
-	
+
 	private NumberAxis xAxis;
 	private NumberAxis yAxis;
 
 	private NumberAxis initXAxis() {
-		NumberAxis xAxis = new NumberAxis(0, MAX_DATA_POINTS,
-				MAX_DATA_POINTS / 10);
+		final NumberAxis xAxis = new NumberAxis(0,
+				AccelerationProfileView.MAX_DATA_POINTS,
+				AccelerationProfileView.MAX_DATA_POINTS / 10);
 		xAxis.setTickLabelFont(Font.font("Arial", FontWeight.MEDIUM, 18));
 		xAxis.setForceZeroInRange(false);
 		xAxis.setAutoRanging(false);
@@ -36,10 +36,10 @@ public class AccelerationProfileView {
 	}
 
 	private NumberAxis initYAxis() {
-		NumberAxis yAxis = new NumberAxis(800, 802, 0.1);
+		final NumberAxis yAxis = new NumberAxis(800, 802, 0.1);
 		yAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(yAxis) {
 			@Override
-			public String toString(Number object) {
+			public String toString(final Number object) {
 				return String.format("%6.2f", object);
 			}
 		});
@@ -55,11 +55,11 @@ public class AccelerationProfileView {
 	private LineChart<Number, Number> initChart() {
 		// -- Chart
 		final LineChart<Number, Number> lineChart = new LineChart<Number, Number>(
-				xAxis, yAxis) {
+				this.xAxis, this.yAxis) {
 			// Override to remove symbols on each data point
 			@Override
-			protected void dataItemAdded(Series<Number, Number> series,
-					int itemIndex, Data<Number, Number> item) {
+			protected void dataItemAdded(final Series<Number, Number> series,
+					final int itemIndex, final Data<Number, Number> item) {
 			}
 		};
 		lineChart.setAnimated(false);
@@ -68,62 +68,63 @@ public class AccelerationProfileView {
 		return lineChart;
 	}
 
-	private void init(Stage stage) {
-		xAxis = initXAxis();
-		yAxis = initYAxis();
-		LineChart<Number, Number> chart = initChart();
+	private void init(final Stage stage) {
+		this.xAxis = this.initXAxis();
+		this.yAxis = this.initYAxis();
+		final LineChart<Number, Number> chart = this.initChart();
 
 		// Chart Series
-		
-		accelerationSeries = new LineChart.Series<Number, Number>();
-		accelerationSeries.setName("Acceleration");
-		chart.getData().add(accelerationSeries);
+
+		this.accelerationSeries = new LineChart.Series<Number, Number>();
+		this.accelerationSeries.setName("Acceleration");
+		chart.getData().add(this.accelerationSeries);
 
 		stage.setScene(new Scene(chart));
 
 	}
 
-
-	public AccelerationProfileView(Stage stage){
-		init(stage);
-		prepareTimeline();
+	public AccelerationProfileView(final Stage stage) {
+		this.init(stage);
+		this.prepareTimeline();
 	}
 
 	public static void addAccelerationData(final double data) {
-		dataAcceleration.add(data);
+		AccelerationProfileView.dataAcceleration.add(data);
 	}
-
-	
 
 	// Timeline gets called in the JavaFX Main thread
 	private void prepareTimeline() {
 		// Every frame to take any data from queue and add to chart
 		new AnimationTimer() {
 			@Override
-			public void handle(long now) {
-				addDataToSeries();
+			public void handle(final long now) {
+				AccelerationProfileView.this.addDataToSeries();
 			}
 		}.start();
 	}
 
 	private void addDataToSeries() {
 		for (int i = 0; i < 50; i++) { // -- add some new samples to the plot
-			if (dataAcceleration.isEmpty())
+			if (AccelerationProfileView.dataAcceleration.isEmpty()) {
 				break;
-			accelerationSeries.getData().add(
-					new LineChart.Data<Number, Number>(xSeriesData++,
-							dataAcceleration.remove()));
+			}
+			this.accelerationSeries.getData().add(
+					new LineChart.Data<Number, Number>(this.xSeriesData++,
+							AccelerationProfileView.dataAcceleration.remove()));
 		}
-		
+
 		// remove points to keep us at no more than MAX_DATA_POINTS
-		if (accelerationSeries.getData().size() > MAX_DATA_POINTS) {
-			accelerationSeries.getData().remove(0,
-					accelerationSeries.getData().size() - MAX_DATA_POINTS);
+		if (this.accelerationSeries.getData().size() > AccelerationProfileView.MAX_DATA_POINTS) {
+			this.accelerationSeries.getData().remove(
+					0,
+					this.accelerationSeries.getData().size()
+							- AccelerationProfileView.MAX_DATA_POINTS);
 		}
-		
+
 		// update Axis
-		xAxis.setLowerBound(xSeriesData - MAX_DATA_POINTS);
-		xAxis.setUpperBound(xSeriesData - 1);
-		
+		this.xAxis.setLowerBound(this.xSeriesData
+				- AccelerationProfileView.MAX_DATA_POINTS);
+		this.xAxis.setUpperBound(this.xSeriesData - 1);
+
 	}
 }

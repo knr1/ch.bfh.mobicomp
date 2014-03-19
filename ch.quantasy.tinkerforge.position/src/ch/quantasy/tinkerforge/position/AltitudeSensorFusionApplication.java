@@ -14,23 +14,24 @@ import com.tinkerforge.Device;
 
 //https://github.com/Tinkerforge/imu-barometer-fusion/blob/master/imu_barometer_fusion.py
 
-public class AltitudeSensorFusionApplication extends AbstractTinkerforgeApplication implements
-		AccelerationListener, QuaternionListener, AltitudeListener {
-	
-	private IMUApplication imuApplication;
-	private BarometerApplication barometerApplication;
+public class AltitudeSensorFusionApplication extends
+		AbstractTinkerforgeApplication implements AccelerationListener,
+		QuaternionListener, AltitudeListener {
+
+	private final IMUApplication imuApplication;
+	private final BarometerApplication barometerApplication;
 	private double[] latestIMUQuaternion;
 	private double[] latestIMUAcceleration;
-	private int latestBarometricAltitudeInCentiMeter=Integer.MIN_VALUE;
+	private int latestBarometricAltitudeInCentiMeter = Integer.MIN_VALUE;
 	private double latestEstimatedAltitudeInMeter;
+
 	public AltitudeSensorFusionApplication() {
 		super();
-		this.imuApplication=new IMUApplication(this);
-		this.barometerApplication=new BarometerApplication(this);
-		super.addTinkerforgeApplication(imuApplication,barometerApplication);
+		this.imuApplication = new IMUApplication(this);
+		this.barometerApplication = new BarometerApplication(this);
+		super.addTinkerforgeApplication(this.imuApplication,
+				this.barometerApplication);
 	}
-
-	
 
 	// Update measurements and compute new altitude.
 	public void update() {
@@ -55,14 +56,18 @@ public class AltitudeSensorFusionApplication extends AbstractTinkerforgeApplicat
 
 		this.latestEstimatedAltitudeInMeter = this.computeAltitude(
 				compensated_acc_q_earth[2], altitudeInMeter);
-		AltitudeProfileView.addEstimatedAltitudeData(this.latestEstimatedAltitudeInMeter);
-		AltitudeProfileView.addBarometricAltitudeData(this.latestBarometricAltitudeInCentiMeter/100.0);
+		
+		// updateView
+
+		AltitudeProfileView
+				.addEstimatedAltitudeData(this.latestEstimatedAltitudeInMeter);
+		AltitudeProfileView
+				.addBarometricAltitudeData(this.latestBarometricAltitudeInCentiMeter / 100.0);
 		VelocityProfileView.addEstimatedVelocityData(this.estimatedVelocity);
 		AccelerationProfileView.addAccelerationData(this.instAcceleration);
-		//updateView
 		
 		ErrorProfileView.addErrorData(this.altitudeErrorI);
-		
+
 	}
 
 	// Remove gravity from accelerometer measurements
@@ -98,16 +103,18 @@ public class AltitudeSensorFusionApplication extends AbstractTinkerforgeApplicat
 
 	private static final int FACTOR = 1;
 	private static final double KP1 = 0.55 * AltitudeSensorFusionApplication.FACTOR; // PI
-																	// observer
-																	// velocity
+	// observer
+	// velocity
 	// gain
 	private static final double KP2 = 1.0 * AltitudeSensorFusionApplication.FACTOR; // PI
-																	// observer
-																	// position
-																	// gain
-	private static final double KI = 0.001 / AltitudeSensorFusionApplication.FACTOR; // # PI
-																	// observer
-																	// integral
+	// observer
+	// position
+	// gain
+	private static final double KI = 0.001 / AltitudeSensorFusionApplication.FACTOR; // #
+																						// PI
+
+	// observer
+	// integral
 
 	// gain (bias
 	// cancellation)
@@ -137,7 +144,7 @@ public class AltitudeSensorFusionApplication extends AbstractTinkerforgeApplicat
 
 		this.instAcceleration = (compensated_acceleration * 9.80605)
 				+ (this.altitudeErrorI * AltitudeSensorFusionApplication.KI);
-		
+
 		// Integrators
 		final double delta = (this.instAcceleration * dt)
 				+ ((AltitudeSensorFusionApplication.KP1 * dt) * altitudeError);
@@ -186,14 +193,17 @@ public class AltitudeSensorFusionApplication extends AbstractTinkerforgeApplicat
 		}
 
 	}
+
 	@Override
 	public void deviceConnected(
 			final TinkerforgeStackAgent tinkerforgeStackAgent,
 			final Device device) {
 	}
+
 	@Override
-	public void deviceDisconnected(TinkerforgeStackAgent tinkerforgeStackAgent,
-			Device device) {
+	public void deviceDisconnected(
+			final TinkerforgeStackAgent tinkerforgeStackAgent,
+			final Device device) {
 	}
 
 	@Override
