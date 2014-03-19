@@ -1,5 +1,9 @@
 package ch.quantasy.tinkerforge.position;
 
+import ch.quantasy.tinkerforge.position.view.AccelerationProfileView;
+import ch.quantasy.tinkerforge.position.view.AltitudeProfileView;
+import ch.quantasy.tinkerforge.position.view.ErrorProfileView;
+import ch.quantasy.tinkerforge.position.view.VelocityProfileView;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 
@@ -10,7 +14,7 @@ import com.tinkerforge.Device;
 
 //https://github.com/Tinkerforge/imu-barometer-fusion/blob/master/imu_barometer_fusion.py
 
-public class HightSensorFusionApplication extends AbstractTinkerforgeApplication implements
+public class AltitudeSensorFusionApplication extends AbstractTinkerforgeApplication implements
 		AccelerationListener, QuaternionListener, AltitudeListener {
 	
 	private IMUApplication imuApplication;
@@ -19,7 +23,7 @@ public class HightSensorFusionApplication extends AbstractTinkerforgeApplication
 	private double[] latestIMUAcceleration;
 	private int latestBarometricAltitudeInCentiMeter=Integer.MIN_VALUE;
 	private double latestEstimatedAltitudeInMeter;
-	public HightSensorFusionApplication() {
+	public AltitudeSensorFusionApplication() {
 		super();
 		this.imuApplication=new IMUApplication(this);
 		this.barometerApplication=new BarometerApplication(this);
@@ -51,9 +55,14 @@ public class HightSensorFusionApplication extends AbstractTinkerforgeApplication
 
 		this.latestEstimatedAltitudeInMeter = this.computeAltitude(
 				compensated_acc_q_earth[2], altitudeInMeter);
-		View.addEstimatedHightData(this.latestEstimatedAltitudeInMeter);
-		View.addBarometricHightData(this.latestBarometricAltitudeInCentiMeter/100.0);
+		AltitudeProfileView.addEstimatedAltitudeData(this.latestEstimatedAltitudeInMeter);
+		AltitudeProfileView.addBarometricAltitudeData(this.latestBarometricAltitudeInCentiMeter/100.0);
+		VelocityProfileView.addEstimatedVelocityData(this.estimatedVelocity);
+		AccelerationProfileView.addAccelerationData(this.instAcceleration);
 		//updateView
+		
+		ErrorProfileView.addErrorData(this.altitudeErrorI);
+		
 	}
 
 	// Remove gravity from accelerometer measurements
@@ -88,15 +97,15 @@ public class HightSensorFusionApplication extends AbstractTinkerforgeApplication
 	private double instAcceleration;
 
 	private static final int FACTOR = 1;
-	private static final double KP1 = 0.55 * HightSensorFusionApplication.FACTOR; // PI
+	private static final double KP1 = 0.55 * AltitudeSensorFusionApplication.FACTOR; // PI
 																	// observer
 																	// velocity
 	// gain
-	private static final double KP2 = 1.0 * HightSensorFusionApplication.FACTOR; // PI
+	private static final double KP2 = 1.0 * AltitudeSensorFusionApplication.FACTOR; // PI
 																	// observer
 																	// position
 																	// gain
-	private static final double KI = 0.001 / HightSensorFusionApplication.FACTOR; // # PI
+	private static final double KI = 0.001 / AltitudeSensorFusionApplication.FACTOR; // # PI
 																	// observer
 																	// integral
 
@@ -118,6 +127,7 @@ public class HightSensorFusionApplication extends AbstractTinkerforgeApplication
 			this.latestTimeInNanoseconds = currentTimeInNanoseconds;
 			return this.estimatedAltitude;
 		}
+		final double dt = (currentTimeInNanoseconds - this.latestTimeInNanoseconds) / 1000000000.0;
 
 		// Estimation Error
 		final double altitudeError = altitude - this.estimatedAltitude;
@@ -126,14 +136,13 @@ public class HightSensorFusionApplication extends AbstractTinkerforgeApplication
 				Math.max(-2500.0, this.altitudeErrorI));
 
 		this.instAcceleration = (compensated_acceleration * 9.80605)
-				+ (this.altitudeErrorI * HightSensorFusionApplication.KI);
-		final double dt = (currentTimeInNanoseconds - this.latestTimeInNanoseconds) / 1000000000.0;
-
+				+ (this.altitudeErrorI * AltitudeSensorFusionApplication.KI);
+		
 		// Integrators
 		final double delta = (this.instAcceleration * dt)
-				+ ((HightSensorFusionApplication.KP1 * dt) * altitudeError);
+				+ ((AltitudeSensorFusionApplication.KP1 * dt) * altitudeError);
 		this.estimatedAltitude += (((this.estimatedVelocity / 5.0) + delta) * (dt / 2.0))
-				+ ((HightSensorFusionApplication.KP2 * dt) * altitudeError);
+				+ ((AltitudeSensorFusionApplication.KP2 * dt) * altitudeError);
 		this.estimatedVelocity += delta * 10.0;
 
 		this.latestTimeInNanoseconds = currentTimeInNanoseconds;

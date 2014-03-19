@@ -13,10 +13,10 @@ public class BarometerApplication extends AbstractTinkerforgeApplication {
 	private BrickletBarometer barometer;
 
 	private long updatePeriodeInMilliseconds = 1;
-	private HightSensorFusionApplication sensorFusionApplication;
+	private AltitudeSensorFusionApplication sensorFusionApplication;
 
 	public BarometerApplication(
-			HightSensorFusionApplication sensorFusionApplication) {
+			AltitudeSensorFusionApplication sensorFusionApplication) {
 		super();
 		this.sensorFusionApplication = sensorFusionApplication;
 

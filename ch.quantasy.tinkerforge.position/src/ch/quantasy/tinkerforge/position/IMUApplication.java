@@ -13,9 +13,9 @@ public class IMUApplication extends AbstractTinkerforgeApplication {
 	private BrickIMU imuBrick;
 
 	private long updatePeriodeInMilliseconds = 1;
-	private HightSensorFusionApplication imuApplication;
+	private AltitudeSensorFusionApplication imuApplication;
 
-	public IMUApplication(HightSensorFusionApplication imuApplication) {
+	public IMUApplication(AltitudeSensorFusionApplication imuApplication) {
 		super();
 		this.imuApplication = imuApplication;
 

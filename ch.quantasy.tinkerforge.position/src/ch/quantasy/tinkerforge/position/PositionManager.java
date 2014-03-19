@@ -1,5 +1,6 @@
 package ch.quantasy.tinkerforge.position;
 
+import ch.quantasy.tinkerforge.position.view.GUIApplication;
 import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgency;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgentIdentifier;
@@ -10,14 +11,13 @@ public class PositionManager {
 		TinkerforgeStackAgent agent1=TinkerforgeStackAgency.getInstance().getStackAgent(identifier);
 		
 		new Thread(){
-			public void run() {javafx.application.Application.launch(View.class,args);}
+			public void run() {javafx.application.Application.launch(GUIApplication.class,args);}
 		}.start();
-		
-		HightSensorFusionApplication application=new HightSensorFusionApplication();
+		AltitudeSensorFusionApplication application=new AltitudeSensorFusionApplication();
 		agent1.addApplication(application);
 		System.in.read();
-		
 		agent1.removeApplication(application);
+		GUIApplication.finish();
 		
 	}
 }
