@@ -31,12 +31,13 @@ public class ErrorProfileView {
 		xAxis.setTickLabelFont(Font.font("Arial", FontWeight.MEDIUM, 18));
 		xAxis.setForceZeroInRange(false);
 		xAxis.setAutoRanging(false);
+		xAxis.setAnimated(false);
 		return xAxis;
 
 	}
 
 	private NumberAxis initYAxis() {
-		final NumberAxis yAxis = new NumberAxis(800, 802, 0.1);
+		final NumberAxis yAxis = new NumberAxis();
 		yAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(yAxis) {
 			@Override
 			public String toString(final Number object) {
@@ -48,7 +49,7 @@ public class ErrorProfileView {
 		yAxis.setAutoRanging(true);
 		yAxis.setLabel("factor");
 		yAxis.setForceZeroInRange(false);
-		yAxis.setAnimated(true);
+		yAxis.setAnimated(false);
 		return yAxis;
 	}
 

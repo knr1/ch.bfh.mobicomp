@@ -15,7 +15,7 @@ import javafx.stage.Stage;
  */
 public class AltitudeProfileView {
 
-	private static final int MAX_DATA_POINTS = 1000;
+	private static final int MAX_DATA_POINTS = 4000;
 
 	private Series<Number, Number> estimatedAltitudeSeries;
 	private Series<Number, Number> barometricAltitudeSeries;
