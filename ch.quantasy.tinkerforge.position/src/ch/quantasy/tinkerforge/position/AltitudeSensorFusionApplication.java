@@ -3,6 +3,7 @@ package ch.quantasy.tinkerforge.position;
 import ch.quantasy.tinkerforge.position.view.AccelerationProfileView;
 import ch.quantasy.tinkerforge.position.view.AltitudeProfileView;
 import ch.quantasy.tinkerforge.position.view.ErrorProfileView;
+import ch.quantasy.tinkerforge.position.view.EstimatedAltitudeProfileView;
 import ch.quantasy.tinkerforge.position.view.VelocityProfileView;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
@@ -58,7 +59,7 @@ public class AltitudeSensorFusionApplication extends
 				compensated_acc_q_earth[2], altitudeInMeter);
 		
 		// updateView
-
+		EstimatedAltitudeProfileView.addEstimatedAltitudeData(this.latestEstimatedAltitudeInMeter);
 		AltitudeProfileView
 				.addEstimatedAltitudeData(this.latestEstimatedAltitudeInMeter);
 		AltitudeProfileView
@@ -221,6 +222,9 @@ public class AltitudeSensorFusionApplication extends
 	public void quaternion(final float x, final float y, final float z,
 			final float w) {
 		this.latestIMUQuaternion = new double[] { x, y, z, w };
+		//int yaw_angle = (int)((Math.atan2(-w*y + x*y + y*x - w*w, w*w + y*y - z*y -  x*x)*180.0/Math.PI)+0.5);
+		//System.out.println(yaw_angle);
+		//http://www.tinkerunity.org/forum/index.php/topic,162.msg549.html#msg549
 		this.update();
 	}
 

@@ -22,8 +22,12 @@ public class GUIApplication extends Application {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				final Stage estimatedAltitudeStage = new Stage();
+				final EstimatedAltitudeProfileView p = new EstimatedAltitudeProfileView(
+						estimatedAltitudeStage);
+				GUIApplication.stages.add(estimatedAltitudeStage);
 				final Stage altitudeStage = new Stage();
-				final AltitudeProfileView p = new AltitudeProfileView(
+				final AltitudeProfileView e = new AltitudeProfileView(
 						altitudeStage);
 				GUIApplication.stages.add(altitudeStage);
 				final Stage velocityStage = new Stage();
