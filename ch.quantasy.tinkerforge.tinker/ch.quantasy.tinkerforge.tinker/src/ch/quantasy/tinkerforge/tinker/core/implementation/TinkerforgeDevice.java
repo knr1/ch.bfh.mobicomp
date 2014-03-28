@@ -58,8 +58,14 @@ import com.tinkerforge.Device.Identity;
  * 
  */
 public enum TinkerforgeDevice {
-	DC (BrickDC.class) , IMU (BrickIMU.class) , Master (BrickMaster.class) , Servo (BrickServo.class) , Stepper (
-			BrickStepper.class) ,
+	DC (BrickDC.class) {
+		public BrickDC getTypedInstance(Device device) {
+			if(device instanceof BrickDC)
+				return BrickDC.class.cast(device);
+			return null;
+		}
+	} ,
+	IMU (BrickIMU.class) , Master (BrickMaster.class) , Servo (BrickServo.class) , Stepper (BrickStepper.class) ,
 
 	AmbientLight (BrickletAmbientLight.class) , AnalogIn (BrickletAnalogIn.class) , AnalogOut (BrickletAnalogOut.class) , Barometer (
 			BrickletBarometer.class) , Current12 (BrickletCurrent12.class) , Current25 (BrickletCurrent25.class) , DistanceIR (
@@ -79,6 +85,10 @@ public enum TinkerforgeDevice {
 
 	public final int identifier;
 	public final Class<?> device;
+
+	public Device getTypedInstance(Device device) {
+		return null;
+	}
 
 	private TinkerforgeDevice(final Class<?> device) {
 		if (device == null) {
@@ -121,7 +131,7 @@ public enum TinkerforgeDevice {
 		if ((id1 == null) || (id2 == null)) {
 			return false;
 		}
-		if(id1.deviceIdentifier!=id2.deviceIdentifier){
+		if (id1.deviceIdentifier != id2.deviceIdentifier) {
 			return false;
 		}
 		if (!id1.uid.equals(id2.uid)) {
