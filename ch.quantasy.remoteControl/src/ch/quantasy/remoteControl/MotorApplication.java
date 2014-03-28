@@ -22,6 +22,7 @@ public class MotorApplication extends AbstractTinkerforgeApplication{
 				dc1=(BrickDC)device;
 				try {
 					dc1.enable();
+					dc1.setAcceleration(10000);
 				} catch (TimeoutException | NotConnectedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -30,6 +31,7 @@ public class MotorApplication extends AbstractTinkerforgeApplication{
 				dc2=(BrickDC)device;
 				try {
 					dc2.enable();
+					dc2.setAcceleration(10000);
 				} catch (TimeoutException | NotConnectedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
