@@ -58,50 +58,43 @@ import com.tinkerforge.Device.Identity;
  * 
  */
 public enum TinkerforgeDevice {
-	DC (BrickDC.class) {
-		public BrickDC getTypedInstance(Device device) {
-			if(device instanceof BrickDC)
-				return BrickDC.class.cast(device);
-			return null;
-		}
-	} ,
-	IMU (BrickIMU.class) , Master (BrickMaster.class) , Servo (BrickServo.class) , Stepper (BrickStepper.class) ,
-
-	AmbientLight (BrickletAmbientLight.class) , AnalogIn (BrickletAnalogIn.class) , AnalogOut (BrickletAnalogOut.class) , Barometer (
-			BrickletBarometer.class) , Current12 (BrickletCurrent12.class) , Current25 (BrickletCurrent25.class) , DistanceIR (
-			BrickletDistanceIR.class) , DistanceUS (BrickletDistanceUS.class) , DualButton (BrickletDualButton.class) , DualRelay (
-			BrickletDualRelay.class) , GPS (BrickletGPS.class) , HallEffect (BrickletHallEffect.class) , Humidity (
-			BrickletHumidity.class) , IndustrialDigitalIn4 (BrickletIndustrialDigitalIn4.class) , IndustrialDigitalOut4 (
-			BrickletIndustrialDigitalOut4.class) , IndustrialDual020mA (BrickletIndustrialDual020mA.class) , IndustrialQuadRelay (
-			BrickletIndustrialQuadRelay.class) , IO16 (BrickletIO16.class) , IO4 (BrickletIO4.class) , Joystick (
-			BrickletJoystick.class) , LCD16x2 (BrickletLCD16x2.class) , LCD20x4 (BrickletLCD20x4.class) , LEDStrip (
-			BrickletLEDStrip.class) , Line (BrickletLine.class) , LinearPoti (BrickletLinearPoti.class) , Moisture (
-			BrickletMoisture.class) , MotionDetector (BrickletMotionDetector.class) , MultiTouch (BrickletMultiTouch.class) , PiezoBuzzer (
-			BrickletPiezoBuzzer.class) , PiezoSpeaker (BrickletPiezoSpeaker.class) , PTC (BrickletPTC.class) , RemoteSwitch (
-			BrickletRemoteSwitch.class) , RotaryEncoder (BrickletRotaryEncoder.class) , RotaryPoti (BrickletRotaryPoti.class) , SegmentDisplay4x7 (
+	DC (BrickDC.class) , IMU (BrickIMU.class) , Master (BrickMaster.class) , Servo (BrickServo.class) , Stepper (
+			BrickStepper.class) , AmbientLight (BrickletAmbientLight.class) , AnalogIn (BrickletAnalogIn.class) , AnalogOut (
+			BrickletAnalogOut.class) , Barometer (BrickletBarometer.class) , Current12 (BrickletCurrent12.class) , Current25 (
+			BrickletCurrent25.class) , DistanceIR (BrickletDistanceIR.class) , DistanceUS (BrickletDistanceUS.class) , DualButton (
+			BrickletDualButton.class) , DualRelay (BrickletDualRelay.class) , GPS (BrickletGPS.class) , HallEffect (
+			BrickletHallEffect.class) , Humidity (BrickletHumidity.class) , IndustrialDigitalIn4 (
+			BrickletIndustrialDigitalIn4.class) , IndustrialDigitalOut4 (BrickletIndustrialDigitalOut4.class) , IndustrialDual020mA (
+			BrickletIndustrialDual020mA.class) , IndustrialQuadRelay (BrickletIndustrialQuadRelay.class) , IO16 (
+			BrickletIO16.class) , IO4 (BrickletIO4.class) , Joystick (BrickletJoystick.class) , LCD16x2 (
+			BrickletLCD16x2.class) , LCD20x4 (BrickletLCD20x4.class) , LEDStrip (BrickletLEDStrip.class) , Line (
+			BrickletLine.class) , LinearPoti (BrickletLinearPoti.class) , Moisture (BrickletMoisture.class) , MotionDetector (
+			BrickletMotionDetector.class) , MultiTouch (BrickletMultiTouch.class) , PiezoBuzzer (BrickletPiezoBuzzer.class) , PiezoSpeaker (
+			BrickletPiezoSpeaker.class) , PTC (BrickletPTC.class) , RemoteSwitch (BrickletRemoteSwitch.class) , RotaryEncoder (
+			BrickletRotaryEncoder.class) , RotaryPoti (BrickletRotaryPoti.class) , SegmentDisplay4x7 (
 			BrickletSegmentDisplay4x7.class) , SoundIntensity (BrickletSoundIntensity.class) , Temperature (
 			BrickletTemperature.class) , TemperatureIR (BrickletTemperatureIR.class) , Tilt (BrickletTilt.class) , Voltage (
 			BrickletVoltage.class) , VoltageCurrent (BrickletVoltageCurrent.class);
 
 	public final int identifier;
-	public final Class<?> device;
+	public final Class<?> deviceClass;
 
-	public Device getTypedInstance(Device device) {
-		return null;
-	}
-
-	private TinkerforgeDevice(final Class<?> device) {
-		if (device == null) {
+	private TinkerforgeDevice(final Class<?> deviceClass) {
+		if (deviceClass == null) {
 			throw new IllegalArgumentException();
 		}
-		this.device = device;
+		this.deviceClass = deviceClass;
 		int internalIdentifier = -1;
 		try {
-			internalIdentifier = device.getField("DEVICE_IDENTIFIER").getInt(null);
+			internalIdentifier = deviceClass.getField("DEVICE_IDENTIFIER").getInt(null);
 		} catch (final Exception e) {
 			// No identifier
 		}
 		this.identifier = internalIdentifier;
+	}
+
+	public Device getCastInstance(Device device) {
+		return null;
 	}
 
 	public static String toString(final Device device) {
@@ -152,10 +145,17 @@ public enum TinkerforgeDevice {
 		}
 		final Class<? extends Device> deviceClass = device.getClass();
 		for (final TinkerforgeDevice tinkerforgeDevice : TinkerforgeDevice.values()) {
-			if (deviceClass == tinkerforgeDevice.device) {
+			if (deviceClass == tinkerforgeDevice.deviceClass) {
 				return tinkerforgeDevice;
 			}
 		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <E extends Device> E getCastInstance(TinkerforgeDevice tinkerforgeDevice, Device device) {
+		if (tinkerforgeDevice.deviceClass.equals(device.getClass()))
+			return (E) device;
 		return null;
 	}
 

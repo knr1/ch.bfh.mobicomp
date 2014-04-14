@@ -231,7 +231,7 @@ public abstract class AbstractTinkerforgeStackManager {
 				TinkerforgeDevice tinkerforgeDevice = TinkerforgeDevice.getDevice(deviceIdentifier);
 				if (tinkerforgeDevice == null)
 					return false;
-				final Device device = (Device) tinkerforgeDevice.device
+				final Device device = (Device) tinkerforgeDevice.deviceClass
 						.getDeclaredConstructor(String.class, IPConnection.class).newInstance(uid,
 								AbstractTinkerforgeStackManager.this.ipConnection);
 				device.getIdentity();

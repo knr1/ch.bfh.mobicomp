@@ -58,6 +58,8 @@ public class MasterBrickApplication extends AbstractTinkerforgeApplication {
 		if (device instanceof BrickMaster) {
 			this.masterConnect((BrickMaster) device);
 		}
+		BrickMaster master=TinkerforgeDevice.getCastInstance(TinkerforgeDevice.Master,device);
+		System.out.println(master);
 
 	}
 
