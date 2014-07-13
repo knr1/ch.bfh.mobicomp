@@ -4,6 +4,7 @@ import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 
+import com.tinkerforge.BrickDC;
 import com.tinkerforge.BrickletBarometer;
 import com.tinkerforge.Device;
 import com.tinkerforge.NotConnectedException;

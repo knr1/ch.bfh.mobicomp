@@ -93,10 +93,6 @@ public enum TinkerforgeDevice {
 		this.identifier = internalIdentifier;
 	}
 
-	public Device getCastInstance(Device device) {
-		return null;
-	}
-
 	public static String toString(final Device device) {
 		try {
 			return device.getIdentity().toString();
@@ -149,13 +145,6 @@ public enum TinkerforgeDevice {
 				return tinkerforgeDevice;
 			}
 		}
-		return null;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <E extends Device> E getCastInstance(TinkerforgeDevice tinkerforgeDevice, Device device) {
-		if (tinkerforgeDevice.deviceClass.equals(device.getClass()))
-			return (E) device;
 		return null;
 	}
 

@@ -13,11 +13,11 @@ public class IMUApplication extends AbstractTinkerforgeApplication {
 	private BrickIMU imuBrick;
 
 	private final long updatePeriodeInMilliseconds = 1;
-	private final AltitudeSensorFusionApplication imuApplication;
+	private final AltitudeSensorFusionApplication sensorFusionApplication;
 
-	public IMUApplication(final AltitudeSensorFusionApplication imuApplication) {
+	public IMUApplication(final AltitudeSensorFusionApplication sensorFusionApplication) {
 		super();
-		this.imuApplication = imuApplication;
+		this.sensorFusionApplication = sensorFusionApplication;
 
 	}
 
@@ -28,8 +28,8 @@ public class IMUApplication extends AbstractTinkerforgeApplication {
 		if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.IMU) {
 			if (this.imuBrick == null) {
 				this.imuBrick = (BrickIMU) device;
-				this.imuBrick.addQuaternionListener(this.imuApplication);
-				this.imuBrick.addAccelerationListener(this.imuApplication);
+				this.imuBrick.addQuaternionListener(this.sensorFusionApplication);
+				this.imuBrick.addAccelerationListener(this.sensorFusionApplication);
 				try {
 					this.imuBrick.orientationCalculationOff();
 					this.imuBrick.ledsOff();
@@ -54,10 +54,9 @@ public class IMUApplication extends AbstractTinkerforgeApplication {
 			final TinkerforgeStackAgent tinkerforgeStackAgent,
 			final Device device) {
 		if (TinkerforgeDevice.areEqual(this.imuBrick, device)) {
-			this.imuBrick.removeQuaternionListener(this.imuApplication);
-			this.imuBrick.removeAccelerationListener(this.imuApplication);
+			this.imuBrick.removeQuaternionListener(this.sensorFusionApplication);
+			this.imuBrick.removeAccelerationListener(this.sensorFusionApplication);
 			try {
-
 				this.imuBrick.setQuaternionPeriod(0);
 				this.imuBrick.setAccelerationPeriod(0);
 				this.imuBrick.ledsOn();

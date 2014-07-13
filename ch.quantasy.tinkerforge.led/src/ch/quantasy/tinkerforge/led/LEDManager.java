@@ -11,7 +11,7 @@ public class LEDManager {
 		System.out.println("Start");
 		final TinkerforgeApplication ledApp = new BlinkingLEDs();
 		final TinkerforgeStackAgentIdentifier identifier = new TinkerforgeStackAgentIdentifier(
-				"localhost");
+				"10.0.233.120");
 		System.out.println("Starting");
 		TinkerforgeStackAgency.getInstance().getStackAgent(identifier)
 				.addApplication(ledApp);

@@ -9,7 +9,7 @@ import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent
 public class RemoteControllerManager {
 	public static void main(String[] args) throws IOException {
 		TinkerforgeStackAgentIdentifier identifier1=new TinkerforgeStackAgentIdentifier("localhost");
-		TinkerforgeStackAgentIdentifier identifier2=new TinkerforgeStackAgentIdentifier("MasterBrick01");
+		TinkerforgeStackAgentIdentifier identifier2=new TinkerforgeStackAgentIdentifier("Robot01");
 		TinkerforgeStackAgent agent1=TinkerforgeStackAgency.getInstance().getStackAgent(identifier1);
 		TinkerforgeStackAgent agent2=TinkerforgeStackAgency.getInstance().getStackAgent(identifier2);
 		
