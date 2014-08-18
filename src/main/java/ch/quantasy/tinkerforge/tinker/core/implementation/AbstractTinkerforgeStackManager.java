@@ -163,7 +163,7 @@ public abstract class AbstractTinkerforgeStackManager {
 	    try {
 		this.connection.enumerate();
 		AbstractTinkerforgeStackManager.this.connected();
-	    } catch (final NotConnectedException ex) {
+	    } catch (final Exception ex) {
 		// Well, this should not happen?!
 		// But will treat it gracefully.
 		ex.printStackTrace();
