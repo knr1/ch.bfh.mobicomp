@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -26,6 +27,8 @@ public class GUIApplication extends Application {
 		final AltitudeProfileView e = new AltitudeProfileView(
 			altitudeStage);
 		GUIApplication.stages.add(altitudeStage);
+		double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
+		altitudeStage.setWidth(screenWidth);
 
 		for (final Stage stage : GUIApplication.stages) {
 		    stage.show();

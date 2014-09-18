@@ -69,10 +69,8 @@ public class BarometerApplication extends AbstractTinkerforgeApplication impleme
     }
 
     @Override
-    public void altitude(int altitude
-    ) {
-	//AltitudeProfileView.addBarometricAltitudeData(altitude);
-	AltitudeProfileView.addEstimatedAltitudeData(altitude);
+    public void altitude(int altitude) {
+	AltitudeProfileView.addBarometricAltitudeData(altitude);
     }
 
     @Override

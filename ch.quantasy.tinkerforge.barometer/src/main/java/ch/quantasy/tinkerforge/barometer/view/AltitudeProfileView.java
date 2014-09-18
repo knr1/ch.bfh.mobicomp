@@ -16,11 +16,9 @@ public class AltitudeProfileView {
 
     private static final int MAX_DATA_POINTS = 1000;
 
-    private Series<Number, Number> estimatedAltitudeSeries;
     private Series<Number, Number> barometricAltitudeSeries;
-    private int estimatedAltitudeXSeriesDataPosition = 0;
     private int barometricAltitudeXSeriesDataPosition = 0;
-    private static ConcurrentLinkedQueue<Number> dataEstimatedAltitude = new ConcurrentLinkedQueue<Number>();
+
     private static ConcurrentLinkedQueue<Number> dataBarometricAltitude = new ConcurrentLinkedQueue<Number>();
 
     private NumberAxis xAxis;
@@ -48,7 +46,7 @@ public class AltitudeProfileView {
 	yAxis.setTickLabelFont(Font.font("Arial", FontWeight.MEDIUM, 18));
 	yAxis.setPrefWidth(120);
 	yAxis.setAutoRanging(true);
-	yAxis.setLabel("Meters^{-2}");
+	yAxis.setLabel("Meters⁻²");
 	yAxis.setForceZeroInRange(false);
 	yAxis.setAnimated(true);
 	return yAxis;
@@ -66,7 +64,7 @@ public class AltitudeProfileView {
 		};
 	lineChart.setAnimated(false);
 	lineChart.setId("Live Altitude Position");
-	lineChart.setTitle("Sensor-Fusion (Altitude)");
+	lineChart.setTitle("Barometric (Altitude)");
 	return lineChart;
     }
 
@@ -80,10 +78,6 @@ public class AltitudeProfileView {
 	this.barometricAltitudeSeries.setName("Barometric Altitude");
 	chart.getData().add(this.barometricAltitudeSeries);
 
-	this.estimatedAltitudeSeries = new LineChart.Series<Number, Number>();
-	this.estimatedAltitudeSeries.setName("Estimated Altitude");
-	chart.getData().add(this.estimatedAltitudeSeries);
-
 	stage.setScene(new Scene(chart));
 
     }
@@ -91,10 +85,6 @@ public class AltitudeProfileView {
     public AltitudeProfileView(final Stage stage) {
 	this.init(stage);
 	this.prepareTimeline();
-    }
-
-    public static void addEstimatedAltitudeData(final double data) {
-	AltitudeProfileView.dataEstimatedAltitude.add(data);
     }
 
     public static void addBarometricAltitudeData(final double data) {
@@ -114,16 +104,6 @@ public class AltitudeProfileView {
 
     private void addDataToSeries() {
 	for (int i = 0; i < 50; i++) { // -- add some new samples to the plot
-	    if (AltitudeProfileView.dataEstimatedAltitude.isEmpty()) {
-		break;
-	    }
-	    this.estimatedAltitudeSeries
-		    .getData()
-		    .add(new LineChart.Data<Number, Number>(
-				    this.estimatedAltitudeXSeriesDataPosition++,
-				    AltitudeProfileView.dataEstimatedAltitude.remove()));
-	}
-	for (int i = 0; i < 50; i++) { // -- add some new samples to the plot
 	    if (AltitudeProfileView.dataBarometricAltitude.isEmpty()) {
 		break;
 	    }
@@ -133,13 +113,7 @@ public class AltitudeProfileView {
 				    this.barometricAltitudeXSeriesDataPosition++,
 				    AltitudeProfileView.dataBarometricAltitude.remove()));
 	}
-	// remove points to keep us at no more than MAX_DATA_POINTS
-	if (this.estimatedAltitudeSeries.getData().size() > AltitudeProfileView.MAX_DATA_POINTS) {
-	    this.estimatedAltitudeSeries.getData().remove(
-		    0,
-		    this.estimatedAltitudeSeries.getData().size()
-		    - AltitudeProfileView.MAX_DATA_POINTS);
-	}
+
 	// remove points to keep us at no more than MAX_DATA_POINTS
 	if (this.barometricAltitudeSeries.getData().size() > AltitudeProfileView.MAX_DATA_POINTS) {
 	    this.barometricAltitudeSeries.getData().remove(
@@ -148,8 +122,8 @@ public class AltitudeProfileView {
 		    - AltitudeProfileView.MAX_DATA_POINTS);
 	}
 	// update Axis
-	this.xAxis.setLowerBound(this.estimatedAltitudeXSeriesDataPosition
+	this.xAxis.setLowerBound(this.barometricAltitudeXSeriesDataPosition
 		- AltitudeProfileView.MAX_DATA_POINTS);
-	this.xAxis.setUpperBound(this.estimatedAltitudeXSeriesDataPosition - 1);
+	this.xAxis.setUpperBound(this.barometricAltitudeXSeriesDataPosition - 1);
     }
 }
