@@ -1,4 +1,4 @@
-package ch.quantasy.remoteControl;
+package ch.quantasy.tinkerforge.remoteControl;
 
 import com.tinkerforge.BrickletJoystick;
 import com.tinkerforge.BrickletJoystick.PositionListener;

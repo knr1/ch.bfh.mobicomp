@@ -1,4 +1,4 @@
-package ch.quantasy.remoteControl;
+package ch.quantasy.tinkerforge.remoteControl;
 
 import com.tinkerforge.Device;
 
