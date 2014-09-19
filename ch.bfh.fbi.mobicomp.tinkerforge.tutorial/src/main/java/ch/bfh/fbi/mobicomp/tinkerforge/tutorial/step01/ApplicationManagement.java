@@ -17,8 +17,7 @@ public class ApplicationManagement {
 
     public static void main(final String[] args) throws IOException {
 	System.out.println(ApplicationManagement.class.getPackage());
-	System.out
-		.println("The localhost agent will be connected... That is the local USB-connection");
+	System.out.println("The localhost agent will be connected... That is the local USB-connection");
 	System.out.println("For this, brickd must be installed and running");
 	final TinkerforgeStackAddress identifier = new TinkerforgeStackAddress(
 		"localhost");
