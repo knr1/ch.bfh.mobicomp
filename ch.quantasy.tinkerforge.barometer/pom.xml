@@ -20,6 +20,7 @@
     <build>
 	<plugins>
 	    <plugin>
+		<!--mvn clean compile assembly:single -->
 		<artifactId>maven-assembly-plugin</artifactId>
 		<configuration>
 		    <descriptorRefs>

@@ -103,7 +103,7 @@ public class AltitudeProfileView {
     }
 
     private void addDataToSeries() {
-	for (int i = 0; i < 50; i++) { // -- add some new samples to the plot
+	for (int i = 0; i < 100; i++) { // -- add some new samples to the plot
 	    if (AltitudeProfileView.dataBarometricAltitude.isEmpty()) {
 		break;
 	    }
