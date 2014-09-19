@@ -17,6 +17,8 @@ public interface Message extends Serializable {
 
     public String getSenderID();
 
+    public String getID();
+
     public boolean containsReceiverIDs();
 
     public boolean containsReceiverID(String receiverID);

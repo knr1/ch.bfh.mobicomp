@@ -66,4 +66,9 @@ public abstract class AMessage implements Message {
 	return "AMessage{" + "timeStamp=" + timeStamp + ", senderID=" + senderID + ", receiverIDs=" + receiverIDs + '}';
     }
 
+    @Override
+    public String getID() {
+	return this.getClass().getName();
+    }
+
 }

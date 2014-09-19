@@ -21,4 +21,5 @@ public class DefaultIntent extends AMessage implements Intent {
 	setSenderID(intentSender.getID());
 	addReceiverIDs(intentReceivers);
     }
+
 }
