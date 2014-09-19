@@ -25,7 +25,7 @@ public class TinkerforgeWavingLEDAgent extends ATinkerforgeAgent {
     private final short[][] leds;
     private final short[] sampleWave;
     private Random random;
-    private final int MAX_LIGHT = 80;
+    private final int MAX_LIGHT = 128;
     private double samplePosition1;
     private double samplePosition2;
     private double samplePosition3;

@@ -18,8 +18,10 @@ class ServiceLocationIntent extends DefaultIntent {
 
     private Boolean requestServiceLocationSet;
     private Set<ServiceLocation> serviceLocationSet;
+    private String requestLocationsForService;
+    private String requestServiceForLocations;
 
-    public void setServiceLocation(ServiceLocation serviceLocation, boolean isValid) {
+    public void setServiceLocationSet(ServiceLocation serviceLocation, boolean isValid) {
 	if (serviceLocationSet == null) {
 	    serviceLocationSet = new HashSet<>();
 	}

@@ -8,7 +8,6 @@ package ch.quantasy.tinkerbus.service.location.location;
 import ch.quantasy.messagebus.message.Event;
 import ch.quantasy.messagebus.worker.definition.Agent;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeService;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,13 +17,9 @@ import java.util.Set;
  */
 public class LocationService extends ATinkerforgeService<LocationIntent, LocationEvent> {
 
-    private final HashMap<String, Set<Location>> locationMapByLocation;
-    private final HashMap<String, Set<Location>> locationMapByDevice;
     private final Set<Location> locationSet;
 
     public LocationService() {
-	locationMapByDevice = new HashMap<>();
-	locationMapByLocation = new HashMap<>();
 	locationSet = new HashSet<>();
     }
 
@@ -38,7 +33,13 @@ public class LocationService extends ATinkerforgeService<LocationIntent, Locatio
 	}
 	synchronized (this) {
 	    if (message.getLocationSet() != null) {
-		locationSet.addAll(message.getLocationSet());
+		for (Location location : message.getLocationSet()) {
+		    if (location.isValid()) {
+			locationSet.add(location);
+		    } else {
+			locationSet.remove(location);
+		    }
+		}
 		LocationEvent event = createEvent();
 		event.addLocations(locationSet);
 		publish(event);

@@ -15,6 +15,7 @@ class Location {
 
     private String locationDescription;
     private final String locationID;
+    private Boolean valid;
 
     public Location(String locationID) {
 
@@ -31,6 +32,14 @@ class Location {
 
     public String getLocationDescription() {
 	return locationDescription;
+    }
+
+    public Boolean isValid() {
+	return valid != null && valid;
+    }
+
+    public void setValid(Boolean valid) {
+	this.valid = valid;
     }
 
     @Override
