@@ -45,7 +45,6 @@ class ServiceLocation {
 	int hash = 5;
 	hash = 43 * hash + Objects.hashCode(this.serviceID);
 	hash = 43 * hash + Objects.hashCode(this.locationID);
-	hash = 43 * hash + Objects.hashCode(this.valid);
 	return hash;
     }
 
@@ -64,9 +63,7 @@ class ServiceLocation {
 	if (!Objects.equals(this.locationID, other.locationID)) {
 	    return false;
 	}
-	if (!Objects.equals(this.valid, other.valid)) {
-	    return false;
-	}
+
 	return true;
     }
 

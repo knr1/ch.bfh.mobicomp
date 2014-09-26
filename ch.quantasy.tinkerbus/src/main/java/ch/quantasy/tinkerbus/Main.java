@@ -7,7 +7,7 @@ package ch.quantasy.tinkerbus;
 
 import ch.quantasy.tinkerbus.agent.device.deviceAmbientLight.TinkerforgeAmbientLightAgent;
 import ch.quantasy.tinkerbus.agent.device.deviceDC.TinkerforgeDCAgent;
-import ch.quantasy.tinkerbus.agent.device.deviceLED.TinkerforgeWavingLEDAgent;
+import ch.quantasy.tinkerbus.agent.device.deviceLED.TinkerforgeLEDAgent;
 import ch.quantasy.tinkerbus.service.location.serviceLocation.ServiceLocationService;
 import ch.quantasy.tinkerbus.service.stack.TinkerforgeStackAgent;
 import ch.quantasy.tinkerbus.service.stack.registration.TinkerforgeStackRegistrationService;
@@ -25,8 +25,8 @@ public class Main {
 	TinkerforgeStackAgent stackAgent = new TinkerforgeStackAgent();
 	TinkerforgeAmbientLightAgent ambientLightAgent = new TinkerforgeAmbientLightAgent();
 	TinkerforgeDCAgent dcAgent = new TinkerforgeDCAgent();
-	//TinkerforgeLEDAgent ledAgent = new TinkerforgeLEDAgent();
-	TinkerforgeWavingLEDAgent ledAgent = new TinkerforgeWavingLEDAgent();
+	TinkerforgeLEDAgent ledAgent = new TinkerforgeLEDAgent();
+	//TinkerforgeWavingLEDAgent ledAgent = new TinkerforgeWavingLEDAgent();
 	//TinkerforgeLivingLEDAgent ledAgent = new TinkerforgeLivingLEDAgent();
 	stackAgent.register();
 	System.in.read();

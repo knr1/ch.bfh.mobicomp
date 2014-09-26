@@ -29,6 +29,7 @@ public class TinkerforgeLEDAgent extends ATinkerforgeAgent {
     private short power;
     private String ledDeviceID;
     private short[][] frame;
+    private final int AMOUNT_OF_LEDs = 64;
 
     private void handleEvent(TinkerforgeLEDEvent event) {
 	if (event == null) {
@@ -39,10 +40,10 @@ public class TinkerforgeLEDAgent extends ATinkerforgeAgent {
 	    System.out.println("LED-Stripe discovered");
 	    this.ledDeviceID = event.getSenderID();
 	    TinkerforgeLEDIntent intent = TinkerforgeLEDService.createIntent(this);
-	    intent.getDeviceSetting().setChipType(TinkerforgeLEDSetting.DEFAULT_CHIP_TYPE);
+	    intent.getDeviceSetting().setChipType(TinkerforgeLEDSetting.CHIP_TYPE_WS2812);
 	    intent.getDeviceSetting().setClockFrequencyOfICsInHz(2000000);
 	    intent.getDeviceSetting().setFrameDurationInMilliseconds(20);
-	    intent.getDeviceSetting().setNumberOfLEDs(50);
+	    intent.getDeviceSetting().setNumberOfLEDs(AMOUNT_OF_LEDs);
 	    intent.addReceiverIDs(event.getSenderID());
 	    System.out.println(intent);
 	    publish(intent);
@@ -51,12 +52,12 @@ public class TinkerforgeLEDAgent extends ATinkerforgeAgent {
 	    intent.addReceiverIDs(event.getSenderID());
 	    publish(intent);
 
-	    frame = TinkerforgeLEDService.getFreshRGBLEDs(50);
+	    frame = TinkerforgeLEDService.getFreshRGBLEDs(AMOUNT_OF_LEDs);
 	} else {
 	    TinkerforgeLEDIntent intent = TinkerforgeLEDService.createIntent(this);
 	    //intent.addReceiverIDs(ledDeviceID);
 	    power++;
-	    power %= 128;
+	    power %= 256;
 	    for (int i = 0; i < frame.length; i++) {
 		for (int j = 0; j < frame[i].length; j++) {
 		    frame[i][j] = (short) (power * Math.random());

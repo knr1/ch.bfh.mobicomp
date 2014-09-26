@@ -26,6 +26,8 @@ public class TinkerforgeWavingLEDAgent extends ATinkerforgeAgent {
     private final short[] sampleWave;
     private Random random;
     private final int MAX_LIGHT = 128;
+    private final int AMOUNT_OF_LEDs = 64;
+
     private double samplePosition1;
     private double samplePosition2;
     private double samplePosition3;
@@ -38,8 +40,8 @@ public class TinkerforgeWavingLEDAgent extends ATinkerforgeAgent {
 
     public TinkerforgeWavingLEDAgent() {
 	random = new Random();
-	this.leds = TinkerforgeLEDService.getFreshRGBLEDs(50);
-	sampleWave = new short[50 * 255];
+	this.leds = TinkerforgeLEDService.getFreshRGBLEDs(AMOUNT_OF_LEDs);
+	sampleWave = new short[AMOUNT_OF_LEDs * 255];
 	for (int i = 0; i < sampleWave.length; i++) {
 	    sampleWave[i] = (short) ((MAX_LIGHT / 2) * Math
 		    .sin((2 * Math.PI / sampleWave.length) * i));
@@ -58,10 +60,10 @@ public class TinkerforgeWavingLEDAgent extends ATinkerforgeAgent {
 	    ledServiceID = event.getSenderID();
 	    System.out.println("LED-Stripe discovered");
 	    TinkerforgeLEDIntent intent = TinkerforgeLEDService.createIntent(this);
-	    intent.getDeviceSetting().setChipType(TinkerforgeLEDSetting.DEFAULT_CHIP_TYPE);
+	    intent.getDeviceSetting().setChipType(TinkerforgeLEDSetting.CHIP_TYPE_WS2812);
 	    intent.getDeviceSetting().setClockFrequencyOfICsInHz(2000000);
 	    intent.getDeviceSetting().setFrameDurationInMilliseconds(20);
-	    intent.getDeviceSetting().setNumberOfLEDs(50);
+	    intent.getDeviceSetting().setNumberOfLEDs(AMOUNT_OF_LEDs);
 	    intent.addReceiverIDs(event.getSenderID());
 	    System.out.println(intent);
 	    publish(intent);

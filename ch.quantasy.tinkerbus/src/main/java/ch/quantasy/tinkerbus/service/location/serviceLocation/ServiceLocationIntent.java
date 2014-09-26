@@ -28,8 +28,8 @@ class ServiceLocationIntent extends DefaultIntent {
 	serviceLocationSet.add(serviceLocation);
     }
 
-    public void setRequestServiceLocationSet(Boolean requestLocationSet) {
-	this.requestServiceLocationSet = requestLocationSet;
+    public void setRequestServiceLocationSet(Boolean requestServiceLocationSet) {
+	this.requestServiceLocationSet = requestServiceLocationSet;
     }
 
     public Boolean isRequestServiceLocationSet() {

@@ -24,7 +24,8 @@ public class TinkerforgeLivingLEDAgent extends ATinkerforgeAgent {
     public static final String ID = "TinkerforgeLivingLEDAgent";
     private final short[][] leds;
     private final Random random;
-    private final int MAX_LIGHT = 40;
+    private final int MAX_LIGHT = 200;
+    private final int AMOUNT_OF_LEDs = 64;
     private double samplePosition1;
     private double samplePosition2;
     private double samplePosition3;
@@ -37,7 +38,7 @@ public class TinkerforgeLivingLEDAgent extends ATinkerforgeAgent {
 
     public TinkerforgeLivingLEDAgent() {
 	random = new Random();
-	this.leds = TinkerforgeLEDService.getFreshRGBLEDs(50);
+	this.leds = TinkerforgeLEDService.getFreshRGBLEDs(AMOUNT_OF_LEDs);
 
     }
 
@@ -52,10 +53,10 @@ public class TinkerforgeLivingLEDAgent extends ATinkerforgeAgent {
 	    ledServiceID = event.getSenderID();
 	    System.out.println("LED-Stripe discovered");
 	    TinkerforgeLEDIntent intent = TinkerforgeLEDService.createIntent(this);
-	    intent.getDeviceSetting().setChipType(TinkerforgeLEDSetting.DEFAULT_CHIP_TYPE);
+	    intent.getDeviceSetting().setChipType(TinkerforgeLEDSetting.CHIP_TYPE_WS2812);
 	    intent.getDeviceSetting().setClockFrequencyOfICsInHz(2000000);
-	    intent.getDeviceSetting().setFrameDurationInMilliseconds(20);
-	    intent.getDeviceSetting().setNumberOfLEDs(50);
+	    intent.getDeviceSetting().setFrameDurationInMilliseconds(50);
+	    intent.getDeviceSetting().setNumberOfLEDs(AMOUNT_OF_LEDs);
 	    intent.addReceiverIDs(event.getSenderID());
 	    System.out.println(intent);
 	    publish(intent);
@@ -95,20 +96,16 @@ public class TinkerforgeLivingLEDAgent extends ATinkerforgeAgent {
 	    int preLed = this.leds[0][i];
 	    int curLed = this.leds[0][(i + 1) % this.leds[0].length];
 	    int postLed = this.leds[0][(i + 2) % this.leds[0].length];
-	    int lower = 0;//MAX_LIGHT / 2;
-	    lower += curLed - preLed;
-	    lower += curLed - postLed;
-
-	    int nextTrend = random.nextInt(Math.abs(lower) + 1);
-	    if (nextTrend >= Math.abs(lower) / 2) {
-		if (random.nextInt(20) < 2) {
-		    this.leds[0][(i + 1) % this.leds[0].length] = (short) (Math.min(MAX_LIGHT, Math.max(1, curLed + Math.signum(lower))));
-		}
-	    } else if (nextTrend <= Math.abs(lower) / 2) {
-		if (random.nextInt(20) < 2) {
-		    this.leds[0][(i + 1) % this.leds[0].length] = (short) (Math.min(MAX_LIGHT, Math.max(1, curLed - Math.signum(lower))));
-		}
+	    int neighbourPower = (preLed + postLed) / 2;
+	    if (curLed < neighbourPower) {
+		curLed += random.nextInt(10) - 2;
+	    } else {
+		curLed += random.nextInt(10) - 8;
 	    }
+
+	    curLed = Math.max(1, Math.min(MAX_LIGHT, curLed));
+
+	    this.leds[0][(i + 1) % this.leds[0].length] = (short) curLed;
 
 	}
 

@@ -24,7 +24,8 @@ public class TinkerforgeLEDSetting extends TinkerforgeDeviceSetting<TinkerforgeL
     // IC-refresh in Hz
     public static final int DEFAULT_CLOCK_FREQUENCY_OF_ICS_IN_HZ = 2000000;
 
-    public static final int DEFAULT_CHIP_TYPE = BrickletLEDStrip.CHIP_TYPE_WS2801;
+    public static final int CHIP_TYPE_WS2801 = BrickletLEDStrip.CHIP_TYPE_WS2801;
+    public static final int CHIP_TYPE_WS2812 = BrickletLEDStrip.CHIP_TYPE_WS2812;
 
     private Integer frameDurationInMilliseconds;
     private Integer clockFrequencyOfICsInHz;
