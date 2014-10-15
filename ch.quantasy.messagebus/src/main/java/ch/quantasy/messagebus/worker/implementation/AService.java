@@ -5,8 +5,11 @@
  */
 package ch.quantasy.messagebus.worker.implementation;
 
-import ch.quantasy.messagebus.message.DefaultEvent;
-import ch.quantasy.messagebus.message.DefaultIntent;
+import ch.quantasy.messagebus.message.definition.Event;
+import ch.quantasy.messagebus.message.definition.Intent;
+import ch.quantasy.messagebus.message.implementation.AnIntent;
+import ch.quantasy.messagebus.message.implementation.DiscoveryIntent;
+import ch.quantasy.messagebus.worker.definition.Agent;
 import ch.quantasy.messagebus.worker.definition.Service;
 
 /**
@@ -15,21 +18,52 @@ import ch.quantasy.messagebus.worker.definition.Service;
  * @param <SEND>
  * @param <RECEIVE>
  */
-public abstract class AService<SEND extends DefaultEvent, RECEIVE extends DefaultIntent> extends AWorker<SEND, RECEIVE> implements Service<SEND, RECEIVE> {
+public abstract class AService<SEND extends Event, RECEIVE extends Intent> extends AWorker<SEND, RECEIVE> implements Service<SEND, RECEIVE> {
 
     public AService() {
 	getBusFactory().getIntentBus().subscribe(this);
     }
 
-    public SEND createServiceDiscoveryEvent() {
-	SEND event = createEvent();
-	event.setDiscovered(true);
-	return event;
-    }
-
     @Override
     public void publish(SEND message) {
 	getBusFactory().getEventBus().post(message).asynchronously();
+    }
+
+    @Override
+    public final void handleMessage(Intent message) {
+	if (message == null) {
+	    return;
+	}
+	if (message.containsReceiverIDs() && !message.containsReceiverID(this.getID())) {
+	    return;
+	}
+
+	if (message instanceof DiscoveryIntent) {
+	    publish(createEvent());
+	}
+	try {
+	    handleIntent((RECEIVE) message);
+	} catch (ClassCastException ex) {
+	    //Nope, this intent is not for us...
+	}
+    }
+
+    protected abstract void handleIntent(RECEIVE message);
+
+    public static DiscoveryIntent discover(Agent intentSender, String... intentReceivers) {
+	return new ServiceDiscoveryIntent(intentSender, intentReceivers);
+    }
+
+}
+
+class ServiceDiscoveryIntent extends AnIntent implements DiscoveryIntent {
+
+    public ServiceDiscoveryIntent(Agent intentSender) {
+	super(intentSender);
+    }
+
+    public ServiceDiscoveryIntent(Agent intentSender, String... intentReceivers) {
+	super(intentSender, intentReceivers);
     }
 
 }

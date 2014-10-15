@@ -6,7 +6,7 @@
 package ch.quantasy.messagebus.worker.definition;
 
 import ch.quantasy.messagebus.definition.BusFactory;
-import ch.quantasy.messagebus.message.Message;
+import ch.quantasy.messagebus.message.definition.Message;
 
 /**
  *

@@ -3,22 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.messagebus.message;
+package ch.quantasy.messagebus.message.implementation;
 
+import ch.quantasy.messagebus.message.definition.Intent;
 import ch.quantasy.messagebus.worker.definition.Agent;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class DefaultIntent extends AMessage implements Intent {
+public abstract class AnIntent extends AMessage<Agent> implements Intent {
 
-    public DefaultIntent(Agent intentSender) {
-	setSenderID(intentSender.getID());
+    public AnIntent(Agent intentSender) {
+	super(intentSender);
     }
 
-    public DefaultIntent(Agent intentSender, String... intentReceivers) {
-	setSenderID(intentSender.getID());
+    public AnIntent(Agent intentSender, String... intentReceivers) {
+	super(intentSender);
 	addReceiverIDs(intentReceivers);
     }
 

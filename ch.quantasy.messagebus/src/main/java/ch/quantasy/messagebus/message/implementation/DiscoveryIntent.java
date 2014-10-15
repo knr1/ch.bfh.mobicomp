@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.messagebus.message;
+package ch.quantasy.messagebus.message.implementation;
+
+import ch.quantasy.messagebus.message.definition.Intent;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public interface Event extends Message {
-
-}
+public interface DiscoveryIntent extends Intent {
+};

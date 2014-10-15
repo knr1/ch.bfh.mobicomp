@@ -5,8 +5,8 @@
  */
 package ch.quantasy.messagebus.definition;
 
-import ch.quantasy.messagebus.message.Event;
-import ch.quantasy.messagebus.message.Intent;
+import ch.quantasy.messagebus.message.definition.Event;
+import ch.quantasy.messagebus.message.definition.Intent;
 import net.engio.mbassy.bus.MBassador;
 
 /**

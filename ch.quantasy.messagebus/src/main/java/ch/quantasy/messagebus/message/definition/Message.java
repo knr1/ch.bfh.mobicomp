@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.messagebus.message;
+package ch.quantasy.messagebus.message.definition;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  *
@@ -21,6 +22,16 @@ public interface Message extends Serializable {
 
     public boolean containsReceiverIDs();
 
+    public void addReceiverIDs(String... receiverIDs);
+
     public boolean containsReceiverID(String receiverID);
+
+    public boolean containsContent();
+
+    public void addContents(Content... contents);
+
+    public Collection<Content> getContents();
+
+    public Content getContentByID(Class classname);
 
 }
