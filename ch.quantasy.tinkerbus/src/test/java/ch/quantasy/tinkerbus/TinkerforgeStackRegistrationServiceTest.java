@@ -6,9 +6,8 @@
 package ch.quantasy.tinkerbus;
 
 import ch.quantasy.messagebus.definition.BusFactory;
-import ch.quantasy.messagebus.message.DefaultEvent;
-import ch.quantasy.messagebus.message.DefaultIntent;
-import ch.quantasy.messagebus.worker.implementation.AnAgent;
+import ch.quantasy.messagebus.message.definition.Event;
+import ch.quantasy.tinkerbus.bus.ATinkerforgeAgent;
 import ch.quantasy.tinkerbus.bus.TinkerforgeBusFactory;
 import ch.quantasy.tinkerbus.service.stack.registration.TinkerforgeStackRegistrationIntent;
 import ch.quantasy.tinkerbus.service.stack.registration.TinkerforgeStackRegistrationService;
@@ -52,30 +51,17 @@ public class TinkerforgeStackRegistrationServiceTest {
     public void testHandleRegisterMessage() {
 	System.out.println("handleMessage");
 	TestAgent agent = new TestAgent() {
-	    public DefaultEvent event;
 
 	    @Override
-	    public void handleMessage(DefaultEvent message) {
+	    protected void handleEvent(Event message) {
 		System.out.println(message);
 	    }
-
-	    @Override
-	    public String getID() {
-		return "TestAgent";
-	    }
-
-	    @Override
-	    public BusFactory getBusFactory() {
-		return TinkerforgeBusFactory.getInstance();
-	    }
 	};
+
 	TinkerforgeStackRegistrationService instance = new TinkerforgeStackRegistrationService();
 
-	TinkerforgeStackRegistrationIntent intent = TinkerforgeStackRegistrationService.createIntent(agent);
-	intent.setTinkerforgeStackAddress(new TinkerforgeStackAddress("192.168.1.1", 4223));
-
+	TinkerforgeStackRegistrationIntent intent = TinkerforgeStackRegistrationIntent.register(agent, new TinkerforgeStackAddress("localhost", 4223));
 	agent.publish(intent);
-
 	System.out.println(intent);
 	try {
 	    Thread.sleep(2000);
@@ -92,7 +78,7 @@ public class TinkerforgeStackRegistrationServiceTest {
     public void testGetID() {
 	System.out.println("getID");
 	TinkerforgeStackRegistrationService instance = new TinkerforgeStackRegistrationService();
-	String expResult = TinkerforgeStackRegistrationService.ID;
+	String expResult = instance.getClass().getName();
 	String result = instance.getID();
 	Assert.assertEquals(expResult, result);
     }
@@ -110,7 +96,12 @@ public class TinkerforgeStackRegistrationServiceTest {
 
     }
 
-    abstract class TestAgent extends AnAgent<DefaultIntent, DefaultEvent> {
+    abstract class TestAgent extends ATinkerforgeAgent {
+
+	@Override
+	public String getID() {
+	    return this.getClass().getName();
+	}
 
     }
 

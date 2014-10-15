@@ -5,31 +5,12 @@
  */
 package ch.quantasy.tinkerbus.service.device.deviceAmbientLight;
 
-import ch.quantasy.messagebus.worker.definition.Agent;
-import ch.quantasy.tinkerbus.service.device.core.TinkerforgeDeviceIntent;
+import ch.quantasy.tinkerbus.service.device.message.TinkerforgeDeviceIntent;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class TinkerforgeAmbientLightIntent extends TinkerforgeDeviceIntent<TinkerforgeAmbientLightSetting> {
-
-    public TinkerforgeAmbientLightIntent(Agent intentSender) {
-	super(intentSender);
-    }
-
-    public TinkerforgeAmbientLightIntent(Agent intentSender, String... intentReceivers) {
-	super(intentSender, intentReceivers);
-    }
-
-    @Override
-    public String toString() {
-	return super.toString() + " TinkerforgeAmbientLightIntent{" + '}';
-    }
-
-    @Override
-    protected TinkerforgeAmbientLightSetting createDeviceSetting() {
-	return new TinkerforgeAmbientLightSetting();
-    }
+public interface TinkerforgeAmbientLightIntent extends TinkerforgeDeviceIntent {
 
 }

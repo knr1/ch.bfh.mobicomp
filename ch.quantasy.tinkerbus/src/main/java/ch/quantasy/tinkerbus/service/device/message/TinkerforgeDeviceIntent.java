@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.stack;
+package ch.quantasy.tinkerbus.service.device.message;
+
+import ch.quantasy.messagebus.message.definition.Intent;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public enum StackConnectionIntentState {
+public interface TinkerforgeDeviceIntent extends Intent, TinkerforgeDeviceMessage {
 
-    Connect, Disconnect, Status;
 }

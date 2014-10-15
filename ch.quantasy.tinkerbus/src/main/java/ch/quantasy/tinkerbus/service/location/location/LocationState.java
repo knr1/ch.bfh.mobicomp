@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.stack;
+package ch.quantasy.tinkerbus.service.location.location;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public enum StackConnectionEventState {
+public enum LocationState {
 
-    Connected, Disconnected;
+    status, add, remove;
 }

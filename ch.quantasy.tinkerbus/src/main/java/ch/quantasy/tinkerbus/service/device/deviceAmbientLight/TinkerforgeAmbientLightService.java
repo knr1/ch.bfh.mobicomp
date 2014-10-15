@@ -7,7 +7,11 @@ package ch.quantasy.tinkerbus.service.device.deviceAmbientLight;
 
 import ch.quantasy.messagebus.message.DefaultEvent;
 import ch.quantasy.messagebus.worker.definition.Agent;
+import ch.quantasy.messagebus.worker.definition.Service;
+import ch.quantasy.tinkerbus.service.device.content.TinkerforgeDeviceContent;
 import ch.quantasy.tinkerbus.service.device.core.TinkerforgeDeviceService;
+import ch.quantasy.tinkerbus.service.device.message.ATinkerforgeDeviceEvent;
+import ch.quantasy.tinkerbus.service.device.message.ATinkerforgeDeviceIntent;
 import com.tinkerforge.BrickletAmbientLight;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class TinkerforgeAmbientLightService extends TinkerforgeDeviceService<BrickletAmbientLight, TinkerforgeAmbientLightSetting, TinkerforgeAmbientLightIntent, TinkerforgeAmbientLightEvent> implements BrickletAmbientLight.AnalogValueListener, BrickletAmbientLight.AnalogValueReachedListener, BrickletAmbientLight.IlluminanceListener, BrickletAmbientLight.IlluminanceReachedListener {
+public class TinkerforgeAmbientLightService extends TinkerforgeDeviceService<BrickletAmbientLight, TinkerforgeAmbientLightIntent, TinkerforgeAmbientLightEvent> implements BrickletAmbientLight.AnalogValueListener, BrickletAmbientLight.AnalogValueReachedListener, BrickletAmbientLight.IlluminanceListener, BrickletAmbientLight.IlluminanceReachedListener {
 
     public TinkerforgeAmbientLightService(BrickletAmbientLight device, String deviceID) {
 	super(device, deviceID);
@@ -103,7 +107,7 @@ public class TinkerforgeAmbientLightService extends TinkerforgeDeviceService<Bri
     }
 
     @Override
-    protected void handleTinkerMessage(TinkerforgeAmbientLightIntent message) {
+    public void handleMessage(TinkerforgeAmbientLightIntent message) {
 	if (message == null) {
 	    return;
 	}
@@ -159,6 +163,26 @@ public class TinkerforgeAmbientLightService extends TinkerforgeDeviceService<Bri
 	    return (TinkerforgeAmbientLightEvent) event;
 	}
 	return null;
+    }
+
+}
+
+class Intent extends ATinkerforgeDeviceIntent implements TinkerforgeAmbientLightIntent {
+
+    public Intent(TinkerforgeDeviceContent deviceContent, Agent intentSender) {
+	super(deviceContent, intentSender);
+    }
+
+    public Intent(TinkerforgeDeviceContent deviceContent, Agent intentSender, String... intentReceivers) {
+	super(deviceContent, intentSender, intentReceivers);
+    }
+
+}
+
+class Event extends ATinkerforgeDeviceEvent implements TinkerforgeAmbientLightEvent {
+
+    public Event(TinkerforgeDeviceContent deviceContent, Service eventSender) {
+	super(deviceContent, eventSender);
     }
 
 }

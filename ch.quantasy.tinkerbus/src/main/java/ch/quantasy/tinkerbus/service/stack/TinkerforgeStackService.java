@@ -5,11 +5,16 @@
  */
 package ch.quantasy.tinkerbus.service.stack;
 
-import ch.quantasy.messagebus.message.DefaultEvent;
+import ch.quantasy.messagebus.message.implementation.AnEvent;
+import ch.quantasy.messagebus.message.implementation.AnIntent;
 import ch.quantasy.messagebus.worker.definition.Agent;
+import ch.quantasy.messagebus.worker.definition.Service;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeService;
+import ch.quantasy.tinkerbus.service.content.ThrowableContent;
+import ch.quantasy.tinkerbus.service.device.content.TinkerforgeStackAddressContent;
 import ch.quantasy.tinkerbus.service.device.core.TinkerforgeDeviceService;
 import ch.quantasy.tinkerbus.service.device.core.TinkerforgeDeviceServiceFactory;
+import ch.quantasy.tinkerbus.service.stack.content.StackConnectionStateContent;
 import com.tinkerforge.Device;
 import com.tinkerforge.Device.Identity;
 import com.tinkerforge.NotConnectedException;
@@ -25,10 +30,6 @@ import java.util.logging.Logger;
  */
 public class TinkerforgeStackService extends ATinkerforgeService<TinkerforgeStackIntent, TinkerforgeStackEvent> {
 
-    public final static String STACK_ADDRESS = "tinkerforge.stack.address";
-    public final static String CONNECTED = "tinkerforge.stack.connected";
-    public final static String EXCEPTION = "tinkerforge.stack.exception";
-
     private final TinkerforgeStackManager stackManager;
     private final Map<String, TinkerforgeDeviceService> deviceServices;
 
@@ -39,31 +40,31 @@ public class TinkerforgeStackService extends ATinkerforgeService<TinkerforgeStac
     }
 
     @Override
-    protected void handleTinkerMessage(TinkerforgeStackIntent message) {
+    protected void handleIntent(TinkerforgeStackIntent message) {
 	if (message == null) {
 	    return;
 	}
-	StackConnectionIntentState state = message.getStackIntentState();
+	StackConnectionStateContent state = (StackConnectionStateContent) message.getContentByID(StackConnectionStateContent.class);
 	if (state == null) {
 	    return;
 	}
-	if (state == StackConnectionIntentState.Connect) {
+	if (state.getValue() == StackConnectionState.Connect) {
 	    this.stackManager.connect();
 	}
-	if (state == StackConnectionIntentState.Disconnect) {
+	if (state.getValue() == StackConnectionState.Disconnect) {
 	    this.stackManager.disconnect();
 	}
-	if (state == StackConnectionIntentState.Status) {
+	if (state.getValue() == StackConnectionState.Status) {
 	    TinkerforgeStackEvent event = createEvent();
 	    if (this.stackManager.isConnected()) {
-		event.setStackConnectionEventState(StackConnectionEventState.Connected);
+		event.addContents(new StackConnectionStateContent(StackConnectionState.Connected));
 	    } else {
-		event.setStackConnectionEventState(StackConnectionEventState.Disconnected);
+		event.addContents(new StackConnectionStateContent(StackConnectionState.Disconnected));
 	    }
 	    Exception exception = this.stackManager.getActualConnectionException();
 	    System.out.println(exception);
 	    if (exception != null) {
-		event.setException(exception.toString());
+		event.addContents(new ThrowableContent(exception));
 	    }
 	    publish(event);
 	}
@@ -76,15 +77,15 @@ public class TinkerforgeStackService extends ATinkerforgeService<TinkerforgeStac
 
     public void connected() {
 	TinkerforgeStackEvent event = createEvent();
-	event.setStackConnectionEventState(StackConnectionEventState.Connected);
-	event.setStackAddress(stackManager.getStackAddress());
+	event.addContents(new StackConnectionStateContent(StackConnectionState.Connected));
+	event.addContents(new TinkerforgeStackAddressContent(stackManager.getStackAddress()));
 	publish(event);
     }
 
     public void disconnected() {
 	TinkerforgeStackEvent event = createEvent();
-	event.setStackConnectionEventState(StackConnectionEventState.Disconnected);
-	event.setStackAddress(stackManager.getStackAddress());
+	event.addContents(new StackConnectionStateContent(StackConnectionState.Disconnected));
+	event.addContents(new TinkerforgeStackAddressContent(stackManager.getStackAddress()));
 	publish(event);
     }
 
@@ -118,19 +119,44 @@ public class TinkerforgeStackService extends ATinkerforgeService<TinkerforgeStac
 
     @Override
     public TinkerforgeStackEvent createEvent() {
-	return new TinkerforgeStackEvent(this);
+	return new Event(this);
     }
 
-    public static TinkerforgeStackEvent getTinkerforgeStackEvent(DefaultEvent event) {
-	if (event instanceof TinkerforgeStackEvent) {
-	    return (TinkerforgeStackEvent) event;
-	} else {
-	    return null;
-	}
+    public static TinkerforgeStackIntent connect(Agent intentSender, String... intentReceivers) {
+	TinkerforgeStackIntent intent = new Intent(intentSender, intentReceivers);
+	intent.addContents(new StackConnectionStateContent(StackConnectionState.Connect));
+	return intent;
     }
 
-    public static TinkerforgeStackIntent createIntent(Agent agent) {
-	return new TinkerforgeStackIntent(agent);
+    public static TinkerforgeStackIntent disconnect(Agent intentSender, String... intentReceivers) {
+	TinkerforgeStackIntent intent = new Intent(intentSender, intentReceivers);
+	intent.addContents(new StackConnectionStateContent(StackConnectionState.Disconnect));
+	return intent;
+    }
+
+    public static TinkerforgeStackIntent connectionStatus(Agent intentSender, String... intentReceivers) {
+	TinkerforgeStackIntent intent = new Intent(intentSender, intentReceivers);
+	intent.addContents(new StackConnectionStateContent(StackConnectionState.Status));
+	return intent;
+    }
+}
+
+class Intent extends AnIntent implements TinkerforgeStackIntent {
+
+    public Intent(Agent intentSender) {
+	super(intentSender);
+    }
+
+    public Intent(Agent intentSender, String... intentReceivers) {
+	super(intentSender, intentReceivers);
+    }
+
+}
+
+class Event extends AnEvent implements TinkerforgeStackEvent {
+
+    public Event(Service eventSender) {
+	super(eventSender);
     }
 
 }

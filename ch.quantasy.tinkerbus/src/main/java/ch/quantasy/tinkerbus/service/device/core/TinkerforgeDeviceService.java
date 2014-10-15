@@ -5,9 +5,10 @@
  */
 package ch.quantasy.tinkerbus.service.device.core;
 
-import ch.quantasy.tinkerbus.bus.ATinkerforgeAgent;
+import ch.quantasy.messagebus.message.definition.Event;
+import ch.quantasy.messagebus.message.definition.Intent;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeService;
-import ch.quantasy.tinkerbus.bus.ServiceDiscoveryIntent;
+import ch.quantasy.tinkerbus.service.device.content.TinkerforgeDeviceContent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import com.tinkerforge.Device;
 
@@ -15,30 +16,35 @@ import com.tinkerforge.Device;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  * @param <D>
- * @param <S>
  * @param <I>
  * @param <E>
  */
-public abstract class TinkerforgeDeviceService<D extends Device, S extends TinkerforgeDeviceSetting, I extends TinkerforgeDeviceIntent<S>, E extends TinkerforgeDeviceEvent<S>> extends ATinkerforgeService<I, E> {
+public abstract class TinkerforgeDeviceService<D extends Device, I extends Intent, E extends Event> extends ATinkerforgeService<I, E> {
 
     protected D device;
-    protected S currentSetting;
     private final String deviceID;
+    private TinkerforgeDeviceContent deviceContent;
 
     public TinkerforgeDeviceService(D device, String deviceID) {
 	this.deviceID = deviceID;
 	updateDevice(device);
-	E event = createServiceDiscoveryEvent();
+	E event = createEvent();
 	publish(event);
     }
+
+    protected TinkerforgeDeviceContent getDeviceContent() {
+	return deviceContent;
+    }
+
+    protected abstract void updateSettingsOnDevice();
 
     public void updateDevice(D device) {
 	if (!TinkerforgeDevice.areEqual(this.device, device)) {
 	    this.device = device;
 	    this.device.setResponseExpectedAll(true);
+	    updateSettingsOnDevice();
 	    updateListeners();
 	}
-	updateDeviceSetting(currentSetting);
     }
 
     @Override
@@ -47,20 +53,5 @@ public abstract class TinkerforgeDeviceService<D extends Device, S extends Tinke
     }
 
     protected abstract void updateListeners();
-
-    protected abstract void updateDeviceSetting(S setting);
-
-    protected abstract S updateCurrentSetting(S newSetting);
-
-    //Do we really need that?
-    //public static ServiceDiscoveryEvent getEventForDeviceServiceDiscovered(DefaultEvent event) {
-    //if (event instanceof ServiceDiscoveryEvent) {
-    //  return (ServiceDiscoveryEvent) event;
-    //}
-    //return null;
-    //}
-    public static ServiceDiscoveryIntent getIntentForDeviceServiceDiscovered(ATinkerforgeAgent sender) {
-	return new ServiceDiscoveryIntent(sender);
-    }
 
 }

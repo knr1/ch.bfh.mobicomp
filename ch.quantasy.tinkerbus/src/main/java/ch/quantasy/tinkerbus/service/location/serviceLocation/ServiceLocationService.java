@@ -5,9 +5,13 @@
  */
 package ch.quantasy.tinkerbus.service.location.serviceLocation;
 
-import ch.quantasy.messagebus.message.DefaultEvent;
+import ch.quantasy.messagebus.message.implementation.AnEvent;
+import ch.quantasy.messagebus.message.implementation.AnIntent;
 import ch.quantasy.messagebus.worker.definition.Agent;
+import ch.quantasy.messagebus.worker.definition.Service;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeService;
+import ch.quantasy.tinkerbus.service.location.serviceLocation.content.ServiceLocationContent;
+import ch.quantasy.tinkerbus.service.location.serviceLocation.content.ServiceLocationStateContent;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,67 +33,49 @@ public class ServiceLocationService extends ATinkerforgeService<ServiceLocationI
     }
 
     @Override
-    protected void handleTinkerMessage(ServiceLocationIntent message) {
-	if (message.isRequestServiceLocationSet()) {
+    protected void handleIntent(ServiceLocationIntent message) {
+	if (message == null) {
+	    return;
+	}
+	ServiceLocationStateContent state = (ServiceLocationStateContent) message.getContentByID(ServiceLocationStateContent.class);
+	if (state == null) {
+	    return;
+	}
+	if (state.getValue() == ServiceLocationState.status) {
 	    ServiceLocationEvent event = createEvent();
 	    event.addReceiverIDs(message.getSenderID());
-	    event.addServiceLocations(serviceLocationSet);
+	    event.addContents(state);
+	    event.addContents(new ServiceLocationContent(serviceLocationSet));
 	    publish(event);
-	}
-	synchronized (this) {
-	    if (message.geServicetLocationSet() != null) {
-		for (ServiceLocation location : message.geServicetLocationSet()) {
-		    if (location.isValid()) {
-			serviceLocationSet.add(location);
-			if (!serviceLocationMapByLocation.containsKey(location.getLocationID())) {
-			    serviceLocationMapByLocation.put(location.getLocationID(), new HashSet<ServiceLocation>());
-			}
-			serviceLocationMapByLocation.get(location.getLocationID()).add(location);
-
-			if (!serviceLocationMapByDevice.containsKey(location.getServiceID())) {
-			    serviceLocationMapByDevice.put(location.getServiceID(), new HashSet<ServiceLocation>());
-			}
-			serviceLocationMapByLocation.get(location.getServiceID()).add(location);
-		    } else {
-			serviceLocationSet.remove(location);
-			if (!serviceLocationMapByLocation.containsKey(location.getLocationID())) {
-			    Set<ServiceLocation> locations = serviceLocationMapByLocation.get(location.getLocationID());
-			    locations.remove(location);
-			    if (locations.isEmpty()) {
-				serviceLocationMapByLocation.remove(location.getLocationID());
-			    }
-			}
-			if (!serviceLocationMapByDevice.containsKey(location.getServiceID())) {
-			    Set<ServiceLocation> locationSet = serviceLocationMapByDevice.get(location.getServiceID());
-			    locationSet.remove(location);
-			    if (locationSet.isEmpty()) {
-				serviceLocationMapByDevice.remove(location.getServiceID());
-			    }
-			}
-		    }
-		}
-		ServiceLocationEvent event = createEvent();
-		event.addServiceLocations(serviceLocationSet);
-		publish(event);
+	} else {
+	    ServiceLocationContent locations = (ServiceLocationContent) message.getContentByID(ServiceLocationContent.class);
+	    if (locations.getValue() == null || locations.getValue().isEmpty()) {
+		return;
 	    }
+	    Set<ServiceLocation> locSet = new HashSet(locations.getValue());
+	    locSet.removeAll(this.serviceLocationSet);
+	    if (locSet.isEmpty()) {
+		return;
+	    }
+	    ServiceLocationEvent event = createEvent();
+	    event.addContents(new ServiceLocationContent(locSet));
+
+	    if (state.getValue() == ServiceLocationState.add) {
+		serviceLocationSet.addAll(locSet);
+		event.addContents(state);
+
+	    }
+	    if (state.getValue() == ServiceLocationState.remove) {
+		serviceLocationSet.addAll(locSet);
+		event.addContents(state);
+	    }
+	    publish(event);
 	}
     }
 
     @Override
     public ServiceLocationEvent createEvent() {
-	return new ServiceLocationEvent(this);
-    }
-
-    public static ServiceLocationIntent createIntent(Agent agent) {
-	ServiceLocationIntent intent = new ServiceLocationIntent(agent);
-	return intent;
-    }
-
-    public static ServiceLocationEvent getServiceLocationEvent(DefaultEvent event) {
-	if (event instanceof ServiceLocationEvent) {
-	    return (ServiceLocationEvent) event;
-	}
-	return null;
+	return new Event(this);
     }
 
     @Override
@@ -97,4 +83,43 @@ public class ServiceLocationService extends ATinkerforgeService<ServiceLocationI
 	return "ServiceLocationService";
     }
 
+    public static ServiceLocationIntent add(Set<ServiceLocation> locations, Agent intentSender, String... intentReceivers) {
+	ServiceLocationIntent intent = new Intent(intentSender, intentReceivers);
+	intent.addContents(new ServiceLocationStateContent(ServiceLocationState.add));
+	intent.addContents(new ServiceLocationContent(locations));
+	return intent;
+    }
+
+    public static ServiceLocationIntent remove(Set<ServiceLocation> locations, Agent intentSender, String... intentReceivers) {
+	ServiceLocationIntent intent = new Intent(intentSender, intentReceivers);
+	intent.addContents(new ServiceLocationStateContent(ServiceLocationState.remove));
+	intent.addContents(new ServiceLocationContent(locations));
+	return intent;
+    }
+
+    public static ServiceLocationIntent status(Agent intentSender, String... intentReceivers) {
+	ServiceLocationIntent intent = new Intent(intentSender, intentReceivers);
+	intent.addContents(new ServiceLocationStateContent(ServiceLocationState.status));
+	return intent;
+    }
+
+}
+
+class Intent extends AnIntent implements ServiceLocationIntent {
+
+    public Intent(Agent intentSender) {
+	super(intentSender);
+    }
+
+    public Intent(Agent intentSender, String... intentReceivers) {
+	super(intentSender, intentReceivers);
+    }
+
+}
+
+class Event extends AnEvent implements ServiceLocationEvent {
+
+    public Event(Service eventSender) {
+	super(eventSender);
+    }
 }

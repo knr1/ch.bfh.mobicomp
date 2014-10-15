@@ -5,14 +5,14 @@
  */
 package ch.quantasy.tinkerbus.service.stack;
 
-import ch.quantasy.messagebus.message.DefaultEvent;
+import ch.quantasy.messagebus.message.definition.Event;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeAgent;
 import ch.quantasy.tinkerbus.service.stack.registration.StackRegistrationState;
-import ch.quantasy.tinkerbus.service.stack.registration.TinkerforgeStackRegistrationEvent;
 import ch.quantasy.tinkerbus.service.stack.registration.TinkerforgeStackRegistrationIntent;
 import ch.quantasy.tinkerbus.service.stack.registration.TinkerforgeStackRegistrationService;
+import ch.quantasy.tinkerbus.service.stack.registration.content.StackRegistrationStateContent;
+import ch.quantasy.tinkerbus.service.stack.registration.content.TinkerforgeStackServiceIDContent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
-import java.util.Set;
 
 /**
  *
@@ -23,34 +23,34 @@ public class TinkerforgeStackAgent extends ATinkerforgeAgent {
     public static final String ID = "TinkerforgeStackAgent";
 
     @Override
-    protected void handleTinkerMessage(DefaultEvent message) {
-	handleStackService(TinkerforgeStackService.getTinkerforgeStackEvent(message));
-	handleStackRegistrationService(TinkerforgeStackRegistrationService.getTinkerforgeStackRegistrationEvent(message));
+    protected void handleEvent(Event message) {
+	if (message == null) {
+	    return;
+	}
+
+	handleStackService(message);
+	handleStackRegistrationService(message);
 
     }
 
-    private void handleStackRegistrationService(TinkerforgeStackRegistrationEvent event) {
-	if (event == null) {
+    private void handleStackRegistrationService(Event event) {
+	StackRegistrationStateContent stateContent = (StackRegistrationStateContent) event.getContentByID(StackRegistrationStateContent.class);
+	if (stateContent == null) {
 	    return;
 	}
-	System.out.println("Event: " + event);
-	if (event.getRegistrationState() == StackRegistrationState.Registered) {
-	    Set<String> stackServiceIDs = event.getStackServiceIDs();
-	    TinkerforgeStackIntent intent = TinkerforgeStackService.createIntent(this);
-	    for (String stackServiceID : stackServiceIDs) {
-		intent.addReceiverIDs(stackServiceID);
+	if (stateContent.getValue() == StackRegistrationState.Registered) {
+	    TinkerforgeStackServiceIDContent stackServiceIDContent = (TinkerforgeStackServiceIDContent) event.getContentByID(TinkerforgeStackServiceIDContent.class);
+	    if (stackServiceIDContent == null) {
+		return;
 	    }
-	    intent.setStackIntentState(StackConnectionIntentState.Connect);;
+	    TinkerforgeStackIntent intent = TinkerforgeStackService.connect(this, stackServiceIDContent.getValue());
 	    System.out.println("Intent: " + intent);
 	    publish(intent);
 	}
 
     }
 
-    private void handleStackService(TinkerforgeStackEvent event) {
-	if (event == null) {
-	    return;
-	}
+    private void handleStackService(Event event) {
 	System.out.println("Event: " + event);
     }
 
@@ -60,8 +60,7 @@ public class TinkerforgeStackAgent extends ATinkerforgeAgent {
     }
 
     public void register() {
-	TinkerforgeStackRegistrationIntent intent = TinkerforgeStackRegistrationService.createIntent(this);
-	intent.setTinkerforgeStackAddress(new TinkerforgeStackAddress("localhost", TinkerforgeStackAddress.DEFAULT_PORT));
+	TinkerforgeStackRegistrationIntent intent = TinkerforgeStackRegistrationService.register(this, new TinkerforgeStackAddress("localhost", TinkerforgeStackAddress.DEFAULT_PORT));
 	System.out.println("Intent: " + intent);
 	publish(intent);
     }
