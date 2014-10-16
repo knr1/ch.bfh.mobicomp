@@ -6,7 +6,7 @@
 package ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content;
 
 import ch.quantasy.tinkerbus.service.content.ThresholdReachedContent;
-import ch.quantasy.tinkerbus.service.device.threshold.CallbackThreshold;
+import ch.quantasy.tinkerbus.service.device.threshold.CallbackThresholdReached;
 
 /**
  *
@@ -14,8 +14,8 @@ import ch.quantasy.tinkerbus.service.device.threshold.CallbackThreshold;
  */
 public class IlluminanceThresholdReachedContent extends ThresholdReachedContent {
 
-    public IlluminanceThresholdReachedContent(CallbackThreshold callbackThreshold, boolean thresholdReached) {
-	super(callbackThreshold, thresholdReached);
+    public IlluminanceThresholdReachedContent(CallbackThresholdReached value) {
+	super(value);
     }
 
 }

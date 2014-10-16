@@ -7,7 +7,9 @@ package ch.quantasy.tinkerbus.service.device.content;
 
 import ch.quantasy.messagebus.message.definition.Content;
 import ch.quantasy.messagebus.message.implementation.AContent;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -17,40 +19,61 @@ import java.util.Set;
  */
 public class TinkerforgeDeviceContent extends AContent implements Content {
 
-    private Set<Content> settings;
-    private Set<Content> emitions;
+    private Map<Class, Content> settings;
+    private Map<Class, Content> emitions;
 
-    private TinkerforgeDeviceContent() {
-
+    public TinkerforgeDeviceContent() {
+	this.settings = new HashMap<>();
+	this.emitions = new HashMap<>();
     }
 
-    public TinkerforgeDeviceContent(Set<Content> settings, Set<Content> emitions) {
-	this.settings = new HashSet<>(settings);
-	this.emitions = new HashSet<>(emitions);
+    public TinkerforgeDeviceContent(Map<Class, Content> settings, Map<Class, Content> emitions) {
+	this.settings = new HashMap<>(settings);
+	this.emitions = new HashMap<>(emitions);
     }
 
-    public Set<Content> getEmitions() {
+    public Map getEmitions() {
 	return emitions;
     }
 
-    public Set<Content> getSettings() {
+    public Map getSettings() {
 	return settings;
     }
 
-    public Set<Content> getSettingsChange(TinkerforgeDeviceContent content) {
-	Set<Content> changeSet = new HashSet<>(content.getSettings());
-	changeSet.removeAll(settings);
+    public Set<Content> updateSettings(TinkerforgeDeviceContent content) {
+	Set<Content> changeSet = new HashSet<>(content.getSettings().entrySet());
+	changeSet.removeAll(settings.entrySet());
+	this.settings = content.getSettings();
 	return changeSet;
     }
 
-    public Set<Content> getEmitionsChange(TinkerforgeDeviceContent content) {
-	Set<Content> changeSet = new HashSet<>(content.getEmitions());
-	changeSet.removeAll(settings);
+    public Set<Content> updateEmitions(TinkerforgeDeviceContent content) {
+	Set<Content> changeSet = new HashSet<>(content.getEmitions().entrySet());
+	changeSet.removeAll(emitions.entrySet());
+	this.emitions = content.getEmitions();
 	return changeSet;
     }
 
-    public void setSettings(Set<Content> settings) {
-	this.settings = settings;
+    public Content updateSetting(Content content) {
+	if (content == null) {
+	    return null;
+	}
+	return settings.put(content.getClass(), content);
+    }
+
+    public Content updateEmition(Content content) {
+	if (content == null) {
+	    return null;
+	}
+	return emitions.put(content.getClass(), content);
+    }
+
+    public Content getSettingContentByID(Class classname) {
+	return settings.get(classname);
+    }
+
+    public Content getEmitionContentByID(Class classname) {
+	return emitions.get(classname);
     }
 
     @Override

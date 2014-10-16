@@ -11,9 +11,9 @@ import ch.quantasy.tinkerbus.service.content.ValueContent;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class IlluminanceValueCallbackPeriodContent extends ValueContent<Long> {
+public class IlluminanceCallbackPeriodContent extends ValueContent<Long> {
 
-    public IlluminanceValueCallbackPeriodContent(Long value) {
+    public IlluminanceCallbackPeriodContent(Long value) {
 	super(value);
     }
 

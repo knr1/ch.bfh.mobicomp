@@ -18,7 +18,6 @@ public class ATinkerforgeDeviceIntent extends AnIntent implements TinkerforgeDev
     public ATinkerforgeDeviceIntent(TinkerforgeDeviceContent deviceContent, Agent intentSender) {
 	super(intentSender);
 	super.addContents(deviceContent);
-
     }
 
     public ATinkerforgeDeviceIntent(TinkerforgeDeviceContent deviceContent, Agent intentSender, String... intentReceivers) {

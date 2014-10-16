@@ -5,12 +5,14 @@
  */
 package ch.quantasy.tinkerbus.service.device.core;
 
-import ch.quantasy.messagebus.message.definition.Event;
-import ch.quantasy.messagebus.message.definition.Intent;
+import ch.quantasy.messagebus.message.definition.Content;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeService;
 import ch.quantasy.tinkerbus.service.device.content.TinkerforgeDeviceContent;
+import ch.quantasy.tinkerbus.service.device.message.TinkerforgeDeviceEvent;
+import ch.quantasy.tinkerbus.service.device.message.TinkerforgeDeviceIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import com.tinkerforge.Device;
+import java.util.Set;
 
 /**
  *
@@ -19,14 +21,15 @@ import com.tinkerforge.Device;
  * @param <I>
  * @param <E>
  */
-public abstract class TinkerforgeDeviceService<D extends Device, I extends Intent, E extends Event> extends ATinkerforgeService<I, E> {
+public abstract class TinkerforgeDeviceService<D extends Device, I extends TinkerforgeDeviceIntent, E extends TinkerforgeDeviceEvent> extends ATinkerforgeService<I, E> {
 
     protected D device;
     private final String deviceID;
-    private TinkerforgeDeviceContent deviceContent;
+    private final TinkerforgeDeviceContent deviceContent;
 
     public TinkerforgeDeviceService(D device, String deviceID) {
 	this.deviceID = deviceID;
+	this.deviceContent = new TinkerforgeDeviceContent();
 	updateDevice(device);
 	E event = createEvent();
 	publish(event);
@@ -36,15 +39,35 @@ public abstract class TinkerforgeDeviceService<D extends Device, I extends Inten
 	return deviceContent;
     }
 
-    protected abstract void updateSettingsOnDevice();
+    public void updateSettings(TinkerforgeDeviceContent content) {
+	Set<Content> changeMap = getDeviceContent().updateSettings(content);
+	updateSettingsOnDevice(device, content);
+	if (!changeMap.isEmpty()) {
+	    E event = createEvent();
+	    publish(event);
+	}
 
-    public void updateDevice(D device) {
+    }
+
+    protected void updateDevice(D device) {
 	if (!TinkerforgeDevice.areEqual(this.device, device)) {
 	    this.device = device;
 	    this.device.setResponseExpectedAll(true);
-	    updateSettingsOnDevice();
-	    updateListeners();
+	    if (deviceContent != null) {
+		updateSettingsOnDevice(device, deviceContent);
+	    }
+	    updateListeners(device);
 	}
+    }
+
+    @Override
+    public void handleMessage(I message) {
+	if (message == null) {
+	    return;
+	}
+	TinkerforgeDeviceContent content = message.getDeviceContent();
+	updateSettings(content);
+	handleTinkerforgeMessage(message);
     }
 
     @Override
@@ -52,6 +75,10 @@ public abstract class TinkerforgeDeviceService<D extends Device, I extends Inten
 	return deviceID;
     }
 
-    protected abstract void updateListeners();
+    protected abstract void updateListeners(D device);
+
+    protected abstract void updateSettingsOnDevice(D device, TinkerforgeDeviceContent deviceContent);
+
+    public abstract void handleTinkerforgeMessage(I message);
 
 }

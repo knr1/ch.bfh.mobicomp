@@ -5,23 +5,16 @@
  */
 package ch.quantasy.tinkerbus.service.content;
 
-import ch.quantasy.messagebus.message.implementation.AContent;
 import ch.quantasy.tinkerbus.service.device.threshold.CallbackThreshold;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ThresholdContent extends AContent {
+public class ThresholdContent extends ValueContent<CallbackThreshold> {
 
-    private final CallbackThreshold callbackThreshold;
-
-    public ThresholdContent(CallbackThreshold callbackThreshold) {
-	this.callbackThreshold = callbackThreshold;
-    }
-
-    public CallbackThreshold getCallbackThreshold() {
-	return callbackThreshold;
+    public ThresholdContent(CallbackThreshold value) {
+	super(value);
     }
 
 }

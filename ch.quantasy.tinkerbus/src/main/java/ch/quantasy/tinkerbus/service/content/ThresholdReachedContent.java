@@ -5,23 +5,15 @@
  */
 package ch.quantasy.tinkerbus.service.content;
 
-import ch.quantasy.tinkerbus.service.device.threshold.CallbackThreshold;
+import ch.quantasy.tinkerbus.service.device.threshold.CallbackThresholdReached;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ThresholdReachedContent extends ThresholdContent {
+public class ThresholdReachedContent extends ValueContent<CallbackThresholdReached> {
 
-    private final boolean thresholdReached;
-
-    public ThresholdReachedContent(CallbackThreshold callbackThreshold, boolean thresholdReached) {
-	super(callbackThreshold);
-	this.thresholdReached = thresholdReached;
+    public ThresholdReachedContent(CallbackThresholdReached value) {
+	super(value);
     }
-
-    public boolean isThresholdReached() {
-	return thresholdReached;
-    }
-
 }
