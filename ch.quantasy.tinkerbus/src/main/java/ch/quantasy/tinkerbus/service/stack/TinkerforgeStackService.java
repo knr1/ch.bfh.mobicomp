@@ -12,7 +12,7 @@ import ch.quantasy.messagebus.worker.definition.Service;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeService;
 import ch.quantasy.tinkerbus.service.content.ThrowableContent;
 import ch.quantasy.tinkerbus.service.device.content.TinkerforgeStackAddressContent;
-import ch.quantasy.tinkerbus.service.device.core.TinkerforgeDeviceService;
+import ch.quantasy.tinkerbus.service.device.core.ATinkerforgeDeviceService;
 import ch.quantasy.tinkerbus.service.device.core.TinkerforgeDeviceServiceFactory;
 import ch.quantasy.tinkerbus.service.stack.content.StackConnectionStateContent;
 import com.tinkerforge.Device;
@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 public class TinkerforgeStackService extends ATinkerforgeService<TinkerforgeStackIntent, TinkerforgeStackEvent> {
 
     private final TinkerforgeStackManager stackManager;
-    private final Map<String, TinkerforgeDeviceService> deviceServices;
+    private final Map<String, ATinkerforgeDeviceService> deviceServices;
 
     public TinkerforgeStackService(TinkerforgeStackManager manager) {
 	this.deviceServices = new HashMap<>();
@@ -94,7 +94,7 @@ public class TinkerforgeStackService extends ATinkerforgeService<TinkerforgeStac
 	try {
 	    identity = device.getIdentity();
 	    String deviceID = identity.uid + identity.connectedUid;
-	    TinkerforgeDeviceService deviceService = deviceServices.get(deviceID);
+	    ATinkerforgeDeviceService deviceService = deviceServices.get(deviceID);
 	    if (deviceService == null) {
 		deviceService = TinkerforgeDeviceServiceFactory.getDevice(device, deviceID);
 		deviceServices.put(deviceID, deviceService);

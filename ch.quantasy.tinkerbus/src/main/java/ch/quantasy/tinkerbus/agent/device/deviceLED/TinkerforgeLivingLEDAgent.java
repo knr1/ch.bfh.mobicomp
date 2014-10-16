@@ -7,8 +7,8 @@ package ch.quantasy.tinkerbus.agent.device.deviceLED;
 
 import ch.quantasy.messagebus.message.DefaultEvent;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeAgent;
-import ch.quantasy.tinkerbus.service.device.deviceLED.TinkerforgeLEDEvent;
-import ch.quantasy.tinkerbus.service.device.deviceLED.TinkerforgeLEDIntent;
+import ch.quantasy.tinkerbus.service.device.deviceLED.message.TinkerforgeLEDEvent;
+import ch.quantasy.tinkerbus.service.device.deviceLED.message.TinkerforgeLEDIntent;
 import ch.quantasy.tinkerbus.service.device.deviceLED.TinkerforgeLEDService;
 import ch.quantasy.tinkerbus.service.device.deviceLED.TinkerforgeLEDSetting;
 import java.util.Random;

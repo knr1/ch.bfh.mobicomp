@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.device.deviceAmbientLight;
+package ch.quantasy.tinkerbus.service.device.deviceLED.message;
 
 import ch.quantasy.tinkerbus.service.device.message.TinkerforgeDeviceIntent;
 
@@ -11,6 +11,5 @@ import ch.quantasy.tinkerbus.service.device.message.TinkerforgeDeviceIntent;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public interface TinkerforgeAmbientLightIntent extends TinkerforgeDeviceIntent {
-
+public interface TinkerforgeLEDIntent extends TinkerforgeDeviceIntent {
 }

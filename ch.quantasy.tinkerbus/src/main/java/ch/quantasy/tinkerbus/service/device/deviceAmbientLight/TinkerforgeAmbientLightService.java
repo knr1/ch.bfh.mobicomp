@@ -5,17 +5,19 @@
  */
 package ch.quantasy.tinkerbus.service.device.deviceAmbientLight;
 
-import ch.quantasy.messagebus.message.DefaultEvent;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.message.TinkerforgeAmbientLightIntent;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.message.TinkerforgeAmbientLightEvent;
 import ch.quantasy.messagebus.worker.definition.Agent;
 import ch.quantasy.messagebus.worker.definition.Service;
 import ch.quantasy.tinkerbus.service.device.content.TinkerforgeDeviceContent;
-import ch.quantasy.tinkerbus.service.device.core.TinkerforgeDeviceService;
+import ch.quantasy.tinkerbus.service.device.core.ATinkerforgeDeviceService;
 import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.AnalogValueCallbackPeriodContent;
 import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.AnalogValueContent;
 import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.AnalogValueThresholdContent;
 import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.DebouncePeriodContent;
 import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.IlluminanceCallbackPeriodContent;
 import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.IlluminanceThresholdContent;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.IlluminanceValueContent;
 import ch.quantasy.tinkerbus.service.device.message.ATinkerforgeDeviceEvent;
 import ch.quantasy.tinkerbus.service.device.message.ATinkerforgeDeviceIntent;
 import ch.quantasy.tinkerbus.service.device.threshold.CallbackThreshold;
@@ -29,7 +31,7 @@ import java.util.logging.Logger;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class TinkerforgeAmbientLightService extends TinkerforgeDeviceService<BrickletAmbientLight, TinkerforgeAmbientLightIntent, TinkerforgeAmbientLightEvent> implements BrickletAmbientLight.AnalogValueListener, BrickletAmbientLight.AnalogValueReachedListener, BrickletAmbientLight.IlluminanceListener, BrickletAmbientLight.IlluminanceReachedListener {
+public class TinkerforgeAmbientLightService extends ATinkerforgeDeviceService<BrickletAmbientLight, TinkerforgeAmbientLightIntent, TinkerforgeAmbientLightEvent> implements BrickletAmbientLight.AnalogValueListener, BrickletAmbientLight.AnalogValueReachedListener, BrickletAmbientLight.IlluminanceListener, BrickletAmbientLight.IlluminanceReachedListener {
 
     public TinkerforgeAmbientLightService(BrickletAmbientLight device, String deviceID) {
 	super(device, deviceID);
@@ -92,7 +94,7 @@ public class TinkerforgeAmbientLightService extends TinkerforgeDeviceService<Bri
     }
 
     @Override
-    public void handleTinkerforgeMessage(TinkerforgeAmbientLightIntent message) {
+    public void handleTinkerforgeIntent(TinkerforgeAmbientLightIntent message) {
 	//Nothing special
     }
 
@@ -100,30 +102,27 @@ public class TinkerforgeAmbientLightService extends TinkerforgeDeviceService<Bri
     public void analogValue(int value) {
 	getDeviceContent().updateEmition(new AnalogValueContent(value));
 	TinkerforgeAmbientLightEvent event = createEvent();
-	event.setAnalogValue(value);
 	publish(event);
     }
 
     @Override
     public void analogValueReached(int value) {
+	getDeviceContent().updateEmition(new AnalogValueContent(value));
 	TinkerforgeAmbientLightEvent event = createEvent();
-	event.setAnalogValueReached(true);
-	event.setAnalogValue(value);
 	publish(event);
     }
 
     @Override
     public void illuminance(int illuminance) {
+	getDeviceContent().updateEmition(new IlluminanceValueContent(illuminance));
 	TinkerforgeAmbientLightEvent event = createEvent();
-	event.setIlluminanceValue(illuminance);
 	publish(event);
     }
 
     @Override
     public void illuminanceReached(int illuminance) {
+	getDeviceContent().updateEmition(new IlluminanceValueContent(illuminance));
 	TinkerforgeAmbientLightEvent event = createEvent();
-	event.setIlluminanceReached(true);
-	event.setIlluminanceValue(illuminance);
 	publish(event);
     }
 
@@ -134,13 +133,6 @@ public class TinkerforgeAmbientLightService extends TinkerforgeDeviceService<Bri
 
     public static TinkerforgeAmbientLightIntent createIntent(TinkerforgeDeviceContent content, Agent agent) {
 	return new Intent(content, agent);
-    }
-
-    public static TinkerforgeAmbientLightEvent getTinkerforgeAmbientLightEvent(DefaultEvent event) {
-	if (event instanceof TinkerforgeAmbientLightEvent) {
-	    return (TinkerforgeAmbientLightEvent) event;
-	}
-	return null;
     }
 
 }

@@ -8,8 +8,11 @@ package ch.quantasy.tinkerbus.service.device.deviceDC;
 import ch.quantasy.messagebus.message.DefaultEvent;
 import ch.quantasy.messagebus.message.DefaultIntent;
 import ch.quantasy.messagebus.worker.definition.Agent;
-import ch.quantasy.tinkerbus.service.device.core.TinkerforgeDeviceService;
+import ch.quantasy.tinkerbus.service.device.content.TinkerforgeDeviceContent;
+import ch.quantasy.tinkerbus.service.device.core.ATinkerforgeDeviceService;
 import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.TinkerforgeAmbientLightService;
+import ch.quantasy.tinkerbus.service.device.deviceDC.message.TinkerforgeDCEvent;
+import ch.quantasy.tinkerbus.service.device.deviceDC.message.TinkerforgeDCIntent;
 import com.tinkerforge.BrickDC;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,17 +21,14 @@ import java.util.logging.Logger;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class TinkerforgeDCService extends TinkerforgeDeviceService<BrickDC, TinkerforgeDCSetting, TinkerforgeDCIntent, TinkerforgeDCEvent> implements BrickDC.CurrentVelocityListener, BrickDC.EmergencyShutdownListener, BrickDC.UnderVoltageListener, BrickDC.VelocityReachedListener {
-
-    private final TinkerforgeDCSetting currentSettings;
+public class TinkerforgeDCService extends ATinkerforgeDeviceService<BrickDC, TinkerforgeDCIntent, TinkerforgeDCEvent> implements BrickDC.CurrentVelocityListener, BrickDC.EmergencyShutdownListener, BrickDC.UnderVoltageListener, BrickDC.VelocityReachedListener {
 
     public TinkerforgeDCService(BrickDC device, String deviceID) {
 	super(device, deviceID);
-	this.currentSettings = new TinkerforgeDCSetting();
     }
 
     @Override
-    protected void updateListeners() {
+    protected void updateListeners(BrickDC device) {
 	device.addCurrentVelocityListener(this);
 	device.addEmergencyShutdownListener(this);
 	device.addUnderVoltageListener(this);
@@ -199,6 +199,16 @@ public class TinkerforgeDCService extends TinkerforgeDeviceService<BrickDC, Tink
 	    return (TinkerforgeDCEvent) event;
 	}
 	return null;
+    }
+
+    @Override
+    protected void updateSettingsOnDevice(BrickDC device, TinkerforgeDeviceContent deviceContent) {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void handleTinkerforgeIntent(TinkerforgeDCIntent message) {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

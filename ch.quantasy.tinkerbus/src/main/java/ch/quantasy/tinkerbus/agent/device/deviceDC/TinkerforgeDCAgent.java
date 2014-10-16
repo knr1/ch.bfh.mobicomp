@@ -7,8 +7,8 @@ package ch.quantasy.tinkerbus.agent.device.deviceDC;
 
 import ch.quantasy.messagebus.message.DefaultEvent;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeAgent;
-import ch.quantasy.tinkerbus.service.device.deviceDC.TinkerforgeDCEvent;
-import ch.quantasy.tinkerbus.service.device.deviceDC.TinkerforgeDCIntent;
+import ch.quantasy.tinkerbus.service.device.deviceDC.message.TinkerforgeDCEvent;
+import ch.quantasy.tinkerbus.service.device.deviceDC.message.TinkerforgeDCIntent;
 import ch.quantasy.tinkerbus.service.device.deviceDC.TinkerforgeDCService;
 
 /**

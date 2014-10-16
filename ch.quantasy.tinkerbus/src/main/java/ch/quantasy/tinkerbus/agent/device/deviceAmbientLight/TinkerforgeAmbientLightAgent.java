@@ -7,8 +7,8 @@ package ch.quantasy.tinkerbus.agent.device.deviceAmbientLight;
 
 import ch.quantasy.messagebus.message.DefaultEvent;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeAgent;
-import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.TinkerforgeAmbientLightEvent;
-import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.TinkerforgeAmbientLightIntent;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.message.TinkerforgeAmbientLightEvent;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.message.TinkerforgeAmbientLightIntent;
 import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.TinkerforgeAmbientLightService;
 import ch.quantasy.tinkerbus.service.device.threshold.ThresholdOption;
 

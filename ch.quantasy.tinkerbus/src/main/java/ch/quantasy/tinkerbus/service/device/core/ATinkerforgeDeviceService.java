@@ -21,13 +21,13 @@ import java.util.Set;
  * @param <I>
  * @param <E>
  */
-public abstract class TinkerforgeDeviceService<D extends Device, I extends TinkerforgeDeviceIntent, E extends TinkerforgeDeviceEvent> extends ATinkerforgeService<I, E> {
+public abstract class ATinkerforgeDeviceService<D extends Device, I extends TinkerforgeDeviceIntent, E extends TinkerforgeDeviceEvent> extends ATinkerforgeService<I, E> {
 
     protected D device;
     private final String deviceID;
     private final TinkerforgeDeviceContent deviceContent;
 
-    public TinkerforgeDeviceService(D device, String deviceID) {
+    public ATinkerforgeDeviceService(D device, String deviceID) {
 	this.deviceID = deviceID;
 	this.deviceContent = new TinkerforgeDeviceContent();
 	updateDevice(device);
@@ -61,13 +61,13 @@ public abstract class TinkerforgeDeviceService<D extends Device, I extends Tinke
     }
 
     @Override
-    public void handleMessage(I message) {
-	if (message == null) {
+    public void handleIntent(I intent) {
+	if (intent == null) {
 	    return;
 	}
-	TinkerforgeDeviceContent content = message.getDeviceContent();
+	TinkerforgeDeviceContent content = intent.getDeviceContent();
 	updateSettings(content);
-	handleTinkerforgeMessage(message);
+	handleTinkerforgeIntent(intent);
     }
 
     @Override
@@ -79,6 +79,6 @@ public abstract class TinkerforgeDeviceService<D extends Device, I extends Tinke
 
     protected abstract void updateSettingsOnDevice(D device, TinkerforgeDeviceContent deviceContent);
 
-    public abstract void handleTinkerforgeMessage(I message);
+    public abstract void handleTinkerforgeIntent(I message);
 
 }
