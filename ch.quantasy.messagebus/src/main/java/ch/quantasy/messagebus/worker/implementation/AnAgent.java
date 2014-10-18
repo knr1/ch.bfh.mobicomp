@@ -5,8 +5,8 @@
  */
 package ch.quantasy.messagebus.worker.implementation;
 
-import ch.quantasy.messagebus.message.Event;
-import ch.quantasy.messagebus.message.Intent;
+import ch.quantasy.messagebus.message.definition.Event;
+import ch.quantasy.messagebus.message.definition.Intent;
 import ch.quantasy.messagebus.worker.definition.Agent;
 
 /**
@@ -25,5 +25,19 @@ public abstract class AnAgent<SEND extends Intent, RECEIVE extends Event> extend
     public void publish(SEND intent) {
 	getBusFactory().getIntentBus().post(intent).asynchronously();
     }
+
+    @Override
+    public void handleMessage(Event message) {
+
+	if (message == null) {
+	    return;
+	}
+	if (message.containsReceiverIDs() && !message.containsReceiverID(this.getID())) {
+	    return;
+	}
+	handleEvent(message);
+    }
+
+    protected abstract void handleEvent(Event message);
 
 }

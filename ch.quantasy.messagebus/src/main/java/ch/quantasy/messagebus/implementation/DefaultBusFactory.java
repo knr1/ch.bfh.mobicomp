@@ -6,8 +6,8 @@
 package ch.quantasy.messagebus.implementation;
 
 import ch.quantasy.messagebus.definition.BusFactory;
-import ch.quantasy.messagebus.message.Event;
-import ch.quantasy.messagebus.message.Intent;
+import ch.quantasy.messagebus.message.definition.Event;
+import ch.quantasy.messagebus.message.definition.Intent;
 import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.bus.config.BusConfiguration;
 
@@ -22,9 +22,13 @@ public class DefaultBusFactory implements BusFactory {
     private static final DefaultBusFactory instance;
 
     static {
-	intentBus = new MBassador<>(BusConfiguration.Default());
-	eventBus = new MBassador<>(BusConfiguration.Default());
+	intentBus = new MBassador<>(BusConfiguration.SyncAsync());
+	eventBus = new MBassador<>(BusConfiguration.SyncAsync());
 	instance = new DefaultBusFactory();
+    }
+
+    private DefaultBusFactory() {
+	//Singleton.
     }
 
     @Override

@@ -5,38 +5,11 @@
  */
 package ch.quantasy.tinkerbus.service.location.location;
 
-import ch.quantasy.messagebus.message.DefaultEvent;
-import ch.quantasy.messagebus.worker.definition.Service;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import ch.quantasy.messagebus.message.definition.Event;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class LocationEvent extends DefaultEvent {
-
-    private Set<Location> locationSet;
-
-    public LocationEvent(Service eventSender) {
-	super(eventSender);
-    }
-
-    public void addLocations(Collection<Location> locations) {
-	if (locationSet == null) {
-	    locationSet = new HashSet<>();
-	}
-	locationSet.addAll(locations);
-    }
-
-    public void addLocations(Location... locations) {
-	this.addLocations(Arrays.asList(locations));
-    }
-
-    public Set<Location> getLocationSet() {
-	return locationSet;
-    }
-
+public interface LocationEvent extends Event {
 }

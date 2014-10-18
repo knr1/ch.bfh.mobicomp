@@ -6,33 +6,22 @@
 package ch.quantasy.tinkerbus.bus;
 
 import ch.quantasy.messagebus.definition.BusFactory;
-import ch.quantasy.messagebus.message.DefaultEvent;
-import ch.quantasy.messagebus.message.DefaultIntent;
+import ch.quantasy.messagebus.message.definition.Event;
+import ch.quantasy.messagebus.message.definition.Intent;
 import ch.quantasy.messagebus.worker.implementation.AnAgent;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public abstract class ATinkerforgeAgent extends AnAgent<DefaultIntent, DefaultEvent> {
-
-    @Override
-    public void handleMessage(DefaultEvent message) {
-
-	if (message == null) {
-	    return;
-	}
-	if (message.containsReceiverIDs() && !message.containsReceiverID(this.getID())) {
-	    return;
-	}
-	handleTinkerMessage(message);
-    }
-
-    protected abstract void handleTinkerMessage(DefaultEvent message);
+public abstract class ATinkerforgeAgent extends AnAgent<Intent, Event> {
 
     @Override
     public BusFactory getBusFactory() {
 	return TinkerforgeBusFactory.getInstance();
     }
+
+    @Override
+    protected abstract void handleEvent(Event message);
 
 }

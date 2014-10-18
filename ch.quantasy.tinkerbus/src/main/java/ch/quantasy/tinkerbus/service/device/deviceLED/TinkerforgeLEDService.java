@@ -5,12 +5,27 @@
  */
 package ch.quantasy.tinkerbus.service.device.deviceLED;
 
-import ch.quantasy.messagebus.message.DefaultEvent;
+import ch.quantasy.messagebus.message.definition.Content;
 import ch.quantasy.messagebus.worker.definition.Agent;
-import ch.quantasy.tinkerbus.service.device.core.TinkerforgeDeviceService;
+import ch.quantasy.messagebus.worker.definition.Service;
+import ch.quantasy.tinkerbus.service.device.content.TinkerforgeDeviceContent;
+import ch.quantasy.tinkerbus.service.device.core.ATinkerforgeDeviceService;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.TinkerforgeAmbientLightService;
+import ch.quantasy.tinkerbus.service.device.deviceLED.content.ChipTypeContent;
+import ch.quantasy.tinkerbus.service.device.deviceLED.content.FrameDurationInMilliSecondsContent;
+import ch.quantasy.tinkerbus.service.device.deviceLED.content.ICClockFrequencyInHzContent;
+import ch.quantasy.tinkerbus.service.device.deviceLED.content.NumberOfLEDsContent;
+import ch.quantasy.tinkerbus.service.device.deviceLED.content.RGBLEDsContent;
+import ch.quantasy.tinkerbus.service.device.deviceLED.message.TinkerforgeLEDEvent;
+import ch.quantasy.tinkerbus.service.device.deviceLED.message.TinkerforgeLEDIntent;
+import ch.quantasy.tinkerbus.service.device.message.ATinkerforgeDeviceEvent;
+import ch.quantasy.tinkerbus.service.device.message.ATinkerforgeDeviceIntent;
 import com.tinkerforge.BrickletLEDStrip;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class can be used in order to send an 'image' that has to be displayed on an LED-stripe. It is best to get a
@@ -21,9 +36,9 @@ import com.tinkerforge.TimeoutException;
  * @author reto
  *
  */
-public class TinkerforgeLEDService extends TinkerforgeDeviceService<BrickletLEDStrip, TinkerforgeLEDSetting, TinkerforgeLEDIntent, TinkerforgeLEDEvent> implements BrickletLEDStrip.FrameRenderedListener {
+public class TinkerforgeLEDService extends ATinkerforgeDeviceService<BrickletLEDStrip, TinkerforgeLEDIntent, TinkerforgeLEDEvent> implements BrickletLEDStrip.FrameRenderedListener {
 
-    private final static short[] DEFAULT_GAMMA_CORRECTION = {
+    public final static short[] DEFAULT_GAMMA_CORRECTION = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
 	1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2,
@@ -42,27 +57,78 @@ public class TinkerforgeLEDService extends TinkerforgeDeviceService<BrickletLEDS
 	215, 218, 220, 223, 225, 228, 231, 233, 236, 239, 241, 244, 247, 249, 252, 255};
 
     @Override
-    protected void handleTinkerMessage(TinkerforgeLEDIntent message) {
-	TinkerforgeLEDSetting delta = updateCurrentSetting(message.getDeviceSetting());
-	updateDeviceSetting(delta);
-	if (message.isRequestCurrentSetting()) {
-	    TinkerforgeLEDEvent event = createEvent();
-	    event.setDeviceSetting(super.currentSetting.clone());
-	    this.publish(event);
+    protected void updateSettingsOnDevice(BrickletLEDStrip device, Map<Class, Content> contentMap) {
+	if (contentMap == null || contentMap.isEmpty() || device == null) {
+	    return;
 	}
-	if (message.getFrame() != null) {
-	    setRGBLEDs(message.getFrame());
-	    TinkerforgeLEDEvent event = createEvent();
-	    event.setLaging(isLaging);
-	    resetLagState();
-	    this.publish(event);
+	try {
+	    {
+		ChipTypeContent content = ((ChipTypeContent) (contentMap.get(ChipTypeContent.class)));
+		if (content != null) {
+		    Integer value = content.getValue();
+		    if (value != null) {
+			device.setChipType(value);
+		    }
+		}
+	    }
+	    {
+		ICClockFrequencyInHzContent content = ((ICClockFrequencyInHzContent) (contentMap.get(ICClockFrequencyInHzContent.class)));
+		if (content != null) {
+		    Long value = content.getValue();
+		    if (value != null) {
+			//	device.setClockFrequency(value);
+		    }
+		}
+	    }
+	    {
+		FrameDurationInMilliSecondsContent content = ((FrameDurationInMilliSecondsContent) (contentMap.get(FrameDurationInMilliSecondsContent.class)));
+		if (content != null) {
+		    Integer value = content.getValue();
+		    if (value != null) {
+			device.setFrameDuration(value);
+		    }
+		}
+	    }
+
+	    {
+		NumberOfLEDsContent content = ((NumberOfLEDsContent) (contentMap.get(NumberOfLEDsContent.class)));
+		if (content != null) {
+		    Integer value = content.getValue();
+		    if (value != null) {
+			this.setNumberOfLEDs(value);
+		    }
+		}
+	    }
+	    {
+		RGBLEDsContent content = ((RGBLEDsContent) (contentMap.get(RGBLEDsContent.class)));
+		if (content != null) {
+		    short[][] value = content.getValue();
+		    if (value != null) {
+			this.setRGBLEDs(value);
+		    }
+		}
+	    }
+	} catch (TimeoutException ex) {
+	    Logger.getLogger(TinkerforgeAmbientLightService.class.getName()).log(Level.SEVERE, null, ex);
+	} catch (NotConnectedException ex) {
+	    Logger.getLogger(TinkerforgeAmbientLightService.class.getName()).log(Level.SEVERE, null, ex);
 	}
 
     }
 
     @Override
     public TinkerforgeLEDEvent createEvent() {
-	return new TinkerforgeLEDEvent(this);
+	return new Event(getDeviceContent(), this);
+    }
+
+    @Override
+    protected void updateListeners(BrickletLEDStrip device) {
+	device.addFrameRenderedListener(this);
+    }
+
+    @Override
+    public void handleTinkerforgeIntent(TinkerforgeLEDIntent message) {
+	//Nothing special
     }
 
     private enum SendState {
@@ -76,8 +142,8 @@ public class TinkerforgeLEDService extends TinkerforgeDeviceService<BrickletLEDS
     }
 
     private boolean isLaging;
-    private SendState sendState;
-    private RenderState renderState;
+    private SendState sendState = SendState.FREE;
+    private RenderState renderState = RenderState.FREE;
 
     private boolean isGammaCorrection;
 
@@ -93,74 +159,6 @@ public class TinkerforgeLEDService extends TinkerforgeDeviceService<BrickletLEDS
 	super(device, deviceID);
 	sendRGBLEDFrame();
 
-    }
-
-    @Override
-    protected void updateListeners() {
-	device.addFrameRenderedListener(this);
-    }
-
-    @Override
-    protected TinkerforgeLEDSetting updateCurrentSetting(TinkerforgeLEDSetting newSetting) {
-	if (newSetting == null) {
-	    return null;
-	}
-	if (currentSetting == null) {
-	    currentSetting = newSetting.clone();
-	    return newSetting;
-	}
-	TinkerforgeLEDSetting delta = new TinkerforgeLEDSetting();
-
-	if (newSetting.getChipType() != null && !newSetting.getChipType().equals(this.currentSetting.getChipType())) {
-	    this.currentSetting.setChipType(newSetting.getChipType());
-	    delta.setChipType(newSetting.getChipType());
-	}
-	if (newSetting.getClockFrequencyOfICsInHz() != null && !newSetting.getClockFrequencyOfICsInHz().equals(this.currentSetting.getClockFrequencyOfICsInHz())) {
-	    this.currentSetting.setClockFrequencyOfICsInHz(newSetting.getClockFrequencyOfICsInHz());
-	    delta.setChipType(newSetting.getClockFrequencyOfICsInHz());
-	}
-
-	if (newSetting.getNumberOfLEDs() != null && !newSetting.getNumberOfLEDs().equals(this.currentSetting.getNumberOfLEDs())) {
-	    this.currentSetting.setNumberOfLEDs(newSetting.getNumberOfLEDs());
-	    delta.setNumberOfLEDs(newSetting.getNumberOfLEDs());
-	}
-	if (newSetting.getFrameDurationInMilliseconds() != null && !newSetting.getFrameDurationInMilliseconds().equals(this.currentSetting.getFrameDurationInMilliseconds())) {
-	    this.currentSetting.setFrameDurationInMilliseconds(newSetting.getFrameDurationInMilliseconds());
-	    delta.setFrameDurationInMilliseconds(newSetting.getFrameDurationInMilliseconds());
-	}
-	if (newSetting.isGammaCorrection() != null && !newSetting.isGammaCorrection().equals(this.currentSetting.isGammaCorrection())) {
-	    this.currentSetting.setGammaCorrection(newSetting.isGammaCorrection());
-	    delta.setGammaCorrection(newSetting.isGammaCorrection());
-	}
-	return delta;
-    }
-
-    @Override
-    protected void updateDeviceSetting(TinkerforgeLEDSetting setting) {
-	if (device == null) {
-	    return;
-	}
-	if (setting == null) {
-	    return;
-	}
-
-	if (setting.getChipType() != null) {
-	    this.setChipType(setting.getChipType());
-	}
-
-	if (setting.getFrameDurationInMilliseconds() != null) {
-	    this.setFrameDurationInMilliseconds(setting.getFrameDurationInMilliseconds());
-	}
-	//if (setting.getClockFrequencyOfICsInHz() != null) {
-	//    this.setClockFrequencyOfICsInHz(setting.getClockFrequencyOfICsInHz());
-
-	//}
-	if (setting.isGammaCorrection() != null) {
-	    this.isGammaCorrection = setting.isGammaCorrection();
-	}
-	if (setting.getNumberOfLEDs() != null) {
-	    this.setNumberOfLEDs(setting.getNumberOfLEDs());
-	}
     }
 
     /**
@@ -201,59 +199,13 @@ public class TinkerforgeLEDService extends TinkerforgeDeviceService<BrickletLEDS
 	return this.numberOfLEDs;
     }
 
-    public void setFrameDurationInMilliseconds(
-	    final int frameDurationInMilliseconds) {
-	if (super.device != null) {
-	    try {
-		super.device
-			.setFrameDuration(frameDurationInMilliseconds);
-	    } catch (final TimeoutException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    } catch (final NotConnectedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	}
-
-    }
-
-    public void setClockFrequencyOfICsInHz(final int clockFrequencyOfICsInHz) {
-	if (super.device != null) {
-	    try {
-		super.device.setClockFrequency(clockFrequencyOfICsInHz);
-	    } catch (final TimeoutException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    } catch (final NotConnectedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	}
-
-    }
-
-    public void setChipType(int chipType) {
-	if (super.device != null) {
-	    try {
-		super.device.setChipType(chipType);
-	    } catch (TimeoutException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    } catch (NotConnectedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	}
-    }
-
     /**
      * Returns a new 2-dimensional array of shorts representing all the RGB-LEDs of the strip.
      *
      * @return 3-channel-array of shorts
      */
     public static short[][] getFreshRGBLEDs(int numberOfLEDs) {
-	return new short[TinkerforgeLEDSetting.NUMBER_OF_COLOR_CHANNELS][numberOfLEDs];
+	return new short[TinkerforgeLEDService.NUMBER_OF_COLOR_CHANNELS][numberOfLEDs];
     }
 
     /**
@@ -392,15 +344,31 @@ public class TinkerforgeLEDService extends TinkerforgeDeviceService<BrickletLEDS
 	}
     }
 
-    public static TinkerforgeLEDIntent createIntent(Agent agent) {
-	return new TinkerforgeLEDIntent(agent);
+    public static TinkerforgeLEDIntent createIntent(TinkerforgeDeviceContent deviceContent, Agent agent) {
+	return new Intent(deviceContent, agent);
     }
 
-    public static TinkerforgeLEDEvent getTinkerforgeLEDEvent(DefaultEvent event) {
-	if (event instanceof TinkerforgeLEDEvent) {
-	    return (TinkerforgeLEDEvent) event;
-	}
-	return null;
+    public static TinkerforgeLEDIntent createIntent(TinkerforgeDeviceContent deviceContent, Agent agent, String... intentReceivers) {
+	return new Intent(deviceContent, agent, intentReceivers);
+    }
+}
+
+class Event extends ATinkerforgeDeviceEvent implements TinkerforgeLEDEvent {
+
+    public Event(TinkerforgeDeviceContent deviceContent, Service eventSender) {
+	super(deviceContent, eventSender);
+    }
+
+}
+
+class Intent extends ATinkerforgeDeviceIntent implements TinkerforgeLEDIntent {
+
+    public Intent(TinkerforgeDeviceContent deviceContent, Agent intentSender) {
+	super(deviceContent, intentSender);
+    }
+
+    public Intent(TinkerforgeDeviceContent deviceContent, Agent intentSender, String... intentReceivers) {
+	super(deviceContent, intentSender, intentReceivers);
     }
 
 }

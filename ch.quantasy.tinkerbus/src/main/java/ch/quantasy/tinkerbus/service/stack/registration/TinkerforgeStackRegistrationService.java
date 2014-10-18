@@ -5,11 +5,19 @@
  */
 package ch.quantasy.tinkerbus.service.stack.registration;
 
-import ch.quantasy.messagebus.message.DefaultEvent;
+import ch.quantasy.tinkerbus.service.stack.registration.message.TinkerforgeStackRegistrationEvent;
+import ch.quantasy.tinkerbus.service.stack.registration.message.TinkerforgeStackRegistrationIntent;
+import ch.quantasy.messagebus.message.implementation.AnEvent;
+import ch.quantasy.messagebus.message.implementation.AnIntent;
 import ch.quantasy.messagebus.worker.definition.Agent;
+import ch.quantasy.messagebus.worker.definition.Service;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeService;
+import ch.quantasy.tinkerbus.service.content.ThrowableContent;
 import ch.quantasy.tinkerbus.service.stack.TinkerforgeStackManager;
 import ch.quantasy.tinkerbus.service.stack.TinkerforgeStackService;
+import ch.quantasy.tinkerbus.service.stack.content.TinkerforgeStackAddressContent;
+import ch.quantasy.tinkerbus.service.stack.registration.content.StackRegistrationStateContent;
+import ch.quantasy.tinkerbus.service.stack.registration.content.TinkerforgeStackServiceIDContent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,89 +28,92 @@ import java.util.Map;
  */
 public class TinkerforgeStackRegistrationService extends ATinkerforgeService<TinkerforgeStackRegistrationIntent, TinkerforgeStackRegistrationEvent> {
 
-    public static final String ID = "ch.quantasy.tinkerbus.TinkerforgeStackRegistrationService";
-    public static final String INTENT_REGISTER = "register";
-    public static final String INTENT_LIST_REGISTERED_STACK_SERVICES = "listRegisteredStackServices";
-    public static final String HOST_NAME = "host name";
-    public static final String PORT = "port";
-    public static final String TINKERFORGE_STACK_SERVICE_ID = "tinkerforgeStackServiceID";
-    public static final String TINKERFORGE_STACK_SERVICE_IDS = "tinkerforgeStackServiceIDS";
-
-    public static final String EVENT_STACK_REGISTERED = "registered";
-    public static final String EVENT_STACK_ALREADY_REGISTERED = "already registered";
-    public static final String EVENT_REGISTERED_STACK_SERVICES = "registered stack services";
-
-    public static final String EVENT_STACK_REGISTRATION_EXCEPTION = "registration exception";
-    public static final String EXCEPTION = "exception";
-
     private final Map<TinkerforgeStackAddress, TinkerforgeStackService> stackServices;
 
     public TinkerforgeStackRegistrationService() {
+	super();
 	stackServices = new HashMap<>();
     }
 
     @Override
-    protected void handleTinkerMessage(TinkerforgeStackRegistrationIntent message) {
-	register(message.getTinkerforgeStackAddress());
-
-	if (message.isRequestRegisteredTinkerforgeStackServices()) {
-	    TinkerforgeStackRegistrationEvent event = new TinkerforgeStackRegistrationEvent(this);
-	    for (TinkerforgeStackService service : stackServices.values()) {
-		event.addStackServiceID(service.getID());
-	    }
-	    publish(event);
-	}
-    }
-
-    @SuppressWarnings({"BroadCatchBlock", "TooBroadCatch"})
-    private void register(TinkerforgeStackAddress address) {
-	if (address == null) {
+    protected void handleIntent(TinkerforgeStackRegistrationIntent message) {
+	if (message == null) {
 	    return;
 	}
-	TinkerforgeStackRegistrationEvent event = null;
-	try {
-	    if (!stackServices.containsKey(address)) {
-		TinkerforgeStackService stackService = new TinkerforgeStackService(new TinkerforgeStackManager(address));
-		stackServices.put(address, stackService);
-		event = createEvent();
+	register(message);
+    }
 
-		event.setRegistrationState(StackRegistrationState.Registered);
-		event.addStackServiceID(stackService.getID());
-
-	    } else {
-		event = createEvent();
-		event.setRegistrationState(StackRegistrationState.AlreadyRegistered);
-		event.addStackServiceID(stackServices.get(address).getID());
-	    }
-	} catch (Throwable ex) {
-	    event = createEvent();
-	    event.setRegistrationState(StackRegistrationState.Exception);
-	    event.setException(ex.toString());
+    private void register(TinkerforgeStackRegistrationIntent intent) {
+	if (!intent.containsContent()) {
+	    return;
 	}
-	event.setTinkerforgeStackAddress(address);
+
+	StackRegistrationStateContent state = (StackRegistrationStateContent) intent.getContentByID(StackRegistrationStateContent.class);
+	if (state == null || state.getValue() != StackRegistrationState.Register) {
+	    return;
+	}
+
+	TinkerforgeStackAddressContent addressContent = (TinkerforgeStackAddressContent) intent.getContentByID(TinkerforgeStackAddressContent.class);
+
+	if (addressContent == null) {
+	    return;
+	}
+	TinkerforgeStackRegistrationEvent event = createEvent();
+	TinkerforgeStackAddress address = addressContent.getValue();
+	if (this.stackServices.containsKey(address)) {
+	    event.addContents(new StackRegistrationStateContent(StackRegistrationState.AlreadyRegistered));
+	} else {
+
+	    try {
+		TinkerforgeStackManager manager = new TinkerforgeStackManager(address);
+		TinkerforgeStackService stackService = new TinkerforgeStackService(manager);
+		stackServices.put(address, stackService);
+		event.addContents(new StackRegistrationStateContent(StackRegistrationState.Registered));
+		event.addContents(new TinkerforgeStackServiceIDContent(stackService.getID()));
+
+	    } catch (Throwable ex) {
+		event.addContents(new StackRegistrationStateContent(StackRegistrationState.Exception));
+		event.addContents(new ThrowableContent(ex));
+	    }
+	}
+	event.addContents(new TinkerforgeStackAddressContent(address));
 	super.publish(event);
     }
 
     @Override
-    public String getID() {
-	return ID;
+    public TinkerforgeStackRegistrationEvent createEvent() {
+	return new Event(this);
     }
 
     @Override
-    public TinkerforgeStackRegistrationEvent createEvent() {
-	return new TinkerforgeStackRegistrationEvent(this);
+    public String getID() {
+	return this.getClass().getName();
     }
 
-    public static TinkerforgeStackRegistrationEvent getTinkerforgeStackRegistrationEvent(DefaultEvent event) {
-	if (event instanceof TinkerforgeStackRegistrationEvent) {
-	    return (TinkerforgeStackRegistrationEvent) event;
-	} else {
-	    return null;
-	}
+    public static TinkerforgeStackRegistrationIntent register(Agent intentSender, TinkerforgeStackAddress address) {
+	TinkerforgeStackRegistrationIntent intent = new Intent(intentSender);
+	intent.addContents(new TinkerforgeStackAddressContent(address));
+	intent.addContents(new StackRegistrationStateContent(StackRegistrationState.Register));
+	return intent;
+    }
+}
+
+class Intent extends AnIntent implements TinkerforgeStackRegistrationIntent {
+
+    public Intent(Agent intentSender) {
+	super(intentSender);
     }
 
-    public static TinkerforgeStackRegistrationIntent createIntent(Agent agent) {
-	return new TinkerforgeStackRegistrationIntent(agent);
+    public Intent(Agent intentSender, String... intentReceivers) {
+	super(intentSender, intentReceivers);
+    }
+
+}
+
+class Event extends AnEvent implements TinkerforgeStackRegistrationEvent {
+
+    public Event(Service eventSender) {
+	super(eventSender);
     }
 
 }

@@ -5,10 +5,27 @@
  */
 package ch.quantasy.tinkerbus.service.device.deviceAmbientLight;
 
-import ch.quantasy.messagebus.message.DefaultEvent;
+import ch.quantasy.messagebus.message.definition.Content;
 import ch.quantasy.messagebus.worker.definition.Agent;
-import ch.quantasy.tinkerbus.service.device.core.TinkerforgeDeviceService;
+import ch.quantasy.messagebus.worker.definition.Service;
+import ch.quantasy.tinkerbus.service.device.content.TinkerforgeDeviceContent;
+import ch.quantasy.tinkerbus.service.device.core.ATinkerforgeDeviceService;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.AnalogValueCallbackPeriodContent;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.AnalogValueContent;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.AnalogValueThresholdContent;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.DebouncePeriodContent;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.IlluminanceCallbackPeriodContent;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.IlluminanceThresholdContent;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.IlluminanceValueContent;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.message.TinkerforgeAmbientLightEvent;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.message.TinkerforgeAmbientLightIntent;
+import ch.quantasy.tinkerbus.service.device.message.ATinkerforgeDeviceEvent;
+import ch.quantasy.tinkerbus.service.device.message.ATinkerforgeDeviceIntent;
+import ch.quantasy.tinkerbus.service.device.threshold.CallbackThreshold;
 import com.tinkerforge.BrickletAmbientLight;
+import com.tinkerforge.NotConnectedException;
+import com.tinkerforge.TimeoutException;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,14 +33,17 @@ import java.util.logging.Logger;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class TinkerforgeAmbientLightService extends TinkerforgeDeviceService<BrickletAmbientLight, TinkerforgeAmbientLightSetting, TinkerforgeAmbientLightIntent, TinkerforgeAmbientLightEvent> implements BrickletAmbientLight.AnalogValueListener, BrickletAmbientLight.AnalogValueReachedListener, BrickletAmbientLight.IlluminanceListener, BrickletAmbientLight.IlluminanceReachedListener {
+public class TinkerforgeAmbientLightService extends ATinkerforgeDeviceService<BrickletAmbientLight, TinkerforgeAmbientLightIntent, TinkerforgeAmbientLightEvent> implements BrickletAmbientLight.AnalogValueListener, BrickletAmbientLight.AnalogValueReachedListener, BrickletAmbientLight.IlluminanceListener, BrickletAmbientLight.IlluminanceReachedListener {
 
     public TinkerforgeAmbientLightService(BrickletAmbientLight device, String deviceID) {
 	super(device, deviceID);
     }
 
     @Override
-    protected void updateListeners() {
+    protected void updateListeners(BrickletAmbientLight device) {
+	if (device == null) {
+	    return;
+	}
 	device.addAnalogValueListener(this);
 	device.addAnalogValueReachedListener(this);
 	device.addIlluminanceListener(this);
@@ -31,134 +51,131 @@ public class TinkerforgeAmbientLightService extends TinkerforgeDeviceService<Bri
     }
 
     @Override
-    protected TinkerforgeAmbientLightSetting updateCurrentSetting(TinkerforgeAmbientLightSetting newSetting) {
-	if (newSetting == null) {
-	    return null;
-	}
-	if (currentSetting == null) {
-	    currentSetting = newSetting.clone();
-	    return newSetting;
-	}
-	TinkerforgeAmbientLightSetting delta = new TinkerforgeAmbientLightSetting();
-
-	if (newSetting.getAnalogThreshold() != null && !newSetting.getAnalogThreshold().equals(this.currentSetting.getAnalogThreshold())) {
-	    this.currentSetting.setAnalogThreshold(newSetting.getAnalogThreshold());
-	    delta.setAnalogThreshold(newSetting.getAnalogThreshold());
-	}
-	if (newSetting.getAnalogValueCallbackPeriod() != null && !newSetting.getAnalogValueCallbackPeriod().equals(currentSetting.getAnalogValueCallbackPeriod())) {
-	    this.currentSetting.setAnalogValueCallbackPeriod(newSetting.getAnalogValueCallbackPeriod());
-	    delta.setAnalogValueCallbackPeriod(newSetting.getAnalogValueCallbackPeriod());
-	}
-	if (newSetting.getDebouncePeriod() != null && !newSetting.getDebouncePeriod().equals(currentSetting.getDebouncePeriod())) {
-	    this.currentSetting.setDebouncePeriod(newSetting.getDebouncePeriod());
-	    delta.setDebouncePeriod(this.currentSetting.getDebouncePeriod());
-	}
-	if (newSetting.getIlluminanceThreshold() != null && !newSetting.getIlluminanceThreshold().equals(currentSetting.getIlluminanceThreshold())) {
-	    this.currentSetting.setIlluminanceThreshold(newSetting.getIlluminanceThreshold());
-	    delta.setIlluminanceThreshold(this.currentSetting.getIlluminanceThreshold());
-	}
-	if (newSetting.getIlluminanceValueCallbackPeriod() != null && !newSetting.getIlluminanceValueCallbackPeriod().equals(currentSetting.getIlluminanceValueCallbackPeriod())) {
-	    this.currentSetting.setIlluminanceValueCallbackPeriod(newSetting.getIlluminanceValueCallbackPeriod());
-	    delta.setIlluminanceValueCallbackPeriod(newSetting.getIlluminanceValueCallbackPeriod());
-	}
-	return delta;
-
-    }
-
-    @Override
-    protected void updateDeviceSetting(TinkerforgeAmbientLightSetting setting) {
-	if (device == null) {
+    protected void updateSettingsOnDevice(BrickletAmbientLight device, Map<Class, Content> settings) {
+	if (settings == null || settings.isEmpty() || device == null) {
 	    return;
 	}
-	if (setting == null) {
-	    return;
-	}
-
 	try {
+	    {
+		AnalogValueCallbackPeriodContent content = ((AnalogValueCallbackPeriodContent) (settings.get(AnalogValueCallbackPeriodContent.class)));
+		if (content != null) {
+		    Long value = content.getValue();
+		    if (value != null) {
+			device.setAnalogValueCallbackPeriod(value);
+		    }
+		}
+	    }
+	    {
+		AnalogValueThresholdContent content = ((AnalogValueThresholdContent) (settings.get(AnalogValueThresholdContent.class)));
+		if (content != null) {
+		    CallbackThreshold value = content.getValue();
+		    if (value != null) {
+			device.setAnalogValueCallbackThreshold(value.option, value.min, value.max);
+		    }
+		}
+	    }
+	    {
 
-	    if (setting.getAnalogValueCallbackPeriod() != null) {
-		device.setAnalogValueCallbackPeriod(setting.getAnalogValueCallbackPeriod());
+		DebouncePeriodContent content = ((DebouncePeriodContent) (settings.get(DebouncePeriodContent.class)));
+		if (content != null) {
+		    Long value = content.getValue();
+		    if (value != null) {
+			device.setDebouncePeriod(value);
+		    }
+		}
+	    }
+	    {
+		IlluminanceThresholdContent content = ((IlluminanceThresholdContent) (settings.get(IlluminanceThresholdContent.class)));
+		if (content != null) {
+		    CallbackThreshold value = content.getValue();
+		    if (value != null) {
+			device.setIlluminanceCallbackThreshold(value.option, value.min, value.max);
+		    }
+		}
+	    }
+	    {
+		IlluminanceCallbackPeriodContent content = ((IlluminanceCallbackPeriodContent) (settings.get(IlluminanceCallbackPeriodContent.class)));
+		if (content != null) {
+		    Long value = content.getValue();
+
+		    if (value != null) {
+			device.setIlluminanceCallbackPeriod(value);
+		    }
+		}
 	    }
 
-	    if (setting.getIlluminanceValueCallbackPeriod() != null) {
-
-		device.setIlluminanceCallbackPeriod(setting.getIlluminanceValueCallbackPeriod());
-	    }
-
-	    if (setting.getIlluminanceThreshold() != null) {
-		device.setIlluminanceCallbackThreshold(setting.getIlluminanceThreshold().option, setting.getIlluminanceThreshold().min, setting.getIlluminanceThreshold().max);
-
-	    }
-	    if (setting.getAnalogThreshold() != null) {
-		device.setAnalogValueCallbackThreshold(setting.getAnalogThreshold().option, setting.getAnalogThreshold().min, setting.getAnalogThreshold().max);
-
-	    }
-
-	    if (setting.getDebouncePeriod() != null) {
-		device.setDebouncePeriod(setting.getDebouncePeriod());
-	    }
-	} catch (Exception ex) {
+	} catch (TimeoutException ex) {
+	    Logger.getLogger(TinkerforgeAmbientLightService.class.getName()).log(Level.SEVERE, null, ex);
+	} catch (NotConnectedException ex) {
 	    Logger.getLogger(TinkerforgeAmbientLightService.class.getName()).log(Level.SEVERE, null, ex);
 	}
+
     }
 
     @Override
-    protected void handleTinkerMessage(TinkerforgeAmbientLightIntent message) {
-	if (message == null) {
-	    return;
-	}
-	TinkerforgeAmbientLightSetting delta = updateCurrentSetting(message.getDeviceSetting());
-	updateDeviceSetting(delta);
-	if (message.isRequestCurrentSetting() != null && message.isRequestCurrentSetting()) {
-	    TinkerforgeAmbientLightEvent event = createEvent();
-	    event.setDeviceSetting(currentSetting.clone());
-	}
+    public void handleTinkerforgeIntent(TinkerforgeAmbientLightIntent message) {
+	//Nothing special
     }
 
     @Override
-    public void analogValue(int value) {
+    public void analogValue(int value
+    ) {
+	getDeviceContent().updateEmission(new AnalogValueContent(value));
 	TinkerforgeAmbientLightEvent event = createEvent();
-	event.setAnalogValue(value);
 	publish(event);
     }
 
     @Override
-    public void analogValueReached(int value) {
+    public void analogValueReached(int value
+    ) {
+	getDeviceContent().updateEmission(new AnalogValueContent(value));
 	TinkerforgeAmbientLightEvent event = createEvent();
-	event.setAnalogValueReached(true);
-	event.setAnalogValue(value);
 	publish(event);
     }
 
     @Override
-    public void illuminance(int illuminance) {
+    public void illuminance(int illuminance
+    ) {
+	getDeviceContent().updateEmission(new IlluminanceValueContent(illuminance));
 	TinkerforgeAmbientLightEvent event = createEvent();
-	event.setIlluminanceValue(illuminance);
 	publish(event);
     }
 
     @Override
-    public void illuminanceReached(int illuminance) {
+    public void illuminanceReached(int illuminance
+    ) {
+	getDeviceContent().updateEmission(new IlluminanceValueContent(illuminance));
 	TinkerforgeAmbientLightEvent event = createEvent();
-	event.setIlluminanceReached(true);
-	event.setIlluminanceValue(illuminance);
 	publish(event);
     }
 
     @Override
     public TinkerforgeAmbientLightEvent createEvent() {
-	return new TinkerforgeAmbientLightEvent(this);
+	return new Event(getDeviceContent(), this);
     }
 
-    public static TinkerforgeAmbientLightIntent createIntent(Agent agent) {
-	return new TinkerforgeAmbientLightIntent(agent);
+    public static TinkerforgeAmbientLightIntent createIntent(TinkerforgeDeviceContent content, Agent agent) {
+	return new Intent(content, agent);
     }
 
-    public static TinkerforgeAmbientLightEvent getTinkerforgeAmbientLightEvent(DefaultEvent event) {
-	if (event instanceof TinkerforgeAmbientLightEvent) {
-	    return (TinkerforgeAmbientLightEvent) event;
-	}
-	return null;
+}
+
+class Intent extends ATinkerforgeDeviceIntent implements TinkerforgeAmbientLightIntent {
+
+    public Intent(TinkerforgeDeviceContent deviceContent, Agent intentSender) {
+	super(deviceContent, intentSender);
+    }
+
+    public Intent(TinkerforgeDeviceContent deviceContent, Agent intentSender, String... intentReceivers) {
+	super(deviceContent, intentSender, intentReceivers);
+    }
+
+}
+
+class Event extends ATinkerforgeDeviceEvent implements TinkerforgeAmbientLightEvent {
+
+    public Event(TinkerforgeDeviceContent deviceContent, Service eventSender) {
+	super(deviceContent, eventSender);
     }
 
 }

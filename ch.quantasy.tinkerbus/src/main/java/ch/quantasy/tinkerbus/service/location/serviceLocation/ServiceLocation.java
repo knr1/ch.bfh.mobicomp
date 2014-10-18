@@ -11,16 +11,14 @@ import java.util.Objects;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-class ServiceLocation {
+public class ServiceLocation {
 
     private final String serviceID;
     private final String locationID;
-    private final Boolean valid;
 
-    public ServiceLocation(String serviceID, String locationID, boolean isValid) {
+    public ServiceLocation(String serviceID, String locationID) {
 	this.serviceID = serviceID;
 	this.locationID = locationID;
-	this.valid = isValid;
     }
 
     public String getServiceID() {
@@ -31,13 +29,9 @@ class ServiceLocation {
 	return locationID;
     }
 
-    public Boolean isValid() {
-	return valid != null && valid;
-    }
-
     @Override
     public String toString() {
-	return "Location{" + "serviceID=" + serviceID + ", locationID=" + locationID + ", valid=" + valid + '}';
+	return "Location{" + "serviceID=" + serviceID + ", locationID=" + locationID + '}';
     }
 
     @Override
@@ -45,7 +39,6 @@ class ServiceLocation {
 	int hash = 5;
 	hash = 43 * hash + Objects.hashCode(this.serviceID);
 	hash = 43 * hash + Objects.hashCode(this.locationID);
-	hash = 43 * hash + Objects.hashCode(this.valid);
 	return hash;
     }
 
@@ -64,9 +57,7 @@ class ServiceLocation {
 	if (!Objects.equals(this.locationID, other.locationID)) {
 	    return false;
 	}
-	if (!Objects.equals(this.valid, other.valid)) {
-	    return false;
-	}
+
 	return true;
     }
 

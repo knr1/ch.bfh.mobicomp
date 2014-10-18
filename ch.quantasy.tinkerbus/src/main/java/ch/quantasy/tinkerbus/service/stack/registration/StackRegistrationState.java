@@ -11,5 +11,5 @@ package ch.quantasy.tinkerbus.service.stack.registration;
  */
 public enum StackRegistrationState {
 
-    Registered, AlreadyRegistered, Exception;
+    Register, Registered, AlreadyRegistered, Exception;
 }

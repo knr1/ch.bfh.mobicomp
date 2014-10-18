@@ -5,7 +5,7 @@
  */
 package ch.quantasy.messagebus.worker.implementation;
 
-import ch.quantasy.messagebus.message.Message;
+import ch.quantasy.messagebus.message.definition.Message;
 import ch.quantasy.messagebus.worker.definition.Worker;
 
 /**

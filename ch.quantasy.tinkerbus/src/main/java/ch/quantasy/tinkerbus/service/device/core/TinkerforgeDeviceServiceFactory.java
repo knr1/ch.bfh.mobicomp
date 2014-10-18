@@ -20,8 +20,8 @@ import com.tinkerforge.Device;
  */
 public class TinkerforgeDeviceServiceFactory {
 
-    public static TinkerforgeDeviceService getDevice(Device device, String deviceID) {
-	TinkerforgeDeviceService service = null;
+    public static ATinkerforgeDeviceService getDevice(Device device, String deviceID) {
+	ATinkerforgeDeviceService service = null;
 	if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.AmbientLight) {
 	    service = new TinkerforgeAmbientLightService((BrickletAmbientLight) device, deviceID);
 	}

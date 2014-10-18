@@ -93,6 +93,7 @@ public class TinkerforgeStackManager extends AbstractTinkerforgeStackManager {
 
     @Override
     protected void deviceConnected(Device device) {
+
 	stackService.deviceConnected(device);
     }
 
