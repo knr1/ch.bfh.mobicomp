@@ -35,13 +35,19 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint(value = "/smarthomeendpoint", encoders = {FigureEncoder.class}, decoders = {FigureDecoder.class})
 public class SmartHome extends ATinkerforgeService<SmartHomeIntent, SmartHomeEvent> {
 
+    public static final ServiceLocationService locationService;
+    public static final TinkerforgeStackRegistrationService stackRegistrationService;
+    public static final TinkerforgeStackAgent stackAgent;
+    public static final TinkerforgeAmbientLightAgent ambientLightAgent;
+    public static final TinkerforgeLEDAgent ledAgent;
+
     static {
-	ServiceLocationService locationService = new ServiceLocationService();
-	TinkerforgeStackRegistrationService stackRegistrationService = new TinkerforgeStackRegistrationService();
-	TinkerforgeStackAgent stackAgent = new TinkerforgeStackAgent();
-	TinkerforgeAmbientLightAgent ambientLightAgent = new TinkerforgeAmbientLightAgent();
+	locationService = new ServiceLocationService();
+	stackRegistrationService = new TinkerforgeStackRegistrationService();
+	stackAgent = new TinkerforgeStackAgent();
+	ambientLightAgent = new TinkerforgeAmbientLightAgent();
 	//TinkerforgeDCAgent dcAgent = new TinkerforgeDCAgent();
-	TinkerforgeLEDAgent ledAgent = new TinkerforgeLEDAgent();
+	ledAgent = new TinkerforgeLEDAgent();
 	//TinkerforgeWavingLEDAgent ledAgent = new TinkerforgeWavingLEDAgent();
 	//TinkerforgeLivingLEDAgent ledAgent = new TinkerforgeLivingLEDAgent();
 	stackAgent.register();
@@ -66,7 +72,14 @@ public class SmartHome extends ATinkerforgeService<SmartHomeIntent, SmartHomeEve
     public void sendEvent(Figure figure, Session session) throws IOException, EncodeException {
 	SmartHomeEvent evt = createEvent();
 	evt.addContents(new ColorContent(figure.getColor()));
+	System.out.println("Before Publish");
 	publish(evt);
+	for (Session peer : peers) {
+	    if (!peer.equals(session)) {
+		peer.getBasicRemote().sendObject(figure);
+	    }
+	}
+	System.out.println("After Publish");
 
     }
 
