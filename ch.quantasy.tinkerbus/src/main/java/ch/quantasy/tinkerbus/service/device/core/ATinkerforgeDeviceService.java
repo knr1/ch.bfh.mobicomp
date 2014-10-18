@@ -12,6 +12,8 @@ import ch.quantasy.tinkerbus.service.device.message.TinkerforgeDeviceEvent;
 import ch.quantasy.tinkerbus.service.device.message.TinkerforgeDeviceIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import com.tinkerforge.Device;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -40,21 +42,24 @@ public abstract class ATinkerforgeDeviceService<D extends Device, I extends Tink
     }
 
     public void updateSettings(TinkerforgeDeviceContent content) {
-	Set<Content> changeMap = getDeviceContent().updateSettings(content);
-	updateSettingsOnDevice(device, content);
-	if (!changeMap.isEmpty()) {
+	Set<Content> changeSet = deviceContent.updateSettings(content);
+	if (!changeSet.isEmpty()) {
+	    Map<Class, Content> changeMap = new HashMap<>();
+	    for (Content c : changeSet) {
+		changeMap.put(c.getClass(), c);
+	    }
+	    updateSettingsOnDevice(device, changeMap);
 	    E event = createEvent();
 	    publish(event);
 	}
-
     }
 
-    protected void updateDevice(D device) {
+    public void updateDevice(D device) {
 	if (!TinkerforgeDevice.areEqual(this.device, device)) {
 	    this.device = device;
 	    this.device.setResponseExpectedAll(true);
 	    if (deviceContent != null) {
-		updateSettingsOnDevice(device, deviceContent);
+		updateSettingsOnDevice(device, deviceContent.getSettings());
 	    }
 	    updateListeners(device);
 	}
@@ -77,7 +82,7 @@ public abstract class ATinkerforgeDeviceService<D extends Device, I extends Tink
 
     protected abstract void updateListeners(D device);
 
-    protected abstract void updateSettingsOnDevice(D device, TinkerforgeDeviceContent deviceContent);
+    protected abstract void updateSettingsOnDevice(D device, Map<Class, Content> deviceContent);
 
     public abstract void handleTinkerforgeIntent(I message);
 

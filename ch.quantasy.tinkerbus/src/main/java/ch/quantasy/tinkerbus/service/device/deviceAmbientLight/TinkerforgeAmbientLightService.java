@@ -5,8 +5,7 @@
  */
 package ch.quantasy.tinkerbus.service.device.deviceAmbientLight;
 
-import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.message.TinkerforgeAmbientLightIntent;
-import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.message.TinkerforgeAmbientLightEvent;
+import ch.quantasy.messagebus.message.definition.Content;
 import ch.quantasy.messagebus.worker.definition.Agent;
 import ch.quantasy.messagebus.worker.definition.Service;
 import ch.quantasy.tinkerbus.service.device.content.TinkerforgeDeviceContent;
@@ -18,12 +17,15 @@ import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.DebounceP
 import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.IlluminanceCallbackPeriodContent;
 import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.IlluminanceThresholdContent;
 import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.content.IlluminanceValueContent;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.message.TinkerforgeAmbientLightEvent;
+import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.message.TinkerforgeAmbientLightIntent;
 import ch.quantasy.tinkerbus.service.device.message.ATinkerforgeDeviceEvent;
 import ch.quantasy.tinkerbus.service.device.message.ATinkerforgeDeviceIntent;
 import ch.quantasy.tinkerbus.service.device.threshold.CallbackThreshold;
 import com.tinkerforge.BrickletAmbientLight;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,39 +51,56 @@ public class TinkerforgeAmbientLightService extends ATinkerforgeDeviceService<Br
     }
 
     @Override
-    protected void updateSettingsOnDevice(BrickletAmbientLight device, TinkerforgeDeviceContent deviceContent) {
-	if (deviceContent == null || device == null) {
+    protected void updateSettingsOnDevice(BrickletAmbientLight device, Map<Class, Content> settings) {
+	if (settings == null || settings.isEmpty() || device == null) {
 	    return;
 	}
 	try {
 	    {
-		Long value = ((AnalogValueCallbackPeriodContent) (deviceContent.getSettingContentByID(AnalogValueCallbackPeriodContent.class))).getValue();
-		if (value != null) {
-		    device.setAnalogValueCallbackPeriod(value);
+		AnalogValueCallbackPeriodContent content = ((AnalogValueCallbackPeriodContent) (settings.get(AnalogValueCallbackPeriodContent.class)));
+		if (content != null) {
+		    Long value = content.getValue();
+		    if (value != null) {
+			device.setAnalogValueCallbackPeriod(value);
+		    }
 		}
 	    }
 	    {
-		CallbackThreshold value = ((AnalogValueThresholdContent) (deviceContent.getSettingContentByID(AnalogValueThresholdContent.class))).getValue();
-		if (value != null) {
-		    device.setAnalogValueCallbackThreshold(value.option, value.min, value.max);
+		AnalogValueThresholdContent content = ((AnalogValueThresholdContent) (settings.get(AnalogValueThresholdContent.class)));
+		if (content != null) {
+		    CallbackThreshold value = content.getValue();
+		    if (value != null) {
+			device.setAnalogValueCallbackThreshold(value.option, value.min, value.max);
+		    }
 		}
 	    }
 	    {
-		Long value = ((DebouncePeriodContent) (deviceContent.getSettingContentByID(AnalogValueThresholdContent.class))).getValue();
-		if (value != null) {
-		    device.setDebouncePeriod(value);
+
+		DebouncePeriodContent content = ((DebouncePeriodContent) (settings.get(DebouncePeriodContent.class)));
+		if (content != null) {
+		    Long value = content.getValue();
+		    if (value != null) {
+			device.setDebouncePeriod(value);
+		    }
 		}
 	    }
 	    {
-		CallbackThreshold value = ((IlluminanceThresholdContent) (deviceContent.getSettingContentByID(IlluminanceThresholdContent.class))).getValue();
-		if (value != null) {
-		    device.setIlluminanceCallbackThreshold(value.option, value.min, value.max);
+		IlluminanceThresholdContent content = ((IlluminanceThresholdContent) (settings.get(IlluminanceThresholdContent.class)));
+		if (content != null) {
+		    CallbackThreshold value = content.getValue();
+		    if (value != null) {
+			device.setIlluminanceCallbackThreshold(value.option, value.min, value.max);
+		    }
 		}
 	    }
 	    {
-		Long value = ((IlluminanceCallbackPeriodContent) (deviceContent.getSettingContentByID(IlluminanceCallbackPeriodContent.class))).getValue();
-		if (value != null) {
-		    device.setIlluminanceCallbackPeriod(value);
+		IlluminanceCallbackPeriodContent content = ((IlluminanceCallbackPeriodContent) (settings.get(IlluminanceCallbackPeriodContent.class)));
+		if (content != null) {
+		    Long value = content.getValue();
+
+		    if (value != null) {
+			device.setIlluminanceCallbackPeriod(value);
+		    }
 		}
 	    }
 
@@ -99,29 +118,33 @@ public class TinkerforgeAmbientLightService extends ATinkerforgeDeviceService<Br
     }
 
     @Override
-    public void analogValue(int value) {
-	getDeviceContent().updateEmition(new AnalogValueContent(value));
+    public void analogValue(int value
+    ) {
+	getDeviceContent().updateEmission(new AnalogValueContent(value));
 	TinkerforgeAmbientLightEvent event = createEvent();
 	publish(event);
     }
 
     @Override
-    public void analogValueReached(int value) {
-	getDeviceContent().updateEmition(new AnalogValueContent(value));
+    public void analogValueReached(int value
+    ) {
+	getDeviceContent().updateEmission(new AnalogValueContent(value));
 	TinkerforgeAmbientLightEvent event = createEvent();
 	publish(event);
     }
 
     @Override
-    public void illuminance(int illuminance) {
-	getDeviceContent().updateEmition(new IlluminanceValueContent(illuminance));
+    public void illuminance(int illuminance
+    ) {
+	getDeviceContent().updateEmission(new IlluminanceValueContent(illuminance));
 	TinkerforgeAmbientLightEvent event = createEvent();
 	publish(event);
     }
 
     @Override
-    public void illuminanceReached(int illuminance) {
-	getDeviceContent().updateEmition(new IlluminanceValueContent(illuminance));
+    public void illuminanceReached(int illuminance
+    ) {
+	getDeviceContent().updateEmission(new IlluminanceValueContent(illuminance));
 	TinkerforgeAmbientLightEvent event = createEvent();
 	publish(event);
     }

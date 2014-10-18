@@ -22,8 +22,8 @@ public class TinkerforgeBusFactory implements BusFactory {
     private static final TinkerforgeBusFactory instance;
 
     static {
-	intentBus = new MBassador<>(BusConfiguration.Default());
-	eventBus = new MBassador<>(BusConfiguration.Default());
+	intentBus = new MBassador<>(BusConfiguration.SyncAsync());
+	eventBus = new MBassador<>(BusConfiguration.SyncAsync());
 	instance = new TinkerforgeBusFactory();
     }
 

@@ -9,7 +9,7 @@ import ch.quantasy.messagebus.definition.BusFactory;
 import ch.quantasy.messagebus.message.definition.Event;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeAgent;
 import ch.quantasy.tinkerbus.bus.TinkerforgeBusFactory;
-import ch.quantasy.tinkerbus.service.stack.registration.TinkerforgeStackRegistrationIntent;
+import ch.quantasy.tinkerbus.service.stack.registration.message.TinkerforgeStackRegistrationIntent;
 import ch.quantasy.tinkerbus.service.stack.registration.TinkerforgeStackRegistrationService;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import org.junit.After;
@@ -60,7 +60,7 @@ public class TinkerforgeStackRegistrationServiceTest {
 
 	TinkerforgeStackRegistrationService instance = new TinkerforgeStackRegistrationService();
 
-	TinkerforgeStackRegistrationIntent intent = TinkerforgeStackRegistrationIntent.register(agent, new TinkerforgeStackAddress("localhost", 4223));
+	TinkerforgeStackRegistrationIntent intent = TinkerforgeStackRegistrationService.register(agent, new TinkerforgeStackAddress("localhost", 4223));
 	agent.publish(intent);
 	System.out.println(intent);
 	try {

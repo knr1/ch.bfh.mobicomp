@@ -5,16 +5,18 @@
  */
 package ch.quantasy.tinkerbus.service.stack;
 
+import ch.quantasy.tinkerbus.service.stack.message.TinkerforgeStackEvent;
+import ch.quantasy.tinkerbus.service.stack.message.TinkerforgeStackIntent;
 import ch.quantasy.messagebus.message.implementation.AnEvent;
 import ch.quantasy.messagebus.message.implementation.AnIntent;
 import ch.quantasy.messagebus.worker.definition.Agent;
 import ch.quantasy.messagebus.worker.definition.Service;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeService;
 import ch.quantasy.tinkerbus.service.content.ThrowableContent;
-import ch.quantasy.tinkerbus.service.device.content.TinkerforgeStackAddressContent;
 import ch.quantasy.tinkerbus.service.device.core.ATinkerforgeDeviceService;
 import ch.quantasy.tinkerbus.service.device.core.TinkerforgeDeviceServiceFactory;
 import ch.quantasy.tinkerbus.service.stack.content.StackConnectionStateContent;
+import ch.quantasy.tinkerbus.service.stack.content.TinkerforgeStackAddressContent;
 import com.tinkerforge.Device;
 import com.tinkerforge.Device.Identity;
 import com.tinkerforge.NotConnectedException;

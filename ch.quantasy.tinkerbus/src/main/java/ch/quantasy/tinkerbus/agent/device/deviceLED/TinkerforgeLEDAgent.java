@@ -5,12 +5,20 @@
  */
 package ch.quantasy.tinkerbus.agent.device.deviceLED;
 
-import ch.quantasy.messagebus.message.DefaultEvent;
+import ch.quantasy.messagebus.message.definition.Content;
+import ch.quantasy.messagebus.message.definition.Event;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeAgent;
-import ch.quantasy.tinkerbus.service.device.deviceLED.message.TinkerforgeLEDEvent;
-import ch.quantasy.tinkerbus.service.device.deviceLED.message.TinkerforgeLEDIntent;
+import ch.quantasy.tinkerbus.service.device.content.TinkerforgeDeviceContent;
 import ch.quantasy.tinkerbus.service.device.deviceLED.TinkerforgeLEDService;
-import ch.quantasy.tinkerbus.service.device.deviceLED.TinkerforgeLEDSetting;
+import ch.quantasy.tinkerbus.service.device.deviceLED.content.ChipTypeContent;
+import ch.quantasy.tinkerbus.service.device.deviceLED.content.FrameDurationInMilliSecondsContent;
+import ch.quantasy.tinkerbus.service.device.deviceLED.content.ICClockFrequencyInHzContent;
+import ch.quantasy.tinkerbus.service.device.deviceLED.content.NumberOfLEDsContent;
+import ch.quantasy.tinkerbus.service.device.deviceLED.content.RGBLEDsContent;
+import ch.quantasy.tinkerbus.service.device.deviceLED.message.TinkerforgeLEDIntent;
+import ch.quantasy.tinkerbus.service.device.message.TinkerforgeDeviceEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,42 +28,28 @@ public class TinkerforgeLEDAgent extends ATinkerforgeAgent {
 
     public static final String ID = "TinkerforgeLEDAgent";
 
-    @Override
-    protected void handleTinkerMessage(DefaultEvent message) {
-
-	this.handleEvent(TinkerforgeLEDService.getTinkerforgeLEDEvent(message));
-    }
-
-    private short power;
-    private String ledDeviceID;
+    private TinkerforgeDeviceContent ledContent;
     private short[][] frame;
-    private final int AMOUNT_OF_LEDs = 64;
+    private int power;
 
-    private void handleEvent(TinkerforgeLEDEvent event) {
-	if (event == null) {
-	    return;
-	}
-	//System.out.println("---> LED");
-	if (event.isDiscovered() != null && event.isDiscovered()) {
-	    System.out.println("LED-Stripe discovered");
-	    this.ledDeviceID = event.getSenderID();
-	    TinkerforgeLEDIntent intent = TinkerforgeLEDService.createIntent(this);
-	    intent.getDeviceSetting().setChipType(TinkerforgeLEDSetting.CHIP_TYPE_WS2812);
-	    intent.getDeviceSetting().setClockFrequencyOfICsInHz(2000000);
-	    intent.getDeviceSetting().setFrameDurationInMilliseconds(20);
-	    intent.getDeviceSetting().setNumberOfLEDs(AMOUNT_OF_LEDs);
-	    intent.addReceiverIDs(event.getSenderID());
-	    System.out.println(intent);
-	    publish(intent);
-	    intent = TinkerforgeLEDService.createIntent(this);
-	    intent.setRequestCurrentSetting(true);
-	    intent.addReceiverIDs(event.getSenderID());
-	    publish(intent);
-
-	    frame = TinkerforgeLEDService.getFreshRGBLEDs(AMOUNT_OF_LEDs);
+    private void handleTinkerforgeEvent(final TinkerforgeDeviceEvent event) {
+	TinkerforgeDeviceContent content = event.getDeviceContent();
+	if (ledContent == null) {
+	    this.ledContent = content;
+	    this.ledContent.updateSetting(new ChipTypeContent(ChipTypeContent.WS2801));
+	    this.ledContent.updateSetting(new FrameDurationInMilliSecondsContent(20));
+	    this.ledContent.updateSetting(new ICClockFrequencyInHzContent(2000000L));
+	    this.ledContent.updateSetting(new NumberOfLEDsContent(40));
+	    frame = TinkerforgeLEDService.getFreshRGBLEDs(40);
+	    this.ledContent.updateSetting(new RGBLEDsContent(frame));
+	    publish(TinkerforgeLEDService.createIntent(this.ledContent, this));
 	} else {
-	    TinkerforgeLEDIntent intent = TinkerforgeLEDService.createIntent(this);
-	    //intent.addReceiverIDs(ledDeviceID);
+	    try {
+		Thread.sleep(80);
+	    } catch (InterruptedException ex) {
+		Logger.getLogger(TinkerforgeLEDAgent.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	    TinkerforgeLEDIntent intent = TinkerforgeLEDService.createIntent(ledContent, TinkerforgeLEDAgent.this, event.getSenderID());
 	    power++;
 	    power %= 256;
 	    for (int i = 0; i < frame.length; i++) {
@@ -63,11 +57,18 @@ public class TinkerforgeLEDAgent extends ATinkerforgeAgent {
 		    frame[i][j] = (short) (power * Math.random());
 		}
 	    }
-	    intent.setFrame(frame);
-	    publish(intent);
+	    TinkerforgeDeviceContent dc = new TinkerforgeDeviceContent();
+
+	    Content c = dc.updateSetting(new RGBLEDsContent(frame));
+	    publish(TinkerforgeLEDService.createIntent(dc, TinkerforgeLEDAgent.this, event.getSenderID()));
+
 	}
-	if (event.isLaging() != null && event.isLaging()) {
-	    System.out.println("lagging");
+    }
+
+    @Override
+    protected void handleEvent(Event message) {
+	if (message instanceof TinkerforgeDeviceEvent) {
+	    handleTinkerforgeEvent((TinkerforgeDeviceEvent) message);
 	}
 
     }
@@ -76,5 +77,4 @@ public class TinkerforgeLEDAgent extends ATinkerforgeAgent {
     public String getID() {
 	return ID;
     }
-
 }

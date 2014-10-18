@@ -5,6 +5,7 @@
  */
 package ch.quantasy.tinkerbus.service.device.deviceLED;
 
+import ch.quantasy.messagebus.message.definition.Content;
 import ch.quantasy.messagebus.worker.definition.Agent;
 import ch.quantasy.messagebus.worker.definition.Service;
 import ch.quantasy.tinkerbus.service.device.content.TinkerforgeDeviceContent;
@@ -22,6 +23,7 @@ import ch.quantasy.tinkerbus.service.device.message.ATinkerforgeDeviceIntent;
 import com.tinkerforge.BrickletLEDStrip;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,7 +38,7 @@ import java.util.logging.Logger;
  */
 public class TinkerforgeLEDService extends ATinkerforgeDeviceService<BrickletLEDStrip, TinkerforgeLEDIntent, TinkerforgeLEDEvent> implements BrickletLEDStrip.FrameRenderedListener {
 
-    private final static short[] DEFAULT_GAMMA_CORRECTION = {
+    public final static short[] DEFAULT_GAMMA_CORRECTION = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
 	1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2,
@@ -55,39 +57,55 @@ public class TinkerforgeLEDService extends ATinkerforgeDeviceService<BrickletLED
 	215, 218, 220, 223, 225, 228, 231, 233, 236, 239, 241, 244, 247, 249, 252, 255};
 
     @Override
-    protected void updateSettingsOnDevice(BrickletLEDStrip device, TinkerforgeDeviceContent deviceContent) {
-	if (deviceContent == null || device == null) {
+    protected void updateSettingsOnDevice(BrickletLEDStrip device, Map<Class, Content> contentMap) {
+	if (contentMap == null || contentMap.isEmpty() || device == null) {
 	    return;
 	}
 	try {
 	    {
-		Integer value = ((ChipTypeContent) (deviceContent.getSettingContentByID(ChipTypeContent.class))).getValue();
-		if (value != null) {
-		    device.setChipType(value);
+		ChipTypeContent content = ((ChipTypeContent) (contentMap.get(ChipTypeContent.class)));
+		if (content != null) {
+		    Integer value = content.getValue();
+		    if (value != null) {
+			device.setChipType(value);
+		    }
 		}
 	    }
 	    {
-		Integer value = ((FrameDurationInMilliSecondsContent) (deviceContent.getSettingContentByID(FrameDurationInMilliSecondsContent.class))).getValue();
-		if (value != null) {
-		    device.setFrameDuration(value);
+		ICClockFrequencyInHzContent content = ((ICClockFrequencyInHzContent) (contentMap.get(ICClockFrequencyInHzContent.class)));
+		if (content != null) {
+		    Long value = content.getValue();
+		    if (value != null) {
+			//	device.setClockFrequency(value);
+		    }
 		}
 	    }
 	    {
-		Integer value = ((ICClockFrequencyInHzContent) (deviceContent.getSettingContentByID(ICClockFrequencyInHzContent.class))).getValue();
-		if (value != null) {
-		    device.setClockFrequency(value);
+		FrameDurationInMilliSecondsContent content = ((FrameDurationInMilliSecondsContent) (contentMap.get(FrameDurationInMilliSecondsContent.class)));
+		if (content != null) {
+		    Integer value = content.getValue();
+		    if (value != null) {
+			device.setFrameDuration(value);
+		    }
+		}
+	    }
+
+	    {
+		NumberOfLEDsContent content = ((NumberOfLEDsContent) (contentMap.get(NumberOfLEDsContent.class)));
+		if (content != null) {
+		    Integer value = content.getValue();
+		    if (value != null) {
+			this.setNumberOfLEDs(value);
+		    }
 		}
 	    }
 	    {
-		Integer value = ((NumberOfLEDsContent) (deviceContent.getSettingContentByID(NumberOfLEDsContent.class))).getValue();
-		if (value != null) {
-		    this.setNumberOfLEDs(numberOfLEDs);
-		}
-	    }
-	    {
-		short[][] value = ((RGBLEDsContent) (deviceContent.getSettingContentByID(RGBLEDsContent.class))).getValue();
-		if (value != null) {
-		    this.setRGBLEDs(value);
+		RGBLEDsContent content = ((RGBLEDsContent) (contentMap.get(RGBLEDsContent.class)));
+		if (content != null) {
+		    short[][] value = content.getValue();
+		    if (value != null) {
+			this.setRGBLEDs(value);
+		    }
 		}
 	    }
 	} catch (TimeoutException ex) {
@@ -124,8 +142,8 @@ public class TinkerforgeLEDService extends ATinkerforgeDeviceService<BrickletLED
     }
 
     private boolean isLaging;
-    private SendState sendState;
-    private RenderState renderState;
+    private SendState sendState = SendState.FREE;
+    private RenderState renderState = RenderState.FREE;
 
     private boolean isGammaCorrection;
 
@@ -324,6 +342,10 @@ public class TinkerforgeLEDService extends ATinkerforgeDeviceService<BrickletLED
 	    }
 
 	}
+    }
+
+    public static TinkerforgeLEDIntent createIntent(TinkerforgeDeviceContent deviceContent, Agent agent) {
+	return new Intent(deviceContent, agent);
     }
 
     public static TinkerforgeLEDIntent createIntent(TinkerforgeDeviceContent deviceContent, Agent agent, String... intentReceivers) {

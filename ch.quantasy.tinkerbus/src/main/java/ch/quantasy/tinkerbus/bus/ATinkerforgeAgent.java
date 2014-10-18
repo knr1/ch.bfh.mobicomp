@@ -21,4 +21,7 @@ public abstract class ATinkerforgeAgent extends AnAgent<Intent, Event> {
 	return TinkerforgeBusFactory.getInstance();
     }
 
+    @Override
+    protected abstract void handleEvent(Event message);
+
 }

@@ -5,15 +5,17 @@
  */
 package ch.quantasy.tinkerbus.service.stack.registration;
 
+import ch.quantasy.tinkerbus.service.stack.registration.message.TinkerforgeStackRegistrationEvent;
+import ch.quantasy.tinkerbus.service.stack.registration.message.TinkerforgeStackRegistrationIntent;
 import ch.quantasy.messagebus.message.implementation.AnEvent;
 import ch.quantasy.messagebus.message.implementation.AnIntent;
 import ch.quantasy.messagebus.worker.definition.Agent;
 import ch.quantasy.messagebus.worker.definition.Service;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeService;
 import ch.quantasy.tinkerbus.service.content.ThrowableContent;
-import ch.quantasy.tinkerbus.service.device.content.TinkerforgeStackAddressContent;
 import ch.quantasy.tinkerbus.service.stack.TinkerforgeStackManager;
 import ch.quantasy.tinkerbus.service.stack.TinkerforgeStackService;
+import ch.quantasy.tinkerbus.service.stack.content.TinkerforgeStackAddressContent;
 import ch.quantasy.tinkerbus.service.stack.registration.content.StackRegistrationStateContent;
 import ch.quantasy.tinkerbus.service.stack.registration.content.TinkerforgeStackServiceIDContent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;

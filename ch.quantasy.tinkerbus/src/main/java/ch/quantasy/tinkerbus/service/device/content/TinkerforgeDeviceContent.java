@@ -20,67 +20,110 @@ import java.util.Set;
 public class TinkerforgeDeviceContent extends AContent implements Content {
 
     private Map<Class, Content> settings;
-    private Map<Class, Content> emitions;
+    private Map<Class, Content> emissions;
 
     public TinkerforgeDeviceContent() {
 	this.settings = new HashMap<>();
-	this.emitions = new HashMap<>();
+	this.emissions = new HashMap<>();
     }
 
-    public TinkerforgeDeviceContent(Map<Class, Content> settings, Map<Class, Content> emitions) {
+    public TinkerforgeDeviceContent(Set<Content> settings, Set<Content> emissions) {
+	this();
+	for (Content content : settings) {
+	    this.settings.put(content.getClass(), content);
+	}
+	for (Content content : emissions) {
+	    this.emissions.put(content.getClass(), content);
+	}
+    }
+
+    public TinkerforgeDeviceContent(Map<Class, Content> settings, Map<Class, Content> emissions) {
 	this.settings = new HashMap<>(settings);
-	this.emitions = new HashMap<>(emitions);
+	this.emissions = new HashMap<>(emissions);
     }
 
-    public Map getEmitions() {
-	return emitions;
+    public Map<Class, Content> getEmissions() {
+	return new HashMap(this.emissions);
     }
 
-    public Map getSettings() {
-	return settings;
+    public Map<Class, Content> getSettings() {
+	return new HashMap(this.settings);
     }
 
+    /**
+     * Enriches the settings stored with the settings stored in content. This is done by adding new settings and by
+     * replacing existent settings with different values.
+     *
+     * @param content The content carrying potentially new settings...
+     * @return The values that were updated
+     */
     public Set<Content> updateSettings(TinkerforgeDeviceContent content) {
-	Set<Content> changeSet = new HashSet<>(content.getSettings().entrySet());
+	if (content == null) {
+	    return new HashSet<>();
+	}
+	Set<Content> changeSet = new HashSet<>(content.settings.values());
 	changeSet.removeAll(settings.entrySet());
 	this.settings = content.getSettings();
 	return changeSet;
     }
 
-    public Set<Content> updateEmitions(TinkerforgeDeviceContent content) {
-	Set<Content> changeSet = new HashSet<>(content.getEmitions().entrySet());
-	changeSet.removeAll(emitions.entrySet());
-	this.emitions = content.getEmitions();
+    /**
+     * Enriches the emissions stored with the emissions stored in content. This is done by adding new emissions and by
+     * replacing existent emissions with different values.
+     *
+     * @param content The content carrying potentially new emissions...
+     * @return The values that were updated
+     */
+    public Set<Content> updateEmissions(TinkerforgeDeviceContent content) {
+	if (content == null) {
+	    return new HashSet<>();
+	}
+	Set<Content> changeSet = new HashSet<>(content.emissions.values());
+	changeSet.removeAll(emissions.entrySet());
+	this.emissions = content.getEmissions();
 	return changeSet;
     }
 
+    /**
+     * Updates a single setting with the one provided by content.
+     *
+     * @param content
+     * @return If the value changed, this method returns the new value else it returns null
+     */
     public Content updateSetting(Content content) {
-	if (content == null) {
-	    return null;
+	if (content != null && settings.put(content.getClass(), content) != null) {
+	    return content;
 	}
-	return settings.put(content.getClass(), content);
+	return null;
     }
 
-    public Content updateEmition(Content content) {
-	if (content == null) {
-	    return null;
+    /**
+     * Updates a single emission with the one provided by content.
+     *
+     * @param content
+     * @return If the value changed, this method returns the new value else it returns null
+     */
+    public Content updateEmission(Content content) {
+
+	if (content != null && emissions.put(content.getClass(), content) != null) {
+	    return content;
 	}
-	return emitions.put(content.getClass(), content);
+	return null;
     }
 
     public Content getSettingContentByID(Class classname) {
 	return settings.get(classname);
     }
 
-    public Content getEmitionContentByID(Class classname) {
-	return emitions.get(classname);
+    public Content getEmissionContentByID(Class classname) {
+	return emissions.get(classname);
     }
 
     @Override
     public int hashCode() {
 	int hash = 3;
 	hash = 13 * hash + Objects.hashCode(this.settings);
-	hash = 13 * hash + Objects.hashCode(this.emitions);
+	hash = 13 * hash + Objects.hashCode(this.emissions);
 	return hash;
     }
 
@@ -96,7 +139,7 @@ public class TinkerforgeDeviceContent extends AContent implements Content {
 	if (!Objects.equals(this.settings, other.settings)) {
 	    return false;
 	}
-	if (!Objects.equals(this.emitions, other.emitions)) {
+	if (!Objects.equals(this.emissions, other.emissions)) {
 	    return false;
 	}
 	return true;
@@ -104,7 +147,7 @@ public class TinkerforgeDeviceContent extends AContent implements Content {
 
     @Override
     public String toString() {
-	return "TinkerforgeDeviceContent{" + "id=" + super.getContentID() + ", settings=" + settings + ", emitions=" + emitions + '}';
+	return "TinkerforgeDeviceContent{" + "id=" + super.getContentID() + ", settings=" + settings + ", emissions=" + emissions + '}';
     }
 
 }

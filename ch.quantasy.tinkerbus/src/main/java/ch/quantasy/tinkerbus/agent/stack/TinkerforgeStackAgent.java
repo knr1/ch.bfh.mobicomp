@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.stack;
+package ch.quantasy.tinkerbus.agent.stack;
 
 import ch.quantasy.messagebus.message.definition.Event;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeAgent;
+import ch.quantasy.tinkerbus.service.stack.message.TinkerforgeStackIntent;
+import ch.quantasy.tinkerbus.service.stack.TinkerforgeStackService;
 import ch.quantasy.tinkerbus.service.stack.registration.StackRegistrationState;
-import ch.quantasy.tinkerbus.service.stack.registration.TinkerforgeStackRegistrationIntent;
+import ch.quantasy.tinkerbus.service.stack.registration.message.TinkerforgeStackRegistrationIntent;
 import ch.quantasy.tinkerbus.service.stack.registration.TinkerforgeStackRegistrationService;
 import ch.quantasy.tinkerbus.service.stack.registration.content.StackRegistrationStateContent;
 import ch.quantasy.tinkerbus.service.stack.registration.content.TinkerforgeStackServiceIDContent;
@@ -51,7 +53,7 @@ public class TinkerforgeStackAgent extends ATinkerforgeAgent {
     }
 
     private void handleStackService(Event event) {
-	System.out.println("Event: " + event);
+	//Nothing special...
     }
 
     @Override

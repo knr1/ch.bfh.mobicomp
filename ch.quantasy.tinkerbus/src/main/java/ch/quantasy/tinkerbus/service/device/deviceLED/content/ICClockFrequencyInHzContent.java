@@ -11,9 +11,9 @@ import ch.quantasy.tinkerbus.service.content.ValueContent;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ICClockFrequencyInHzContent extends ValueContent<Integer> {
+public class ICClockFrequencyInHzContent extends ValueContent<Long> {
 
-    public ICClockFrequencyInHzContent(Integer value) {
+    public ICClockFrequencyInHzContent(Long value) {
 	super(value);
     }
 
