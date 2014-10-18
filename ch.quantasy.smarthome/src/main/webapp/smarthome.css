@@ -1,0 +1,15 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : Sep 29, 2014, 1:49:23 PM
+    Author     : Reto E. Koenig <reto.koenig@bfh.ch>
+*/
+
+#myRGB{
+    width:30%;
+    height: fit-content;
+    padding:5px 1%;
+}

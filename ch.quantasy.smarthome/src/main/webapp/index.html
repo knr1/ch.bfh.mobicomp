@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Smarthome</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<script type="text/javascript" src="js/libs/jquery/jquery.js"></script>
+	<script type="text/javascript" src="js/Point.js"></script>
+	<script type="text/javascript" src="js/Color.js"></script>
+    </head>
+    <body>
+        <h1>Hello World!</h1>
+	<div id="output"></div>
+	<table>
+	    <tr>
+		<td>
+		    <canvas id="myCanvas" width="150" height="150" style="border:1px solid #000000;"></canvas>
+		</td>
+		<td>
+		    <form name="inputForm">
+
+			<table>
+
+                            <tr>
+                                <th id="color">Color</th>
+                                <td><input type="radio" name="color" value="#FF0000" checked="checked">Red</td>
+                                <td><input type="radio" name="color" value="#0000FF">Blue</td>
+                                <td><input type="radio" name="color" value="#FF9900">Orange</td>
+                                <td><input type="radio" name="color" value="#33CC33">Green</td>
+                            </tr>
+
+                            <tr>
+                                <th>Shape</th>
+                                <td><input type="radio" name="shape" value="square" checked="checked">Square</td>
+                                <td><input type="radio" name="shape" value="circle">Circle</td>
+                                <td> </td>
+                                <td> </td>
+                            </tr>
+			</table>
+		    </form>
+		</td>
+	    </tr>
+	</table>
+	<object id="myRGB" type="image/svg+xml" data="LED-ColorWheel.svg"></object>
+
+	<script type="text/javascript" src="WebSocket.js"></script>
+	<script type="text/javascript" src="smarthome.js"></script>
+    </body>
+</html>
