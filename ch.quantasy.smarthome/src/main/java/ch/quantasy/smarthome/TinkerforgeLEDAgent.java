@@ -16,6 +16,8 @@ import ch.quantasy.tinkerbus.service.device.deviceLED.content.ICClockFrequencyIn
 import ch.quantasy.tinkerbus.service.device.deviceLED.content.NumberOfLEDsContent;
 import ch.quantasy.tinkerbus.service.device.deviceLED.content.RGBLEDsContent;
 import ch.quantasy.tinkerbus.service.device.message.TinkerforgeDeviceEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -85,8 +87,9 @@ public class TinkerforgeLEDAgent extends ATinkerforgeAgent {
 
 		    Content c = dc.updateSetting(new RGBLEDsContent(frame));
 		    publish(TinkerforgeLEDService.createIntent(dc, TinkerforgeLEDAgent.this));
+		    System.out.println("Clicky");
+		    Logger.getLogger(TinkerforgeLEDAgent.class.getName()).log(Level.INFO, null, "clicky");
 
-		    System.out.println("clicky");
 		}
 
 	    }
@@ -97,4 +100,11 @@ public class TinkerforgeLEDAgent extends ATinkerforgeAgent {
     public String getID() {
 	return ID;
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+	super.finalize();
+	System.out.println("Shoot I am going down.");
+    }
+
 }
