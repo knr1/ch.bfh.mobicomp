@@ -28,7 +28,6 @@ public abstract class AnAgent<SEND extends Intent, RECEIVE extends Event> extend
 
     @Override
     public void handleMessage(Event message) {
-
 	if (message == null) {
 	    return;
 	}

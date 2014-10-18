@@ -111,7 +111,7 @@ public abstract class AMessage<W extends Worker> implements Message {
     @Override
     public String toString() {
 	String string = this.getID() + '{' + "timeStamp=" + timeStamp + ", senderID=" + senderID + ", receiverIDs=" + receiverIDs + '}';
-
+	string += contentMap.toString();
 	return string;
     }
 
