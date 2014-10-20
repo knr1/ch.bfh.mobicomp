@@ -101,7 +101,7 @@ public class TinkerforgeLEDService extends ATinkerforgeDeviceService<BrickletLED
 	    }
 	    {
 		RGBLEDsContent content = ((RGBLEDsContent) (contentMap.get(RGBLEDsContent.class)));
-		if (content != null) {
+		if (content != null && sendState == SendState.FREE) {
 		    short[][] value = content.getValue();
 		    if (value != null) {
 			this.setRGBLEDs(value);

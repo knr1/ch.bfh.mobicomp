@@ -11,6 +11,7 @@ import ch.quantasy.messagebus.message.implementation.AnIntent;
 import ch.quantasy.messagebus.message.implementation.DiscoveryIntent;
 import ch.quantasy.messagebus.worker.definition.Agent;
 import ch.quantasy.messagebus.worker.definition.Service;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -26,7 +27,7 @@ public abstract class AService<SEND extends Event, RECEIVE extends Intent> exten
 
     @Override
     public void publish(SEND message) {
-	getBusFactory().getEventBus().post(message).asynchronously();
+	getBusFactory().getEventBus().post(message).asynchronously(100, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -37,7 +38,6 @@ public abstract class AService<SEND extends Event, RECEIVE extends Intent> exten
 	if (message.containsReceiverIDs() && !message.containsReceiverID(this.getID())) {
 	    return;
 	}
-
 	if (message instanceof DiscoveryIntent) {
 	    publish(createEvent());
 	}
