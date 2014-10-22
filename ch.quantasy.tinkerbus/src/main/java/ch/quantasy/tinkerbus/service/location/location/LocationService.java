@@ -5,6 +5,9 @@
  */
 package ch.quantasy.tinkerbus.service.location.location;
 
+import ch.quantasy.tinkerbus.service.location.content.State;
+import ch.quantasy.tinkerbus.service.location.location.message.LocationEvent;
+import ch.quantasy.tinkerbus.service.location.location.message.LocationIntent;
 import ch.quantasy.messagebus.message.implementation.AnEvent;
 import ch.quantasy.messagebus.message.implementation.AnIntent;
 import ch.quantasy.messagebus.worker.definition.Agent;
@@ -36,7 +39,7 @@ public class LocationService extends ATinkerforgeService<LocationIntent, Locatio
 	if (state == null) {
 	    return;
 	}
-	if (state.getValue() == LocationState.status) {
+	if (state.getValue() == State.status) {
 	    LocationEvent event = createEvent();
 	    event.addReceiverIDs(message.getSenderID());
 	    event.addContents(new LocationContent(locationSet));
@@ -54,12 +57,12 @@ public class LocationService extends ATinkerforgeService<LocationIntent, Locatio
 	    LocationEvent event = createEvent();
 	    event.addContents(new LocationContent(locSet));
 
-	    if (state.getValue() == LocationState.add) {
+	    if (state.getValue() == State.add) {
 		locationSet.addAll(locSet);
 		event.addContents(state);
 
 	    }
-	    if (state.getValue() == LocationState.remove) {
+	    if (state.getValue() == State.remove) {
 		locationSet.addAll(locSet);
 		event.addContents(state);
 	    }
@@ -79,21 +82,21 @@ public class LocationService extends ATinkerforgeService<LocationIntent, Locatio
 
     public static LocationIntent add(Set<Location> locations, Agent intentSender, String... intentReceivers) {
 	LocationIntent intent = new Intent(intentSender, intentReceivers);
-	intent.addContents(new LocationStateContent(LocationState.add));
+	intent.addContents(new LocationStateContent(State.add));
 	intent.addContents(new LocationContent(locations));
 	return intent;
     }
 
     public static LocationIntent remove(Set<Location> locations, Agent intentSender, String... intentReceivers) {
 	LocationIntent intent = new Intent(intentSender, intentReceivers);
-	intent.addContents(new LocationStateContent(LocationState.remove));
+	intent.addContents(new LocationStateContent(State.remove));
 	intent.addContents(new LocationContent(locations));
 	return intent;
     }
 
     public static LocationIntent status(Agent intentSender, String... intentReceivers) {
 	LocationIntent intent = new Intent(intentSender, intentReceivers);
-	intent.addContents(new LocationStateContent(LocationState.status));
+	intent.addContents(new LocationStateContent(State.status));
 	return intent;
     }
 

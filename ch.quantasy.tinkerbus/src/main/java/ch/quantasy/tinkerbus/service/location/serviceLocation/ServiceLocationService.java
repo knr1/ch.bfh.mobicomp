@@ -10,6 +10,7 @@ import ch.quantasy.messagebus.message.implementation.AnIntent;
 import ch.quantasy.messagebus.worker.definition.Agent;
 import ch.quantasy.messagebus.worker.definition.Service;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeService;
+import ch.quantasy.tinkerbus.service.location.content.State;
 import ch.quantasy.tinkerbus.service.location.serviceLocation.content.ServiceLocationContent;
 import ch.quantasy.tinkerbus.service.location.serviceLocation.content.ServiceLocationStateContent;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class ServiceLocationService extends ATinkerforgeService<ServiceLocationI
 	if (state == null) {
 	    return;
 	}
-	if (state.getValue() == ServiceLocationState.status) {
+	if (state.getValue() == State.status) {
 	    ServiceLocationEvent event = createEvent();
 	    event.addReceiverIDs(message.getSenderID());
 	    event.addContents(state);
@@ -60,12 +61,12 @@ public class ServiceLocationService extends ATinkerforgeService<ServiceLocationI
 	    ServiceLocationEvent event = createEvent();
 	    event.addContents(new ServiceLocationContent(locSet));
 
-	    if (state.getValue() == ServiceLocationState.add) {
+	    if (state.getValue() == State.add) {
 		serviceLocationSet.addAll(locSet);
 		event.addContents(state);
 
 	    }
-	    if (state.getValue() == ServiceLocationState.remove) {
+	    if (state.getValue() == State.remove) {
 		serviceLocationSet.addAll(locSet);
 		event.addContents(state);
 	    }
@@ -85,21 +86,21 @@ public class ServiceLocationService extends ATinkerforgeService<ServiceLocationI
 
     public static ServiceLocationIntent add(Set<ServiceLocation> locations, Agent intentSender, String... intentReceivers) {
 	ServiceLocationIntent intent = new Intent(intentSender, intentReceivers);
-	intent.addContents(new ServiceLocationStateContent(ServiceLocationState.add));
+	intent.addContents(new ServiceLocationStateContent(State.add));
 	intent.addContents(new ServiceLocationContent(locations));
 	return intent;
     }
 
     public static ServiceLocationIntent remove(Set<ServiceLocation> locations, Agent intentSender, String... intentReceivers) {
 	ServiceLocationIntent intent = new Intent(intentSender, intentReceivers);
-	intent.addContents(new ServiceLocationStateContent(ServiceLocationState.remove));
+	intent.addContents(new ServiceLocationStateContent(State.remove));
 	intent.addContents(new ServiceLocationContent(locations));
 	return intent;
     }
 
     public static ServiceLocationIntent status(Agent intentSender, String... intentReceivers) {
 	ServiceLocationIntent intent = new Intent(intentSender, intentReceivers);
-	intent.addContents(new ServiceLocationStateContent(ServiceLocationState.status));
+	intent.addContents(new ServiceLocationStateContent(State.status));
 	return intent;
     }
 

@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.location.location;
+package ch.quantasy.tinkerbus.service.device.dualRelay.message;
+
+import ch.quantasy.tinkerbus.service.device.message.TinkerforgeDeviceIntent;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public enum LocationState {
+public interface TinkerforgeDualRelayIntent extends TinkerforgeDeviceIntent {
 
-    status, add, remove;
 }

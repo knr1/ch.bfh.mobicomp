@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.location.location;
+package ch.quantasy.tinkerbus.service.device.dualRelay.message;
 
-import ch.quantasy.messagebus.message.definition.Event;
+import ch.quantasy.tinkerbus.service.device.message.TinkerforgeDeviceEvent;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public interface LocationEvent extends Event {
+public interface TinkerforgeDualRelayEvent extends TinkerforgeDeviceEvent {
+
 }
