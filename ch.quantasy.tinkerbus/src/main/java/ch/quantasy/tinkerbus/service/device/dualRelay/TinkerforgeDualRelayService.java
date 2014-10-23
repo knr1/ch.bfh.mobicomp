@@ -10,7 +10,6 @@ import ch.quantasy.messagebus.worker.definition.Agent;
 import ch.quantasy.messagebus.worker.definition.Service;
 import ch.quantasy.tinkerbus.service.device.content.TinkerforgeDeviceContent;
 import ch.quantasy.tinkerbus.service.device.core.ATinkerforgeDeviceService;
-import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.TinkerforgeAmbientLightService;
 import ch.quantasy.tinkerbus.service.device.dualRelay.content.Monoflop;
 import ch.quantasy.tinkerbus.service.device.dualRelay.content.MonoflopContent;
 import ch.quantasy.tinkerbus.service.device.dualRelay.content.MonoflopDone;
@@ -80,9 +79,9 @@ public class TinkerforgeDualRelayService extends ATinkerforgeDeviceService<Brick
 		}
 	    }
 	} catch (TimeoutException ex) {
-	    Logger.getLogger(TinkerforgeAmbientLightService.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
 	} catch (NotConnectedException ex) {
-	    Logger.getLogger(TinkerforgeAmbientLightService.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
 	}
 
     }
@@ -104,6 +103,9 @@ public class TinkerforgeDualRelayService extends ATinkerforgeDeviceService<Brick
 	publish(event);
     }
 
+    public static TinkerforgeDualRelayIntent createIntent(TinkerforgeDeviceContent content, Agent agent) {
+	return new Intent(content, agent);
+    }
 }
 
 class Event extends ATinkerforgeDeviceEvent implements TinkerforgeDualRelayEvent {
