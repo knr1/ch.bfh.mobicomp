@@ -9,6 +9,9 @@ import ch.quantasy.messagebus.message.implementation.AnEvent;
 import ch.quantasy.messagebus.message.implementation.AnIntent;
 import ch.quantasy.messagebus.worker.definition.Agent;
 import ch.quantasy.messagebus.worker.definition.Service;
+import ch.quantasy.smarthome.content.ColorContent;
+import ch.quantasy.smarthome.content.Type;
+import ch.quantasy.smarthome.content.TypeContent;
 import ch.quantasy.smarthome.message.SmartHomeEvent;
 import ch.quantasy.smarthome.message.SmartHomeIntent;
 import ch.quantasy.tinkerbus.agent.device.deviceAmbientLight.TinkerforgeAmbientLightAgent;
@@ -39,7 +42,7 @@ public class SmartHome extends ATinkerforgeService<SmartHomeIntent, SmartHomeEve
     public static final TinkerforgeStackRegistrationService stackRegistrationService;
     public static final TinkerforgeStackAgent stackAgent;
     public static final TinkerforgeAmbientLightAgent ambientLightAgent;
-    public static final TinkerforgeLEDAgent ledAgent;
+    public static final LightAgent ledAgent;
 
     static {
 	locationService = new ServiceLocationService();
@@ -47,7 +50,7 @@ public class SmartHome extends ATinkerforgeService<SmartHomeIntent, SmartHomeEve
 	stackAgent = new TinkerforgeStackAgent();
 	ambientLightAgent = new TinkerforgeAmbientLightAgent();
 	//TinkerforgeDCAgent dcAgent = new TinkerforgeDCAgent();
-	ledAgent = new TinkerforgeLEDAgent();
+	ledAgent = new LightAgent();
 	//TinkerforgeWavingLEDAgent ledAgent = new TinkerforgeWavingLEDAgent();
 	//TinkerforgeLivingLEDAgent ledAgent = new TinkerforgeLivingLEDAgent();
 	stackAgent.register();
@@ -70,10 +73,13 @@ public class SmartHome extends ATinkerforgeService<SmartHomeIntent, SmartHomeEve
     //}
     @OnMessage
     public void sendEvent(Figure figure, Session session) throws IOException, EncodeException {
-	SmartHomeEvent evt = createEvent();
-	evt.addContents(new ColorContent(figure.getColor()));
-	System.out.println("Before Publish");
-	publish(evt);
+	for (Type type : Type.values()) {
+	    SmartHomeEvent evt = createEvent();
+	    evt.addContents(new ColorContent(figure.getColor()));
+	    //evt.addContents(new TypeContent(figure.getType()));
+	    evt.addContents(new TypeContent(type));
+	    publish(evt);
+	}
 	for (Session peer : peers) {
 	    if (!peer.equals(session)) {
 		peer.getBasicRemote().sendObject(figure);

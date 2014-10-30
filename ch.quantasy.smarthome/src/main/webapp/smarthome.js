@@ -34,6 +34,7 @@ function onColorWheel(evt) {
     var rgbString = color.toString();
     var hexString = color.toHexString();
     var json = JSON.stringify({
+	"type": "ambient",
 	"colorHex": hexString,
 	"rgbString": rgbString,
 	"color": {
@@ -42,8 +43,9 @@ function onColorWheel(evt) {
 	    "b": color.b
 	}
     });
-    drawImageText(json);
     sendText(json);
+    drawImageText(json);
+
 
     canvas.style.backgroundColor = rgbString;
     context.fillStyle = rgbString;

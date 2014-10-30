@@ -3,18 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.smarthome;
-
-import ch.quantasy.tinkerbus.service.content.ValueContent;
+package ch.quantasy.smarthome.content;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ColorContent extends ValueContent<Color> {
+public enum Type {
 
-    public ColorContent(Color value) {
-	super(value);
-    }
-    
+    ambient, direct, spot;
+
 }

@@ -5,6 +5,8 @@
  */
 package ch.quantasy.smarthome;
 
+import ch.quantasy.smarthome.content.Color;
+import ch.quantasy.smarthome.content.Type;
 import java.io.StringWriter;
 import javax.json.Json;
 import javax.json.JsonNumber;
@@ -18,21 +20,35 @@ public class Figure {
 
     private JsonObject json;
     private Color color;
+    private Type type;
 
     public Figure(JsonObject json) {
 	this.json = json;
+	if (json != null) {
+	    try {
+		type = Type.valueOf(json.getString("type"));
+	    } catch (IllegalArgumentException ex) {
+		type = Type.ambient;
+	    }
+	}
 	JsonObject colorObject = (JsonObject) (this.json.get("color"));
 	if (colorObject != null) {
 	    JsonNumber red = (JsonNumber) colorObject.get("r");
 	    JsonNumber green = (JsonNumber) colorObject.get("g");
 	    JsonNumber blue = (JsonNumber) colorObject.get("b");
 	    color = new Color((float) red.doubleValue(), (float) green.doubleValue(), (float) blue.doubleValue());
-	    System.out.println("Color: " + color);
+
 	}
+	System.out.println("Type: " + type + "Color: " + color);
+
     }
 
     public Color getColor() {
 	return color;
+    }
+
+    public Type getType() {
+	return type;
     }
 
     public JsonObject getJson() {
