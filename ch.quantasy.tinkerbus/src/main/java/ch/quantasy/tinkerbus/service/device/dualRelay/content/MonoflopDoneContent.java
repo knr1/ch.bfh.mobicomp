@@ -3,18 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.location.serviceLocation.content;
+package ch.quantasy.tinkerbus.service.device.dualRelay.content;
 
 import ch.quantasy.tinkerbus.service.content.ValueContent;
-import ch.quantasy.tinkerbus.service.location.content.State;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ServiceLocationStateContent extends ValueContent<State> {
+public class MonoflopDoneContent extends ValueContent<MonoflopDone> {
 
-    public ServiceLocationStateContent(State value) {
+    public MonoflopDoneContent(MonoflopDone value) {
 	super(value);
     }
 

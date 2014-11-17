@@ -3,18 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.location.serviceLocation.content;
+package ch.quantasy.tinkerbus.service.device.DeviceRemoteSwitch.ocntent;
 
 import ch.quantasy.tinkerbus.service.content.ValueContent;
-import ch.quantasy.tinkerbus.service.location.content.State;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ServiceLocationStateContent extends ValueContent<State> {
+public class DimSocketBContent extends ValueContent<DimSocketB> {
 
-    public ServiceLocationStateContent(State value) {
+    public DimSocketBContent(DimSocketB value) {
 	super(value);
     }
 

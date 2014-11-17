@@ -5,16 +5,16 @@
  */
 package ch.quantasy.tinkerbus.service.location.location.content;
 
+import ch.quantasy.tinkerbus.service.location.content.State;
 import ch.quantasy.tinkerbus.service.content.ValueContent;
-import ch.quantasy.tinkerbus.service.location.location.LocationState;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class LocationStateContent extends ValueContent<LocationState> {
+public class LocationStateContent extends ValueContent<State> {
 
-    public LocationStateContent(LocationState value) {
+    public LocationStateContent(State value) {
 	super(value);
     }
 

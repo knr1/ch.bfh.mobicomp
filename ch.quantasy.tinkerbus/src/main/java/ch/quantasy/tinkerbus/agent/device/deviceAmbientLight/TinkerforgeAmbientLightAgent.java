@@ -86,7 +86,6 @@ public class TinkerforgeAmbientLightAgent extends ATinkerforgeAgent {
 
     @Override
     protected void handleEvent(Event message) {
-	System.out.println("ATinkerforgeAgent: Event: " + message);
 	if (message instanceof TinkerforgeDeviceEvent) {
 	    handleTinkerforgeEvent((TinkerforgeDeviceEvent) message);
 	}
