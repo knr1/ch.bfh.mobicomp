@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.device.DeviceRemoteSwitch.message;
+package ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.message;
 
-import ch.quantasy.tinkerbus.service.device.message.TinkerforgeDeviceEvent;
+import ch.quantasy.tinkerbus.service.device.message.TinkerforgeDeviceIntent;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public interface TinkerforgeRemoteSwitchEvent extends TinkerforgeDeviceEvent {
+public interface TinkerforgeRemoteSwitchIntent extends TinkerforgeDeviceIntent {
 
 }

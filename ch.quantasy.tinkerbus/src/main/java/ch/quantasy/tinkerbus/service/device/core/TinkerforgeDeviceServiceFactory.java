@@ -7,13 +7,15 @@ package ch.quantasy.tinkerbus.service.device.core;
 
 import ch.quantasy.tinkerbus.service.device.deviceAmbientLight.TinkerforgeAmbientLightService;
 import ch.quantasy.tinkerbus.service.device.deviceDC.TinkerforgeDCService;
+import ch.quantasy.tinkerbus.service.device.deviceDualRelay.TinkerforgeDualRelayService;
 import ch.quantasy.tinkerbus.service.device.deviceLED.TinkerforgeLEDService;
-import ch.quantasy.tinkerbus.service.device.dualRelay.TinkerforgeDualRelayService;
+import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.TinkerforgeRemoteSwitchService;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import com.tinkerforge.BrickDC;
 import com.tinkerforge.BrickletAmbientLight;
 import com.tinkerforge.BrickletDualRelay;
 import com.tinkerforge.BrickletLEDStrip;
+import com.tinkerforge.BrickletRemoteSwitch;
 import com.tinkerforge.Device;
 
 /**
@@ -35,7 +37,9 @@ public class TinkerforgeDeviceServiceFactory {
 	}
 	if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.DualRelay) {
 	    service = new TinkerforgeDualRelayService((BrickletDualRelay) device, deviceID);
-	    System.out.println("service" + service);
+	}
+	if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.RemoteSwitch) {
+	    service = new TinkerforgeRemoteSwitchService((BrickletRemoteSwitch) device, deviceID);
 	}
 	return service;
     }

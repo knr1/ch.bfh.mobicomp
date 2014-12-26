@@ -3,23 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.device.dualRelay;
+package ch.quantasy.tinkerbus.service.device.deviceDualRelay;
 
 import ch.quantasy.messagebus.message.definition.Content;
 import ch.quantasy.messagebus.worker.definition.Agent;
 import ch.quantasy.messagebus.worker.definition.Service;
 import ch.quantasy.tinkerbus.service.device.content.TinkerforgeDeviceContent;
 import ch.quantasy.tinkerbus.service.device.core.ATinkerforgeDeviceService;
-import ch.quantasy.tinkerbus.service.device.dualRelay.content.Monoflop;
-import ch.quantasy.tinkerbus.service.device.dualRelay.content.MonoflopContent;
-import ch.quantasy.tinkerbus.service.device.dualRelay.content.MonoflopDone;
-import ch.quantasy.tinkerbus.service.device.dualRelay.content.MonoflopDoneContent;
-import ch.quantasy.tinkerbus.service.device.dualRelay.content.SelectedState;
-import ch.quantasy.tinkerbus.service.device.dualRelay.content.SelectedStateContent;
-import ch.quantasy.tinkerbus.service.device.dualRelay.content.State;
-import ch.quantasy.tinkerbus.service.device.dualRelay.content.StateContent;
-import ch.quantasy.tinkerbus.service.device.dualRelay.message.TinkerforgeDualRelayEvent;
-import ch.quantasy.tinkerbus.service.device.dualRelay.message.TinkerforgeDualRelayIntent;
+import ch.quantasy.tinkerbus.service.device.deviceDualRelay.content.Monoflop;
+import ch.quantasy.tinkerbus.service.device.deviceDualRelay.content.MonoflopContent;
+import ch.quantasy.tinkerbus.service.device.deviceDualRelay.content.MonoflopDone;
+import ch.quantasy.tinkerbus.service.device.deviceDualRelay.content.MonoflopDoneContent;
+import ch.quantasy.tinkerbus.service.device.deviceDualRelay.content.SelectedState;
+import ch.quantasy.tinkerbus.service.device.deviceDualRelay.content.SelectedStateContent;
+import ch.quantasy.tinkerbus.service.device.deviceDualRelay.content.State;
+import ch.quantasy.tinkerbus.service.device.deviceDualRelay.content.StateContent;
+import ch.quantasy.tinkerbus.service.device.deviceDualRelay.message.TinkerforgeDualRelayEvent;
+import ch.quantasy.tinkerbus.service.device.deviceDualRelay.message.TinkerforgeDualRelayIntent;
 import ch.quantasy.tinkerbus.service.device.message.ATinkerforgeDeviceEvent;
 import ch.quantasy.tinkerbus.service.device.message.ATinkerforgeDeviceIntent;
 import com.tinkerforge.BrickletDualRelay;

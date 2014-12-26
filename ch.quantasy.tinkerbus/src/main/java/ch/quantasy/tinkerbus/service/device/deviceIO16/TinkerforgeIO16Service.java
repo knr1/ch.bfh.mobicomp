@@ -143,6 +143,10 @@ public class TinkerforgeIO16Service extends ATinkerforgeDeviceService<BrickletIO
 	return new Event(getDeviceContent(), this);
     }
 
+    public static TinkerforgeIO16Intent createIntent(TinkerforgeDeviceContent content, Agent agent) {
+	return new Intent(content, agent);
+    }
+
     @Override
     public void interrupt(char port, short interruptMask, short valueMask) {
 	getDeviceContent().updateEmission(new InterruptContent(new Interrupt(port, interruptMask, valueMask)));
