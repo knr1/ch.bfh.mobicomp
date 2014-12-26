@@ -29,7 +29,7 @@
      inkscape:cx="2630.2542"
      inkscape:cy="528.31234"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="colorWheel"
      showgrid="false"
      inkscape:window-width="2880"
      inkscape:window-height="1719"
@@ -46,7 +46,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
