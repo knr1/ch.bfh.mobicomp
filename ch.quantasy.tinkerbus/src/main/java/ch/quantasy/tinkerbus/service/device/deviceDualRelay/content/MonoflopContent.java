@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.device.DeviceRemoteSwitch.ocntent;
+package ch.quantasy.tinkerbus.service.device.deviceDualRelay.content;
 
 import ch.quantasy.tinkerbus.service.content.ValueContent;
 
@@ -11,9 +11,9 @@ import ch.quantasy.tinkerbus.service.content.ValueContent;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class SwitchSocketContent extends ValueContent<SwitchSocket> {
+public class MonoflopContent extends ValueContent<Monoflop> {
 
-    public SwitchSocketContent(SwitchSocket value) {
+    public MonoflopContent(Monoflop value) {
 	super(value);
     }
 

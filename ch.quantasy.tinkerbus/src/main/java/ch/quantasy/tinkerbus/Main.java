@@ -5,8 +5,8 @@
  */
 package ch.quantasy.tinkerbus;
 
-import ch.quantasy.tinkerbus.agent.device.DualRelay.TinkerforgeDualRelayAgent;
 import ch.quantasy.tinkerbus.agent.device.deviceLED.TinkerforgeLEDAgent;
+import ch.quantasy.tinkerbus.agent.device.deviceRemoteSwitch.TinkerforgeRemoteSwitchAgent;
 import ch.quantasy.tinkerbus.agent.stack.TinkerforgeStackAgent;
 import ch.quantasy.tinkerbus.service.location.serviceLocation.ServiceLocationService;
 import ch.quantasy.tinkerbus.service.stack.registration.TinkerforgeStackRegistrationService;
@@ -22,7 +22,8 @@ public class Main {
 	ServiceLocationService locationService = new ServiceLocationService();
 	TinkerforgeStackRegistrationService stackRegistrationService = new TinkerforgeStackRegistrationService();
 	TinkerforgeStackAgent stackAgent = new TinkerforgeStackAgent();
-	TinkerforgeDualRelayAgent dualRelayAgent = new TinkerforgeDualRelayAgent();
+	//TinkerforgeDualRelayAgent dualRelayAgent = new TinkerforgeDualRelayAgent();
+	TinkerforgeRemoteSwitchAgent remoteSwitchAgent = new TinkerforgeRemoteSwitchAgent();
 	//TinkerforgeAmbientLightAgent ambientLightAgent = new TinkerforgeAmbientLightAgent();
 	//TinkerforgeDCAgent dcAgent = new TinkerforgeDCAgent();
 	TinkerforgeLEDAgent ledAgent = new TinkerforgeLEDAgent();
@@ -30,9 +31,10 @@ public class Main {
 	//TinkerforgeLivingLEDAgent ledAgent = new TinkerforgeLivingLEDAgent();
 	stackAgent.register();
 	System.in.read();
-	System.out.println(dualRelayAgent);
+	//System.out.println(dualRelayAgent);
 	System.out.println(ledAgent);
 	System.out.println(stackRegistrationService);
 	System.out.println(stackAgent);
+	System.out.println(remoteSwitchAgent);
     }
 }

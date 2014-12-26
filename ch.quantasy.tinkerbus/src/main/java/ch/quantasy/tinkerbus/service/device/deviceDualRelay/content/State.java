@@ -3,27 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.device.dualRelay.content;
+package ch.quantasy.tinkerbus.service.device.deviceDualRelay.content;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class SelectedState {
+public class State {
 
-    public final short relay;
-    public final boolean state;
+    public final boolean relay1;
+    public final boolean relay2;
 
-    public SelectedState(short relay, boolean state) {
-	this.relay = relay;
-	this.state = state;
+    public State(boolean relay1, boolean relay2) {
+	this.relay1 = relay1;
+	this.relay2 = relay2;
     }
 
     @Override
     public int hashCode() {
-	int hash = 7;
-	hash = 37 * hash + this.relay;
-	hash = 37 * hash + (this.state ? 1 : 0);
+	int hash = 5;
+	hash = 97 * hash + (this.relay1 ? 1 : 0);
+	hash = 97 * hash + (this.relay2 ? 1 : 0);
 	return hash;
     }
 
@@ -35,11 +35,11 @@ public class SelectedState {
 	if (getClass() != obj.getClass()) {
 	    return false;
 	}
-	final SelectedState other = (SelectedState) obj;
-	if (this.relay != other.relay) {
+	final State other = (State) obj;
+	if (this.relay1 != other.relay1) {
 	    return false;
 	}
-	if (this.state != other.state) {
+	if (this.relay2 != other.relay2) {
 	    return false;
 	}
 	return true;
@@ -47,7 +47,7 @@ public class SelectedState {
 
     @Override
     public String toString() {
-	return "SelectedState{" + "relay=" + relay + ", state=" + state + '}';
+	return "State{" + "relay1=" + relay1 + ", relay2=" + relay2 + '}';
     }
 
 }

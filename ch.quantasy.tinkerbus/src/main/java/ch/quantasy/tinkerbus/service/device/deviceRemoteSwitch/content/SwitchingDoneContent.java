@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.device.dualRelay.content;
+package ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.content;
 
 import ch.quantasy.tinkerbus.service.content.ValueContent;
 
@@ -11,9 +11,9 @@ import ch.quantasy.tinkerbus.service.content.ValueContent;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class MonoflopDoneContent extends ValueContent<MonoflopDone> {
+public class SwitchingDoneContent extends ValueContent<Boolean> {
 
-    public MonoflopDoneContent(MonoflopDone value) {
+    public SwitchingDoneContent(Boolean value) {
 	super(value);
     }
 

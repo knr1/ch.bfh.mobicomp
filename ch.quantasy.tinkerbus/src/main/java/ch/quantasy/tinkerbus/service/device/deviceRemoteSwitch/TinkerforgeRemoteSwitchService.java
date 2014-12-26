@@ -3,21 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.device.DeviceRemoteSwitch;
+package ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch;
 
 import ch.quantasy.messagebus.message.definition.Content;
 import ch.quantasy.messagebus.worker.definition.Agent;
 import ch.quantasy.messagebus.worker.definition.Service;
-import ch.quantasy.tinkerbus.service.device.DeviceRemoteSwitch.message.TinkerforgeRemoteSwitchEvent;
-import ch.quantasy.tinkerbus.service.device.DeviceRemoteSwitch.message.TinkerforgeRemoteSwitchIntent;
-import ch.quantasy.tinkerbus.service.device.DeviceRemoteSwitch.ocntent.DimSocketB;
-import ch.quantasy.tinkerbus.service.device.DeviceRemoteSwitch.ocntent.DimSocketBContent;
-import ch.quantasy.tinkerbus.service.device.DeviceRemoteSwitch.ocntent.RepeatsContent;
-import ch.quantasy.tinkerbus.service.device.DeviceRemoteSwitch.ocntent.SwitchSocket;
-import ch.quantasy.tinkerbus.service.device.DeviceRemoteSwitch.ocntent.SwitchSocketContent;
-import ch.quantasy.tinkerbus.service.device.DeviceRemoteSwitch.ocntent.SwitchingDoneContent;
 import ch.quantasy.tinkerbus.service.device.content.TinkerforgeDeviceContent;
 import ch.quantasy.tinkerbus.service.device.core.ATinkerforgeDeviceService;
+import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.content.DimSocketB;
+import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.content.DimSocketBContent;
+import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.content.RepeatsContent;
+import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.content.SwitchSocket;
+import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.content.SwitchSocketContent;
+import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.content.SwitchingDoneContent;
+import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.message.TinkerforgeRemoteSwitchEvent;
+import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.message.TinkerforgeRemoteSwitchIntent;
 import ch.quantasy.tinkerbus.service.device.message.ATinkerforgeDeviceEvent;
 import ch.quantasy.tinkerbus.service.device.message.ATinkerforgeDeviceIntent;
 import com.tinkerforge.BrickletRemoteSwitch;
@@ -38,6 +38,7 @@ public class TinkerforgeRemoteSwitchService extends ATinkerforgeDeviceService<Br
 
     public TinkerforgeRemoteSwitchService(BrickletRemoteSwitch device, String deviceID) {
 	super(device, deviceID);
+
     }
 
     @Override
@@ -59,7 +60,7 @@ public class TinkerforgeRemoteSwitchService extends ATinkerforgeDeviceService<Br
 			synchronized (this) {
 			    while (this.isSwitching) {
 				try {
-				    wait(1000);
+				    wait(100);
 				} catch (InterruptedException ex) {
 				    Logger.getLogger(TinkerforgeRemoteSwitchService.class.getName()).log(Level.SEVERE, null, ex);
 				}
@@ -89,7 +90,7 @@ public class TinkerforgeRemoteSwitchService extends ATinkerforgeDeviceService<Br
 			synchronized (this) {
 			    while (this.isSwitching) {
 				try {
-				    wait(1000);
+				    wait(100);
 				} catch (InterruptedException ex) {
 				    Logger.getLogger(TinkerforgeRemoteSwitchService.class.getName()).log(Level.SEVERE, null, ex);
 				}
@@ -97,15 +98,15 @@ public class TinkerforgeRemoteSwitchService extends ATinkerforgeDeviceService<Br
 
 			    switch (value.socket) {
 				case A:
-				    device.switchSocketA(value.houseCode, value.receiverCode, value.switchTo);
+				    device.switchSocketA((short) value.houseCode, value.receiverCode, value.getSwitchTo());
 				    this.isSwitching = true;
 				    break;
 				case B:
-				    device.switchSocketB(value.houseCode, value.receiverCode, value.switchTo);
+				    device.switchSocketB(value.houseCode, value.receiverCode, value.getSwitchTo());
 				    this.isSwitching = true;
 				    break;
 				case C:
-				    device.switchSocketC((char) value.houseCode, value.receiverCode, value.switchTo);
+				    device.switchSocketC((char) value.houseCode, value.receiverCode, value.getSwitchTo());
 				    this.isSwitching = true;
 				    break;
 				default:
@@ -135,6 +136,10 @@ public class TinkerforgeRemoteSwitchService extends ATinkerforgeDeviceService<Br
 
     public static TinkerforgeRemoteSwitchIntent createIntent(TinkerforgeDeviceContent content, Agent agent) {
 	return new Intent(content, agent);
+    }
+
+    public static TinkerforgeRemoteSwitchIntent createIntent(TinkerforgeDeviceContent deviceContent, Agent agent, String... intentReceivers) {
+	return new Intent(deviceContent, agent, intentReceivers);
     }
 
     @Override

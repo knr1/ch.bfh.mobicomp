@@ -3,18 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.device.dualRelay.content;
-
-import ch.quantasy.tinkerbus.service.content.ValueContent;
+package ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.content;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class StateContent extends ValueContent<State> {
+public enum Socket {
 
-    public StateContent(State value) {
-	super(value);
-    }
-
+    A, B, C;
 }

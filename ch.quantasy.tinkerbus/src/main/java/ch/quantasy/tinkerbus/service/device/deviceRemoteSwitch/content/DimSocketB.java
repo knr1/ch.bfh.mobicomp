@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.tinkerbus.service.device.DeviceRemoteSwitch.ocntent;
+package ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.content;
 
 /**
  *

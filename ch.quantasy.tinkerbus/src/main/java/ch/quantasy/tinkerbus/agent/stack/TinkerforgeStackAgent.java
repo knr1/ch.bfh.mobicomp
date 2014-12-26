@@ -7,13 +7,13 @@ package ch.quantasy.tinkerbus.agent.stack;
 
 import ch.quantasy.messagebus.message.definition.Event;
 import ch.quantasy.tinkerbus.bus.ATinkerforgeAgent;
-import ch.quantasy.tinkerbus.service.stack.message.TinkerforgeStackIntent;
 import ch.quantasy.tinkerbus.service.stack.TinkerforgeStackService;
+import ch.quantasy.tinkerbus.service.stack.message.TinkerforgeStackIntent;
 import ch.quantasy.tinkerbus.service.stack.registration.StackRegistrationState;
-import ch.quantasy.tinkerbus.service.stack.registration.message.TinkerforgeStackRegistrationIntent;
 import ch.quantasy.tinkerbus.service.stack.registration.TinkerforgeStackRegistrationService;
 import ch.quantasy.tinkerbus.service.stack.registration.content.StackRegistrationStateContent;
 import ch.quantasy.tinkerbus.service.stack.registration.content.TinkerforgeStackServiceIDContent;
+import ch.quantasy.tinkerbus.service.stack.registration.message.TinkerforgeStackRegistrationIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 
 /**
@@ -62,7 +62,10 @@ public class TinkerforgeStackAgent extends ATinkerforgeAgent {
     }
 
     public void register() {
-	TinkerforgeStackRegistrationIntent intent = TinkerforgeStackRegistrationService.register(this, new TinkerforgeStackAddress("localhost", TinkerforgeStackAddress.DEFAULT_PORT));
+	TinkerforgeStackRegistrationIntent intent = TinkerforgeStackRegistrationService.register(this, new TinkerforgeStackAddress("obergeschoss", TinkerforgeStackAddress.DEFAULT_PORT));
+	System.out.println("Intent: " + intent);
+	publish(intent);
+	intent = TinkerforgeStackRegistrationService.register(this, new TinkerforgeStackAddress("erdgeschoss", TinkerforgeStackAddress.DEFAULT_PORT));
 	System.out.println("Intent: " + intent);
 	publish(intent);
     }
