@@ -15,6 +15,7 @@ import ch.quantasy.tinkerbus.service.device.content.TinkerforgeDeviceContent;
 import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.TinkerforgeRemoteSwitchService;
 import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.content.DimSocketB;
 import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.content.DimSocketBContent;
+import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.content.RepeatsContent;
 import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.content.Socket;
 import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.content.SwitchSocket;
 import ch.quantasy.tinkerbus.service.device.deviceRemoteSwitch.content.SwitchSocketContent;
@@ -63,6 +64,7 @@ public class RemoteSwitchAgent extends ATinkerforgeAgent {
 	RemoteSwitch remoteSwitch = content.getValue();
 
 	TinkerforgeDeviceContent deviceContent = new TinkerforgeDeviceContent();
+	deviceContent.updateSetting(new RepeatsContent((short) 3));
 	if (remoteSwitch.getDimValue() >= 0) {
 	    deviceContent.updateSetting(new DimSocketBContent(new DimSocketB((long) remoteSwitch.getAddress(), (short) remoteSwitch.getUnit(), (short) remoteSwitch.getDimValue())));
 	} else {

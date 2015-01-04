@@ -64,10 +64,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="46.389082"
+     inkscape:cx="343.62647"
      inkscape:cy="733.2012"
      inkscape:document-units="px"
-     inkscape:current-layer="layer4"
+     inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="3200"
      inkscape:window-height="1694"
@@ -633,145 +633,27 @@
          id="path5225" />
     </g>
     <rect
-       style="fill:#3494ee;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.18920469px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline"
-       id="luOgDim"
-       width="96.092819"
-       height="176.60522"
-       x="371.69421"
-       y="104.75836"
-       inkscape:label="#rect3128" />
-    <path
-       inkscape:label="#rect4890-1-5-5-8"
-       sodipodi:nodetypes="csscc"
-       id="luOgOff"
-       d="m 371.94253,306.65012 c 0,17.90486 14.4143,32.31924 32.31924,32.31924 l 30.95771,0 c 17.90486,0 32.31924,-14.41438 32.31924,-32.31924 z"
-       style="fill:#3494ee;fill-opacity:1;stroke:none;display:inline"
-       inkscape:connector-curvature="0" />
-    <path
-       inkscape:connector-curvature="0"
-       style="fill:#3494ee;fill-opacity:1;stroke:none;display:inline"
-       d="m 371.94253,79.471802 c 0,-17.90486 14.4143,-32.31924 32.31924,-32.31924 l 30.95771,0 c 17.90486,0 32.31924,14.41438 32.31924,32.31924 z"
-       id="luOgOn"
-       sodipodi:nodetypes="csscc"
-       inkscape:label="#path3157" />
-    <rect
        inkscape:label="#rect3128"
-       y="104.75836"
-       x="251.69421"
-       height="176.60522"
+       y="107.66484"
+       x="277.39731"
+       height="185.60648"
        width="96.092819"
-       id="lightOgGallerieDim"
-       style="fill:#3494ee;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.18920469px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline" />
+       id="Lu-1-Dim"
+       style="fill:#3494ee;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.68637729px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline" />
     <path
        inkscape:connector-curvature="0"
        style="fill:#3494ee;fill-opacity:1;stroke:none;display:inline"
-       d="m 251.94253,306.65012 c 0,17.90486 14.4143,32.31924 32.31924,32.31924 l 30.95771,0 c 17.90486,0 32.31924,-14.41438 32.31924,-32.31924 z"
-       id="lightOgGallerieOff"
+       d="m 277.64563,299.6232 c 0,17.90486 14.4143,32.31924 32.31924,32.31924 l 30.95771,0 c 17.90486,0 32.31924,-14.41438 32.31924,-32.31924 z"
+       id="Lu-1-Off"
        sodipodi:nodetypes="csscc"
-       inkscape:label="#rect4890-1-5-5-8" />
+       inkscape:label="#path5181" />
     <path
-       inkscape:label="#path3157"
        sodipodi:nodetypes="csscc"
-       id="lightOgGallerieOn"
-       d="m 251.94253,79.471802 c 0,-17.90486 14.4143,-32.31924 32.31924,-32.31924 l 30.95771,0 c 17.90486,0 32.31924,14.41438 32.31924,32.31924 z"
+       id="Lu-1-On"
+       d="m 277.64563,101.31293 c 0,-17.904869 14.4143,-32.319249 32.31924,-32.319249 l 30.95771,0 c 17.90486,0 32.31924,14.41438 32.31924,32.319249 z"
        style="fill:#3494ee;fill-opacity:1;stroke:none;display:inline"
-       inkscape:connector-curvature="0" />
-    <rect
-       style="fill:#3494ee;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.18920469px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline"
-       id="lightOgDuscheDim"
-       width="96.092819"
-       height="176.60522"
-       x="491.69421"
-       y="104.75836"
-       inkscape:label="#rect3128" />
-    <path
-       inkscape:label="#rect4890-1-5-5-8"
-       sodipodi:nodetypes="csscc"
-       id="lightOgDuscheOff"
-       d="m 491.94253,306.65012 c 0,17.90486 14.4143,32.31924 32.31924,32.31924 l 30.95771,0 c 17.90486,0 32.31924,-14.41438 32.31924,-32.31924 z"
-       style="fill:#3494ee;fill-opacity:1;stroke:none;display:inline"
-       inkscape:connector-curvature="0" />
-    <path
        inkscape:connector-curvature="0"
-       style="fill:#3494ee;fill-opacity:1;stroke:none;display:inline"
-       d="m 491.94253,79.471802 c 0,-17.90486 14.4143,-32.31924 32.31924,-32.31924 l 30.95771,0 c 17.90486,0 32.31924,14.41438 32.31924,32.31924 z"
-       id="lightOgDuscheOn"
-       sodipodi:nodetypes="csscc"
-       inkscape:label="#path3157" />
-    <rect
-       inkscape:label="#rect3128"
-       y="104.75836"
-       x="611.69421"
-       height="176.60522"
-       width="96.092819"
-       id="lightOgBadDim"
-       style="fill:#3494ee;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.18920469px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline" />
-    <path
-       inkscape:connector-curvature="0"
-       style="fill:#3494ee;fill-opacity:1;stroke:none;display:inline"
-       d="m 611.94253,306.65012 c 0,17.90486 14.4143,32.31924 32.31924,32.31924 l 30.95771,0 c 17.90486,0 32.31924,-14.41438 32.31924,-32.31924 z"
-       id="lightOgBadOff"
-       sodipodi:nodetypes="csscc"
-       inkscape:label="#rect4890-1-5-5-8" />
-    <path
-       inkscape:label="#path3157"
-       sodipodi:nodetypes="csscc"
-       id="lightOgBadOn"
-       d="m 611.94253,79.471802 c 0,-17.90486 14.4143,-32.31924 32.31924,-32.31924 l 30.95771,0 c 17.90486,0 32.31924,14.41438 32.31924,32.31924 z"
-       style="fill:#3494ee;fill-opacity:1;stroke:none;display:inline"
-       inkscape:connector-curvature="0" />
-    <text
-       sodipodi:linespacing="125%"
-       id="text3159"
-       y="336.99017"
-       x="-268.36914"
-       style="font-size:34.60658264px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:TeX Gyre Heros;-inkscape-font-specification:TeX Gyre Heros"
-       xml:space="preserve"
-       transform="matrix(0,-1,1,0,0,0)"><tspan
-         style="font-size:25.95493698px;font-weight:bold;fill:#000000;fill-opacity:1;-inkscape-font-specification:TeX Gyre Heros Bold"
-         y="336.99017"
-         x="-268.36914"
-         sodipodi:role="line"
-         id="tspan3161">Gallerie</tspan></text>
-    <text
-       transform="matrix(0,-1,1,0,0,0)"
-       xml:space="preserve"
-       style="font-size:34.60658264px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:TeX Gyre Heros;-inkscape-font-specification:TeX Gyre Heros"
-       x="-268.36914"
-       y="456.99017"
-       id="text3184"
-       sodipodi:linespacing="125%"><tspan
-         id="tspan3186"
-         sodipodi:role="line"
-         x="-268.36914"
-         y="456.99017"
-         style="font-size:25.95493698px;font-weight:bold;fill:#000000;fill-opacity:1;-inkscape-font-specification:TeX Gyre Heros Bold">Luzia</tspan></text>
-    <text
-       sodipodi:linespacing="125%"
-       id="text3188"
-       y="696.99017"
-       x="-268.36914"
-       style="font-size:34.60658264px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:TeX Gyre Heros;-inkscape-font-specification:TeX Gyre Heros"
-       xml:space="preserve"
-       transform="matrix(0,-1,1,0,0,0)"><tspan
-         style="font-size:25.95493698px;font-weight:bold;fill:#000000;fill-opacity:1;-inkscape-font-specification:TeX Gyre Heros Bold"
-         y="696.99017"
-         x="-268.36914"
-         sodipodi:role="line"
-         id="tspan3190">Bad</tspan></text>
-    <text
-       transform="matrix(0,-1,1,0,0,0)"
-       xml:space="preserve"
-       style="font-size:34.60658264px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:TeX Gyre Heros;-inkscape-font-specification:TeX Gyre Heros"
-       x="-268.36914"
-       y="576.99017"
-       id="text3192"
-       sodipodi:linespacing="125%"><tspan
-         id="tspan3194"
-         sodipodi:role="line"
-         x="-268.36914"
-         y="576.99017"
-         style="font-size:25.95493698px;font-weight:bold;fill:#000000;fill-opacity:1;-inkscape-font-specification:TeX Gyre Heros Bold">Dusche</tspan></text>
+       inkscape:label="#path5183" />
   </g>
   <g
      inkscape:groupmode="layer"
@@ -920,8 +802,7 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="blindsOG"
-     style="display:none"
-     sodipodi:insensitive="true">
+     style="display:none">
     <rect
        style="fill:#3494ee;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.68637729px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="ogLeftUp"
