@@ -60,7 +60,7 @@ public class TinkerforgeRemoteSwitchService extends ATinkerforgeDeviceService<Br
 			synchronized (this) {
 			    while (this.isSwitching) {
 				try {
-				    wait(100);
+				    wait(10);
 				} catch (InterruptedException ex) {
 				    Logger.getLogger(TinkerforgeRemoteSwitchService.class.getName()).log(Level.SEVERE, null, ex);
 				}
@@ -90,7 +90,7 @@ public class TinkerforgeRemoteSwitchService extends ATinkerforgeDeviceService<Br
 			synchronized (this) {
 			    while (this.isSwitching) {
 				try {
-				    wait(100);
+				    wait(10);
 				} catch (InterruptedException ex) {
 				    Logger.getLogger(TinkerforgeRemoteSwitchService.class.getName()).log(Level.SEVERE, null, ex);
 				}
