@@ -28,7 +28,7 @@
 		    </descriptorRefs>
 		    <archive>
 			<manifest>
-			    <mainClass>ch.quantasy.tinkerforge.fridgeIt.FridgeIt</mainClass>
+			    <mainClass>ch.quantasy.tinkerforge.fridgeit.FridgeManager</mainClass>
 			</manifest>
 		    </archive>
 		</configuration>
