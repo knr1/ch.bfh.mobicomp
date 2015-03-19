@@ -77,7 +77,7 @@ public class TimeService {
 
     class TimeTickManager implements Runnable {
 
-	private String topic;
+	private final String topic;
 
 	public TimeTickManager(String topic) {
 	    this.topic = topic;
@@ -92,9 +92,7 @@ public class TimeService {
 		MqttMessage message = new MqttMessage(nowStringAsBytes);
 		message.setRetained(true);
 		mqttClient.publish(topic, message);
-	    } catch (UnsupportedEncodingException ex) {
-		Logger.getLogger(TimeService.class.getName()).log(Level.SEVERE, null, ex);
-	    } catch (MqttException ex) {
+	    } catch (UnsupportedEncodingException | MqttException ex) {
 		Logger.getLogger(TimeService.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	}

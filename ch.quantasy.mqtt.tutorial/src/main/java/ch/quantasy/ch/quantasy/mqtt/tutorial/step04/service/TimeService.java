@@ -88,9 +88,7 @@ public class TimeService {
 		MqttMessage message = new MqttMessage(nowStringAsBytes);
 		message.setRetained(true);
 		mqttClient.publish(topic, message);
-	    } catch (UnsupportedEncodingException ex) {
-		Logger.getLogger(TimeService.class.getName()).log(Level.SEVERE, null, ex);
-	    } catch (MqttException ex) {
+	    } catch (UnsupportedEncodingException | MqttException ex) {
 		Logger.getLogger(TimeService.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	}
