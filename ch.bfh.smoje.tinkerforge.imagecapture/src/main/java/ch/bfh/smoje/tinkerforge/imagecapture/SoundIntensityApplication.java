@@ -7,6 +7,7 @@ import com.tinkerforge.BrickletSoundIntensity;
 import com.tinkerforge.BrickletSoundIntensity.IntensityReachedListener;
 import com.tinkerforge.Device;
 import com.tinkerforge.NotConnectedException;
+import com.tinkerforge.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,8 +16,43 @@ public class SoundIntensityApplication extends AbstractTinkerforgeApplication im
     private BrickletSoundIntensity soundIntensity;
     private ImageCaptureManager manager;
 
+    private int intensityThreshold;
+    private int debouncePeriod;
+
     public SoundIntensityApplication(ImageCaptureManager manager) {
 	this.manager = manager;
+	intensityThreshold = 400;
+	debouncePeriod = 50;
+    }
+
+    public void setSoundIntensityThreshold(int intensityThreshold) {
+	this.intensityThreshold = intensityThreshold;
+	Logger.getLogger(SoundIntensityApplication.class.getName()).log(Level.INFO, "New intensity threshold received: " + this.intensityThreshold);
+	if (this.soundIntensity == null) {
+	    return;
+	}
+	try {
+	    this.soundIntensity.setIntensityCallbackThreshold('>', this.intensityThreshold, this.intensityThreshold);
+	} catch (TimeoutException ex) {
+	    Logger.getLogger(SoundIntensityApplication.class.getName()).log(Level.SEVERE, null, ex);
+	} catch (NotConnectedException ex) {
+	    Logger.getLogger(SoundIntensityApplication.class.getName()).log(Level.SEVERE, null, ex);
+	}
+    }
+
+    public void setDebouncePeriod(int debouncePeriod) {
+	this.debouncePeriod = debouncePeriod;
+	Logger.getLogger(SoundIntensityApplication.class.getName()).log(Level.INFO, "New debounce period received: " + this.debouncePeriod);
+	if (this.soundIntensity == null) {
+	    return;
+	}
+	try {
+	    this.soundIntensity.setDebouncePeriod(this.debouncePeriod * 1000);
+	} catch (TimeoutException ex) {
+	    Logger.getLogger(SoundIntensityApplication.class.getName()).log(Level.SEVERE, null, ex);
+	} catch (NotConnectedException ex) {
+	    Logger.getLogger(SoundIntensityApplication.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
 
     @Override
@@ -30,8 +66,8 @@ public class SoundIntensityApplication extends AbstractTinkerforgeApplication im
 			.addIntensityReachedListener(this);
 		try {
 		    try {
-			this.soundIntensity.setDebouncePeriod(50 * 1000);
-			this.soundIntensity.setIntensityCallbackThreshold('>', 500, 500);
+			this.soundIntensity.setDebouncePeriod(this.debouncePeriod * 1000);
+			this.soundIntensity.setIntensityCallbackThreshold('>', this.intensityThreshold, this.intensityThreshold);
 		    } catch (com.tinkerforge.TimeoutException ex) {
 			Logger.getLogger(SoundIntensityApplication.class.getName()).log(Level.SEVERE, null, ex);
 		    }
