@@ -5,6 +5,8 @@ import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import java.net.InetAddress;
 import java.net.URI;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -200,7 +202,7 @@ public class ImageCaptureManager {
 	mqttMessage.setQos(
 		1);
 	mqttMessage.setRetained(
-		false);
+		true);
 
 	try {
 	    mqttClient.publish(MQTT_TOPIC, mqttMessage);
@@ -212,6 +214,9 @@ public class ImageCaptureManager {
     }
 
     public static void main(final String[] args) throws Exception {
+	Handler handler = new FileHandler("SensorApp.log", 1000000, 2);
+	Logger.getLogger("").addHandler(handler);
+
 	ImageCaptureManager manager = new ImageCaptureManager();
 	manager.captureImage();
 	System.out.println("Hit a key to terminate program");
