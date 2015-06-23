@@ -41,7 +41,7 @@
 		    </descriptorRefs>
 		    <archive>
 			<manifest>
-			    <mainClass>ch.quantasy.tinkerforge.barometer.BarometerManager</mainClass>
+			    <mainClass>ch.bfh.smoje.tinkerforge.imagecapture.ImageCaptureManager</mainClass>
 			</manifest>
 		    </archive>
 		</configuration>

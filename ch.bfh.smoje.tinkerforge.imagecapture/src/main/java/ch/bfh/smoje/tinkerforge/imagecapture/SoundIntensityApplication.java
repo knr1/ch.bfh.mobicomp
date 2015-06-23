@@ -21,7 +21,7 @@ public class SoundIntensityApplication extends AbstractTinkerforgeApplication im
 
     public SoundIntensityApplication(ImageCaptureManager manager) {
 	this.manager = manager;
-	intensityThreshold = 400;
+	intensityThreshold = 2500;
 	debouncePeriod = 50;
     }
 
