@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.device;
+package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler;
 
 import ch.quantasy.iot.gateway.tinkerforge.TFMQTTGateway;
 import ch.quantasy.iot.gateway.tinkerforge.application.TinkerforgeMQTTPiezoSpeakerApplication;
-import ch.quantasy.iot.gateway.tinkerforge.application.device.piezospeaker.PiezoSpeaker;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.PiezoSpeaker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tinkerforge.Device;

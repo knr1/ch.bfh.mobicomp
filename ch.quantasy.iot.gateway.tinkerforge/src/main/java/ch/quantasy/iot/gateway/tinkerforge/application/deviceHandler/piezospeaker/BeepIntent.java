@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.device.piezospeaker;
+package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.TinkerforgeMQTTPiezoSpeakerApplication;
-import ch.quantasy.iot.gateway.tinkerforge.application.device.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.application.device.Definition;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.Definition;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
 import java.io.ByteArrayInputStream;

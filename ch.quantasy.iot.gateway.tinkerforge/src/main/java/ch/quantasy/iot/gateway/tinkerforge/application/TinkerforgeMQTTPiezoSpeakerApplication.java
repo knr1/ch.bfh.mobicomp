@@ -6,7 +6,7 @@
 package ch.quantasy.iot.gateway.tinkerforge.application;
 
 import ch.quantasy.iot.gateway.tinkerforge.TFMQTTGateway;
-import ch.quantasy.iot.gateway.tinkerforge.application.device.piezospeaker.PiezoSpeaker;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.PiezoSpeaker;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;

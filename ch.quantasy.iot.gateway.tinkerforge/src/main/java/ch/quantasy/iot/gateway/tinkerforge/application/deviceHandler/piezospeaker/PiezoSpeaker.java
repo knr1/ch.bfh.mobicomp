@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.device.piezospeaker;
+package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker;
 
 import ch.quantasy.iot.gateway.tinkerforge.TFMQTTGateway;
-import ch.quantasy.iot.gateway.tinkerforge.application.device.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AnIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletPiezoSpeaker;
