@@ -3,19 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker;
+package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.TinkerforgeMQTTPiezoSpeakerApplication;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.Definition;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.PiezoSpeaker;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -31,32 +30,30 @@ public class MorseIntent extends AnIntent {
     public int frequency;
 
     public MorseIntent(PiezoSpeaker deviceHandler, String intentTopic) {
-	super(deviceHandler, intentTopic + "/morse");
+	super(deviceHandler, intentTopic, "/morse");
     }
 
     @Override
-    public Map<String, List<Definition>> getIntentTopicDefinitions() {
-	Map<String, List<Definition>> definitionMap = new HashMap<>();
+    public List<Definition> getIntentTopicDefinitions() {
 	List<Definition> definitions = new ArrayList<>();
-	definitionMap.put("morse", definitions);
 	definitions.add(new Definition(TinkerforgeMQTTPiezoSpeakerApplication.APPLICATION_TOPIC + "/[identificationString]/intent/morse/enabled", "Boolean", "JSON", "true", "false"));
 	definitions.add(new Definition(TinkerforgeMQTTPiezoSpeakerApplication.APPLICATION_TOPIC + "/[identificationString]/intent/morse/code", "String", "JSON", ".", "-", " ", "unbounded"));
 	definitions.add(new Definition(TinkerforgeMQTTPiezoSpeakerApplication.APPLICATION_TOPIC + "/[identificationString]/intent/morse/frequency", "Integer", "JSON", "685", "...", "7100"));
-	return definitionMap;
+	return definitions;
     }
 
     protected void processSpezializedIntent(String string, MqttMessage mm) {
 	try {
-	    if (string.endsWith("morse/enabled")) {
+	    if (string.endsWith(getSpezializedIntentTopic() + "/enabled")) {
 		enabled = gson.fromJson(new InputStreamReader(new ByteArrayInputStream(mm.getPayload())), Boolean.class);
 	    }
-	    if (string.endsWith("morse/code")) {
+	    if (string.endsWith(getSpezializedIntentTopic() + "/code")) {
 		code = gson.fromJson(new InputStreamReader(new ByteArrayInputStream(mm.getPayload())), String.class);
 	    }
-	    if (string.endsWith("morse/frequency")) {
+	    if (string.endsWith(getSpezializedIntentTopic() + "/frequency")) {
 		frequency = gson.fromJson(new InputStreamReader(new ByteArrayInputStream(mm.getPayload())), Integer.class);
 	    }
-	    if (enabled) {
+	    if (enabled && code != null && isFrequencyInRange()) {
 		try {
 		    getDeviceHandler().getDevice().morseCode(code, frequency);
 		} catch (TimeoutException | NotConnectedException ex) {
@@ -66,5 +63,9 @@ public class MorseIntent extends AnIntent {
 	} catch (Throwable th) {
 	    th.printStackTrace();
 	}
+    }
+
+    private boolean isFrequencyInRange() {
+	return (frequency >= 685 && frequency <= 7100);
     }
 }

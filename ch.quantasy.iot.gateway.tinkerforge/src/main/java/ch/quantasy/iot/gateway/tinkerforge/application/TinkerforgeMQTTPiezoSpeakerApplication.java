@@ -57,6 +57,12 @@ public class TinkerforgeMQTTPiezoSpeakerApplication extends AbstractTinkerforgeA
 	return 0;
     }
 
+    public synchronized String digestIdentityString(String identityString) {
+	synchronized (digest) {
+	    return new BigInteger(identityString.getBytes(java.nio.charset.StandardCharsets.UTF_8)).mod(BigInteger.valueOf(Integer.MAX_VALUE)).toString(Character.MAX_RADIX);
+	}
+    }
+
     @Override
     public void deviceConnected(TinkerforgeStackAgent tinkerforgeStackAgent, Device device) {
 	if (TinkerforgeDevice.getDevice(device) != TinkerforgeDevice.PiezoSpeaker) {
@@ -64,13 +70,11 @@ public class TinkerforgeMQTTPiezoSpeakerApplication extends AbstractTinkerforgeA
 	}
 	System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
 	try {
-	    String identityString = null;
-	    synchronized (digest) {
-		identityString = new BigInteger(digest.digest(device.getIdentity().toString().getBytes(java.nio.charset.StandardCharsets.UTF_8))).toString(Character.MAX_RADIX);
-	    }
-	    PiezoSpeaker deviceHandler = this.deviceHandlers.get(identityString);
+	    String digestedIdentityString = null;
+	    digestedIdentityString = digestIdentityString(device.getIdentity().toString());
+	    PiezoSpeaker deviceHandler = this.deviceHandlers.get(digestedIdentityString);
 	    if (deviceHandler == null) {
-		deviceHandler = new PiezoSpeaker(mqttURI, tinkerforgeStackAgent.getStackAddress(), identityString);
+		deviceHandler = new PiezoSpeaker(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
 		deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
 	    }
 	    deviceHandler.enableDevice((BrickletPiezoSpeaker) device);
@@ -86,8 +90,8 @@ public class TinkerforgeMQTTPiezoSpeakerApplication extends AbstractTinkerforgeA
 	    return;
 	}
 	try {
-	    String identityString = device.getIdentity().toString();
-	    PiezoSpeaker deviceHandler = this.deviceHandlers.get(identityString);
+	    String digestedIdentityString = digestIdentityString(device.getIdentity().toString());
+	    PiezoSpeaker deviceHandler = this.deviceHandlers.get(digestedIdentityString);
 	    if (deviceHandler == null) {
 		return;
 	    }
