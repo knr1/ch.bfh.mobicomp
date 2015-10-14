@@ -5,18 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.TinkerforgeMQTTPiezoSpeakerApplication;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.Definition;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.PiezoSpeaker;
-import com.tinkerforge.NotConnectedException;
-import com.tinkerforge.TimeoutException;
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
@@ -30,26 +20,20 @@ public class CalibrationIntent extends AnIntent {
     public int frequency;
 
     public CalibrationIntent(PiezoSpeaker deviceHandler, String intentTopic) {
-	super(deviceHandler, intentTopic, "/calibrate");
+	super(deviceHandler, intentTopic, "calibrate");
+	super.addIntentTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
+    }
+
+    protected void update(String string, MqttMessage mm) throws Throwable {
+	if (string.endsWith(getIntentName() + "/enabled")) {
+	    enabled = fromMQTTMessage(mm, Boolean.class);
+	}
+	getDeviceHandler().executeIntent(this);
     }
 
     @Override
-    public List<Definition> getIntentTopicDefinitions() {
-	List<Definition> definitions = new ArrayList<>();
-	definitions.add(new Definition(TinkerforgeMQTTPiezoSpeakerApplication.APPLICATION_TOPIC + "/[identificationString]/intent/calibrate/enabled", "Boolean", "JSON", "true", "false"));
-	return definitions;
+    public boolean isExecutable() {
+	return enabled;
     }
 
-    protected void processSpezializedIntent(String string, MqttMessage mm) {
-	if (string.endsWith(getSpezializedIntentTopic() + "/enabled")) {
-	    enabled = gson.fromJson(new InputStreamReader(new ByteArrayInputStream(mm.getPayload())), Boolean.class);
-	}
-	if (enabled) {
-	    try {
-		getDeviceHandler().getDevice().calibrate();
-	    } catch (TimeoutException | NotConnectedException ex) {
-		Logger.getLogger(PiezoSpeaker.class.getName()).log(Level.SEVERE, null, ex);
-	    }
-	}
-    }
 }

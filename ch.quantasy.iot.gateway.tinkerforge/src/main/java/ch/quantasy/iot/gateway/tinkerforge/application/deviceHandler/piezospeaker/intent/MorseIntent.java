@@ -5,18 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.TinkerforgeMQTTPiezoSpeakerApplication;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.Definition;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.PiezoSpeaker;
-import com.tinkerforge.NotConnectedException;
-import com.tinkerforge.TimeoutException;
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
@@ -30,39 +20,28 @@ public class MorseIntent extends AnIntent {
     public int frequency;
 
     public MorseIntent(PiezoSpeaker deviceHandler, String intentTopic) {
-	super(deviceHandler, intentTopic, "/morse");
+	super(deviceHandler, intentTopic, "morse");
+	super.addIntentTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
+	super.addIntentTopicDefinition("code", "String", "JSON", ".", "-", " ", "unbounded");
+	super.addIntentTopicDefinition("frequency", "Integer", "JSON", "685", "...", "7100");
+    }
+
+    protected void update(String string, MqttMessage mm) throws Throwable {
+	if (string.endsWith(getIntentName() + "/enabled")) {
+	    enabled = fromMQTTMessage(mm, Boolean.class);
+	}
+	if (string.endsWith(getIntentName() + "/code")) {
+	    code = fromMQTTMessage(mm, String.class);
+	}
+	if (string.endsWith(getIntentName() + "/frequency")) {
+	    frequency = fromMQTTMessage(mm, Integer.class);
+	}
+	getDeviceHandler().executeIntent(this);
     }
 
     @Override
-    public List<Definition> getIntentTopicDefinitions() {
-	List<Definition> definitions = new ArrayList<>();
-	definitions.add(new Definition(TinkerforgeMQTTPiezoSpeakerApplication.APPLICATION_TOPIC + "/[identificationString]/intent/morse/enabled", "Boolean", "JSON", "true", "false"));
-	definitions.add(new Definition(TinkerforgeMQTTPiezoSpeakerApplication.APPLICATION_TOPIC + "/[identificationString]/intent/morse/code", "String", "JSON", ".", "-", " ", "unbounded"));
-	definitions.add(new Definition(TinkerforgeMQTTPiezoSpeakerApplication.APPLICATION_TOPIC + "/[identificationString]/intent/morse/frequency", "Integer", "JSON", "685", "...", "7100"));
-	return definitions;
-    }
-
-    protected void processSpezializedIntent(String string, MqttMessage mm) {
-	try {
-	    if (string.endsWith(getSpezializedIntentTopic() + "/enabled")) {
-		enabled = gson.fromJson(new InputStreamReader(new ByteArrayInputStream(mm.getPayload())), Boolean.class);
-	    }
-	    if (string.endsWith(getSpezializedIntentTopic() + "/code")) {
-		code = gson.fromJson(new InputStreamReader(new ByteArrayInputStream(mm.getPayload())), String.class);
-	    }
-	    if (string.endsWith(getSpezializedIntentTopic() + "/frequency")) {
-		frequency = gson.fromJson(new InputStreamReader(new ByteArrayInputStream(mm.getPayload())), Integer.class);
-	    }
-	    if (enabled && code != null && isFrequencyInRange()) {
-		try {
-		    getDeviceHandler().getDevice().morseCode(code, frequency);
-		} catch (TimeoutException | NotConnectedException ex) {
-		    Logger.getLogger(PiezoSpeaker.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	    }
-	} catch (Throwable th) {
-	    th.printStackTrace();
-	}
+    public boolean isExecutable() {
+	return enabled && code != null && isFrequencyInRange();
     }
 
     private boolean isFrequencyInRange() {

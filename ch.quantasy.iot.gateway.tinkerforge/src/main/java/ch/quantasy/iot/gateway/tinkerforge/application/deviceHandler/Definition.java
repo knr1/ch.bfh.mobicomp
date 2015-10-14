@@ -11,13 +11,17 @@ package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler;
  */
 public class Definition {
 
-    public final String topic;
+    public final String applicationIntentTopic;
+    public final String intentTopic;
+    public final String intentPropertyTopic;
     public final String type;
     public final String representation;
     public final String[] range;
 
-    public Definition(String topic, String type, String representation, String... range) {
-	this.topic = topic;
+    public Definition(String applicationIntentTopic, String intentTopic, String intentPropertyTopic, String type, String representation, String... range) {
+	this.applicationIntentTopic = applicationIntentTopic;
+	this.intentTopic = intentTopic;
+	this.intentPropertyTopic = intentPropertyTopic;
 	this.type = type;
 	this.representation = representation;
 	this.range = range;

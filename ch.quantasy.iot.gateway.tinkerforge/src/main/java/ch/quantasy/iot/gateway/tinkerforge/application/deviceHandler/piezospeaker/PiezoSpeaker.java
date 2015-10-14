@@ -5,12 +5,12 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent.CalibrationIntent;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent.MorseIntent;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent.BeepIntent;
 import ch.quantasy.iot.gateway.tinkerforge.TFMQTTGateway;
 import ch.quantasy.iot.gateway.tinkerforge.application.TinkerforgeMQTTPiezoSpeakerApplication;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent.BeepIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent.CalibrationIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent.MorseIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.google.gson.Gson;
@@ -168,6 +168,27 @@ public class PiezoSpeaker implements BrickletPiezoSpeaker.MorseCodeFinishedListe
     @Override
     public void beepFinished() {
 
+    }
+
+    public void executeIntent(BeepIntent intent) throws TimeoutException, NotConnectedException {
+	if (!intent.isExecutable()) {
+	    return;
+	}
+	device.beep(intent.duration, intent.frequency);
+    }
+
+    public void executeIntent(MorseIntent intent) throws TimeoutException, NotConnectedException {
+	if (!intent.isExecutable()) {
+	    return;
+	}
+	device.morseCode(intent.code, intent.frequency);
+    }
+
+    public void executeIntent(CalibrationIntent intent) throws TimeoutException, NotConnectedException {
+	if (!intent.isExecutable()) {
+	    return;
+	}
+	device.calibrate();
     }
 
 }

@@ -87,7 +87,6 @@ public class TFMQTTGateway {
 
 	TinkerforgeStackAgent agent = this.agency.getStackAgent(stackAddress);
 	agent.addApplication(new TinkerforgeMQTTPiezoSpeakerApplication(mqttURI));
-
 	publishAgents();
 
     }
