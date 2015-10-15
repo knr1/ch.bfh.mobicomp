@@ -9,7 +9,7 @@ package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class Definition {
+public class IntentDescription {
 
     public final String applicationIntentTopic;
     public final String intentTopic;
@@ -18,7 +18,7 @@ public class Definition {
     public final String representation;
     public final String[] range;
 
-    public Definition(String applicationIntentTopic, String intentTopic, String intentPropertyTopic, String type, String representation, String... range) {
+    public IntentDescription(String applicationIntentTopic, String intentTopic, String intentPropertyTopic, String type, String representation, String... range) {
 	this.applicationIntentTopic = applicationIntentTopic;
 	this.intentTopic = intentTopic;
 	this.intentPropertyTopic = intentPropertyTopic;

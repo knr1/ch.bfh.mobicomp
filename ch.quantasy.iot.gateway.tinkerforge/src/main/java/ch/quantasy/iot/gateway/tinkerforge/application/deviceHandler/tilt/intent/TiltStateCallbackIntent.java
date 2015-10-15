@@ -3,37 +3,35 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent;
+package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.intent;
 
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.PiezoSpeaker;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CalibrationIntent extends AnIntent {
+public class TiltStateCallbackIntent extends AnIntent {
 
     public boolean enabled;
-    public long duration;
-    public int frequency;
 
-    public CalibrationIntent(PiezoSpeaker deviceHandler, String intentTopic) {
-	super(deviceHandler, intentTopic, "calibrate");
+    public TiltStateCallbackIntent(ADeviceHandler deviceHandler, String intentTopic) {
+	super(deviceHandler, intentTopic, "callbackState");
 	super.addIntentTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
     }
 
+    @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
 	if (string.endsWith(getIntentName() + "/enabled")) {
 	    enabled = fromMQTTMessage(mm, Boolean.class);
 	}
-	getDeviceHandler().executeIntent(this);
     }
 
     @Override
     public boolean isExecutable() {
-	return enabled;
+	return true;
     }
 
 }

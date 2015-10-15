@@ -5,12 +5,14 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application;
 
-import ch.quantasy.iot.gateway.tinkerforge.TFMQTTGateway;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.PiezoSpeaker;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.Tilt;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import com.tinkerforge.BrickletPiezoSpeaker;
+import com.tinkerforge.BrickletTilt;
 import com.tinkerforge.Device;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
@@ -22,28 +24,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class TinkerforgeMQTTPiezoSpeakerApplication extends AbstractTinkerforgeApplication {
+public class MQTTTinkerforgeStackHandler<D extends ADeviceHandler> extends AbstractTinkerforgeApplication {
 
-    private final Map<String, PiezoSpeaker> deviceHandlers;
-    public static final String APPLICATION_TOPIC = "/PiezoSpeaker";
-    public static final String APPLICATION_DEFINITION = TFMQTTGateway.TOPIC + "/Definition" + APPLICATION_TOPIC;
+    private final Map<String, ADeviceHandler> deviceHandlers;
     private String clientID;
     private final URI mqttURI;
     private MessageDigest digest;
 
-    public TinkerforgeMQTTPiezoSpeakerApplication(URI mqttURI) {
+    public MQTTTinkerforgeStackHandler(URI mqttURI) {
 	this.mqttURI = mqttURI;
 	this.deviceHandlers = new HashMap<>();
 	try {
 	    digest = MessageDigest.getInstance("SHA-256");
 	} catch (NoSuchAlgorithmException ex) {
-	    Logger.getLogger(TinkerforgeMQTTPiezoSpeakerApplication.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(MQTTTinkerforgeStackHandler.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
 
@@ -65,23 +64,37 @@ public class TinkerforgeMQTTPiezoSpeakerApplication extends AbstractTinkerforgeA
 
     @Override
     public void deviceConnected(TinkerforgeStackAgent tinkerforgeStackAgent, Device device) {
-	if (TinkerforgeDevice.getDevice(device) != TinkerforgeDevice.PiezoSpeaker) {
-	    return;
-	}
-	System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
-	try {
-	    String digestedIdentityString = null;
-	    digestedIdentityString = digestIdentityString(device.getIdentity().toString());
-	    PiezoSpeaker deviceHandler = this.deviceHandlers.get(digestedIdentityString);
-	    if (deviceHandler == null) {
-		deviceHandler = new PiezoSpeaker(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
-		deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
-	    }
-	    deviceHandler.enableDevice((BrickletPiezoSpeaker) device);
-	} catch (TimeoutException | NotConnectedException | MqttException ex) {
-	    Logger.getLogger(TinkerforgeMQTTPiezoSpeakerApplication.class.getName()).log(Level.SEVERE, null, ex);
-	}
 
+	try {
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.PiezoSpeaker) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		String digestedIdentityString = null;
+		digestedIdentityString = digestIdentityString(device.getIdentity().toString());
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new PiezoSpeaker(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletPiezoSpeaker) device);
+
+	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.Tilt) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		String digestedIdentityString = null;
+		digestedIdentityString = digestIdentityString(device.getIdentity().toString());
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new Tilt(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletTilt) device);
+	    }
+
+	} catch (Throwable ex) {
+	    Logger.getLogger(MQTTTinkerforgeStackHandler.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
 
     @Override
@@ -91,13 +104,13 @@ public class TinkerforgeMQTTPiezoSpeakerApplication extends AbstractTinkerforgeA
 	}
 	try {
 	    String digestedIdentityString = digestIdentityString(device.getIdentity().toString());
-	    PiezoSpeaker deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+	    ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
 	    if (deviceHandler == null) {
 		return;
 	    }
-	    deviceHandler.disableDevice((BrickletPiezoSpeaker) device);
+	    deviceHandler.disableDevice(device);
 	} catch (TimeoutException | NotConnectedException ex) {
-	    Logger.getLogger(TinkerforgeMQTTPiezoSpeakerApplication.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(MQTTTinkerforgeStackHandler.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
 }

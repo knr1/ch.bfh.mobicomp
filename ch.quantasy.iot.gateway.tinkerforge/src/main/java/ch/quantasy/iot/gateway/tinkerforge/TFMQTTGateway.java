@@ -5,7 +5,7 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.TinkerforgeMQTTPiezoSpeakerApplication;
+import ch.quantasy.iot.gateway.tinkerforge.application.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgency;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
@@ -77,7 +77,7 @@ public class TFMQTTGateway {
 	}
 	for (TinkerforgeStackAddress address : stackAddresses) {
 	    TinkerforgeStackAgent agent = this.agency.getStackAgent(address);
-	    agent.addApplication(new TinkerforgeMQTTPiezoSpeakerApplication(mqttURI));
+	    agent.addApplication(new MQTTTinkerforgeStackHandler(mqttURI));
 	}
 	publishAgents();
 
@@ -86,7 +86,7 @@ public class TFMQTTGateway {
     public void addNewAgent(TinkerforgeStackAddress stackAddress) {
 
 	TinkerforgeStackAgent agent = this.agency.getStackAgent(stackAddress);
-	agent.addApplication(new TinkerforgeMQTTPiezoSpeakerApplication(mqttURI));
+	agent.addApplication(new MQTTTinkerforgeStackHandler(mqttURI));
 	publishAgents();
 
     }

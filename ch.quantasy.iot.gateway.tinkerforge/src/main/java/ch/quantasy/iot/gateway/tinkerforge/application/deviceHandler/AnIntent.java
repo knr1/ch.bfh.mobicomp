@@ -6,8 +6,6 @@
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler;
 
 import ch.quantasy.iot.gateway.tinkerforge.TFMQTTGateway;
-import ch.quantasy.iot.gateway.tinkerforge.application.TinkerforgeMQTTPiezoSpeakerApplication;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.PiezoSpeaker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.io.ByteArrayInputStream;
@@ -29,13 +27,13 @@ public abstract class AnIntent {
     private final Gson gson;
     private final String intentTopic;
     private final String intentName;
-    List<Definition> definitions = new ArrayList<>();
+    List<IntentDescription> descriptions = new ArrayList<>();
 
-    public final Type definitionsType = new TypeToken<List<Definition>>() {
+    public final Type descriptionsType = new TypeToken<List<IntentDescription>>() {
     }.getType();
-    private final PiezoSpeaker deviceHandler;
+    private final ADeviceHandler deviceHandler;
 
-    public AnIntent(PiezoSpeaker deviceHandler, String intentTopic, String intentName) {
+    public AnIntent(ADeviceHandler deviceHandler, String intentTopic, String intentName) {
 	this.intentName = intentName;
 	this.deviceHandler = deviceHandler;
 	this.intentTopic = intentTopic;
@@ -43,7 +41,7 @@ public abstract class AnIntent {
 
     }
 
-    public PiezoSpeaker getDeviceHandler() {
+    public ADeviceHandler getDeviceHandler() {
 	return deviceHandler;
     }
 
@@ -65,6 +63,7 @@ public abstract class AnIntent {
 	}
 	try {
 	    update(string, mm);
+	    deviceHandler.executeIntent(this);
 	} catch (Throwable th) {
 	    th.printStackTrace();
 	}
@@ -75,12 +74,12 @@ public abstract class AnIntent {
     }
 
     public void publishTopicDefinition(MqttAsyncClient mqttClient) {
-	String json = gson.toJson(getIntentTopicDefinitions(), definitionsType);
+	String json = gson.toJson(getIntentTopicDefinitions(), descriptionsType);
 	MqttMessage message = new MqttMessage(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
 	message.setQos(1);
 	message.setRetained(true);
 	try {
-	    mqttClient.publish(TinkerforgeMQTTPiezoSpeakerApplication.APPLICATION_DEFINITION + "/intent/" + intentName, message);
+	    mqttClient.publish(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC + "/" + deviceHandler.getApplicationName() + "/intent/" + intentName, message);
 	} catch (Exception ex) {
 	    Logger.getLogger(TFMQTTGateway.class.getName()).log(Level.SEVERE, null, ex);
 	}
@@ -88,15 +87,15 @@ public abstract class AnIntent {
     }
 
     protected void addIntentTopicDefinition(String intentPropertyName, String type, String representation, String... range) {
-	definitions.add(new Definition(TinkerforgeMQTTPiezoSpeakerApplication.APPLICATION_TOPIC + "/[identificationString]/intent", "/" + intentName, "/" + intentPropertyName, type, representation, range));
+	descriptions.add(new IntentDescription("/" + ADeviceHandler.DEVICE_DESCRIPTION_TOPIC + "/" + deviceHandler.getApplicationName() + "/[identificationString]/intent", "/" + intentName, "/" + intentPropertyName, type, representation, range));
     }
 
     protected abstract void update(String string, MqttMessage mm) throws Throwable;
 
     public abstract boolean isExecutable();
 
-    protected List<Definition> getIntentTopicDefinitions() {
-	return definitions;
+    protected List<IntentDescription> getIntentTopicDefinitions() {
+	return descriptions;
     }
 
 }

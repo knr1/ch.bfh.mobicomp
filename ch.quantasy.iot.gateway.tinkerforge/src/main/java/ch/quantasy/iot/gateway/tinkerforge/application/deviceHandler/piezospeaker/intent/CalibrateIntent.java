@@ -13,17 +13,13 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class MorseIntent extends AnIntent {
+public class CalibrateIntent extends AnIntent {
 
     public boolean enabled;
-    public String code;
-    public int frequency;
 
-    public MorseIntent(ADeviceHandler deviceHandler, String intentTopic) {
-	super(deviceHandler, intentTopic, "morse");
+    public CalibrateIntent(ADeviceHandler deviceHandler, String intentTopic) {
+	super(deviceHandler, intentTopic, "calibrate");
 	super.addIntentTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
-	super.addIntentTopicDefinition("code", "String", "JSON", ".", "-", " ", "unbounded");
-	super.addIntentTopicDefinition("frequency", "Integer", "JSON", "685", "...", "7100");
     }
 
     @Override
@@ -31,20 +27,11 @@ public class MorseIntent extends AnIntent {
 	if (string.endsWith(getIntentName() + "/enabled")) {
 	    enabled = fromMQTTMessage(mm, Boolean.class);
 	}
-	if (string.endsWith(getIntentName() + "/code")) {
-	    code = fromMQTTMessage(mm, String.class);
-	}
-	if (string.endsWith(getIntentName() + "/frequency")) {
-	    frequency = fromMQTTMessage(mm, Integer.class);
-	}
     }
 
     @Override
     public boolean isExecutable() {
-	return enabled && code != null && isFrequencyInRange();
+	return enabled;
     }
 
-    private boolean isFrequencyInRange() {
-	return (frequency >= 685 && frequency <= 7100);
-    }
 }
