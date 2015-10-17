@@ -6,11 +6,13 @@
 package ch.quantasy.iot.gateway.tinkerforge.application;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ADeviceHandler;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.Moisture;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.PiezoSpeaker;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.Tilt;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
+import com.tinkerforge.BrickletMoisture;
 import com.tinkerforge.BrickletPiezoSpeaker;
 import com.tinkerforge.BrickletTilt;
 import com.tinkerforge.Device;
@@ -91,6 +93,18 @@ public class MQTTTinkerforgeStackHandler<D extends ADeviceHandler> extends Abstr
 		}
 		deviceHandler.enableDevice((BrickletTilt) device);
 	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.Moisture) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		String digestedIdentityString = null;
+		digestedIdentityString = digestIdentityString(device.getIdentity().toString());
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new Moisture(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletMoisture) device);
+	    }
 
 	} catch (Throwable ex) {
 	    Logger.getLogger(MQTTTinkerforgeStackHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -99,9 +113,6 @@ public class MQTTTinkerforgeStackHandler<D extends ADeviceHandler> extends Abstr
 
     @Override
     public void deviceDisconnected(TinkerforgeStackAgent tinkerforgeStackAgent, Device device) {
-	if (TinkerforgeDevice.getDevice(device) != TinkerforgeDevice.PiezoSpeaker) {
-	    return;
-	}
 	try {
 	    String digestedIdentityString = digestIdentityString(device.getIdentity().toString());
 	    ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);

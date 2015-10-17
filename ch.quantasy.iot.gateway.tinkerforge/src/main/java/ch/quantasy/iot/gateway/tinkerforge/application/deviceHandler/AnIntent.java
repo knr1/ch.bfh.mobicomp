@@ -87,7 +87,7 @@ public abstract class AnIntent {
     }
 
     protected void addIntentTopicDefinition(String intentPropertyName, String type, String representation, String... range) {
-	descriptions.add(new IntentDescription("/" + ADeviceHandler.DEVICE_DESCRIPTION_TOPIC + "/" + deviceHandler.getApplicationName() + "/[identificationString]/intent", "/" + intentName, "/" + intentPropertyName, type, representation, range));
+	descriptions.add(new IntentDescription(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC, deviceHandler.getApplicationName(), intentName, intentPropertyName, type, representation, range));
     }
 
     protected abstract void update(String string, MqttMessage mm) throws Throwable;

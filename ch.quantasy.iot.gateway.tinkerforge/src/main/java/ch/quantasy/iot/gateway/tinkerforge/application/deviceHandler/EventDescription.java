@@ -18,10 +18,10 @@ public class EventDescription {
     public final String representation;
     public final String[] range;
 
-    public EventDescription(String applicationEventTopic, String eventTopic, String eventPropertyTopic, String type, String representation, String... range) {
-	this.applicationEventTopic = applicationEventTopic;
-	this.eventTopic = eventTopic;
-	this.eventPropertyTopic = eventPropertyTopic;
+    public EventDescription(String applicationEventTopic, String applicationName, String eventTopic, String eventPropertyTopic, String type, String representation, String... range) {
+	this.applicationEventTopic = "/" + applicationEventTopic + "/" + applicationName + "/[identificationString]/event";
+	this.eventTopic = "/" + eventTopic;
+	this.eventPropertyTopic = "/" + eventPropertyTopic;
 	this.type = type;
 	this.representation = representation;
 	this.range = range;

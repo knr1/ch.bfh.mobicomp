@@ -18,10 +18,10 @@ public class IntentDescription {
     public final String representation;
     public final String[] range;
 
-    public IntentDescription(String applicationIntentTopic, String intentTopic, String intentPropertyTopic, String type, String representation, String... range) {
-	this.applicationIntentTopic = applicationIntentTopic;
-	this.intentTopic = intentTopic;
-	this.intentPropertyTopic = intentPropertyTopic;
+    public IntentDescription(String applicationIntentTopic, String applicationName, String intentTopic, String intentPropertyTopic, String type, String representation, String... range) {
+	this.applicationIntentTopic = "/" + applicationIntentTopic + "/" + applicationName + "/[identificationString]/intent";
+	this.intentTopic = "/" + intentTopic;
+	this.intentPropertyTopic = "/" + intentPropertyTopic;
 	this.type = type;
 	this.representation = representation;
 	this.range = range;

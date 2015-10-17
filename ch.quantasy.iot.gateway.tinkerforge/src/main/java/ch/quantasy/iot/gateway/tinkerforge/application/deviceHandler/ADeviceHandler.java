@@ -7,9 +7,9 @@ package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler;
 
 import ch.quantasy.iot.gateway.tinkerforge.TFMQTTGateway;
 import ch.quantasy.iot.gateway.tinkerforge.application.MQTTTinkerforgeStackHandler;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.status.DeviceHandlerReadyStatus;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
-import com.google.gson.Gson;
 import com.tinkerforge.Device;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
@@ -55,6 +55,7 @@ public abstract class ADeviceHandler<D extends Device> implements MqttCallback {
 
     private final Map<String, Set<AnIntent>> intentsMap;
     private final Map<Class, AnEvent> eventMap;
+    private final Map<Class, AStatus> statusMap;
 
     public ADeviceHandler(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	this.stackApplication = stackApplication;
@@ -67,17 +68,23 @@ public abstract class ADeviceHandler<D extends Device> implements MqttCallback {
 	this.eventTopic = deviceBaseTopic + "/event";
 	this.statusTopic = deviceBaseTopic + "/status";
 	this.mqttClient = new MqttAsyncClient(mqttURI.toString(), this.mqttClientID);
-	connectToMQTT();
 	intentsMap = new HashMap<>();
 	Set<AnIntent> intents = createIntentSet();
 	intentsMap.put("", intents);
+	eventMap = createEventMap();
+	statusMap = createStatusMap();
+	connectToMQTT();
 
 	for (AnIntent intent : intents) {
 	    intent.publishTopicDefinition(mqttClient);
 	}
-	eventMap = createEventMap();
+
 	for (AnEvent event : eventMap.values()) {
 	    event.publishTopicDefinition();
+	}
+
+	for (AStatus status : statusMap.values()) {
+	    status.publishTopicDefinition();
 	}
 	publishStatus();
     }
@@ -86,12 +93,26 @@ public abstract class ADeviceHandler<D extends Device> implements MqttCallback {
 	return (T) eventMap.get(classOfT);
     }
 
+    public <T> T getStatus(Class<T> classOfT) {
+	return (T) statusMap.get(classOfT);
+    }
+
     public Map<Class, AnEvent> createEventMap() throws Throwable {
 	Map<Class, AnEvent> eventMap = new HashMap<>();
 	for (Class eventClass : getEventClasses()) {
 	    eventMap.put(eventClass, (AnEvent) eventClass.getConstructor(ADeviceHandler.class, String.class, MqttAsyncClient.class).newInstance(this, eventTopic, mqttClient));
 	}
 	return eventMap;
+    }
+
+    public Map<Class, AStatus> createStatusMap() throws Throwable {
+	Map<Class, AStatus> statusMap = new HashMap<>();
+	statusMap.put(DeviceHandlerReadyStatus.class, new DeviceHandlerReadyStatus(this, statusTopic, mqttClient));
+
+	for (Class statusClass : getStatusClasses()) {
+	    statusMap.put(statusClass, (AStatus) statusClass.getConstructor(ADeviceHandler.class, String.class, MqttAsyncClient.class).newInstance(this, statusTopic, mqttClient));
+	}
+	return statusMap;
     }
 
     public Set<AnIntent> createIntentSet() throws Throwable {
@@ -103,16 +124,9 @@ public abstract class ADeviceHandler<D extends Device> implements MqttCallback {
     }
 
     public void publishStatus() {
-	Gson gson = new Gson();
-	String json = gson.toJson(true, Boolean.class);
-	MqttMessage message = new MqttMessage(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-	message.setQos(1);
-	message.setRetained(true);
-	try {
-	    mqttClient.publish(statusTopic + "/ready", message);
-	} catch (Exception ex) {
-	    Logger.getLogger(TFMQTTGateway.class.getName()).log(Level.SEVERE, null, ex);
-	}
+	DeviceHandlerReadyStatus readyStatus = getStatus(DeviceHandlerReadyStatus.class);
+	readyStatus.updateEnabled(true);
+	readyStatus.updateReachable(true);
     }
 
     public String getIdentityString() {
@@ -147,6 +161,8 @@ public abstract class ADeviceHandler<D extends Device> implements MqttCallback {
 
     protected abstract Class[] getEventClasses();
 
+    protected abstract Class[] getStatusClasses();
+
     protected abstract void addDeviceListeners();
 
     protected abstract void removeDeviceListeners();
@@ -158,6 +174,9 @@ public abstract class ADeviceHandler<D extends Device> implements MqttCallback {
     private void connectToMQTT() throws MqttException {
 	MqttConnectOptions connectOptions = new MqttConnectOptions();
 	connectOptions.setCleanSession(false);
+	DeviceHandlerReadyStatus readyStatus = getStatus(DeviceHandlerReadyStatus.class);
+	MqttMessage message = readyStatus.toJSONMQTTMessage(false);
+	connectOptions.setWill(readyStatus.getStatusTopic() + "/reachable", message.getPayload(), 1, true);
 	this.mqttClient.setCallback(this);
 	IMqttToken token = this.mqttClient.connect(connectOptions);
 	token.waitForCompletion();

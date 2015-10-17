@@ -8,9 +8,9 @@ package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt;
 import ch.quantasy.iot.gateway.tinkerforge.application.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.event.TiltStateCallbackEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.event.TiltStateEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.intent.TiltStateCallbackIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.status.TiltStateCallbackStatus;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletTilt;
 import com.tinkerforge.NotConnectedException;
@@ -37,7 +37,12 @@ public class Tilt extends ADeviceHandler<BrickletTilt> implements BrickletTilt.T
 
     @Override
     protected Class[] getEventClasses() {
-	return new Class[]{TiltStateEvent.class, TiltStateCallbackEvent.class};
+	return new Class[]{TiltStateEvent.class};
+    }
+
+    @Override
+    protected Class[] getStatusClasses() {
+	return new Class[]{TiltStateCallbackStatus.class};
     }
 
     @Override
@@ -71,7 +76,7 @@ public class Tilt extends ADeviceHandler<BrickletTilt> implements BrickletTilt.T
 	} else {
 	    getDevice().disableTiltStateCallback();
 	}
-	getEvent(TiltStateCallbackEvent.class).updateIntent(intent);
+	getStatus(TiltStateCallbackStatus.class).updateIntent(intent);
     }
 
     @Override

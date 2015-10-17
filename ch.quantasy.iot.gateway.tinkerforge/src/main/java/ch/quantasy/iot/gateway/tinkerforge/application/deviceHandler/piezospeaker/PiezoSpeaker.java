@@ -34,12 +34,19 @@ public class PiezoSpeaker extends ADeviceHandler<BrickletPiezoSpeaker> implement
 	super(stackApplication, mqttURI, stackAddress, identityString);
     }
 
+    @Override
     public Class[] getIntentClasses() {
 	return new Class[]{MorseIntent.class, BeepIntent.class, CalibrateIntent.class};
     }
 
+    @Override
     public Class[] getEventClasses() {
 	return new Class[]{BeepEvent.class, MorseEvent.class, CalibrateEvent.class};
+    }
+
+    @Override
+    protected Class[] getStatusClasses() {
+	return new Class[]{};
     }
 
     @Override

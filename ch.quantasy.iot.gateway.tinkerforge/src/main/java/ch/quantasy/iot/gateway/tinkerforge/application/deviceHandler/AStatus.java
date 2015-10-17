@@ -20,23 +20,23 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public abstract class AnEvent {
+public abstract class AStatus {
 
     private final MqttAsyncClient mqttClient;
     private final Gson gson;
-    private final String eventTopic;
-    private final String eventName;
-    List<EventDescription> descriptions = new ArrayList<>();
+    private final String statusTopic;
+    private final String statusName;
+    List<StatusDescription> descriptions = new ArrayList<>();
 
-    public final Type descriptionsType = new TypeToken<List<EventDescription>>() {
+    public final Type descriptionsType = new TypeToken<List<StatusDescription>>() {
     }.getType();
     private final ADeviceHandler deviceHandler;
 
-    public AnEvent(ADeviceHandler deviceHandler, String eventTopic, String eventName, MqttAsyncClient mqttClient) {
+    public AStatus(ADeviceHandler deviceHandler, String statusTopic, String statusName, MqttAsyncClient mqttClient) {
 	this.mqttClient = mqttClient;
-	this.eventName = eventName;
+	this.statusName = statusName;
 	this.deviceHandler = deviceHandler;
-	this.eventTopic = eventTopic;
+	this.statusTopic = statusTopic;
 	this.gson = new Gson();
 
     }
@@ -45,21 +45,21 @@ public abstract class AnEvent {
 	return deviceHandler;
     }
 
-    public String getEventTopic() {
-	return eventTopic;
+    public String getStatusTopic() {
+	return statusTopic;
     }
 
-    public String getEventName() {
-	return eventName;
+    public String getStatusName() {
+	return statusName;
     }
 
     public void publishTopicDefinition() {
-	String json = gson.toJson(getEventTopicDefinitions(), descriptionsType);
+	String json = gson.toJson(getStatusTopicDefinitions(), descriptionsType);
 	MqttMessage message = new MqttMessage(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
 	message.setQos(1);
 	message.setRetained(true);
 	try {
-	    this.mqttClient.publish(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC + "/" + deviceHandler.getApplicationName() + "/event/" + eventName, message);
+	    this.mqttClient.publish(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC + "/" + deviceHandler.getApplicationName() + "/status/" + statusName, message);
 	} catch (Exception ex) {
 	    Logger.getLogger(TFMQTTGateway.class.getName()).log(Level.SEVERE, null, ex);
 	}
@@ -76,21 +76,21 @@ public abstract class AnEvent {
 	return new MqttMessage(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
 
-    public void publishEvent(String eventPropertyName, MqttMessage mqttMessage) {
+    public void publishStatus(String statusPropertyName, MqttMessage mqttMessage) {
 	mqttMessage.setQos(1);
 	mqttMessage.setRetained(true);
 	try {
-	    mqttClient.publish(eventTopic + "/" + eventName + "/" + eventPropertyName, mqttMessage);
+	    mqttClient.publish(statusTopic + "/" + statusName + "/" + statusPropertyName, mqttMessage);
 	} catch (Exception ex) {
 	    Logger.getLogger(TFMQTTGateway.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
 
-    protected void addEventTopicDefinition(String eventPropertyName, String type, String representation, String... range) {
-	descriptions.add(new EventDescription(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC, deviceHandler.getApplicationName(), eventName, eventPropertyName, type, representation, range));
+    protected void addStatusTopicDescription(String statusPropertyName, String type, String representation, String... range) {
+	descriptions.add(new StatusDescription(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC, deviceHandler.getApplicationName(), statusName, statusPropertyName, type, representation, range));
     }
 
-    protected List<EventDescription> getEventTopicDefinitions() {
+    protected List<StatusDescription> getStatusTopicDefinitions() {
 	return descriptions;
     }
 
