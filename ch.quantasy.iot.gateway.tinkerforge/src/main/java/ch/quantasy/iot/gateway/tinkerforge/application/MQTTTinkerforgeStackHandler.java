@@ -7,13 +7,17 @@ package ch.quantasy.iot.gateway.tinkerforge.application;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.Moisture;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.motiondetector.MotionDetector;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.PiezoSpeaker;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.RemoteSwitch;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.Tilt;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip.LedStrip;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
+import com.tinkerforge.BrickletLEDStrip;
 import com.tinkerforge.BrickletMoisture;
+import com.tinkerforge.BrickletMotionDetector;
 import com.tinkerforge.BrickletPiezoSpeaker;
 import com.tinkerforge.BrickletRemoteSwitch;
 import com.tinkerforge.BrickletTilt;
@@ -70,6 +74,19 @@ public class MQTTTinkerforgeStackHandler<D extends ADeviceHandler> extends Abstr
     public void deviceConnected(TinkerforgeStackAgent tinkerforgeStackAgent, Device device) {
 
 	try {
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.LEDStrip) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		String digestedIdentityString = null;
+		digestedIdentityString = digestIdentityString(device.getIdentity().toString());
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new LedStrip(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletLEDStrip) device);
+
+	    }
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.PiezoSpeaker) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
 
@@ -118,6 +135,18 @@ public class MQTTTinkerforgeStackHandler<D extends ADeviceHandler> extends Abstr
 		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
 		}
 		deviceHandler.enableDevice((BrickletRemoteSwitch) device);
+	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.MotionDetector) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		String digestedIdentityString = null;
+		digestedIdentityString = digestIdentityString(device.getIdentity().toString());
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new MotionDetector(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletMotionDetector) device);
 	    }
 
 	} catch (Throwable ex) {

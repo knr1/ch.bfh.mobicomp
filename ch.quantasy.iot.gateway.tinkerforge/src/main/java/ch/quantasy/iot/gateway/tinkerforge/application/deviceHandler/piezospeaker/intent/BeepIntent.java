@@ -21,9 +21,9 @@ public class BeepIntent extends AnIntent {
 
     public BeepIntent(ADeviceHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "beep");
-	super.addTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
-	super.addTopicDefinition("duration", "Long", "JSON", "1", "...", "" + Long.MAX_VALUE);
-	super.addTopicDefinition("frequency", "Integer", "JSON", "585", "...", "7100");
+	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addTopicDescription("duration", "Long", "JSON", "1", "...", "" + Long.MAX_VALUE);
+	super.addTopicDescription("frequency", "Integer", "JSON", "585", "...", "7100");
     }
 
     @Override

@@ -88,7 +88,7 @@ public abstract class AnIntent {
 
     }
 
-    protected void addTopicDefinition(String intentPropertyName, String type, String representation, String... range) {
+    protected void addTopicDescription(String intentPropertyName, String type, String representation, String... range) {
 	descriptions.add(new IntentDescription(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC, deviceHandler.getApplicationName(), intentName, intentPropertyName, type, representation, range));
     }
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent;
+package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip.intent;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnIntent;
@@ -13,25 +13,24 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CalibrateIntent extends AnIntent {
+public class RGBLEDFrameIntent extends AnIntent {
 
-    public boolean enabled;
+    public short[][] rgbFrame;
 
-    public CalibrateIntent(ADeviceHandler deviceHandler, String intentTopic) {
-	super(deviceHandler, intentTopic, "calibrate");
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
+    public RGBLEDFrameIntent(ADeviceHandler deviceHandler, String intentTopic) {
+	super(deviceHandler, intentTopic, "RGBFrame");
+	super.addTopicDescription("rgbFrame", "Short[][]", "JSON", "[0,0,0]", "...", "[255,255,255]");
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/enabled")) {
-	    enabled = fromMQTTMessage(mm, Boolean.class);
+	if (string.endsWith(getIntentName() + "/rgbFrame")) {
+	    rgbFrame = fromMQTTMessage(mm, short[][].class);
 	}
     }
 
     @Override
     public boolean isExecutable() {
-	return enabled;
+	return rgbFrame != null;
     }
-
 }

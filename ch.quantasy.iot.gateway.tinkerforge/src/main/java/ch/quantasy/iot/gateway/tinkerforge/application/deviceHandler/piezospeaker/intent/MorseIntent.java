@@ -21,9 +21,9 @@ public class MorseIntent extends AnIntent {
 
     public MorseIntent(ADeviceHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "morse");
-	super.addTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
-	super.addTopicDefinition("code", "String", "JSON", ".", "-", " ", "unbounded");
-	super.addTopicDefinition("frequency", "Integer", "JSON", "685", "...", "7100");
+	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addTopicDescription("code", "String", "JSON", ".", "-", " ", "unbounded");
+	super.addTopicDescription("frequency", "Integer", "JSON", "685", "...", "7100");
     }
 
     @Override

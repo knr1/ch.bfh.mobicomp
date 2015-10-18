@@ -19,7 +19,7 @@ public class DebouncePeriodIntent extends AnIntent {
 
     public DebouncePeriodIntent(ADeviceHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "debounce");
-	super.addTopicDefinition("period", "Long", "JSON", "0", "...", "" + Long.MAX_VALUE);
+	super.addTopicDescription("period", "Long", "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
 
     @Override

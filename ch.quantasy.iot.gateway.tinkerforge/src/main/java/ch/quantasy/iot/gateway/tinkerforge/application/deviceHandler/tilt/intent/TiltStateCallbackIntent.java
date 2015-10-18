@@ -19,7 +19,7 @@ public class TiltStateCallbackIntent extends AnIntent {
 
     public TiltStateCallbackIntent(ADeviceHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackState");
-	super.addTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
+	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
     }
 
     @Override

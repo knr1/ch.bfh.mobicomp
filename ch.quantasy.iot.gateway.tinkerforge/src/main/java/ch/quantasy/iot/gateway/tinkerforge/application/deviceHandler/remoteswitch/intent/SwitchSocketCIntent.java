@@ -22,10 +22,10 @@ public class SwitchSocketCIntent extends AnIntent {
 
     public SwitchSocketCIntent(ADeviceHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "switchSocketC");
-	super.addTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
-	super.addTopicDefinition("systemCode", "Character", "JSON", "A", "...", "P");
-	super.addTopicDefinition("deviceCode", "Short", "JSON", "1", "...", "16");
-	super.addTopicDefinition("switchTo", "Short", "JSON", "0", "...", "1");
+	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addTopicDescription("systemCode", "Character", "JSON", "A", "...", "P");
+	super.addTopicDescription("deviceCode", "Short", "JSON", "1", "...", "16");
+	super.addTopicDescription("switchTo", "Short", "JSON", "0", "...", "1");
 
     }
 
