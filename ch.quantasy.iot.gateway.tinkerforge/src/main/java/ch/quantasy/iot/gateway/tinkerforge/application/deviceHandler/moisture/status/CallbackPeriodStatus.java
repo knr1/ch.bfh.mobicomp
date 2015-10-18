@@ -5,8 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.status;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AStatus;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AStatus;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.intent.CallbackPeriodIntent;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
@@ -20,7 +20,7 @@ public class CallbackPeriodStatus extends AStatus {
 
     public CallbackPeriodStatus(ADeviceHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "callbackPeriod", mqttClient);
-	super.addStatusTopicDescription("period", "Long", "JSON", "0", "..", "" + Long.MAX_VALUE);
+	super.addTopicDescription("period", "Long", "JSON", "0", "..", "" + Long.MAX_VALUE);
     }
 
     public void updateIntent(CallbackPeriodIntent intent) {

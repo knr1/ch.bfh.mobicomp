@@ -6,8 +6,8 @@
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.MQTTTinkerforgeStackHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.event.BeepEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.event.CalibrateEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.event.MorseEvent;
@@ -90,26 +90,17 @@ public class PiezoSpeaker extends ADeviceHandler<BrickletPiezoSpeaker> implement
     }
 
     public void executeIntent(BeepIntent intent) throws TimeoutException, NotConnectedException {
-	if (!intent.isExecutable()) {
-	    return;
-	}
 	getDevice().beep(intent.duration, intent.frequency);
 	getEvent(BeepEvent.class).updateIntent(intent);
     }
 
     public void executeIntent(MorseIntent intent) throws TimeoutException, NotConnectedException {
-	if (!intent.isExecutable()) {
-	    return;
-	}
 	getDevice().morseCode(intent.code, intent.frequency);
 
 	getEvent(MorseEvent.class).updateIntent(intent);
     }
 
     public void executeIntent(CalibrateIntent intent) throws TimeoutException, NotConnectedException {
-	if (!intent.isExecutable()) {
-	    return;
-	}
 	getEvent(CalibrateEvent.class).updateIntent(intent);
 	getDevice().calibrate();
 	getEvent(CalibrateEvent.class).updateEnabled(false);

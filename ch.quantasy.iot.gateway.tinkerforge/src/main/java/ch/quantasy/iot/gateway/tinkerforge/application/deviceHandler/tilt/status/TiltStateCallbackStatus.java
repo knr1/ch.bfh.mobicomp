@@ -5,8 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.status;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AStatus;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AStatus;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.intent.TiltStateCallbackIntent;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
@@ -20,7 +20,7 @@ public class TiltStateCallbackStatus extends AStatus {
 
     public TiltStateCallbackStatus(ADeviceHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "stateCallback", mqttClient);
-	super.addStatusTopicDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
     }
 
     public void updateIntent(TiltStateCallbackIntent intent) {

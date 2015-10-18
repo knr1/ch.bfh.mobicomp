@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.status;
+package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.status;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AStatus;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AStatus;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -20,8 +20,8 @@ public class DeviceHandlerReadyStatus extends AStatus {
 
     public DeviceHandlerReadyStatus(ADeviceHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "ready", mqttClient);
-	super.addStatusTopicDescription("enabled", "Boolean", "JSON", "true", "false");
-	super.addStatusTopicDescription("connected", "Boolean", "JSON", "true", "false");
+	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addTopicDescription("connected", "Boolean", "JSON", "true", "false");
     }
 
     public void updateEnabled(boolean enabled) {

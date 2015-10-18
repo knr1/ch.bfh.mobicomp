@@ -5,8 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.intent;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnIntent;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
@@ -22,10 +22,10 @@ public class CallbackThresholdIntent extends AnIntent {
 
     public CallbackThresholdIntent(ADeviceHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackThreshold");
-	super.addIntentTopicDefinition("option", "Character", "JSON", "x", "o", "i", "\\<", "\\>");
-	super.addIntentTopicDefinition("min", "Integer", "JSON", "0", "...", "4095");
-	super.addIntentTopicDefinition("max", "Integer", "JSON", "0", "...", "4095");
-	super.addIntentTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
+	super.addTopicDefinition("option", "Character", "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addTopicDefinition("min", "Integer", "JSON", "0", "...", "4095");
+	super.addTopicDefinition("max", "Integer", "JSON", "0", "...", "4095");
+	super.addTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
     }
 
     @Override

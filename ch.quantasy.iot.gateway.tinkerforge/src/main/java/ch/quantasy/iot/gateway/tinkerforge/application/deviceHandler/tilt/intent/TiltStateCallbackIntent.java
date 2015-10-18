@@ -5,8 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.intent;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnIntent;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
@@ -19,7 +19,7 @@ public class TiltStateCallbackIntent extends AnIntent {
 
     public TiltStateCallbackIntent(ADeviceHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackState");
-	super.addIntentTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
+	super.addTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
     }
 
     @Override

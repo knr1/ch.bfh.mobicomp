@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler;
+package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base;
 
 import ch.quantasy.iot.gateway.tinkerforge.TFMQTTGateway;
 import ch.quantasy.iot.gateway.tinkerforge.application.MQTTTinkerforgeStackHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.status.DeviceHandlerReadyStatus;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.status.DeviceHandlerReadyStatus;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.Device;

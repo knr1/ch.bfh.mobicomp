@@ -6,8 +6,8 @@
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.MQTTTinkerforgeStackHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.event.MoistureEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.event.MoistureReachedEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.intent.CallbackPeriodIntent;
@@ -71,9 +71,6 @@ public class Moisture extends ADeviceHandler<BrickletMoisture> implements Brickl
      * @param intent
      */
     public void executeIntent(AnIntent intent) throws Throwable {
-	if (!intent.isExecutable()) {
-	    return;
-	}
 	if (intent instanceof DebouncePeriodIntent) {
 	    executeIntent((DebouncePeriodIntent) intent);
 	}

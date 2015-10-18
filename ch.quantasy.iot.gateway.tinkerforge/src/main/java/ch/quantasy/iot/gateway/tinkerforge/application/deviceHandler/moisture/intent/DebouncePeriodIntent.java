@@ -5,8 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.intent;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnIntent;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
@@ -19,7 +19,7 @@ public class DebouncePeriodIntent extends AnIntent {
 
     public DebouncePeriodIntent(ADeviceHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "debounce");
-	super.addIntentTopicDefinition("period", "Long", "JSON", "0", "...", "" + Long.MAX_VALUE);
+	super.addTopicDefinition("period", "Long", "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
 
     @Override

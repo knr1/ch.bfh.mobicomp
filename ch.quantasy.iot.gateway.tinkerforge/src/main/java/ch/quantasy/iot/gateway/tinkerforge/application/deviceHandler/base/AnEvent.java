@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler;
+package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base;
 
 import ch.quantasy.iot.gateway.tinkerforge.TFMQTTGateway;
 import com.google.gson.Gson;
@@ -20,23 +20,23 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public abstract class AStatus {
+public abstract class AnEvent {
 
     private final MqttAsyncClient mqttClient;
     private final Gson gson;
-    private final String statusTopic;
-    private final String statusName;
-    List<StatusDescription> descriptions = new ArrayList<>();
+    private final String eventTopic;
+    private final String eventName;
+    List<EventDescription> descriptions = new ArrayList<>();
 
-    public final Type descriptionsType = new TypeToken<List<StatusDescription>>() {
+    public final Type descriptionsType = new TypeToken<List<EventDescription>>() {
     }.getType();
     private final ADeviceHandler deviceHandler;
 
-    public AStatus(ADeviceHandler deviceHandler, String statusTopic, String statusName, MqttAsyncClient mqttClient) {
+    public AnEvent(ADeviceHandler deviceHandler, String eventTopic, String eventName, MqttAsyncClient mqttClient) {
 	this.mqttClient = mqttClient;
-	this.statusName = statusName;
+	this.eventName = eventName;
 	this.deviceHandler = deviceHandler;
-	this.statusTopic = statusTopic;
+	this.eventTopic = eventTopic;
 	this.gson = new Gson();
 
     }
@@ -45,21 +45,21 @@ public abstract class AStatus {
 	return deviceHandler;
     }
 
-    public String getStatusTopic() {
-	return statusTopic;
+    public String getEventTopic() {
+	return eventTopic;
     }
 
-    public String getStatusName() {
-	return statusName;
+    public String getEventName() {
+	return eventName;
     }
 
     public void publishTopicDefinition() {
-	String json = gson.toJson(getStatusTopicDefinitions(), descriptionsType);
+	String json = gson.toJson(getTopicDefinitions(), descriptionsType);
 	MqttMessage message = new MqttMessage(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
 	message.setQos(1);
 	message.setRetained(true);
 	try {
-	    this.mqttClient.publish(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC + "/" + deviceHandler.getApplicationName() + "/status/" + statusName, message);
+	    this.mqttClient.publish(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC + "/" + deviceHandler.getApplicationName() + "/event/" + eventName, message);
 	} catch (Exception ex) {
 	    Logger.getLogger(TFMQTTGateway.class.getName()).log(Level.SEVERE, null, ex);
 	}
@@ -76,21 +76,21 @@ public abstract class AStatus {
 	return new MqttMessage(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
 
-    public void publishStatus(String statusPropertyName, MqttMessage mqttMessage) {
+    public void publishEvent(String eventPropertyName, MqttMessage mqttMessage) {
 	mqttMessage.setQos(1);
 	mqttMessage.setRetained(true);
 	try {
-	    mqttClient.publish(statusTopic + "/" + statusName + "/" + statusPropertyName, mqttMessage);
+	    mqttClient.publish(eventTopic + "/" + eventName + "/" + eventPropertyName, mqttMessage);
 	} catch (Exception ex) {
 	    Logger.getLogger(TFMQTTGateway.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
 
-    protected void addStatusTopicDescription(String statusPropertyName, String type, String representation, String... range) {
-	descriptions.add(new StatusDescription(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC, deviceHandler.getApplicationName(), statusName, statusPropertyName, type, representation, range));
+    protected void addTopicDefinition(String eventPropertyName, String type, String representation, String... range) {
+	descriptions.add(new EventDescription(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC, deviceHandler.getApplicationName(), eventName, eventPropertyName, type, representation, range));
     }
 
-    protected List<StatusDescription> getStatusTopicDefinitions() {
+    protected List<EventDescription> getTopicDefinitions() {
 	return descriptions;
     }
 

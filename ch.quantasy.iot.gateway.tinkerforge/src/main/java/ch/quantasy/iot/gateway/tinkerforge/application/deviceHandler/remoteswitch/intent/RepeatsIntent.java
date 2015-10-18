@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.intent;
+package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.intent;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnIntent;
@@ -13,29 +13,29 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class MovingAverageIntent extends AnIntent {
+public class RepeatsIntent extends AnIntent {
 
-    public short average;
+    public short repeats;
 
-    public MovingAverageIntent(ADeviceHandler deviceHandler, String intentTopic) {
-	super(deviceHandler, intentTopic, "movingAverage");
-	super.addTopicDefinition("average", "Short", "JSON", "0", "...", "100");
+    public RepeatsIntent(ADeviceHandler deviceHandler, String intentTopic) {
+	super(deviceHandler, intentTopic, "repeats");
+	super.addTopicDefinition("repeats", "Short", "JSON", "0", "...", "" + Short.MAX_VALUE);
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/average")) {
-	    average = fromMQTTMessage(mm, Short.class);
+	if (string.endsWith(getIntentName() + "/repeats")) {
+	    repeats = fromMQTTMessage(mm, Short.class);
 	}
+
     }
 
-    @Override
     public boolean isExecutable() {
-	return isAverageInRange();
+	return isRepeatsInRange();
     }
 
-    private boolean isAverageInRange() {
-	return average >= 0 && average <= 100;
+    private boolean isRepeatsInRange() {
+	return (repeats >= 0);
     }
 
 }

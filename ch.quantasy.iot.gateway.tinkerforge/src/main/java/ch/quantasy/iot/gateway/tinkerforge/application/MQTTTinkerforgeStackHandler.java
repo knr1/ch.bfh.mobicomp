@@ -5,15 +5,17 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ADeviceHandler;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.Moisture;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.PiezoSpeaker;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.RemoteSwitch;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.Tilt;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import com.tinkerforge.BrickletMoisture;
 import com.tinkerforge.BrickletPiezoSpeaker;
+import com.tinkerforge.BrickletRemoteSwitch;
 import com.tinkerforge.BrickletTilt;
 import com.tinkerforge.Device;
 import com.tinkerforge.NotConnectedException;
@@ -104,6 +106,18 @@ public class MQTTTinkerforgeStackHandler<D extends ADeviceHandler> extends Abstr
 		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
 		}
 		deviceHandler.enableDevice((BrickletMoisture) device);
+	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.RemoteSwitch) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		String digestedIdentityString = null;
+		digestedIdentityString = digestIdentityString(device.getIdentity().toString());
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new RemoteSwitch(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletRemoteSwitch) device);
 	    }
 
 	} catch (Throwable ex) {

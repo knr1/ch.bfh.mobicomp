@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler;
+package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base;
 
 import ch.quantasy.iot.gateway.tinkerforge.TFMQTTGateway;
 import com.google.gson.Gson;
@@ -63,7 +63,9 @@ public abstract class AnIntent {
 	}
 	try {
 	    update(string, mm);
-	    deviceHandler.executeIntent(this);
+	    if (isExecutable()) {
+		deviceHandler.executeIntent(this);
+	    }
 	} catch (Throwable th) {
 	    th.printStackTrace();
 	}
@@ -74,7 +76,7 @@ public abstract class AnIntent {
     }
 
     public void publishTopicDefinition(MqttAsyncClient mqttClient) {
-	String json = gson.toJson(getIntentTopicDefinitions(), descriptionsType);
+	String json = gson.toJson(getTopicDefinitions(), descriptionsType);
 	MqttMessage message = new MqttMessage(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
 	message.setQos(1);
 	message.setRetained(true);
@@ -86,7 +88,7 @@ public abstract class AnIntent {
 
     }
 
-    protected void addIntentTopicDefinition(String intentPropertyName, String type, String representation, String... range) {
+    protected void addTopicDefinition(String intentPropertyName, String type, String representation, String... range) {
 	descriptions.add(new IntentDescription(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC, deviceHandler.getApplicationName(), intentName, intentPropertyName, type, representation, range));
     }
 
@@ -94,7 +96,7 @@ public abstract class AnIntent {
 
     public abstract boolean isExecutable();
 
-    protected List<IntentDescription> getIntentTopicDefinitions() {
+    protected List<IntentDescription> getTopicDefinitions() {
 	return descriptions;
     }
 

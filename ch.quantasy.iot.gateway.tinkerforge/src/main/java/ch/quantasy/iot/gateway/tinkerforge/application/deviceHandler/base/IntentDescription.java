@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler;
+package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base;
 
 /**
  *

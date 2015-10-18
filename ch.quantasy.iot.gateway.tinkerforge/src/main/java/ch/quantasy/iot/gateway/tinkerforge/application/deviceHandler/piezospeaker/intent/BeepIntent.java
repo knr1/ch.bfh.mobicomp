@@ -5,8 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnIntent;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
@@ -21,9 +21,9 @@ public class BeepIntent extends AnIntent {
 
     public BeepIntent(ADeviceHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "beep");
-	super.addIntentTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
-	super.addIntentTopicDefinition("duration", "Long", "JSON", "1", "...", "" + Long.MAX_VALUE);
-	super.addIntentTopicDefinition("frequency", "Integer", "JSON", "585", "...", "7100");
+	super.addTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
+	super.addTopicDefinition("duration", "Long", "JSON", "1", "...", "" + Long.MAX_VALUE);
+	super.addTopicDefinition("frequency", "Integer", "JSON", "585", "...", "7100");
     }
 
     @Override
