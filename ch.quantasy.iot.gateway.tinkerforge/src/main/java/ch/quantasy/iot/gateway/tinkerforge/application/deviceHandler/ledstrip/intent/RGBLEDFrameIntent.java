@@ -15,11 +15,12 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class RGBLEDFrameIntent extends AnIntent {
 
+    //[red1,red2,red...],[green1,green2,green...],[blue1,blue2,blue3]
     public short[][] rgbFrame;
 
     public RGBLEDFrameIntent(ADeviceHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "RGBFrame");
-	super.addTopicDescription("rgbFrame", "Short[][]", "JSON", "[0,0,0]", "...", "[255,255,255]");
+	super.addTopicDescription("rgbFrame", "Short[][]", "JSON", "[[]<=319,[]<=319,[]<=319]=3", "[[0],[0],[0]]", "...", "[[255],[255],[255]]");
     }
 
     @Override
