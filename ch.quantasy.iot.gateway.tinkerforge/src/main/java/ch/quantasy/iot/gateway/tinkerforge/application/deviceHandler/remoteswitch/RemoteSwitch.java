@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswit
 
 import ch.quantasy.iot.gateway.tinkerforge.application.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.event.DimSocketBEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.event.SwitchSocketAEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.event.SwitchSocketBEvent;
@@ -49,7 +49,7 @@ public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implement
     }
 
     @Override
-    protected Class[] getStatusClasses() {
+    protected Class[] getDeviceStatusClasses() {
 	return new Class[]{RepeatsStatus.class};
     }
 

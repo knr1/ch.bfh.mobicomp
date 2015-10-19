@@ -6,7 +6,7 @@
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.intent;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**

@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip.intent.ConfigIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip.intent.RGBLEDFrameIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip.status.ConfigStatus;
@@ -93,7 +93,7 @@ public class LedStrip extends ADeviceHandler<BrickletLEDStrip> implements Brickl
     }
 
     @Override
-    protected Class[] getStatusClasses() {
+    protected Class[] getDeviceStatusClasses() {
 	return new Class[]{ConfigStatus.class};
     }
 

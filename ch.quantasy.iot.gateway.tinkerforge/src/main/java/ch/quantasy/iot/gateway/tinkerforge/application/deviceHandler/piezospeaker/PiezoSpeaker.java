@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeak
 
 import ch.quantasy.iot.gateway.tinkerforge.application.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.event.BeepEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.event.CalibrateEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.event.MorseEvent;
@@ -45,7 +45,7 @@ public class PiezoSpeaker extends ADeviceHandler<BrickletPiezoSpeaker> implement
     }
 
     @Override
-    protected Class[] getStatusClasses() {
+    protected Class[] getDeviceStatusClasses() {
 	return new Class[]{};
     }
 

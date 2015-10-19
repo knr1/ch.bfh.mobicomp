@@ -6,7 +6,7 @@
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.motiondetector.event;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnEvent;
+import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnEvent;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**

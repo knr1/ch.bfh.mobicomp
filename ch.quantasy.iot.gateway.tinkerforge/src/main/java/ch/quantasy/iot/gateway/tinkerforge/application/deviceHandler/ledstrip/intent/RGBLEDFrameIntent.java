@@ -6,7 +6,7 @@
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip.intent;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
@@ -32,6 +32,7 @@ public class RGBLEDFrameIntent extends AnIntent {
 
     @Override
     public boolean isExecutable() {
-	return rgbFrame != null;
+	return (rgbFrame != null && rgbFrame.length == 3 && rgbFrame[0] != null && rgbFrame[1] != null && rgbFrame[2]
+		!= null);
     }
 }

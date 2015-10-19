@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base;
+package ch.quantasy.iot.gateway.tinkerforge.application.base.message;
 
 import ch.quantasy.iot.gateway.tinkerforge.TFMQTTGateway;
+import ch.quantasy.iot.gateway.tinkerforge.application.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.application.base.StatusDescription;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -30,9 +32,9 @@ public abstract class AStatus {
 
     public final Type descriptionsType = new TypeToken<List<StatusDescription>>() {
     }.getType();
-    private final ADeviceHandler deviceHandler;
+    private final AHandler deviceHandler;
 
-    public AStatus(ADeviceHandler deviceHandler, String statusTopic, String statusName, MqttAsyncClient mqttClient) {
+    public AStatus(AHandler deviceHandler, String statusTopic, String statusName, MqttAsyncClient mqttClient) {
 	this.mqttClient = mqttClient;
 	this.statusName = statusName;
 	this.deviceHandler = deviceHandler;
@@ -41,7 +43,7 @@ public abstract class AStatus {
 
     }
 
-    public ADeviceHandler getDeviceHandler() {
+    public AHandler getDeviceHandler() {
 	return deviceHandler;
     }
 
@@ -59,7 +61,7 @@ public abstract class AStatus {
 	message.setQos(1);
 	message.setRetained(true);
 	try {
-	    this.mqttClient.publish(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC + "/" + deviceHandler.getApplicationName() + "/status/" + statusName, message);
+	    this.mqttClient.publish(AHandler.DEVICE_DESCRIPTION_TOPIC + "/" + deviceHandler.getApplicationName() + "/status/" + statusName, message);
 	} catch (Exception ex) {
 	    Logger.getLogger(TFMQTTGateway.class.getName()).log(Level.SEVERE, null, ex);
 	}
@@ -87,7 +89,7 @@ public abstract class AStatus {
     }
 
     protected void addTopicDescription(String statusPropertyName, String type, String representation, String... range) {
-	descriptions.add(new StatusDescription(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC, deviceHandler.getApplicationName(), statusName, statusPropertyName, type, representation, range));
+	descriptions.add(new StatusDescription(AHandler.DEVICE_DESCRIPTION_TOPIC, deviceHandler.getApplicationName(), statusName, statusPropertyName, type, representation, range));
     }
 
     protected List<StatusDescription> getTopicDefinitions() {

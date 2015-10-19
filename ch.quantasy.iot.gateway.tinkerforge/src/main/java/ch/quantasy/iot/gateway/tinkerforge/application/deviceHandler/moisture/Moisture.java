@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.event.MoistureEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.event.MoistureReachedEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.intent.CallbackPeriodIntent;
@@ -48,7 +48,7 @@ public class Moisture extends ADeviceHandler<BrickletMoisture> implements Brickl
     }
 
     @Override
-    protected Class[] getStatusClasses() {
+    protected Class[] getDeviceStatusClasses() {
 	return new Class[]{CallbackPeriodStatus.class, CallbackThresholdStatus.class, DebounceStatus.class, MovingAverageStatus.class};
     }
 

@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base;
+package ch.quantasy.iot.gateway.tinkerforge.application.base.message;
 
 import ch.quantasy.iot.gateway.tinkerforge.TFMQTTGateway;
+import ch.quantasy.iot.gateway.tinkerforge.application.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.application.base.EventDescription;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -30,9 +32,9 @@ public abstract class AnEvent {
 
     public final Type descriptionsType = new TypeToken<List<EventDescription>>() {
     }.getType();
-    private final ADeviceHandler deviceHandler;
+    private final AHandler deviceHandler;
 
-    public AnEvent(ADeviceHandler deviceHandler, String eventTopic, String eventName, MqttAsyncClient mqttClient) {
+    public AnEvent(AHandler deviceHandler, String eventTopic, String eventName, MqttAsyncClient mqttClient) {
 	this.mqttClient = mqttClient;
 	this.eventName = eventName;
 	this.deviceHandler = deviceHandler;
@@ -41,7 +43,7 @@ public abstract class AnEvent {
 
     }
 
-    public ADeviceHandler getDeviceHandler() {
+    public AHandler getDeviceHandler() {
 	return deviceHandler;
     }
 
@@ -59,7 +61,7 @@ public abstract class AnEvent {
 	message.setQos(1);
 	message.setRetained(true);
 	try {
-	    this.mqttClient.publish(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC + "/" + deviceHandler.getApplicationName() + "/event/" + eventName, message);
+	    this.mqttClient.publish(AHandler.DEVICE_DESCRIPTION_TOPIC + "/" + deviceHandler.getApplicationName() + "/event/" + eventName, message);
 	} catch (Exception ex) {
 	    Logger.getLogger(TFMQTTGateway.class.getName()).log(Level.SEVERE, null, ex);
 	}
@@ -87,7 +89,7 @@ public abstract class AnEvent {
     }
 
     protected void addTopicDefinition(String eventPropertyName, String type, String representation, String... range) {
-	descriptions.add(new EventDescription(ADeviceHandler.DEVICE_DESCRIPTION_TOPIC, deviceHandler.getApplicationName(), eventName, eventPropertyName, type, representation, range));
+	descriptions.add(new EventDescription(AHandler.DEVICE_DESCRIPTION_TOPIC, deviceHandler.getApplicationName(), eventName, eventPropertyName, type, representation, range));
     }
 
     protected List<EventDescription> getTopicDefinitions() {

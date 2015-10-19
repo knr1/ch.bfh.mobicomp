@@ -6,7 +6,7 @@
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.status;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AStatus;
+import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AStatus;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.intent.MovingAverageIntent;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 

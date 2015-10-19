@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.event.TiltStateEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.intent.TiltStateCallbackIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.status.TiltStateCallbackStatus;
@@ -41,7 +41,7 @@ public class Tilt extends ADeviceHandler<BrickletTilt> implements BrickletTilt.T
     }
 
     @Override
-    protected Class[] getStatusClasses() {
+    protected Class[] getDeviceStatusClasses() {
 	return new Class[]{TiltStateCallbackStatus.class};
     }
 
