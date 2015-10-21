@@ -5,9 +5,9 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.status;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AStatus;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.intent.DebouncePeriodIntent;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -18,7 +18,7 @@ public class DebounceStatus extends AStatus {
 
     public long period;
 
-    public DebounceStatus(ADeviceHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
+    public DebounceStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "debounce", mqttClient);
 	super.addTopicDescription("period", "Long", "JSON", "0", "..", "" + Long.MAX_VALUE);
     }

@@ -5,8 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.intent;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
@@ -17,7 +17,7 @@ public class MovingAverageIntent extends AnIntent {
 
     public short average;
 
-    public MovingAverageIntent(ADeviceHandler deviceHandler, String intentTopic) {
+    public MovingAverageIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "movingAverage");
 	super.addTopicDescription("average", "Short", "JSON", "0", "...", "100");
     }

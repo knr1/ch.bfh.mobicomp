@@ -5,8 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
@@ -19,7 +19,7 @@ public class MorseIntent extends AnIntent {
     public String code;
     public int frequency;
 
-    public MorseIntent(ADeviceHandler deviceHandler, String intentTopic) {
+    public MorseIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "morse");
 	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
 	super.addTopicDescription("code", "String", "JSON", ".", "-", " ", "unbounded");

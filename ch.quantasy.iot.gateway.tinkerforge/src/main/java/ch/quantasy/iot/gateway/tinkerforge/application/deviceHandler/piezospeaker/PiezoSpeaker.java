@@ -7,13 +7,13 @@ package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeak
 
 import ch.quantasy.iot.gateway.tinkerforge.application.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.event.BeepEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.event.CalibrateEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.event.MorseEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent.BeepIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent.CalibrateIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent.MorseIntent;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletPiezoSpeaker;
 import com.tinkerforge.NotConnectedException;

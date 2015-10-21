@@ -5,9 +5,9 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.event;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent.CalibrateIntent;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -18,7 +18,7 @@ public class CalibrateEvent extends AnEvent {
 
     public boolean enabled;
 
-    public CalibrateEvent(ADeviceHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
+    public CalibrateEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "calibrate", mqttClient);
 	super.addTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
     }

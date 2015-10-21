@@ -7,7 +7,6 @@ package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.event.MoistureEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.event.MoistureReachedEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.intent.CallbackPeriodIntent;
@@ -18,6 +17,7 @@ import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.st
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.status.CallbackThresholdStatus;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.status.DebounceStatus;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.status.MovingAverageStatus;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletMoisture;
 import com.tinkerforge.NotConnectedException;

@@ -5,8 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.status;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AStatus;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -18,7 +18,7 @@ public class DeviceHandlerReadyStatus extends AStatus {
     public boolean enabled;
     public boolean reachable;
 
-    public DeviceHandlerReadyStatus(ADeviceHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
+    public DeviceHandlerReadyStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "ready", mqttClient);
 	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
 	super.addTopicDescription("connected", "Boolean", "JSON", "true", "false");

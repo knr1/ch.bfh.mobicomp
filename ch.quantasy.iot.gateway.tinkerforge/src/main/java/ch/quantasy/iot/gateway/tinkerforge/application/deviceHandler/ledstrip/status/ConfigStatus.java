@@ -5,9 +5,9 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip.status;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AStatus;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip.intent.ConfigIntent;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -21,7 +21,7 @@ public class ConfigStatus extends AStatus {
     public int frameDurationInMilliseconds;
     public int numberOfLEDs;
 
-    public ConfigStatus(ADeviceHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
+    public ConfigStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "config", mqttClient);
 	super.addTopicDescription("chipType", "Integer", "JSON", "2801", "2811", "2812");
 	super.addTopicDescription("clockFrequencyOfICsInHz", "Long", "JSON", "10000", "...", "2000000");

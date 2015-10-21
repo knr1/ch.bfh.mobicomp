@@ -6,12 +6,13 @@
 package ch.quantasy.iot.gateway.tinkerforge.application;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
+import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip.LedStrip;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.Moisture;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.motiondetector.MotionDetector;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.PiezoSpeaker;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.RemoteSwitch;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.tilt.Tilt;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip.LedStrip;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
@@ -37,7 +38,7 @@ import java.util.logging.Logger;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class MQTTTinkerforgeStackHandler<D extends ADeviceHandler> extends AbstractTinkerforgeApplication {
+public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTinkerforgeApplication {
 
     private final Map<String, ADeviceHandler> deviceHandlers;
     private String clientID;

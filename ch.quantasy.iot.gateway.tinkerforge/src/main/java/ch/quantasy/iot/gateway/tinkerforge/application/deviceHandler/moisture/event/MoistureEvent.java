@@ -5,8 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.event;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnEvent;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -17,7 +17,7 @@ public class MoistureEvent extends AnEvent {
 
     public int moisture;
 
-    public MoistureEvent(ADeviceHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
+    public MoistureEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "moisture", mqttClient);
 	super.addTopicDefinition("moisture", "Integer", "JSON", "0", "...", "4095");
     }

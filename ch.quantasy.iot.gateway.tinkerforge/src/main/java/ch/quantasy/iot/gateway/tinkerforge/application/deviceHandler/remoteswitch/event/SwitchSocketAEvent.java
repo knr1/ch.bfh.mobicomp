@@ -5,9 +5,9 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.event;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.intent.SwitchSocketAIntent;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -21,7 +21,7 @@ public class SwitchSocketAEvent extends AnEvent {
     public short receiverCode;
     public short switchTo;
 
-    public SwitchSocketAEvent(ADeviceHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
+    public SwitchSocketAEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "switchSocketA", mqttClient);
 	super.addTopicDefinition("houseCode", "Short", "JSON", "0", "...", "31");
 	super.addTopicDefinition("receiverCode", "Short", "JSON", "0", "...", "31");

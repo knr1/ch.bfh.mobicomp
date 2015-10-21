@@ -5,9 +5,9 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.event;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.piezospeaker.intent.BeepIntent;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -20,7 +20,7 @@ public class BeepEvent extends AnEvent {
     public long duration;
     public int frequency;
 
-    public BeepEvent(ADeviceHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
+    public BeepEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "beep", mqttClient);
 	super.addTopicDefinition("enabled", "Boolean", "JSON", "true", "false");
 	super.addTopicDefinition("duration", "Long", "JSON", "1", "...", "" + Long.MAX_VALUE);

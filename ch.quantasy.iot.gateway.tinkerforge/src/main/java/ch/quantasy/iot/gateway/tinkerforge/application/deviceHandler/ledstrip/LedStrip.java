@@ -7,10 +7,10 @@ package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip;
 
 import ch.quantasy.iot.gateway.tinkerforge.application.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip.intent.ConfigIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip.intent.RGBLEDFrameIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip.status.ConfigStatus;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletLEDStrip;
 import com.tinkerforge.NotConnectedException;

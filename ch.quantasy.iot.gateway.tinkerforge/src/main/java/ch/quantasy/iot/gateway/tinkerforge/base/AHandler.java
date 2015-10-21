@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.base;
+package ch.quantasy.iot.gateway.tinkerforge.base;
 
-import ch.quantasy.iot.gateway.tinkerforge.TFMQTTGateway;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AStatus;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnEvent;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.status.DeviceHandlerReadyStatus;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.gateway.TFMQTTGateway;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -43,9 +42,10 @@ public abstract class AHandler implements MqttCallback {
     private final String intentTopic;
     private final MqttAsyncClient mqttClient;
     private final String deviceNameTopic;
+    private final URI mqttURI;
 
     public AHandler(URI mqttURI, String deviceNameRootTopic, String identityString) throws Throwable {
-
+	this.mqttURI = mqttURI;
 	this.identityString = identityString;
 	this.deviceNameTopic = deviceNameRootTopic + "/" + getApplicationName() + "/" + identityString;;
 	this.intentTopic = getDeviceBaseTopic() + "/intent";
@@ -74,6 +74,10 @@ public abstract class AHandler implements MqttCallback {
 
     }
 
+    protected URI getMqttURI() {
+	return mqttURI;
+    }
+
     public String getIdentityString() {
 	return identityString;
     }
@@ -90,7 +94,7 @@ public abstract class AHandler implements MqttCallback {
 	Map<Class, AnEvent> eventMap = new HashMap<>();
 
 	for (Class eventClass : getEventClasses()) {
-	    eventMap.put(eventClass, (AnEvent) eventClass.getConstructor(ADeviceHandler.class, String.class, MqttAsyncClient.class
+	    eventMap.put(eventClass, (AnEvent) eventClass.getConstructor(AHandler.class, String.class, MqttAsyncClient.class
 		 ).newInstance(this, eventTopic, mqttClient));
 	}
 	return eventMap;
@@ -100,7 +104,7 @@ public abstract class AHandler implements MqttCallback {
 	Map<Class, AStatus> statusMap = new HashMap<>();
 
 	for (Class statusClass : getStatusClasses()) {
-	    statusMap.put(statusClass, (AStatus) statusClass.getConstructor(ADeviceHandler.class, String.class, MqttAsyncClient.class).newInstance(this, statusTopic, mqttClient));
+	    statusMap.put(statusClass, (AStatus) statusClass.getConstructor(AHandler.class, String.class, MqttAsyncClient.class).newInstance(this, statusTopic, mqttClient));
 	}
 	return statusMap;
     }
@@ -108,7 +112,7 @@ public abstract class AHandler implements MqttCallback {
     private Set<AnIntent> createIntentSet() throws Throwable {
 	Set<AnIntent> intents = new HashSet<>();
 	for (Class intentClass : getIntentClasses()) {
-	    intents.add((AnIntent) intentClass.getConstructor(ADeviceHandler.class, String.class).newInstance(this, intentTopic));
+	    intents.add((AnIntent) intentClass.getConstructor(AHandler.class, String.class).newInstance(this, intentTopic));
 	}
 	return intents;
     }
@@ -159,7 +163,7 @@ public abstract class AHandler implements MqttCallback {
 			if (ex instanceof Exception) {
 			    throw (Exception) ex;
 			} else {
-			    Logger.getLogger(ADeviceHandler.class.getName()).log(Level.SEVERE, null, ex);
+			    Logger.getLogger(AHandler.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		    }
 		    intentsMap.put(tenant, intents);

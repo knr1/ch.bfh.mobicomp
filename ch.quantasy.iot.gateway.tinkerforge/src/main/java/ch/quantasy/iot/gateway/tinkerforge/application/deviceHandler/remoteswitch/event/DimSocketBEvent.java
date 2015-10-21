@@ -5,9 +5,9 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.event;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.intent.DimSocketBIntent;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -21,7 +21,7 @@ public class DimSocketBEvent extends AnEvent {
     public short unit;
     public short dimValue;
 
-    public DimSocketBEvent(ADeviceHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
+    public DimSocketBEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "dimSocketB", mqttClient);
 	super.addTopicDefinition("address", "Long", "JSON", "0", "...", "67108863");
 	super.addTopicDefinition("unit", "Short", "JSON", "0", "...", "15");

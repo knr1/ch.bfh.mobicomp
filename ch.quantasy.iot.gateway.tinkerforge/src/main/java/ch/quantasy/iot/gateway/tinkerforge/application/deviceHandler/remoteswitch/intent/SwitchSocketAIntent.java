@@ -5,8 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.intent;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
@@ -20,7 +20,7 @@ public class SwitchSocketAIntent extends AnIntent {
     public short receiverCode;
     public short switchTo;
 
-    public SwitchSocketAIntent(ADeviceHandler deviceHandler, String intentTopic) {
+    public SwitchSocketAIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "switchSocketA");
 	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
 	super.addTopicDescription("houseCode", "Short", "JSON", "0", "...", "31");

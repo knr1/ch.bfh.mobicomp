@@ -5,9 +5,9 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.status;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AStatus;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.moisture.intent.CallbackThresholdIntent;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -20,7 +20,7 @@ public class CallbackThresholdStatus extends AStatus {
     public int min;
     public int max;
 
-    public CallbackThresholdStatus(ADeviceHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
+    public CallbackThresholdStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "callbackThreshold", mqttClient);
 	super.addTopicDescription("option", "Character", "JSON", "x", "o", "i", "\\<", "\\>");
 	super.addTopicDescription("min", "Integer", "JSON", "0", "...", "4095");

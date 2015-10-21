@@ -5,8 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.intent;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
@@ -17,7 +17,7 @@ public class RepeatsIntent extends AnIntent {
 
     public short repeats;
 
-    public RepeatsIntent(ADeviceHandler deviceHandler, String intentTopic) {
+    public RepeatsIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "repeats");
 	super.addTopicDescription("repeats", "Short", "JSON", "0", "...", "" + Short.MAX_VALUE);
     }

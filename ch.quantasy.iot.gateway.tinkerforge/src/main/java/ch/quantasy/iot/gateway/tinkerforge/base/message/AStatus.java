@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.application.base.message;
+package ch.quantasy.iot.gateway.tinkerforge.base.message;
 
-import ch.quantasy.iot.gateway.tinkerforge.TFMQTTGateway;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.AHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.StatusDescription;
+import ch.quantasy.iot.gateway.tinkerforge.gateway.TFMQTTGateway;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.base.StatusDescription;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;

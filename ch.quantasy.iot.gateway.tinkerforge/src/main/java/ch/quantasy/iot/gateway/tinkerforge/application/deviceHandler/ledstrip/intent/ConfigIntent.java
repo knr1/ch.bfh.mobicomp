@@ -5,8 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.ledstrip.intent;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
@@ -21,7 +21,7 @@ public class ConfigIntent extends AnIntent {
     public int chipType;
     public int numberOfLEDs;
 
-    public ConfigIntent(ADeviceHandler deviceHandler, String intentTopic) {
+    public ConfigIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "config");
 	super.addTopicDescription("chipType", "Integer", "JSON", "2801", "2811", "2812");
 	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");

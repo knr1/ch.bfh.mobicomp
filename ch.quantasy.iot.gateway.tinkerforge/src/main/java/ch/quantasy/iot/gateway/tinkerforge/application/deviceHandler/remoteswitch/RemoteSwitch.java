@@ -7,7 +7,6 @@ package ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswit
 
 import ch.quantasy.iot.gateway.tinkerforge.application.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.gateway.tinkerforge.application.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.event.DimSocketBEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.event.SwitchSocketAEvent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.event.SwitchSocketBEvent;
@@ -18,6 +17,7 @@ import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitc
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.intent.SwitchSocketBIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.intent.SwitchSocketCIntent;
 import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.remoteswitch.status.RepeatsStatus;
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletRemoteSwitch;
 import com.tinkerforge.NotConnectedException;
