@@ -5,7 +5,7 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.base;
 
-import ch.quantasy.iot.gateway.tinkerforge.application.deviceHandler.base.status.DeviceHandlerReadyStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.status.DeviceHandlerReadyStatus;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
@@ -64,7 +64,7 @@ public abstract class AHandler implements MqttCallback {
 	}
 
 	for (AnEvent event : eventMap.values()) {
-	    event.publishTopicDefinition();
+	    event.publishTopicDescription();
 	}
 
 	for (AStatus status : statusMap.values()) {

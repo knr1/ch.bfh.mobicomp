@@ -55,8 +55,8 @@ public abstract class AnEvent {
 	return eventName;
     }
 
-    public void publishTopicDefinition() {
-	String json = gson.toJson(getTopicDefinitions(), descriptionsType);
+    public void publishTopicDescription() {
+	String json = gson.toJson(getTopicDescriptions(), descriptionsType);
 	MqttMessage message = new MqttMessage(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
 	message.setQos(1);
 	message.setRetained(true);
@@ -88,11 +88,11 @@ public abstract class AnEvent {
 	}
     }
 
-    protected void addTopicDefinition(String eventPropertyName, String type, String representation, String... range) {
+    protected void addTopicDescription(String eventPropertyName, String type, String representation, String... range) {
 	descriptions.add(new EventDescription(AHandler.DEVICE_DESCRIPTION_TOPIC, deviceHandler.getApplicationName(), eventName, eventPropertyName, type, representation, range));
     }
 
-    protected List<EventDescription> getTopicDefinitions() {
+    protected List<EventDescription> getTopicDescriptions() {
 	return descriptions;
     }
 
