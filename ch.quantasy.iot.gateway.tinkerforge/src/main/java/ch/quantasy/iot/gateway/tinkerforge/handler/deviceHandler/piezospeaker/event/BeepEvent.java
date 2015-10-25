@@ -22,9 +22,9 @@ public class BeepEvent extends AnEvent {
 
     public BeepEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "beep", mqttClient);
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
-	super.addTopicDescription("duration", "Long", "JSON", "1", "...", "" + Long.MAX_VALUE);
-	super.addTopicDescription("frequency", "Integer", "JSON", "585", "...", "7100");
+	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("duration", "Long", "JSON", "1", "...", "" + Long.MAX_VALUE);
+	super.addDescription("frequency", "Integer", "JSON", "585", "...", "7100");
     }
 
     public void updateIntent(BeepIntent intent) {
@@ -39,7 +39,7 @@ public class BeepEvent extends AnEvent {
 	    return;
 	} else {
 	    this.enabled = enabled;
-	    publishEvent("enabled", toJSONMQTTMessage(enabled));
+	    publish("enabled", toJSONMQTTMessage(enabled));
 	}
 	return;
     }
@@ -49,7 +49,7 @@ public class BeepEvent extends AnEvent {
 	    return;
 	} else {
 	    this.duration = duration;
-	    publishEvent("duration", toJSONMQTTMessage(duration));
+	    publish("duration", toJSONMQTTMessage(duration));
 	}
 	return;
     }
@@ -59,7 +59,7 @@ public class BeepEvent extends AnEvent {
 	    return;
 	} else {
 	    this.frequency = frequency;
-	    publishEvent("frequency", toJSONMQTTMessage(frequency));
+	    publish("frequency", toJSONMQTTMessage(frequency));
 	}
 	return;
     }

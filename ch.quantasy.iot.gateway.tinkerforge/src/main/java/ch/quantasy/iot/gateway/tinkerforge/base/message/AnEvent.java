@@ -5,16 +5,8 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.base.message;
 
-import ch.quantasy.iot.gateway.tinkerforge.gateway.TFMQTTGateway;
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.EventDescription;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
@@ -22,78 +14,30 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public abstract class AnEvent {
+public abstract class AnEvent extends AMessage<EventDescription> {
 
     private final MqttAsyncClient mqttClient;
-    private final Gson gson;
-    private final String eventTopic;
-    private final String eventName;
-    List<EventDescription> descriptions = new ArrayList<>();
-
-    public final Type descriptionsType = new TypeToken<List<EventDescription>>() {
-    }.getType();
-    private final AHandler deviceHandler;
 
     public AnEvent(AHandler deviceHandler, String eventTopic, String eventName, MqttAsyncClient mqttClient) {
+	super(deviceHandler, eventTopic, eventName);
 	this.mqttClient = mqttClient;
-	this.eventName = eventName;
-	this.deviceHandler = deviceHandler;
-	this.eventTopic = eventTopic;
-	this.gson = new Gson();
-
     }
 
-    public AHandler getDeviceHandler() {
-	return deviceHandler;
+    @Override
+    public String getMessageType() {
+	return "event";
     }
 
-    public String getEventTopic() {
-	return eventTopic;
+    public void publishDescriptions() {
+	super.publishDescriptions(mqttClient);
     }
 
-    public String getEventName() {
-	return eventName;
+    public void publish(String statusPropertyName, MqttMessage mqttMessage) {
+	super.publish(statusPropertyName, mqttMessage, mqttClient);
     }
 
-    public void publishTopicDescription() {
-	String json = gson.toJson(getTopicDescriptions(), descriptionsType);
-	MqttMessage message = new MqttMessage(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-	message.setQos(1);
-	message.setRetained(true);
-	try {
-	    this.mqttClient.publish(AHandler.DEVICE_DESCRIPTION_TOPIC + "/" + deviceHandler.getApplicationName() + "/event/" + eventName, message);
-	} catch (Exception ex) {
-	    Logger.getLogger(TFMQTTGateway.class.getName()).log(Level.SEVERE, null, ex);
-	}
-
-    }
-
-    public MqttMessage toJSONMQTTMessage(Object object, Type type) {
-	String json = gson.toJson(object, type);
-	return new MqttMessage(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-    }
-
-    public MqttMessage toJSONMQTTMessage(Object object) {
-	String json = gson.toJson(object);
-	return new MqttMessage(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-    }
-
-    public void publishEvent(String eventPropertyName, MqttMessage mqttMessage) {
-	mqttMessage.setQos(1);
-	mqttMessage.setRetained(true);
-	try {
-	    mqttClient.publish(eventTopic + "/" + eventName + "/" + eventPropertyName, mqttMessage);
-	} catch (Exception ex) {
-	    Logger.getLogger(TFMQTTGateway.class.getName()).log(Level.SEVERE, null, ex);
-	}
-    }
-
-    protected void addTopicDescription(String eventPropertyName, String type, String representation, String... range) {
-	descriptions.add(new EventDescription(AHandler.DEVICE_DESCRIPTION_TOPIC, deviceHandler.getApplicationName(), eventName, eventPropertyName, type, representation, range));
-    }
-
-    protected List<EventDescription> getTopicDescriptions() {
-	return descriptions;
+    protected void addDescription(String propertyName, String type, String representation, String... range) {
+	super.addDescription(new EventDescription(AHandler.DEVICE_DESCRIPTION_TOPIC, getDeviceHandler().getApplicationName(), getName(), propertyName, type, representation, range));
     }
 
 }

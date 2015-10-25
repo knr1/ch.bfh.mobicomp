@@ -9,22 +9,15 @@ package ch.quantasy.iot.gateway.tinkerforge.base;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class EventDescription {
+public class EventDescription extends MessageDescription {
 
-    public final String applicationEventTopic;
-    public final String eventTopic;
-    public final String eventPropertyTopic;
-    public final String type;
-    public final String representation;
-    public final String[] range;
+    public EventDescription(String applicationMessageTopic, String applicationName, String messageTopic, String messagePropertyTopic, String type, String representation, String... range) {
+	super(applicationMessageTopic, applicationName, messageTopic, messagePropertyTopic, type, representation, range);
+    }
 
-    public EventDescription(String applicationEventTopic, String applicationName, String eventTopic, String eventPropertyTopic, String type, String representation, String... range) {
-	this.applicationEventTopic = "/" + applicationEventTopic + "/" + applicationName + "/[identificationString]/event";
-	this.eventTopic = "/" + eventTopic;
-	this.eventPropertyTopic = "/" + eventPropertyTopic;
-	this.type = type;
-	this.representation = representation;
-	this.range = range;
+    @Override
+    public String getMessageType() {
+	return "event";
     }
 
 }

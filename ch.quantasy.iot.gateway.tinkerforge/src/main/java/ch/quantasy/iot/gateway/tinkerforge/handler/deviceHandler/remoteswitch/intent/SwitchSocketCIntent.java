@@ -22,25 +22,25 @@ public class SwitchSocketCIntent extends AnIntent {
 
     public SwitchSocketCIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "switchSocketC");
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
-	super.addTopicDescription("systemCode", "Character", "JSON", "A", "...", "P");
-	super.addTopicDescription("deviceCode", "Short", "JSON", "1", "...", "16");
-	super.addTopicDescription("switchTo", "Short", "JSON", "0", "...", "1");
+	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("systemCode", "Character", "JSON", "A", "...", "P");
+	super.addDescription("deviceCode", "Short", "JSON", "1", "...", "16");
+	super.addDescription("switchTo", "Short", "JSON", "0", "...", "1");
 
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/enabled")) {
+	if (string.endsWith(getName() + "/enabled")) {
 	    enabled = fromMQTTMessage(mm, Boolean.class);
 	}
-	if (string.endsWith(getIntentName() + "/systemCode")) {
+	if (string.endsWith(getName() + "/systemCode")) {
 	    systemCode = fromMQTTMessage(mm, Character.class);
 	}
-	if (string.endsWith(getIntentName() + "/deviceCode")) {
+	if (string.endsWith(getName() + "/deviceCode")) {
 	    deviceCode = fromMQTTMessage(mm, Short.class);
 	}
-	if (string.endsWith(getIntentName() + "/switchTo")) {
+	if (string.endsWith(getName() + "/switchTo")) {
 	    switchTo = fromMQTTMessage(mm, Short.class);
 	}
 

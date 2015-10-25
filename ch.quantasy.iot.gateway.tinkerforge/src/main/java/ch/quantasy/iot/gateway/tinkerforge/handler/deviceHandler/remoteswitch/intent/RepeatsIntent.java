@@ -19,12 +19,12 @@ public class RepeatsIntent extends AnIntent {
 
     public RepeatsIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "repeats");
-	super.addTopicDescription("repeats", "Short", "JSON", "0", "...", "" + Short.MAX_VALUE);
+	super.addDescription("repeats", "Short", "JSON", "0", "...", "" + Short.MAX_VALUE);
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/repeats")) {
+	if (string.endsWith(getName() + "/repeats")) {
 	    repeats = fromMQTTMessage(mm, Short.class);
 	}
 

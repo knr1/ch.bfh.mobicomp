@@ -22,9 +22,9 @@ public class MonoflopEvent extends AnEvent {
 
     public MonoflopEvent(AHandler deviceHandler, String topic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, topic, "monoflop", mqttClient);
-	super.addTopicDescription("time", "Long", "JSON", "0", "...", "" + Long.MAX_VALUE);
-	super.addTopicDescription("relay", "Short", "JSON", "0", "...", "15");
-	super.addTopicDescription("state", "Boolean", "JSON", "true", "false");
+	super.addDescription("time", "Long", "JSON", "0", "...", "" + Long.MAX_VALUE);
+	super.addDescription("relay", "Short", "JSON", "0", "...", "15");
+	super.addDescription("state", "Boolean", "JSON", "true", "false");
     }
 
     public void updateIntent(MonoflopIntent intent) {
@@ -38,7 +38,7 @@ public class MonoflopEvent extends AnEvent {
 	    return;
 	} else {
 	    this.time = time;
-	    publishEvent("time", toJSONMQTTMessage(time));
+	    publish("time", toJSONMQTTMessage(time));
 	}
     }
 
@@ -47,7 +47,7 @@ public class MonoflopEvent extends AnEvent {
 	    return;
 	} else {
 	    this.relay = relay;
-	    publishEvent("relay", toJSONMQTTMessage(relay));
+	    publish("relay", toJSONMQTTMessage(relay));
 	}
     }
 
@@ -56,7 +56,7 @@ public class MonoflopEvent extends AnEvent {
 	    return;
 	} else {
 	    this.state = state;
-	    publishEvent("state", toJSONMQTTMessage(state));
+	    publish("state", toJSONMQTTMessage(state));
 	}
     }
 }

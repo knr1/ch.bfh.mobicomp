@@ -21,8 +21,8 @@ public class DualRelayStatus extends AStatus {
 
     public DualRelayStatus(AHandler deviceHandler, String topic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, topic, "dualRelay", mqttClient);
-	super.addTopicDescription("relay1", "Boolean", "JSON", "true", "false");
-	super.addTopicDescription("relay2", "Boolean", "JSON", "true", "false");
+	super.addDescription("relay1", "Boolean", "JSON", "true", "false");
+	super.addDescription("relay2", "Boolean", "JSON", "true", "false");
     }
 
     public void updateState(BrickletDualRelay.State state) {
@@ -35,7 +35,7 @@ public class DualRelayStatus extends AStatus {
 	    return;
 	} else {
 	    this.relay1 = relay;
-	    publishStatus("relay1", toJSONMQTTMessage(relay1));
+	    publish("relay1", toJSONMQTTMessage(relay1));
 	}
     }
 
@@ -44,7 +44,7 @@ public class DualRelayStatus extends AStatus {
 	    return;
 	} else {
 	    this.relay2 = relay;
-	    publishStatus("relay2", toJSONMQTTMessage(relay2));
+	    publish("relay2", toJSONMQTTMessage(relay2));
 	}
     }
 }

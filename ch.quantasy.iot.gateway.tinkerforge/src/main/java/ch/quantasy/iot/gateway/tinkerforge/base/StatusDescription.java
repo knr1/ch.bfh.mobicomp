@@ -9,22 +9,15 @@ package ch.quantasy.iot.gateway.tinkerforge.base;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class StatusDescription {
+public class StatusDescription extends MessageDescription {
 
-    public final String applicationStatusTopic;
-    public final String statusTopic;
-    public final String statusPropertyTopic;
-    public final String type;
-    public final String representation;
-    public final String[] range;
+    public StatusDescription(String applicationMessageTopic, String applicationName, String messageTopic, String messagePropertyTopic, String type, String representation, String... range) {
+	super(applicationMessageTopic, applicationName, messageTopic, messagePropertyTopic, type, representation, range);
+    }
 
-    public StatusDescription(String applicationStatusTopic, String applicationName, String statusTopic, String statusPropertyTopic, String type, String representation, String... range) {
-	this.applicationStatusTopic = "/" + applicationStatusTopic + "/" + applicationName + "/[identificationString]/status";
-	this.statusTopic = "/" + statusTopic;
-	this.statusPropertyTopic = "/" + statusPropertyTopic;
-	this.type = type;
-	this.representation = representation;
-	this.range = range;
+    @Override
+    public String getMessageType() {
+	return "status";
     }
 
 }

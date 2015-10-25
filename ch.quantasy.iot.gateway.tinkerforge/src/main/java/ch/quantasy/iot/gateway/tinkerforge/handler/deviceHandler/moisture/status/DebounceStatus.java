@@ -20,7 +20,7 @@ public class DebounceStatus extends AStatus {
 
     public DebounceStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "debounce", mqttClient);
-	super.addTopicDescription("period", "Long", "JSON", "0", "..", "" + Long.MAX_VALUE);
+	super.addDescription("period", "Long", "JSON", "0", "..", "" + Long.MAX_VALUE);
     }
 
     public void updateIntent(DebouncePeriodIntent intent) {
@@ -32,7 +32,7 @@ public class DebounceStatus extends AStatus {
 	    return;
 	} else {
 	    this.period = period;
-	    publishStatus("period", toJSONMQTTMessage(period));
+	    publish("period", toJSONMQTTMessage(period));
 	}
 	return;
     }

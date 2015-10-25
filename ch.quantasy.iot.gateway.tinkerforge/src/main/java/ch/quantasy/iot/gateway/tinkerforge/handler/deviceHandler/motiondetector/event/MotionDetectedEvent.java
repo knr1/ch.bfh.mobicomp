@@ -19,7 +19,7 @@ public class MotionDetectedEvent extends AnEvent {
 
     public MotionDetectedEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "motionDetected", mqttClient);
-	super.addTopicDescription("detected", "Boolean", "JSON", "true", "false");
+	super.addDescription("detected", "Boolean", "JSON", "true", "false");
 
     }
 
@@ -28,7 +28,7 @@ public class MotionDetectedEvent extends AnEvent {
 	    return;
 	} else {
 	    this.detected = detected;
-	    publishEvent("detected", toJSONMQTTMessage(detected));
+	    publish("detected", toJSONMQTTMessage(detected));
 	}
 	return;
     }

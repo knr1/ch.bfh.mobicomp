@@ -19,12 +19,12 @@ public class MovingAverageIntent extends AnIntent {
 
     public MovingAverageIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "movingAverage");
-	super.addTopicDescription("average", "Short", "JSON", "0", "...", "100");
+	super.addDescription("average", "Short", "JSON", "0", "...", "100");
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/average")) {
+	if (string.endsWith(getName() + "/average")) {
 	    average = fromMQTTMessage(mm, Short.class);
 	}
     }

@@ -22,25 +22,25 @@ public class DimSocketBIntent extends AnIntent {
 
     public DimSocketBIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "dimSocketB");
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
-	super.addTopicDescription("address", "Long", "JSON", "0", "...", "67108863");
-	super.addTopicDescription("unit", "Short", "JSON", "0", "...", "15");
-	super.addTopicDescription("dimValue", "Short", "JSON", "0", "...", "15");
+	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("address", "Long", "JSON", "0", "...", "67108863");
+	super.addDescription("unit", "Short", "JSON", "0", "...", "15");
+	super.addDescription("dimValue", "Short", "JSON", "0", "...", "15");
 
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/enabled")) {
+	if (string.endsWith(getName() + "/enabled")) {
 	    enabled = fromMQTTMessage(mm, Boolean.class);
 	}
-	if (string.endsWith(getIntentName() + "/address")) {
+	if (string.endsWith(getName() + "/address")) {
 	    address = fromMQTTMessage(mm, Long.class);
 	}
-	if (string.endsWith(getIntentName() + "/unit")) {
+	if (string.endsWith(getName() + "/unit")) {
 	    unit = fromMQTTMessage(mm, Short.class);
 	}
-	if (string.endsWith(getIntentName() + "/dimValue")) {
+	if (string.endsWith(getName() + "/dimValue")) {
 	    dimValue = fromMQTTMessage(mm, Short.class);
 	}
 

@@ -19,12 +19,12 @@ public class CalibrateIntent extends AnIntent {
 
     public CalibrateIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "calibrate");
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/enabled")) {
+	if (string.endsWith(getName() + "/enabled")) {
 	    enabled = fromMQTTMessage(mm, Boolean.class);
 	}
     }

@@ -20,7 +20,7 @@ public class TiltStateCallbackStatus extends AStatus {
 
     public TiltStateCallbackStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "stateCallback", mqttClient);
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
     }
 
     public void updateIntent(TiltStateCallbackIntent intent) {
@@ -32,7 +32,7 @@ public class TiltStateCallbackStatus extends AStatus {
 	    return;
 	} else {
 	    this.enabled = enabled;
-	    publishStatus("enabled", toJSONMQTTMessage(enabled));
+	    publish("enabled", toJSONMQTTMessage(enabled));
 	}
 	return;
     }

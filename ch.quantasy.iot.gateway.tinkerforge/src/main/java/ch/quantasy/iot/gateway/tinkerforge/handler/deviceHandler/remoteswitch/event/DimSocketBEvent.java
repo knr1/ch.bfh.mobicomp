@@ -23,10 +23,10 @@ public class DimSocketBEvent extends AnEvent {
 
     public DimSocketBEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "dimSocketB", mqttClient);
-	super.addTopicDescription("address", "Long", "JSON", "0", "...", "67108863");
-	super.addTopicDescription("unit", "Short", "JSON", "0", "...", "15");
-	super.addTopicDescription("dimValue", "Short", "JSON", "0", "...", "15");
-	super.addTopicDescription("switching", "Boolean", "JSON", "true", "false");
+	super.addDescription("address", "Long", "JSON", "0", "...", "67108863");
+	super.addDescription("unit", "Short", "JSON", "0", "...", "15");
+	super.addDescription("dimValue", "Short", "JSON", "0", "...", "15");
+	super.addDescription("switching", "Boolean", "JSON", "true", "false");
     }
 
     public void updateIntent(DimSocketBIntent intent) {
@@ -41,7 +41,7 @@ public class DimSocketBEvent extends AnEvent {
 	    return;
 	} else {
 	    this.address = address;
-	    publishEvent("address", toJSONMQTTMessage(address));
+	    publish("address", toJSONMQTTMessage(address));
 	}
 
     }
@@ -51,7 +51,7 @@ public class DimSocketBEvent extends AnEvent {
 	    return;
 	} else {
 	    this.unit = unit;
-	    publishEvent("unit", toJSONMQTTMessage(unit));
+	    publish("unit", toJSONMQTTMessage(unit));
 	}
     }
 
@@ -60,7 +60,7 @@ public class DimSocketBEvent extends AnEvent {
 	    return;
 	} else {
 	    this.dimValue = dimValue;
-	    publishEvent("dimValue", toJSONMQTTMessage(dimValue));
+	    publish("dimValue", toJSONMQTTMessage(dimValue));
 	}
     }
 
@@ -69,7 +69,7 @@ public class DimSocketBEvent extends AnEvent {
 	    return;
 	} else {
 	    this.switching = switching;
-	    publishEvent("switching", toJSONMQTTMessage(switching));
+	    publish("switching", toJSONMQTTMessage(switching));
 	}
 	return;
     }

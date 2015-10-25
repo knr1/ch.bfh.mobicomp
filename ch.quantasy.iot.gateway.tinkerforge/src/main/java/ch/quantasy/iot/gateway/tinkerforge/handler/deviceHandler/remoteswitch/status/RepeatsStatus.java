@@ -20,7 +20,7 @@ public class RepeatsStatus extends AStatus {
 
     public RepeatsStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "repeats", mqttClient);
-	super.addTopicDescription("repeats", "Short", "JSON", "0", "...", "" + Short.MAX_VALUE);
+	super.addDescription("repeats", "Short", "JSON", "0", "...", "" + Short.MAX_VALUE);
     }
 
     public void updateIntent(RepeatsIntent intent) {
@@ -32,7 +32,7 @@ public class RepeatsStatus extends AStatus {
 	    return;
 	} else {
 	    this.repeats = repeats;
-	    publishStatus("repeats", toJSONMQTTMessage(repeats));
+	    publish("repeats", toJSONMQTTMessage(repeats));
 	}
 	return;
     }

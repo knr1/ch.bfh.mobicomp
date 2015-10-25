@@ -23,10 +23,10 @@ public class ConfigStatus extends AStatus {
 
     public ConfigStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "config", mqttClient);
-	super.addTopicDescription("chipType", "Integer", "JSON", "2801", "2811", "2812");
-	super.addTopicDescription("clockFrequencyOfICsInHz", "Long", "JSON", "10000", "...", "2000000");
-	super.addTopicDescription("frameDurationInMilliseconds", "Integer", "JSON", "1", "...", "" + Integer.MAX_VALUE);
-	super.addTopicDescription("numberOfLEDs", "Integer", "1", "...", "319");
+	super.addDescription("chipType", "Integer", "JSON", "2801", "2811", "2812");
+	super.addDescription("clockFrequencyOfICsInHz", "Long", "JSON", "10000", "...", "2000000");
+	super.addDescription("frameDurationInMilliseconds", "Integer", "JSON", "1", "...", "" + Integer.MAX_VALUE);
+	super.addDescription("numberOfLEDs", "Integer", "1", "...", "319");
     }
 
     public void updateConfig(ConfigIntent intent) {
@@ -40,7 +40,7 @@ public class ConfigStatus extends AStatus {
 	    return;
 	} else {
 	    this.chipType = chipType;
-	    publishStatus("chipType", toJSONMQTTMessage(chipType));
+	    publish("chipType", toJSONMQTTMessage(chipType));
 	}
     }
 
@@ -49,7 +49,7 @@ public class ConfigStatus extends AStatus {
 	    return;
 	} else {
 	    this.clockFrequencyOfICsInHz = clockFrequencyOfICsInHz;
-	    publishStatus("clockFrequencyOfICsInHz", toJSONMQTTMessage(clockFrequencyOfICsInHz));
+	    publish("clockFrequencyOfICsInHz", toJSONMQTTMessage(clockFrequencyOfICsInHz));
 	}
 	return;
     }
@@ -59,7 +59,7 @@ public class ConfigStatus extends AStatus {
 	    return;
 	} else {
 	    this.frameDurationInMilliseconds = frameDurationInMilliseconds;
-	    publishStatus("frameDurationInMilliseconds", toJSONMQTTMessage(frameDurationInMilliseconds));
+	    publish("frameDurationInMilliseconds", toJSONMQTTMessage(frameDurationInMilliseconds));
 	}
 	return;
     }
@@ -69,7 +69,7 @@ public class ConfigStatus extends AStatus {
 	    return;
 	} else {
 	    this.numberOfLEDs = numberOfLEDs;
-	    publishStatus("numberOfLEDs", toJSONMQTTMessage(numberOfLEDs));
+	    publish("numberOfLEDs", toJSONMQTTMessage(numberOfLEDs));
 	}
 	return;
     }

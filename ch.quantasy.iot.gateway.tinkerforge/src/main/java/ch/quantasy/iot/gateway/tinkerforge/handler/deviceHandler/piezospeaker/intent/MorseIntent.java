@@ -21,20 +21,20 @@ public class MorseIntent extends AnIntent {
 
     public MorseIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "morse");
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
-	super.addTopicDescription("code", "String", "JSON", ".", "-", " ", "unbounded");
-	super.addTopicDescription("frequency", "Integer", "JSON", "685", "...", "7100");
+	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("code", "String", "JSON", ".", "-", " ", "unbounded");
+	super.addDescription("frequency", "Integer", "JSON", "685", "...", "7100");
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/enabled")) {
+	if (string.endsWith(getName() + "/enabled")) {
 	    enabled = fromMQTTMessage(mm, Boolean.class);
 	}
-	if (string.endsWith(getIntentName() + "/code")) {
+	if (string.endsWith(getName() + "/code")) {
 	    code = fromMQTTMessage(mm, String.class);
 	}
-	if (string.endsWith(getIntentName() + "/frequency")) {
+	if (string.endsWith(getName() + "/frequency")) {
 	    frequency = fromMQTTMessage(mm, Integer.class);
 	}
     }

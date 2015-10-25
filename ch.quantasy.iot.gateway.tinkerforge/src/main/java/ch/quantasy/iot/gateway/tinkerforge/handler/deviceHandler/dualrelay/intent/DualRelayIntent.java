@@ -21,20 +21,20 @@ public class DualRelayIntent extends AnIntent {
 
     public DualRelayIntent(AHandler deviceHandler, String topic) {
 	super(deviceHandler, topic, "dualRelay");
-	super.addTopicDescription("relay1", "Boolean", "JSON", "true", "false");
-	super.addTopicDescription("relay2", "Boolean", "JSON", "true", "false");
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("relay1", "Boolean", "JSON", "true", "false");
+	super.addDescription("relay2", "Boolean", "JSON", "true", "false");
+	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/enabled")) {
+	if (string.endsWith(getName() + "/enabled")) {
 	    enabled = fromMQTTMessage(mm, Boolean.class);
 	}
-	if (string.endsWith(getIntentName() + "/relay1")) {
+	if (string.endsWith(getName() + "/relay1")) {
 	    relay1 = fromMQTTMessage(mm, Boolean.class);
 	}
-	if (string.endsWith(getIntentName() + "/relay2")) {
+	if (string.endsWith(getName() + "/relay2")) {
 	    relay2 = fromMQTTMessage(mm, Boolean.class);
 	}
 

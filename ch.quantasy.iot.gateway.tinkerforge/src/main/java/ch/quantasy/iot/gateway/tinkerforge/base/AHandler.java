@@ -5,11 +5,11 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.base;
 
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.status.DeviceHandlerReadyStatus;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.gateway.TFMQTTGateway;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.status.DeviceHandlerReadyStatus;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -60,15 +60,15 @@ public abstract class AHandler implements MqttCallback {
 	connectToMQTT();
 
 	for (AnIntent intent : intents) {
-	    intent.publishTopicDefinition(mqttClient);
+	    intent.publishDescriptions(mqttClient);
 	}
 
 	for (AnEvent event : eventMap.values()) {
-	    event.publishTopicDescription();
+	    event.publishDescriptions();
 	}
 
 	for (AStatus status : statusMap.values()) {
-	    status.publishTopicDefinition();
+	    status.publishDescriptions();
 	}
 	publishStatus();
 
@@ -128,7 +128,7 @@ public abstract class AHandler implements MqttCallback {
 	connectOptions.setCleanSession(false);
 	DeviceHandlerReadyStatus readyStatus = getStatus(DeviceHandlerReadyStatus.class);
 	MqttMessage message = readyStatus.toJSONMQTTMessage(false);
-	connectOptions.setWill(readyStatus.getStatusTopic() + "/reachable", message.getPayload(), 1, true);
+	connectOptions.setWill(readyStatus.getTopic() + "/reachable", message.getPayload(), 1, true);
 	this.mqttClient.setCallback(this);
 	IMqttToken token = this.mqttClient.connect(connectOptions);
 	token.waitForCompletion();

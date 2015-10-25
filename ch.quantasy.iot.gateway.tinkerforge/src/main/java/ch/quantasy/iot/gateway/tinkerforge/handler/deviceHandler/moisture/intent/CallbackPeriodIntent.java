@@ -19,12 +19,12 @@ public class CallbackPeriodIntent extends AnIntent {
 
     public CallbackPeriodIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackPeriod");
-	super.addTopicDescription("period", "Long", "JSON", "0", "...", "" + Long.MAX_VALUE);
+	super.addDescription("period", "Long", "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/period")) {
+	if (string.endsWith(getName() + "/period")) {
 	    period = fromMQTTMessage(mm, Long.class);
 	}
     }

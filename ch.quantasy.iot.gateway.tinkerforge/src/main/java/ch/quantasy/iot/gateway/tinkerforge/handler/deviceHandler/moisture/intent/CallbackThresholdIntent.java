@@ -22,24 +22,24 @@ public class CallbackThresholdIntent extends AnIntent {
 
     public CallbackThresholdIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackThreshold");
-	super.addTopicDescription("option", "Character", "JSON", "x", "o", "i", "\\<", "\\>");
-	super.addTopicDescription("min", "Integer", "JSON", "0", "...", "4095");
-	super.addTopicDescription("max", "Integer", "JSON", "0", "...", "4095");
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("option", "Character", "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription("min", "Integer", "JSON", "0", "...", "4095");
+	super.addDescription("max", "Integer", "JSON", "0", "...", "4095");
+	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/option")) {
+	if (string.endsWith(getName() + "/option")) {
 	    option = fromMQTTMessage(mm, Character.class);
 	}
-	if (string.endsWith(getIntentName() + "/min")) {
+	if (string.endsWith(getName() + "/min")) {
 	    min = fromMQTTMessage(mm, Integer.class);
 	}
-	if (string.endsWith(getIntentName() + "/max")) {
+	if (string.endsWith(getName() + "/max")) {
 	    max = fromMQTTMessage(mm, Integer.class);
 	}
-	if (string.endsWith(getIntentName() + "/enabled")) {
+	if (string.endsWith(getName() + "/enabled")) {
 	    enabled = fromMQTTMessage(mm, Boolean.class);
 	}
     }

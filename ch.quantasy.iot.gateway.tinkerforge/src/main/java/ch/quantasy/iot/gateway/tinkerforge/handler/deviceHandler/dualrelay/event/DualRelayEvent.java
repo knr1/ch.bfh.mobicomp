@@ -21,8 +21,8 @@ public class DualRelayEvent extends AnEvent {
 
     public DualRelayEvent(AHandler deviceHandler, String topic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, topic, "dualRelay", mqttClient);
-	super.addTopicDescription("relay0", "Boolean", "JSON", "true", "false");
-	super.addTopicDescription("relay1", "Boolean", "JSON", "true", "false");
+	super.addDescription("relay0", "Boolean", "JSON", "true", "false");
+	super.addDescription("relay1", "Boolean", "JSON", "true", "false");
 
     }
 
@@ -36,7 +36,7 @@ public class DualRelayEvent extends AnEvent {
 	    return;
 	} else {
 	    this.relay1 = relay;
-	    publishEvent("relay1", toJSONMQTTMessage(relay1));
+	    publish("relay1", toJSONMQTTMessage(relay1));
 	}
     }
 
@@ -45,7 +45,7 @@ public class DualRelayEvent extends AnEvent {
 	    return;
 	} else {
 	    this.relay2 = relay;
-	    publishEvent("relay2", toJSONMQTTMessage(relay2));
+	    publish("relay2", toJSONMQTTMessage(relay2));
 	}
     }
 

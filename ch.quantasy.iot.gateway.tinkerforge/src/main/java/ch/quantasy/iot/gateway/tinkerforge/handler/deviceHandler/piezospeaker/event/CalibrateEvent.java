@@ -20,7 +20,7 @@ public class CalibrateEvent extends AnEvent {
 
     public CalibrateEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "calibrate", mqttClient);
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
     }
 
     public void updateIntent(CalibrateIntent intent) {
@@ -32,7 +32,7 @@ public class CalibrateEvent extends AnEvent {
 	    return;
 	} else {
 	    this.enabled = enabled;
-	    publishEvent("enabled", toJSONMQTTMessage(enabled));
+	    publish("enabled", toJSONMQTTMessage(enabled));
 	}
 	return;
     }

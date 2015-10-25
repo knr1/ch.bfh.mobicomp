@@ -20,7 +20,7 @@ public class ManagedStackHandlersStatus extends AStatus {
 
     public ManagedStackHandlersStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "managedStackHandlers", mqttClient);
-	super.addTopicDescription("addresses", "String", "JSON");
+	super.addDescription("addresses", "String", "JSON");
     }
 
     public void updateManagedStackHandlers(ManagedStackAddresses managedStackHandlers) {
@@ -28,7 +28,7 @@ public class ManagedStackHandlersStatus extends AStatus {
 	    return;
 	} else {
 	    this.managedStackAddresses = managedStackHandlers;
-	    publishStatus("adddresses", toJSONMQTTMessage(managedStackHandlers));
+	    publish("adddresses", toJSONMQTTMessage(managedStackHandlers));
 	}
 	return;
     }

@@ -20,7 +20,7 @@ public class CallbackPeriodStatus extends AStatus {
 
     public CallbackPeriodStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "callbackPeriod", mqttClient);
-	super.addTopicDescription("period", "Long", "JSON", "0", "..", "" + Long.MAX_VALUE);
+	super.addDescription("period", "Long", "JSON", "0", "..", "" + Long.MAX_VALUE);
     }
 
     public void updateIntent(CallbackPeriodIntent intent) {
@@ -32,7 +32,7 @@ public class CallbackPeriodStatus extends AStatus {
 	    return;
 	} else {
 	    this.period = period;
-	    publishStatus("period", toJSONMQTTMessage(period));
+	    publish("period", toJSONMQTTMessage(period));
 	}
 	return;
     }

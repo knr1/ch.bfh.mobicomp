@@ -22,9 +22,9 @@ public class CallbackThresholdStatus extends AStatus {
 
     public CallbackThresholdStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "callbackThreshold", mqttClient);
-	super.addTopicDescription("option", "Character", "JSON", "x", "o", "i", "\\<", "\\>");
-	super.addTopicDescription("min", "Integer", "JSON", "0", "...", "4095");
-	super.addTopicDescription("max", "Integer", "JSON", "0", "...", "4095");
+	super.addDescription("option", "Character", "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription("min", "Integer", "JSON", "0", "...", "4095");
+	super.addDescription("max", "Integer", "JSON", "0", "...", "4095");
     }
 
     public void updateIntent(CallbackThresholdIntent intent) {
@@ -38,7 +38,7 @@ public class CallbackThresholdStatus extends AStatus {
 	    return;
 	} else {
 	    this.option = option;
-	    publishStatus("option", toJSONMQTTMessage(option));
+	    publish("option", toJSONMQTTMessage(option));
 	}
 	return;
     }
@@ -48,7 +48,7 @@ public class CallbackThresholdStatus extends AStatus {
 	    return;
 	} else {
 	    this.min = min;
-	    publishStatus("min", toJSONMQTTMessage(min));
+	    publish("min", toJSONMQTTMessage(min));
 	}
 	return;
     }
@@ -58,7 +58,7 @@ public class CallbackThresholdStatus extends AStatus {
 	    return;
 	} else {
 	    this.max = max;
-	    publishStatus("max", toJSONMQTTMessage(max));
+	    publish("max", toJSONMQTTMessage(max));
 	}
 	return;
     }

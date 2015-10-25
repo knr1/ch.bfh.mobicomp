@@ -23,10 +23,10 @@ public class SwitchSocketAEvent extends AnEvent {
 
     public SwitchSocketAEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "switchSocketA", mqttClient);
-	super.addTopicDescription("houseCode", "Short", "JSON", "0", "...", "31");
-	super.addTopicDescription("receiverCode", "Short", "JSON", "0", "...", "31");
-	super.addTopicDescription("switchTo", "Short", "JSON", "0", "...", "1");
-	super.addTopicDescription("switching", "Boolean", "JSON", "true", "false");
+	super.addDescription("houseCode", "Short", "JSON", "0", "...", "31");
+	super.addDescription("receiverCode", "Short", "JSON", "0", "...", "31");
+	super.addDescription("switchTo", "Short", "JSON", "0", "...", "1");
+	super.addDescription("switching", "Boolean", "JSON", "true", "false");
     }
 
     public void updateIntent(SwitchSocketAIntent intent) {
@@ -41,7 +41,7 @@ public class SwitchSocketAEvent extends AnEvent {
 	    return;
 	} else {
 	    this.houseCode = houseCode;
-	    publishEvent("houseCode", toJSONMQTTMessage(houseCode));
+	    publish("houseCode", toJSONMQTTMessage(houseCode));
 	}
 
     }
@@ -51,7 +51,7 @@ public class SwitchSocketAEvent extends AnEvent {
 	    return;
 	} else {
 	    this.receiverCode = receiverCode;
-	    publishEvent("receiverCode", toJSONMQTTMessage(receiverCode));
+	    publish("receiverCode", toJSONMQTTMessage(receiverCode));
 	}
     }
 
@@ -60,7 +60,7 @@ public class SwitchSocketAEvent extends AnEvent {
 	    return;
 	} else {
 	    this.switchTo = switchTo;
-	    publishEvent("switchTo", toJSONMQTTMessage(switchTo));
+	    publish("switchTo", toJSONMQTTMessage(switchTo));
 	}
     }
 
@@ -69,7 +69,7 @@ public class SwitchSocketAEvent extends AnEvent {
 	    return;
 	} else {
 	    this.switching = switching;
-	    publishEvent("switching", toJSONMQTTMessage(switching));
+	    publish("switching", toJSONMQTTMessage(switching));
 	}
 	return;
     }

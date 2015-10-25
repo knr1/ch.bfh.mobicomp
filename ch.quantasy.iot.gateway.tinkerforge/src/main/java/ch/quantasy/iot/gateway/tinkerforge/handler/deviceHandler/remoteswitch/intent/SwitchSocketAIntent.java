@@ -22,25 +22,25 @@ public class SwitchSocketAIntent extends AnIntent {
 
     public SwitchSocketAIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "switchSocketA");
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
-	super.addTopicDescription("houseCode", "Short", "JSON", "0", "...", "31");
-	super.addTopicDescription("receiverCode", "Short", "JSON", "0", "...", "31");
-	super.addTopicDescription("switchTo", "Short", "JSON", "0", "...", "1");
+	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("houseCode", "Short", "JSON", "0", "...", "31");
+	super.addDescription("receiverCode", "Short", "JSON", "0", "...", "31");
+	super.addDescription("switchTo", "Short", "JSON", "0", "...", "1");
 
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/enabled")) {
+	if (string.endsWith(getName() + "/enabled")) {
 	    enabled = fromMQTTMessage(mm, Boolean.class);
 	}
-	if (string.endsWith(getIntentName() + "/houseCode")) {
+	if (string.endsWith(getName() + "/houseCode")) {
 	    houseCode = fromMQTTMessage(mm, Short.class);
 	}
-	if (string.endsWith(getIntentName() + "/receiverCode")) {
+	if (string.endsWith(getName() + "/receiverCode")) {
 	    receiverCode = fromMQTTMessage(mm, Short.class);
 	}
-	if (string.endsWith(getIntentName() + "/switchTo")) {
+	if (string.endsWith(getName() + "/switchTo")) {
 	    switchTo = fromMQTTMessage(mm, Short.class);
 	}
 

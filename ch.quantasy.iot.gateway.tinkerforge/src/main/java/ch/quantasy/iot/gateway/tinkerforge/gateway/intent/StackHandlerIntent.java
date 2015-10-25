@@ -24,13 +24,13 @@ public class StackHandlerIntent extends AnIntent {
 
     public StackHandlerIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "stackHandler");
-	super.addTopicDescription("stackAddress", "String", "JSON", "{\"hostName\":\"[String]\",\"port\":[Integer]}");
+	super.addDescription("stackAddress", "String", "JSON", "{\"hostName\":\"[String]\",\"port\":[Integer]}");
 
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/stackAddress")) {
+	if (string.endsWith(getName() + "/stackAddress")) {
 	    stackAddress = fromMQTTMessage(mm, TinkerforgeStackAddress.class);
 	}
 

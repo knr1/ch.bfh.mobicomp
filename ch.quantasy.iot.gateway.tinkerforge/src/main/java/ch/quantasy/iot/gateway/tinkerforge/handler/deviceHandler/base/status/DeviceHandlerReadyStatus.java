@@ -20,8 +20,8 @@ public class DeviceHandlerReadyStatus extends AStatus {
 
     public DeviceHandlerReadyStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "ready", mqttClient);
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
-	super.addTopicDescription("connected", "Boolean", "JSON", "true", "false");
+	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("connected", "Boolean", "JSON", "true", "false");
     }
 
     public void updateEnabled(boolean enabled) {
@@ -29,7 +29,7 @@ public class DeviceHandlerReadyStatus extends AStatus {
 	    return;
 	} else {
 	    this.enabled = enabled;
-	    publishStatus("enabled", toJSONMQTTMessage(enabled));
+	    publish("enabled", toJSONMQTTMessage(enabled));
 	}
 	return;
     }
@@ -39,6 +39,6 @@ public class DeviceHandlerReadyStatus extends AStatus {
 	    return;
 	}
 	this.reachable = reachable;
-	publishStatus("reachable", toJSONMQTTMessage(reachable));
+	publish("reachable", toJSONMQTTMessage(reachable));
     }
 }

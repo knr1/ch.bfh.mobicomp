@@ -22,25 +22,25 @@ public class MonoflopIntent extends AnIntent {
 
     public MonoflopIntent(AHandler deviceHandler, String topic) {
 	super(deviceHandler, topic, "monoflop");
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
-	super.addTopicDescription("time", "Long", "JSON", "0", "...", "" + Long.MAX_VALUE);
-	super.addTopicDescription("relay", "Short", "JSON", "1", "2");
-	super.addTopicDescription("state", "Boolean", "JSON", "true", "false");
+	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("time", "Long", "JSON", "0", "...", "" + Long.MAX_VALUE);
+	super.addDescription("relay", "Short", "JSON", "1", "2");
+	super.addDescription("state", "Boolean", "JSON", "true", "false");
 
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/enabled")) {
+	if (string.endsWith(getName() + "/enabled")) {
 	    enabled = fromMQTTMessage(mm, Boolean.class);
 	}
-	if (string.endsWith(getIntentName() + "/time")) {
+	if (string.endsWith(getName() + "/time")) {
 	    time = fromMQTTMessage(mm, Long.class);
 	}
-	if (string.endsWith(getIntentName() + "/relay")) {
+	if (string.endsWith(getName() + "/relay")) {
 	    relay = fromMQTTMessage(mm, Short.class);
 	}
-	if (string.endsWith(getIntentName() + "/state")) {
+	if (string.endsWith(getName() + "/state")) {
 	    state = fromMQTTMessage(mm, Boolean.class);
 	}
 

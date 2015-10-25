@@ -23,9 +23,9 @@ public class MorseEvent extends AnEvent {
 
     public MorseEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "morse", mqttClient);
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
-	super.addTopicDescription("code", "String", "JSON", ".", "-", " ", "unbounded");
-	super.addTopicDescription("frequency", "Integer", "JSON", "585", "...", "7100");
+	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("code", "String", "JSON", ".", "-", " ", "unbounded");
+	super.addDescription("frequency", "Integer", "JSON", "585", "...", "7100");
     }
 
     public void updateIntent(MorseIntent intent) {
@@ -41,7 +41,7 @@ public class MorseEvent extends AnEvent {
 	    return;
 	} else {
 	    this.enabled = enabled;
-	    publishEvent("enabled", toJSONMQTTMessage(enabled));
+	    publish("enabled", toJSONMQTTMessage(enabled));
 	}
 	return;
     }
@@ -51,7 +51,7 @@ public class MorseEvent extends AnEvent {
 	    return;
 	} else {
 	    this.code = code;
-	    publishEvent("code", toJSONMQTTMessage(code));
+	    publish("code", toJSONMQTTMessage(code));
 	}
 	return;
     }
@@ -61,7 +61,7 @@ public class MorseEvent extends AnEvent {
 	    return;
 	} else {
 	    this.frequency = frequency;
-	    publishEvent("frequency", toJSONMQTTMessage(frequency));
+	    publish("frequency", toJSONMQTTMessage(frequency));
 	}
 	return;
     }

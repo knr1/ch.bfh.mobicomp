@@ -9,22 +9,15 @@ package ch.quantasy.iot.gateway.tinkerforge.base;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class IntentDescription {
+public class IntentDescription extends MessageDescription {
 
-    public final String applicationIntentTopic;
-    public final String intentTopic;
-    public final String intentPropertyTopic;
-    public final String type;
-    public final String representation;
-    public final String[] range;
+    public IntentDescription(String applicationMessageTopic, String applicationName, String messageTopic, String messagePropertyTopic, String type, String representation, String... range) {
+	super(applicationMessageTopic, applicationName, messageTopic, messagePropertyTopic, type, representation, range);
+    }
 
-    public IntentDescription(String applicationIntentTopic, String applicationName, String intentTopic, String intentPropertyTopic, String type, String representation, String... range) {
-	this.applicationIntentTopic = "/" + applicationIntentTopic + "/" + applicationName + "/[identificationString]/intent";
-	this.intentTopic = "/" + intentTopic;
-	this.intentPropertyTopic = "/" + intentPropertyTopic;
-	this.type = type;
-	this.representation = representation;
-	this.range = range;
+    @Override
+    public String getMessageType() {
+	return "intent";
     }
 
 }

@@ -19,12 +19,12 @@ public class DebouncePeriodIntent extends AnIntent {
 
     public DebouncePeriodIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "debounce");
-	super.addTopicDescription("period", "Long", "JSON", "0", "...", "" + Long.MAX_VALUE);
+	super.addDescription("period", "Long", "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/period")) {
+	if (string.endsWith(getName() + "/period")) {
 	    period = fromMQTTMessage(mm, Long.class);
 	}
     }

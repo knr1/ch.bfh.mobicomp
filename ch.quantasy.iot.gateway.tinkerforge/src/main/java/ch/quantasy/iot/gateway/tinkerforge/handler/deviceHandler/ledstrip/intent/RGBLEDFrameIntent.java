@@ -20,12 +20,12 @@ public class RGBLEDFrameIntent extends AnIntent {
 
     public RGBLEDFrameIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "RGBFrame");
-	super.addTopicDescription("rgbFrame", "Short[][]", "JSON", "[[]<=319,[]<=319,[]<=319]=3", "[[0],[0],[0]]", "...", "[[255],[255],[255]]");
+	super.addDescription("rgbFrame", "Short[][]", "JSON", "[[]<=319,[]<=319,[]<=319]=3", "[[0],[0],[0]]", "...", "[[255],[255],[255]]");
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/rgbFrame")) {
+	if (string.endsWith(getName() + "/rgbFrame")) {
 	    rgbFrame = fromMQTTMessage(mm, short[][].class);
 	}
     }

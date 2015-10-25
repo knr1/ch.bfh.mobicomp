@@ -20,7 +20,7 @@ public class MovingAverageStatus extends AStatus {
 
     public MovingAverageStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "movingAverage", mqttClient);
-	super.addTopicDescription("average", "Short", "JSON", "0", "..", "100");
+	super.addDescription("average", "Short", "JSON", "0", "..", "100");
     }
 
     public void updateIntent(MovingAverageIntent intent) {
@@ -32,7 +32,7 @@ public class MovingAverageStatus extends AStatus {
 	    return;
 	} else {
 	    this.average = average;
-	    publishStatus("average", toJSONMQTTMessage(average));
+	    publish("average", toJSONMQTTMessage(average));
 	}
 	return;
     }

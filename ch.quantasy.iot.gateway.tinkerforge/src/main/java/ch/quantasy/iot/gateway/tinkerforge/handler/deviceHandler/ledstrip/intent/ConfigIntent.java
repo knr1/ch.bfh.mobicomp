@@ -23,29 +23,29 @@ public class ConfigIntent extends AnIntent {
 
     public ConfigIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "config");
-	super.addTopicDescription("chipType", "Integer", "JSON", "2801", "2811", "2812");
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
-	super.addTopicDescription("clockFrequencyOfICsInHz", "Long", "JSON", "10000", "...", "2000000");
-	super.addTopicDescription("frameDurationInMilliseconds", "Integer", "JSON", "1", "...", "" + Integer.MAX_VALUE);
-	super.addTopicDescription("numberOfLEDs", "Integer", "1", "...", "319");
+	super.addDescription("chipType", "Integer", "JSON", "2801", "2811", "2812");
+	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("clockFrequencyOfICsInHz", "Long", "JSON", "10000", "...", "2000000");
+	super.addDescription("frameDurationInMilliseconds", "Integer", "JSON", "1", "...", "" + Integer.MAX_VALUE);
+	super.addDescription("numberOfLEDs", "Integer", "1", "...", "319");
 
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/enabled")) {
+	if (string.endsWith(getName() + "/enabled")) {
 	    enabled = fromMQTTMessage(mm, Boolean.class);
 	}
-	if (string.endsWith(getIntentName() + "/chipType")) {
+	if (string.endsWith(getName() + "/chipType")) {
 	    chipType = fromMQTTMessage(mm, Integer.class);
 	}
-	if (string.endsWith(getIntentName() + "/clockFrequencyOfICsInHz")) {
+	if (string.endsWith(getName() + "/clockFrequencyOfICsInHz")) {
 	    clockFrequencyOfICsInHz = fromMQTTMessage(mm, Long.class);
 	}
-	if (string.endsWith(getIntentName() + "/frameDurationInMilliseconds")) {
+	if (string.endsWith(getName() + "/frameDurationInMilliseconds")) {
 	    frameDurationInMilliseconds = fromMQTTMessage(mm, Integer.class);
 	}
-	if (string.endsWith(getIntentName() + "/numberOfLEDs")) {
+	if (string.endsWith(getName() + "/numberOfLEDs")) {
 	    numberOfLEDs = fromMQTTMessage(mm, Integer.class);
 	}
 

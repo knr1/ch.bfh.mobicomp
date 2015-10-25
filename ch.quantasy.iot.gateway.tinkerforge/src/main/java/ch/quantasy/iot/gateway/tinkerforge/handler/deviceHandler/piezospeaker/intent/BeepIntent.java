@@ -21,20 +21,20 @@ public class BeepIntent extends AnIntent {
 
     public BeepIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "beep");
-	super.addTopicDescription("enabled", "Boolean", "JSON", "true", "false");
-	super.addTopicDescription("duration", "Long", "JSON", "1", "...", "" + Long.MAX_VALUE);
-	super.addTopicDescription("frequency", "Integer", "JSON", "585", "...", "7100");
+	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("duration", "Long", "JSON", "1", "...", "" + Long.MAX_VALUE);
+	super.addDescription("frequency", "Integer", "JSON", "585", "...", "7100");
     }
 
     @Override
     protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getIntentName() + "/enabled")) {
+	if (string.endsWith(getName() + "/enabled")) {
 	    enabled = fromMQTTMessage(mm, Boolean.class);
 	}
-	if (string.endsWith(getIntentName() + "/duration")) {
+	if (string.endsWith(getName() + "/duration")) {
 	    duration = fromMQTTMessage(mm, Long.class);
 	}
-	if (string.endsWith(getIntentName() + "/frequency")) {
+	if (string.endsWith(getName() + "/frequency")) {
 	    frequency = fromMQTTMessage(mm, Integer.class);
 	}
 
