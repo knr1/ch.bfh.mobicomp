@@ -5,6 +5,7 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch;
 
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.event.DimSocketBEvent;
@@ -17,7 +18,6 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.in
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.intent.SwitchSocketBIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.intent.SwitchSocketCIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.status.RepeatsStatus;
-import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletRemoteSwitch;
 import com.tinkerforge.NotConnectedException;
@@ -36,21 +36,9 @@ public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implement
 
     public RemoteSwitch(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(stackApplication, mqttURI, stackAddress, identityString);
-    }
-
-    @Override
-    public Class[] getIntentClasses() {
-	return new Class[]{RepeatsIntent.class, SwitchSocketAIntent.class, SwitchSocketBIntent.class, DimSocketBIntent.class, SwitchSocketCIntent.class};
-    }
-
-    @Override
-    public Class[] getEventClasses() {
-	return new Class[]{SwitchSocketAEvent.class, SwitchSocketBEvent.class, DimSocketBEvent.class, SwitchSocketCEvent.class};
-    }
-
-    @Override
-    protected Class[] getDeviceStatusClasses() {
-	return new Class[]{RepeatsStatus.class};
+	super.addIntentClass(RepeatsIntent.class, SwitchSocketAIntent.class, SwitchSocketBIntent.class, DimSocketBIntent.class, SwitchSocketCIntent.class);
+	super.addStatusClass(RepeatsStatus.class);
+	super.addEventClass(SwitchSocketAEvent.class, SwitchSocketBEvent.class, DimSocketBEvent.class, SwitchSocketCEvent.class);
     }
 
     @Override

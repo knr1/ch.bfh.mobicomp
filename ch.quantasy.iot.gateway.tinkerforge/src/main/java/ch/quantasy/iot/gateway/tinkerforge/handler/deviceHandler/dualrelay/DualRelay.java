@@ -33,21 +33,9 @@ public class DualRelay extends ADeviceHandler<BrickletDualRelay> implements Bric
 
     public DualRelay(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(stackApplication, mqttURI, stackAddress, identityString);
-    }
-
-    @Override
-    public Class[] getIntentClasses() {
-	return new Class[]{MonoflopIntent.class, DualRelayIntent.class};
-    }
-
-    @Override
-    public Class[] getEventClasses() {
-	return new Class[]{DualRelayEvent.class, MonoflopEvent.class};
-    }
-
-    @Override
-    protected Class[] getDeviceStatusClasses() {
-	return new Class[]{DualRelayStatus.class};
+	super.addIntentClass(MonoflopIntent.class, DualRelayIntent.class);
+	super.addStatusClass(DualRelayStatus.class);
+	super.addEventClass(DualRelayEvent.class, MonoflopEvent.class);
     }
 
     @Override

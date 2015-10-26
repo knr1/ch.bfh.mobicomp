@@ -8,8 +8,9 @@ package ch.quantasy.iot.gateway.tinkerforge.base;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
+import ch.quantasy.iot.gateway.tinkerforge.base.status.HandlerReadyStatus;
 import ch.quantasy.iot.gateway.tinkerforge.gateway.TFMQTTGateway;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.status.DeviceHandlerReadyStatus;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,7 +35,8 @@ public abstract class AHandler implements MqttCallback {
     public static final String DEVICE_DESCRIPTION_TOPIC = TFMQTTGateway.TOPIC + "/Description";
 
     private final String identityString;
-    private final Map<String, Set<AnIntent>> intentsMap;
+    private final Set<Class> intentSet;
+    private final Map<String, Map<Class, AnIntent>> intentsMap;
     private final Map<Class, AnEvent> eventMap;
     private final Map<Class, AStatus> statusMap;
     private final String statusTopic;
@@ -52,26 +54,12 @@ public abstract class AHandler implements MqttCallback {
 	this.eventTopic = getDeviceBaseTopic() + "/event";
 	this.statusTopic = getDeviceBaseTopic() + "/status";
 	this.mqttClient = new MqttAsyncClient(mqttURI.toString(), identityString);
-	intentsMap = new HashMap<>();
-	Set<AnIntent> intents = createIntentSet();
-	intentsMap.put("", intents);
-	eventMap = createEventMap();
-	statusMap = createStatusMap();
+	this.intentSet = new HashSet<>();
+	this.intentsMap = new HashMap<>();
+	this.eventMap = new HashMap<>();
+	this.statusMap = new HashMap<>();
+	this.addStatusClass(HandlerReadyStatus.class);
 	connectToMQTT();
-
-	for (AnIntent intent : intents) {
-	    intent.publishDescriptions(mqttClient);
-	}
-
-	for (AnEvent event : eventMap.values()) {
-	    event.publishDescriptions();
-	}
-
-	for (AStatus status : statusMap.values()) {
-	    status.publishDescriptions();
-	}
-	publishStatus();
-
     }
 
     protected URI getMqttURI() {
@@ -90,43 +78,10 @@ public abstract class AHandler implements MqttCallback {
 	return (T) statusMap.get(classOfT);
     }
 
-    private Map<Class, AnEvent> createEventMap() throws Throwable {
-	Map<Class, AnEvent> eventMap = new HashMap<>();
-
-	for (Class eventClass : getEventClasses()) {
-	    eventMap.put(eventClass, (AnEvent) eventClass.getConstructor(AHandler.class, String.class, MqttAsyncClient.class
-		 ).newInstance(this, eventTopic, mqttClient));
-	}
-	return eventMap;
-    }
-
-    private Map<Class, AStatus> createStatusMap() throws Throwable {
-	Map<Class, AStatus> statusMap = new HashMap<>();
-
-	for (Class statusClass : getStatusClasses()) {
-	    statusMap.put(statusClass, (AStatus) statusClass.getConstructor(AHandler.class, String.class, MqttAsyncClient.class).newInstance(this, statusTopic, mqttClient));
-	}
-	return statusMap;
-    }
-
-    private Set<AnIntent> createIntentSet() throws Throwable {
-	Set<AnIntent> intents = new HashSet<>();
-	for (Class intentClass : getIntentClasses()) {
-	    intents.add((AnIntent) intentClass.getConstructor(AHandler.class, String.class).newInstance(this, intentTopic));
-	}
-	return intents;
-    }
-
-    public void publishStatus() {
-	DeviceHandlerReadyStatus readyStatus = getStatus(DeviceHandlerReadyStatus.class);
-	readyStatus.updateEnabled(true);
-	readyStatus.updateReachable(true);
-    }
-
-    private void connectToMQTT() throws MqttException {
+    protected void connectToMQTT() throws MqttException {
 	MqttConnectOptions connectOptions = new MqttConnectOptions();
 	connectOptions.setCleanSession(false);
-	DeviceHandlerReadyStatus readyStatus = getStatus(DeviceHandlerReadyStatus.class);
+	HandlerReadyStatus readyStatus = getStatus(HandlerReadyStatus.class);
 	MqttMessage message = readyStatus.toJSONMQTTMessage(false);
 	connectOptions.setWill(readyStatus.getTopic() + "/reachable", message.getPayload(), 1, true);
 	this.mqttClient.setCallback(this);
@@ -135,7 +90,8 @@ public abstract class AHandler implements MqttCallback {
 	this.mqttClient.subscribe(intentTopic + "/#", 1);
     }
 
-    public void disconnectFromMQTT() throws MqttException {
+    protected void disconnectFromMQTT() throws MqttException {
+	getStatus(HandlerReadyStatus.class).updateReachable(false);
 	IMqttToken token = this.mqttClient.disconnect();
 	token.waitForCompletion();
     }
@@ -152,13 +108,13 @@ public abstract class AHandler implements MqttCallback {
     public void messageArrived(String string, MqttMessage mm) throws Exception {
 	if (string.startsWith(intentTopic)) {
 	    String substring = string.substring(string.indexOf("intent/") + 7);
-	    Set<AnIntent> intents;
+	    Map<Class, AnIntent> intents;
 	    if (substring.startsWith("<")) {
 		String tenant = substring.substring(0, substring.indexOf(">"));
 		intents = intentsMap.get(tenant);
 		if (intents == null) {
 		    try {
-			intents = createIntentSet();
+			intents = createIntentMap();
 		    } catch (Throwable ex) {
 			if (ex instanceof Exception) {
 			    throw (Exception) ex;
@@ -168,11 +124,10 @@ public abstract class AHandler implements MqttCallback {
 		    }
 		    intentsMap.put(tenant, intents);
 		}
-	    } else {
-		intents = intentsMap.get("");
-	    }
-	    for (AnIntent intent : intents) {
-		intent.processMessage(string, mm);
+
+		for (AnIntent intent : intents.values()) {
+		    intent.processMessage(string, mm);
+		}
 	    }
 	}
     }
@@ -186,13 +141,83 @@ public abstract class AHandler implements MqttCallback {
 	return this.deviceNameTopic;
     }
 
+    private Map<Class, AnIntent> createIntentMap() {
+	Map<Class, AnIntent> intentMap = new HashMap<>();
+	for (Class intentClass : intentSet) {
+	    try {
+		intentMap.put(intentClass, (AnIntent) intentClass.getConstructor(AHandler.class, String.class
+		      ).newInstance(this, intentTopic));
+	    } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+		Logger.getLogger(AHandler.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
+	return intentMap;
+    }
+
+    public void addIntentClass(Class... classes) {
+	for (Class intentClass : classes) {
+	    intentSet.add(intentClass);
+
+	    try {
+		for (Map<Class, AnIntent> intentEntry : intentsMap.values()) {
+		    if (!intentEntry.containsKey(intentClass)) {
+			intentEntry.put(intentClass, (AnIntent) intentClass.getConstructor(AHandler.class, String.class
+				).newInstance(this, intentTopic));
+		    }
+		}
+
+	    } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+		Logger.getLogger(AHandler.class
+			.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
+	if (mqttClient != null && mqttClient.isConnected()) {
+	    for (Class intentClass : intentSet) {
+		try {
+		    AnIntent intent = (AnIntent) intentClass.getConstructor(AHandler.class, String.class).newInstance(this, intentTopic);
+		    intent.publishDescriptions(mqttClient);
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+		    Logger.getLogger(AHandler.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	    }
+	}
+    }
+
+    public void addEventClass(Class... classes) {
+	for (Class eventClass : classes) {
+	    try {
+		eventMap.put(eventClass, (AnEvent) eventClass.getConstructor(AHandler.class, String.class, MqttAsyncClient.class
+		     ).newInstance(this, eventTopic, mqttClient));
+	    } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+		Logger.getLogger(AHandler.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
+	if (mqttClient != null && mqttClient.isConnected()) {
+	    for (AnEvent event : eventMap.values()) {
+		event.publishDescriptions();
+	    }
+	}
+
+    }
+
+    public void addStatusClass(Class... classes) {
+	for (Class statusClass : classes) {
+	    try {
+		statusMap.put(statusClass, (AStatus) statusClass.getConstructor(AHandler.class, String.class, MqttAsyncClient.class
+		      ).newInstance(this, statusTopic, mqttClient));
+	    } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+		Logger.getLogger(AHandler.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
+	if (mqttClient != null && mqttClient.isConnected()) {
+	    for (AStatus status : statusMap.values()) {
+		status.publishDescriptions();
+	    }
+	    getStatus(HandlerReadyStatus.class).updateReachable(true);
+	}
+    }
+
     public abstract String getApplicationName();
-
-    protected abstract Class[] getIntentClasses();
-
-    protected abstract Class[] getEventClasses();
-
-    protected abstract Class[] getStatusClasses();
 
     /**
      * This method allows to describe the strategy of the DeviceHandler for any incoming intent.

@@ -5,18 +5,16 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base;
 
-import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.status.DeviceHandlerReadyStatus;
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.gateway.TFMQTTGateway;
+import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.status.DeviceHandlerReadyStatus;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.Device;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  *
@@ -30,18 +28,9 @@ public abstract class ADeviceHandler<D extends Device> extends AHandler {
 
     public ADeviceHandler(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(mqttURI, TFMQTTGateway.TOPIC + "/" + stackAddress.hostName + "/" + stackAddress.port, identityString);
+	super.addStatusClass(DeviceHandlerReadyStatus.class);
 	this.stackApplication = stackApplication;
-	//this.deviceBaseTopic = TFMQTTGateway.TOPIC + "/" + stackAddress.hostName + "/" + stackAddress.port + "/" + getApplicationName() + "/" + identityString;
     }
-
-    @Override
-    protected final Class[] getStatusClasses() {
-	ArrayList<Class> statusClassList = new ArrayList<>(Arrays.asList(getDeviceStatusClasses()));
-	statusClassList.add(DeviceHandlerReadyStatus.class);
-	return statusClassList.toArray(new Class[0]);
-    }
-
-    protected abstract Class[] getDeviceStatusClasses();
 
     public void enableDevice(D device) {
 	try {

@@ -5,10 +5,10 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.motiondetector;
 
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.motiondetector.event.MotionDetectedEvent;
-import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletMotionDetector;
 import java.net.URI;
@@ -25,19 +25,10 @@ public class MotionDetector extends ADeviceHandler<BrickletMotionDetector> imple
 
     public MotionDetector(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(stackApplication, mqttURI, stackAddress, identityString);
+	super.addEventClass(MotionDetectedEvent.class);
     }
 
     public Class[] getIntentClasses() {
-	return new Class[]{};
-    }
-
-    @Override
-    protected Class[] getEventClasses() {
-	return new Class[]{};
-    }
-
-    @Override
-    protected Class[] getDeviceStatusClasses() {
 	return new Class[]{};
     }
 

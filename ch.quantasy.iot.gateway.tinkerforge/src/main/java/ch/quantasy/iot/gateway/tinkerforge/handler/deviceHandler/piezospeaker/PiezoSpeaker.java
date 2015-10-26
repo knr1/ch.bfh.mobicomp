@@ -5,6 +5,7 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker;
 
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.event.BeepEvent;
@@ -13,7 +14,6 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.ev
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.intent.BeepIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.intent.CalibrateIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.intent.MorseIntent;
-import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletPiezoSpeaker;
 import com.tinkerforge.NotConnectedException;
@@ -32,21 +32,8 @@ public class PiezoSpeaker extends ADeviceHandler<BrickletPiezoSpeaker> implement
 
     public PiezoSpeaker(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(stackApplication, mqttURI, stackAddress, identityString);
-    }
-
-    @Override
-    public Class[] getIntentClasses() {
-	return new Class[]{MorseIntent.class, BeepIntent.class, CalibrateIntent.class};
-    }
-
-    @Override
-    public Class[] getEventClasses() {
-	return new Class[]{BeepEvent.class, MorseEvent.class, CalibrateEvent.class};
-    }
-
-    @Override
-    protected Class[] getDeviceStatusClasses() {
-	return new Class[]{};
+	super.addIntentClass(MorseIntent.class, BeepIntent.class, CalibrateIntent.class);
+	super.addEventClass(BeepEvent.class, MorseEvent.class, CalibrateEvent.class);
     }
 
     @Override

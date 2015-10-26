@@ -5,6 +5,7 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture;
 
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.event.MoistureEvent;
@@ -17,7 +18,6 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.status
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.status.CallbackThresholdStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.status.DebounceStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.status.MovingAverageStatus;
-import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletMoisture;
 import com.tinkerforge.NotConnectedException;
@@ -36,20 +36,12 @@ public class Moisture extends ADeviceHandler<BrickletMoisture> implements Brickl
 
     public Moisture(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(stackApplication, mqttURI, stackAddress, identityString);
+	super.addStatusClass(CallbackPeriodStatus.class, CallbackThresholdStatus.class, DebounceStatus.class, MovingAverageStatus.class);
+	super.addEventClass(MoistureEvent.class, MoistureReachedEvent.class);
     }
 
     public Class[] getIntentClasses() {
 	return new Class[]{CallbackPeriodIntent.class, CallbackThresholdIntent.class, DebouncePeriodIntent.class, MovingAverageIntent.class};
-    }
-
-    @Override
-    protected Class[] getEventClasses() {
-	return new Class[]{MoistureEvent.class, MoistureReachedEvent.class};
-    }
-
-    @Override
-    protected Class[] getDeviceStatusClasses() {
-	return new Class[]{CallbackPeriodStatus.class, CallbackThresholdStatus.class, DebounceStatus.class, MovingAverageStatus.class};
     }
 
     @Override

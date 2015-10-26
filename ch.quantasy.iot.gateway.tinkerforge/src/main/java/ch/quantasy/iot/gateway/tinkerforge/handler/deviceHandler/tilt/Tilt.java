@@ -5,12 +5,12 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.tilt;
 
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.tilt.event.TiltStateEvent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.tilt.intent.TiltStateCallbackIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.tilt.status.TiltStateCallbackStatus;
-import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletTilt;
 import com.tinkerforge.NotConnectedException;
@@ -29,20 +29,12 @@ public class Tilt extends ADeviceHandler<BrickletTilt> implements BrickletTilt.T
 
     public Tilt(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(stackApplication, mqttURI, stackAddress, identityString);
+	super.addStatusClass(TiltStateCallbackStatus.class);
+	super.addEventClass(TiltStateEvent.class);
     }
 
     public Class[] getIntentClasses() {
 	return new Class[]{TiltStateCallbackIntent.class};
-    }
-
-    @Override
-    protected Class[] getEventClasses() {
-	return new Class[]{TiltStateEvent.class};
-    }
-
-    @Override
-    protected Class[] getDeviceStatusClasses() {
-	return new Class[]{TiltStateCallbackStatus.class};
     }
 
     @Override

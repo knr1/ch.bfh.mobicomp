@@ -5,12 +5,12 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ledstrip;
 
+import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ledstrip.intent.ConfigIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ledstrip.intent.RGBLEDFrameIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ledstrip.status.ConfigStatus;
-import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletLEDStrip;
 import com.tinkerforge.NotConnectedException;
@@ -68,6 +68,8 @@ public class LedStrip extends ADeviceHandler<BrickletLEDStrip> implements Brickl
 
     public LedStrip(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(stackApplication, mqttURI, stackAddress, identityString);
+	super.addIntentClass(ConfigIntent.class, RGBLEDFrameIntent.class);
+	super.addStatusClass(ConfigStatus.class);
 	System.out.println("Concurrent");
 	this.setChipType(LedStrip.DEFAULT_CHIP_TYPE);
 	this.setClockFrequencyOfICsInHz(LedStrip.DEFAULT_CLOCK_FREQUENCY_OF_ICS_IN_HZ);
@@ -80,21 +82,6 @@ public class LedStrip extends ADeviceHandler<BrickletLEDStrip> implements Brickl
 	System.out.println("sendingState set");
 	this.setNumberOfLEDs(LedStrip.DEFAULT_NUMBER_OF_LEDS);
 	System.out.println("NumLEDs set");
-    }
-
-    @Override
-    public Class[] getIntentClasses() {
-	return new Class[]{ConfigIntent.class, RGBLEDFrameIntent.class};
-    }
-
-    @Override
-    public Class[] getEventClasses() {
-	return new Class[]{};
-    }
-
-    @Override
-    protected Class[] getDeviceStatusClasses() {
-	return new Class[]{ConfigStatus.class};
     }
 
     @Override

@@ -28,7 +28,7 @@ public class ManagedStackHandlersStatus extends AStatus {
 	    return;
 	} else {
 	    this.managedStackAddresses = managedStackHandlers;
-	    publish("adddresses", toJSONMQTTMessage(managedStackHandlers));
+	    publish("addresses", toJSONMQTTMessage(managedStackHandlers));
 	}
 	return;
     }
