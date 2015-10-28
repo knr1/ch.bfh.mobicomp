@@ -24,6 +24,17 @@ public abstract class AStatus extends AMessage<StatusDescription> {
 	this.mqttClient = mqttClient;
     }
 
+    public void updateIntent(AnIntent intent) {
+	for (Content triple : this.getValueMap().values()) {
+	    byte[] content = intent.getTriple(triple.getProperty()).rawValue;
+	    if (content != null) {
+		if (triple.updateContent(content)) {
+		    publish(triple.getProperty(), toJSONMQTTMessage(content));
+		}
+	    }
+	}
+    }
+
     public void publish(String statusPropertyName, MqttMessage mqttMessage) {
 	super.publish(statusPropertyName, mqttMessage, mqttClient);
     }
@@ -37,7 +48,7 @@ public abstract class AStatus extends AMessage<StatusDescription> {
 	return "status";
     }
 
-    protected void addDescription(String propertyName, String type, String representation, String... range) {
+    protected void addDescription(String propertyName, Class type, String representation, String... range) {
 	super.addDescription(new StatusDescription(AHandler.DEVICE_DESCRIPTION_TOPIC, getDeviceHandler().getApplicationName(), getName(), propertyName, type, representation, range));
     }
 

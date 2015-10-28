@@ -19,7 +19,7 @@ public class MotionDetectedEvent extends AnEvent {
 
     public MotionDetectedEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "motionDetected", mqttClient);
-	super.addDescription("detected", "Boolean", "JSON", "true", "false");
+	super.addDescription("detected", Boolean.class, "JSON", "true", "false");
 
     }
 

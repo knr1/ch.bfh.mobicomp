@@ -19,7 +19,7 @@ public class MovingAverageIntent extends AnIntent {
 
     public MovingAverageIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "movingAverage");
-	super.addDescription("average", "Short", "JSON", "0", "...", "100");
+	super.addDescription("average", Short.class, "JSON", "0", "...", "100");
     }
 
     @Override

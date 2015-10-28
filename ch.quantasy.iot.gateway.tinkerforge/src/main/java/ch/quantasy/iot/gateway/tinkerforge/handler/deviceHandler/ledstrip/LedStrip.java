@@ -25,6 +25,14 @@ import java.util.logging.Logger;
  */
 public class LedStrip extends ADeviceHandler<BrickletLEDStrip> implements BrickletLEDStrip.FrameRenderedListener {
 
+    public static final String CONFIG_CLOCK_FREQUENCY_OF_ICS_IN_HZ = "clockFrequencyOfICsInHz";
+    public static final String CONFIG_ENABLED = "enabled";
+    public static final String CONFIG_FRAME_DURATION_IN_MILLISECONDS = "frameDurationInMilliseconds";
+    public static final String CONFIG_CHIP_TYPE = "chipType";
+    public static final String CONFIG_NUMBER_OF_LEDS = "numberOfLEDs";
+
+    public static final String RGB_FRAME = "rgbFrame";
+
     private enum SendState {
 
 	FREE, PREPARING, TO_BE_SENT, SENDING, MAINTENANCE;
@@ -349,14 +357,14 @@ public class LedStrip extends ADeviceHandler<BrickletLEDStrip> implements Brickl
     }
 
     public void executeIntent(RGBLEDFrameIntent intent) {
-	setRGBLEDs(intent.rgbFrame);
+	setRGBLEDs(intent.getTriple(LedStrip.RGB_FRAME).getValue(short[][].class));
     }
 
     public void executeIntent(ConfigIntent intent) throws TimeoutException, NotConnectedException {
-	setChipType(intent.chipType);
-	setClockFrequencyOfICsInHz((int) intent.clockFrequencyOfICsInHz);
-	setFrameDurationInMilliseconds(intent.frameDurationInMilliseconds);
-	setNumberOfLEDs(intent.numberOfLEDs);
+	setChipType(intent.getTriple(CONFIG_CHIP_TYPE).getValue(Integer.class));
+	setClockFrequencyOfICsInHz(intent.getTriple(CONFIG_CLOCK_FREQUENCY_OF_ICS_IN_HZ).getValue(Long.class).intValue());
+	setFrameDurationInMilliseconds(intent.getTriple(CONFIG_FRAME_DURATION_IN_MILLISECONDS).getValue(Integer.class));
+	setNumberOfLEDs(intent.getTriple(CONFIG_NUMBER_OF_LEDS).getValue(Integer.class));
 	getStatus(ConfigStatus.class).updateChipType(getDevice().getChipType());
 	getStatus(ConfigStatus.class).updateClockFrequencyOfICsInHz(getDevice().getClockFrequency());
 	getStatus(ConfigStatus.class).updateFrameDurationInMilliseconds(getDevice().getFrameDuration());

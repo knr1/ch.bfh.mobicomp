@@ -5,9 +5,9 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.status;
 
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.intent.RepeatsIntent;
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.intent.RepeatsIntent;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -20,7 +20,7 @@ public class RepeatsStatus extends AStatus {
 
     public RepeatsStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "repeats", mqttClient);
-	super.addDescription("repeats", "Short", "JSON", "0", "...", "" + Short.MAX_VALUE);
+	super.addDescription("repeats", Short.class, "JSON", "0", "...", "" + Short.MAX_VALUE);
     }
 
     public void updateIntent(RepeatsIntent intent) {

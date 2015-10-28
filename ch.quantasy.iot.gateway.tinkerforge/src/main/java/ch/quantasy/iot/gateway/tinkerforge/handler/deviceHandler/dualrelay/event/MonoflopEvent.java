@@ -7,7 +7,6 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.even
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.intent.MonoflopIntent;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -22,15 +21,9 @@ public class MonoflopEvent extends AnEvent {
 
     public MonoflopEvent(AHandler deviceHandler, String topic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, topic, "monoflop", mqttClient);
-	super.addDescription("time", "Long", "JSON", "0", "...", "" + Long.MAX_VALUE);
-	super.addDescription("relay", "Short", "JSON", "0", "...", "15");
-	super.addDescription("state", "Boolean", "JSON", "true", "false");
-    }
-
-    public void updateIntent(MonoflopIntent intent) {
-	updateTime(intent.time);
-	updateRelay(intent.relay);
-	updateState(intent.state);
+	super.addDescription("time", Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
+	super.addDescription("relay", Short.class, "JSON", "0", "...", "15");
+	super.addDescription("state", Boolean.class, "JSON", "true", "false");
     }
 
     public void updateTime(long time) {

@@ -10,7 +10,6 @@ import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
  *
@@ -18,26 +17,28 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class StackHandlerIntent extends AnIntent {
 
-    public TinkerforgeStackAddress stackAddress;
+    public static final String STACK_ADDRESS = "stackAddress";
+
+    //public TinkerforgeStackAddress stackAddress;
     public final Type stackAddressType = new TypeToken<TinkerforgeStackAddress>() {
     }.getType();
 
     public StackHandlerIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "stackHandler");
-	super.addDescription("stackAddress", "String", "JSON", "{\"hostName\":\"[String]\",\"port\":[Integer]}");
+	super.addDescription(STACK_ADDRESS, TinkerforgeStackAddress.class, "JSON", "{\"hostName\":\"[String]\",\"port\":[Integer]}");
 
     }
 
-    @Override
-    protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getName() + "/stackAddress")) {
-	    stackAddress = fromMQTTMessage(mm, TinkerforgeStackAddress.class);
-	}
-
-    }
-
+//    @Override
+//    protected void update(String string, MqttMessage mm) throws Throwable {
+//	if (string.endsWith(getName() + "/stackAddress")) {
+//	    stackAddress = fromMQTTMessage(mm, TinkerforgeStackAddress.class);
+//	}
+//
+//    }
+    //TODO: Geht nicht, da in der Map ein leading /  (Das ist aber falsch)
     @Override
     public boolean isExecutable() {
-	return stackAddress != null;
+	return getTriple(STACK_ADDRESS).rawValue != null;
     }
 }

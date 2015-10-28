@@ -22,10 +22,10 @@ public class DimSocketBIntent extends AnIntent {
 
     public DimSocketBIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "dimSocketB");
-	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
-	super.addDescription("address", "Long", "JSON", "0", "...", "67108863");
-	super.addDescription("unit", "Short", "JSON", "0", "...", "15");
-	super.addDescription("dimValue", "Short", "JSON", "0", "...", "15");
+	super.addDescription("enabled", Boolean.class, "JSON", "true", "false");
+	super.addDescription("address", Long.class, "JSON", "0", "...", "67108863");
+	super.addDescription("unit", Short.class, "JSON", "0", "...", "15");
+	super.addDescription("dimValue", Short.class, "JSON", "0", "...", "15");
 
     }
 

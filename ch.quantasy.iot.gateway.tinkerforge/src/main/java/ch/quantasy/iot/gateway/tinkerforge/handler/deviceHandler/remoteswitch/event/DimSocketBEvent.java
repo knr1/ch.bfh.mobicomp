@@ -5,9 +5,9 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.event;
 
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.intent.DimSocketBIntent;
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.intent.DimSocketBIntent;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -23,10 +23,10 @@ public class DimSocketBEvent extends AnEvent {
 
     public DimSocketBEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "dimSocketB", mqttClient);
-	super.addDescription("address", "Long", "JSON", "0", "...", "67108863");
-	super.addDescription("unit", "Short", "JSON", "0", "...", "15");
-	super.addDescription("dimValue", "Short", "JSON", "0", "...", "15");
-	super.addDescription("switching", "Boolean", "JSON", "true", "false");
+	super.addDescription("address", Long.class, "JSON", "0", "...", "67108863");
+	super.addDescription("unit", Short.class, "JSON", "0", "...", "15");
+	super.addDescription("dimValue", Short.class, "JSON", "0", "...", "15");
+	super.addDescription("switching", Boolean.class, "JSON", "true", "false");
     }
 
     public void updateIntent(DimSocketBIntent intent) {

@@ -19,7 +19,7 @@ public class CalibrateIntent extends AnIntent {
 
     public CalibrateIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "calibrate");
-	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("enabled", Boolean.class, "JSON", "true", "false");
     }
 
     @Override

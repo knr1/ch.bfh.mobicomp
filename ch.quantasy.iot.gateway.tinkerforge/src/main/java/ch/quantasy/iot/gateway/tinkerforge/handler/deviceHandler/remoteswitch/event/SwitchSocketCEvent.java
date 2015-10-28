@@ -5,9 +5,9 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.event;
 
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.intent.SwitchSocketCIntent;
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.intent.SwitchSocketCIntent;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -24,10 +24,10 @@ public class SwitchSocketCEvent extends AnEvent {
 
     public SwitchSocketCEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "switchSocketC", mqttClient);
-	super.addDescription("systemCode", "Character", "JSON", "A", "...", "P");
-	super.addDescription("deviceCode", "Short", "JSON", "1", "...", "16");
-	super.addDescription("switchTo", "Short", "JSON", "0", "...", "1");
-	super.addDescription("switching", "Boolean", "JSON", "true", "false");
+	super.addDescription("systemCode", Character.class, "JSON", "A", "...", "P");
+	super.addDescription("deviceCode", Short.class, "JSON", "1", "...", "16");
+	super.addDescription("switchTo", Short.class, "JSON", "0", "...", "1");
+	super.addDescription("switching", Boolean.class, "JSON", "true", "false");
     }
 
     public void updateIntent(SwitchSocketCIntent intent) {

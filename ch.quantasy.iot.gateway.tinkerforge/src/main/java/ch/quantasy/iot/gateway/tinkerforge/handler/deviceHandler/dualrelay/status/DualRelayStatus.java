@@ -7,6 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.stat
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.DualRelay;
 import com.tinkerforge.BrickletDualRelay;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
@@ -16,13 +17,10 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
  */
 public class DualRelayStatus extends AStatus {
 
-    public boolean relay1;
-    public boolean relay2;
-
     public DualRelayStatus(AHandler deviceHandler, String topic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, topic, "dualRelay", mqttClient);
-	super.addDescription("relay1", "Boolean", "JSON", "true", "false");
-	super.addDescription("relay2", "Boolean", "JSON", "true", "false");
+	super.addDescription(DualRelay.DUALRELAY_RELAY1, Boolean.class, "JSON", "true", "false");
+	super.addDescription(DualRelay.DUALRELAY_RELAY2, Boolean.class, "JSON", "true", "false");
     }
 
     public void updateState(BrickletDualRelay.State state) {
@@ -31,20 +29,14 @@ public class DualRelayStatus extends AStatus {
     }
 
     public void updateRelay1(boolean relay) {
-	if (this.relay1 == relay) {
-	    return;
-	} else {
-	    this.relay1 = relay;
-	    publish("relay1", toJSONMQTTMessage(relay1));
+	if (super.getTriple(DualRelay.DUALRELAY_RELAY1).updateContent(relay)) {
+	    publish(DualRelay.DUALRELAY_RELAY1, toJSONMQTTMessage(relay));
 	}
     }
 
     public void updateRelay2(boolean relay) {
-	if (this.relay2 == relay) {
-	    return;
-	} else {
-	    this.relay2 = relay;
-	    publish("relay2", toJSONMQTTMessage(relay2));
+	if (super.getTriple(DualRelay.DUALRELAY_RELAY2).updateContent(relay)) {
+	    publish(DualRelay.DUALRELAY_RELAY2, toJSONMQTTMessage(relay));
 	}
     }
 }

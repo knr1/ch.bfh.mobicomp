@@ -19,10 +19,11 @@ public class HandlerReadyStatus extends AStatus {
 
     public HandlerReadyStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "connectionState", mqttClient);
-	super.addDescription("reachable", "Boolean", "JSON", "true", "false");
+	super.addDescription("reachable", Boolean.class, "JSON", "true", "false");
     }
 
     public void updateReachable(boolean reachable) {
+	super.getTriple("reachable");
 	if (this.reachable == reachable) {
 	    return;
 	}

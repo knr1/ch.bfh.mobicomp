@@ -36,8 +36,19 @@ public abstract class AnEvent extends AMessage<EventDescription> {
 	super.publish(statusPropertyName, mqttMessage, mqttClient);
     }
 
-    protected void addDescription(String propertyName, String type, String representation, String... range) {
+    protected void addDescription(String propertyName, Class type, String representation, String... range) {
 	super.addDescription(new EventDescription(AHandler.DEVICE_DESCRIPTION_TOPIC, getDeviceHandler().getApplicationName(), getName(), propertyName, type, representation, range));
+    }
+
+    public void updateIntent(AnIntent intent) {
+	for (Content triple : this.getValueMap().values()) {
+	    byte[] content = intent.getTriple(triple.getProperty()).rawValue;
+	    if (content != null) {
+		if (triple.updateContent(content)) {
+		    publish(triple.getProperty(), toJSONMQTTMessage(content));
+		}
+	    }
+	}
     }
 
 }

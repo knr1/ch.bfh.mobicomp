@@ -48,11 +48,19 @@ public abstract class AnIntent extends AMessage {
 	return "intent";
     }
 
-    protected void addDescription(String intentPropertyName, String type, String representation, String... range) {
+    protected void addDescription(String intentPropertyName, Class type, String representation, String... range) {
 	super.addDescription(new IntentDescription(AHandler.DEVICE_DESCRIPTION_TOPIC, getDeviceHandler().getApplicationName(), getName(), intentPropertyName, type, representation, range));
     }
 
-    protected abstract void update(String string, MqttMessage mm) throws Throwable;
+    //TODO: auf Message-Ebene nehmen?
+    protected void update(String string, MqttMessage mm) throws Throwable {
+	int offset = (getName() + "/").length();
+	String name = string.substring(string.lastIndexOf(getName() + "/") + offset);
+	Content triple = getTriple(name);
+	if (triple != null) {
+	    triple.rawValue = mm.getPayload();
+	}
+    }
 
     public abstract boolean isExecutable();
 

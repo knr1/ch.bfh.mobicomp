@@ -11,7 +11,7 @@ package ch.quantasy.iot.gateway.tinkerforge.base;
  */
 public class IntentDescription extends MessageDescription {
 
-    public IntentDescription(String applicationMessageTopic, String applicationName, String messageTopic, String messagePropertyTopic, String type, String representation, String... range) {
+    public IntentDescription(String applicationMessageTopic, String applicationName, String messageTopic, String messagePropertyTopic, Class type, String representation, String... range) {
 	super(applicationMessageTopic, applicationName, messageTopic, messagePropertyTopic, type, representation, range);
     }
 

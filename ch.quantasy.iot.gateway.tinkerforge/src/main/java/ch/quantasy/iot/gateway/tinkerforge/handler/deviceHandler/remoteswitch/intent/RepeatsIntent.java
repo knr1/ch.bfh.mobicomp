@@ -19,7 +19,7 @@ public class RepeatsIntent extends AnIntent {
 
     public RepeatsIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "repeats");
-	super.addDescription("repeats", "Short", "JSON", "0", "...", "" + Short.MAX_VALUE);
+	super.addDescription("repeats", Short.class, "JSON", "0", "...", "" + Short.MAX_VALUE);
     }
 
     @Override

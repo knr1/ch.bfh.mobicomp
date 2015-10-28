@@ -22,6 +22,8 @@ import java.net.URI;
  */
 public abstract class ADeviceHandler<D extends Device> extends AHandler {
 
+    public final static String ENABLED = "enabled";
+
     private D device;
 
     private final MQTTTinkerforgeStackHandler stackApplication;
@@ -34,7 +36,7 @@ public abstract class ADeviceHandler<D extends Device> extends AHandler {
 
     public void enableDevice(D device) {
 	try {
-	    if (!this.getIdentityString().equals(stackApplication.digestIdentityString(device.getIdentity().toString()))) {
+	    if (!this.getIdentityString().equals(stackApplication.digestIdentityString(device))) {
 		return;
 	    }
 	} catch (TimeoutException | NotConnectedException ex) {
@@ -45,6 +47,7 @@ public abstract class ADeviceHandler<D extends Device> extends AHandler {
 	}
 	this.device = device;
 	addDeviceListeners();
+	getStatus(DeviceHandlerReadyStatus.class).updateEnabled(true);
     }
 
     public void disableDevice(Device device) {
@@ -53,6 +56,7 @@ public abstract class ADeviceHandler<D extends Device> extends AHandler {
 	}
 	removeDeviceListeners();
 	this.device = null;
+	getStatus(DeviceHandlerReadyStatus.class).updateEnabled(false);
 
     }
 

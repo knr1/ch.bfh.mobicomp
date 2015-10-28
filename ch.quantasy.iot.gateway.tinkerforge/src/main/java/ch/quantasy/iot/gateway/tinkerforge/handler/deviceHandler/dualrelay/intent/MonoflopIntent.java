@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.inte
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.DualRelay;
 
 /**
  *
@@ -15,46 +15,29 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class MonoflopIntent extends AnIntent {
 
-    public boolean enabled;
-    public long time;
-    public short relay;
-    public boolean state;
-
     public MonoflopIntent(AHandler deviceHandler, String topic) {
 	super(deviceHandler, topic, "monoflop");
-	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
-	super.addDescription("time", "Long", "JSON", "0", "...", "" + Long.MAX_VALUE);
-	super.addDescription("relay", "Short", "JSON", "1", "2");
-	super.addDescription("state", "Boolean", "JSON", "true", "false");
-
-    }
-
-    @Override
-    protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getName() + "/enabled")) {
-	    enabled = fromMQTTMessage(mm, Boolean.class);
-	}
-	if (string.endsWith(getName() + "/time")) {
-	    time = fromMQTTMessage(mm, Long.class);
-	}
-	if (string.endsWith(getName() + "/relay")) {
-	    relay = fromMQTTMessage(mm, Short.class);
-	}
-	if (string.endsWith(getName() + "/state")) {
-	    state = fromMQTTMessage(mm, Boolean.class);
-	}
+	super.addDescription(DualRelay.MONOFLOP_ENABLED, Boolean.class, "JSON", "true", "false");
+	super.addDescription(DualRelay.MONOFLOP_TIME, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
+	super.addDescription(DualRelay.MONOFLOP_RELAY, Short.class, "JSON", "1", "2");
+	super.addDescription(DualRelay.MONOFLOP_STATE, Boolean.class, "JSON", "true", "false");
 
     }
 
     public boolean isExecutable() {
-	return enabled && isTimeInRange() && isRelayInRange();
+	try {
+	    return getTriple(DualRelay.MONOFLOP_ENABLED).getValue(Boolean.class) && isTimeInRange() && isRelayInRange();
+	} catch (Throwable th) {
+	    return false;
+	}
     }
 
     private boolean isTimeInRange() {
-	return (time >= 0);
+	return (getTriple(DualRelay.MONOFLOP_TIME).getValue(Long.class) >= 0);
     }
 
     private boolean isRelayInRange() {
+	int relay = getTriple(DualRelay.MONOFLOP_RELAY).getValue(Integer.class);
 	return (relay == 1 || relay == 2);
     }
 

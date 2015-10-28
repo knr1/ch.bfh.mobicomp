@@ -7,6 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.status;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -15,30 +16,16 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
  */
 public class DeviceHandlerReadyStatus extends AStatus {
 
-    public boolean enabled;
-    public boolean reachable;
-
     public DeviceHandlerReadyStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "ready", mqttClient);
-	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
-	super.addDescription("connected", "Boolean", "JSON", "true", "false");
+	super.addDescription(ADeviceHandler.ENABLED, Boolean.class, "JSON", "true", "false");
+
     }
 
     public void updateEnabled(boolean enabled) {
-	if (this.enabled == enabled) {
-	    return;
-	} else {
-	    this.enabled = enabled;
-	    publish("enabled", toJSONMQTTMessage(enabled));
+	if (super.getTriple(ADeviceHandler.ENABLED).updateContent(enabled)) {
+	    publish(ADeviceHandler.ENABLED, toJSONMQTTMessage(enabled));
 	}
-	return;
     }
 
-    public void updateReachable(boolean reachable) {
-	if (this.reachable == reachable) {
-	    return;
-	}
-	this.reachable = reachable;
-	publish("reachable", toJSONMQTTMessage(reachable));
-    }
 }

@@ -22,10 +22,10 @@ public class CallbackThresholdIntent extends AnIntent {
 
     public CallbackThresholdIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackThreshold");
-	super.addDescription("option", "Character", "JSON", "x", "o", "i", "\\<", "\\>");
-	super.addDescription("min", "Integer", "JSON", "0", "...", "4095");
-	super.addDescription("max", "Integer", "JSON", "0", "...", "4095");
-	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
+	super.addDescription("option", Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription("min", Integer.class, "JSON", "0", "...", "4095");
+	super.addDescription("max", Integer.class, "JSON", "0", "...", "4095");
+	super.addDescription("enabled", Boolean.class, "JSON", "true", "false");
     }
 
     @Override
@@ -53,8 +53,8 @@ public class CallbackThresholdIntent extends AnIntent {
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<':
-	    case '>':
+	    case '<': //<
+	    case '>': //>
 		return true;
 	}
 	return false;

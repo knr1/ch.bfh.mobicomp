@@ -12,7 +12,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
@@ -28,17 +30,21 @@ public abstract class AMessage<E extends MessageDescription> {
     private final String topic;
     private final String name;
     List<E> descriptions = new ArrayList<>();
-
+    private Map<String, Content> valueMap;
     public final Type descriptionsType = new TypeToken<List<E>>() {
     }.getType();
     private final AHandler deviceHandler;
 
-    public AMessage(AHandler deviceHandler, String eventTopic, String eventName) {
-	this.name = eventName;
+    public AMessage(AHandler deviceHandler, String messageTopic, String messageName) {
+	valueMap = new HashMap<>();
+	this.name = messageName;
 	this.deviceHandler = deviceHandler;
-	this.topic = eventTopic;
+	this.topic = messageTopic;
 	this.gson = new Gson();
+    }
 
+    public Content getTriple(String name) {
+	return valueMap.get(name);
     }
 
     public Gson getGson() {
@@ -92,12 +98,21 @@ public abstract class AMessage<E extends MessageDescription> {
 	return new MqttMessage(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
 
+    public MqttMessage toJSONMQTTMessage(byte[] byteArray) {
+	return new MqttMessage(byteArray);
+    }
+
     protected void addDescription(E messageDescription) {
 	descriptions.add(messageDescription);
+	Content triple = new Content(messageDescription);
+	valueMap.put(triple.getProperty(), triple);
+    }
+
+    protected Map<String, Content> getValueMap() {
+	return valueMap;
     }
 
     protected List<E> getDescriptions() {
 	return descriptions;
     }
-
 }

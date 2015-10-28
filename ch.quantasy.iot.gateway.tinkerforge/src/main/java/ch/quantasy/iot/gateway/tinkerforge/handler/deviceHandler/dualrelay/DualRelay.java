@@ -27,6 +27,15 @@ import java.util.logging.Logger;
  */
 public class DualRelay extends ADeviceHandler<BrickletDualRelay> implements BrickletDualRelay.MonoflopDoneListener {
 
+    public static final String MONOFLOP_ENABLED = "enabled";
+    public static final String MONOFLOP_TIME = "time";
+    public static final String MONOFLOP_RELAY = "relay";
+    public static final String MONOFLOP_STATE = "state";
+
+    public static final String DUALRELAY_RELAY1 = "relay1";
+    public static final String DUALRELAY_RELAY2 = "relay2";
+    public static final String DUALRELAY_ENABLED = "enabled";
+
     public String getApplicationName() {
 	return "DualRelay";
     }
@@ -81,12 +90,18 @@ public class DualRelay extends ADeviceHandler<BrickletDualRelay> implements Bric
     }
 
     public void executeIntent(DualRelayIntent intent) throws Throwable {
-	getDevice().setState(intent.relay1, intent.relay2);
+	boolean relay1 = intent.getTriple(DUALRELAY_RELAY1).getValue(Boolean.class);
+	boolean relay2 = intent.getTriple(DUALRELAY_RELAY2).getValue(Boolean.class);
+	getDevice().setState(relay1, relay2);
 	updateState();
     }
 
     public void executeIntent(MonoflopIntent intent) throws TimeoutException, NotConnectedException {
-	getDevice().setMonoflop(intent.relay, intent.state, intent.time);
+	short relay = intent.getTriple(MONOFLOP_RELAY).getValue(Short.class);
+	boolean state = intent.getTriple(MONOFLOP_STATE).getValue(Boolean.class);
+	long time = intent.getTriple(MONOFLOP_TIME).getValue(Long.class);
+
+	getDevice().setMonoflop(relay, state, time);
 	updateState();
 	getEvent(MonoflopEvent.class).updateIntent(intent);
     }

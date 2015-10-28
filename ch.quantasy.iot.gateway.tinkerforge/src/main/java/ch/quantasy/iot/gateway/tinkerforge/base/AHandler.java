@@ -110,7 +110,7 @@ public abstract class AHandler implements MqttCallback {
 	    String substring = string.substring(string.indexOf("intent/") + 7);
 	    Map<Class, AnIntent> intents;
 	    if (substring.startsWith("<")) {
-		String tenant = substring.substring(0, substring.indexOf(">"));
+		String tenant = substring.substring(1, substring.indexOf(">"));
 		intents = intentsMap.get(tenant);
 		if (intents == null) {
 		    try {

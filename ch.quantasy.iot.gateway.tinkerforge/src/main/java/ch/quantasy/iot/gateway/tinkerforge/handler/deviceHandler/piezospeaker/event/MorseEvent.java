@@ -5,9 +5,9 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.event;
 
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.intent.MorseIntent;
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.intent.MorseIntent;
 import java.util.Objects;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
@@ -23,9 +23,9 @@ public class MorseEvent extends AnEvent {
 
     public MorseEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "morse", mqttClient);
-	super.addDescription("enabled", "Boolean", "JSON", "true", "false");
-	super.addDescription("code", "String", "JSON", ".", "-", " ", "unbounded");
-	super.addDescription("frequency", "Integer", "JSON", "585", "...", "7100");
+	super.addDescription("enabled", Boolean.class, "JSON", "true", "false");
+	super.addDescription("code", String.class, "JSON", ".", "-", " ", "unbounded");
+	super.addDescription("frequency", Integer.class, "JSON", "585", "...", "7100");
     }
 
     public void updateIntent(MorseIntent intent) {

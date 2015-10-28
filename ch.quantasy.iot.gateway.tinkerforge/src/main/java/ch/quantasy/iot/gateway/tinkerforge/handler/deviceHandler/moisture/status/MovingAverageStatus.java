@@ -5,9 +5,9 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.status;
 
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.intent.MovingAverageIntent;
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.intent.MovingAverageIntent;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -20,7 +20,7 @@ public class MovingAverageStatus extends AStatus {
 
     public MovingAverageStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "movingAverage", mqttClient);
-	super.addDescription("average", "Short", "JSON", "0", "..", "100");
+	super.addDescription("average", Short.class, "JSON", "0", "..", "100");
     }
 
     public void updateIntent(MovingAverageIntent intent) {

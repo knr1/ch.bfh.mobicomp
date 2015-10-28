@@ -67,9 +67,9 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 	return 0;
     }
 
-    public synchronized String digestIdentityString(String identityString) {
+    public synchronized String digestIdentityString(Device device) throws TimeoutException, NotConnectedException {
 	synchronized (digest) {
-	    return new BigInteger(identityString.getBytes(java.nio.charset.StandardCharsets.UTF_8)).mod(BigInteger.valueOf(Integer.MAX_VALUE)).toString(Character.MAX_RADIX);
+	    return new BigInteger(("" + device.getIdentity().deviceIdentifier + device.getIdentity().uid).getBytes(java.nio.charset.StandardCharsets.UTF_8)).mod(BigInteger.valueOf(Integer.MAX_VALUE)).toString(Character.MAX_RADIX);
 	}
     }
 
@@ -77,11 +77,10 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
     public void deviceConnected(TinkerforgeStackAgent tinkerforgeStackAgent, Device device) {
 
 	try {
+	    String digestedIdentityString = digestIdentityString(device);
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.LEDStrip) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
 
-		String digestedIdentityString = null;
-		digestedIdentityString = digestIdentityString(device.getIdentity().toString());
 		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
 		if (deviceHandler == null) {
 		    deviceHandler = new LedStrip(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
@@ -93,8 +92,6 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.PiezoSpeaker) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
 
-		String digestedIdentityString = null;
-		digestedIdentityString = digestIdentityString(device.getIdentity().toString());
 		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
 		if (deviceHandler == null) {
 		    deviceHandler = new PiezoSpeaker(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
@@ -106,8 +103,6 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.Tilt) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
 
-		String digestedIdentityString = null;
-		digestedIdentityString = digestIdentityString(device.getIdentity().toString());
 		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
 		if (deviceHandler == null) {
 		    deviceHandler = new Tilt(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
@@ -118,8 +113,6 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.Moisture) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
 
-		String digestedIdentityString = null;
-		digestedIdentityString = digestIdentityString(device.getIdentity().toString());
 		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
 		if (deviceHandler == null) {
 		    deviceHandler = new Moisture(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
@@ -130,8 +123,6 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.RemoteSwitch) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
 
-		String digestedIdentityString = null;
-		digestedIdentityString = digestIdentityString(device.getIdentity().toString());
 		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
 		if (deviceHandler == null) {
 		    deviceHandler = new RemoteSwitch(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
@@ -142,8 +133,6 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.MotionDetector) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
 
-		String digestedIdentityString = null;
-		digestedIdentityString = digestIdentityString(device.getIdentity().toString());
 		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
 		if (deviceHandler == null) {
 		    deviceHandler = new MotionDetector(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
@@ -154,8 +143,6 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.DualRelay) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
 
-		String digestedIdentityString = null;
-		digestedIdentityString = digestIdentityString(device.getIdentity().toString());
 		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
 		if (deviceHandler == null) {
 		    deviceHandler = new DualRelay(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
@@ -172,7 +159,7 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
     @Override
     public void deviceDisconnected(TinkerforgeStackAgent tinkerforgeStackAgent, Device device) {
 	try {
-	    String digestedIdentityString = digestIdentityString(device.getIdentity().toString());
+	    String digestedIdentityString = digestIdentityString(device);
 	    ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
 	    if (deviceHandler == null) {
 		return;

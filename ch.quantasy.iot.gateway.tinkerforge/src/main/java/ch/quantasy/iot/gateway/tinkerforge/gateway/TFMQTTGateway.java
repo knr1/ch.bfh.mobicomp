@@ -75,7 +75,8 @@ public class TFMQTTGateway extends AHandler {
 
     public void executeIntent(StackHandlerIntent intent) throws Throwable {
 	try {
-	    addNewAgent(new TinkerforgeStackAddress(intent.stackAddress.hostName, intent.stackAddress.port));
+	    TinkerforgeStackAddress address = intent.getTriple(StackHandlerIntent.STACK_ADDRESS).getValue(TinkerforgeStackAddress.class);
+	    addNewAgent(address);
 	} catch (Exception ex) {
 	    ex.printStackTrace();
 	}

@@ -19,7 +19,7 @@ public class MoistureEvent extends AnEvent {
 
     public MoistureEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "moisture", mqttClient);
-	super.addDescription("moisture", "Integer", "JSON", "0", "...", "4095");
+	super.addDescription("moisture", Integer.class, "JSON", "0", "...", "4095");
     }
 
     public void updateMoisture(int moisture) {

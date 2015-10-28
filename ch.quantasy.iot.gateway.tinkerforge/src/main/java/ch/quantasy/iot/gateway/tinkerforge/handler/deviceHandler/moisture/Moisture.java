@@ -38,10 +38,7 @@ public class Moisture extends ADeviceHandler<BrickletMoisture> implements Brickl
 	super(stackApplication, mqttURI, stackAddress, identityString);
 	super.addStatusClass(CallbackPeriodStatus.class, CallbackThresholdStatus.class, DebounceStatus.class, MovingAverageStatus.class);
 	super.addEventClass(MoistureEvent.class, MoistureReachedEvent.class);
-    }
-
-    public Class[] getIntentClasses() {
-	return new Class[]{CallbackPeriodIntent.class, CallbackThresholdIntent.class, DebouncePeriodIntent.class, MovingAverageIntent.class};
+	super.addIntentClass(CallbackPeriodIntent.class, CallbackThresholdIntent.class, DebouncePeriodIntent.class, MovingAverageIntent.class);
     }
 
     @Override

@@ -19,7 +19,7 @@ public class TiltStateEvent extends AnEvent {
 
     public TiltStateEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "tilt", mqttClient);
-	super.addDescription("state", "Short", "JSON", "0", "1", "2");
+	super.addDescription("state", Short.class, "JSON", "0", "1", "2");
     }
 
     public void updateTiltState(short state) {

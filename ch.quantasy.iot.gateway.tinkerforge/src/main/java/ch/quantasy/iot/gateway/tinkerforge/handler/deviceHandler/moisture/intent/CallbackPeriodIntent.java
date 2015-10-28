@@ -19,7 +19,7 @@ public class CallbackPeriodIntent extends AnIntent {
 
     public CallbackPeriodIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackPeriod");
-	super.addDescription("period", "Long", "JSON", "0", "...", "" + Long.MAX_VALUE);
+	super.addDescription("period", Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
 
     @Override

@@ -5,9 +5,9 @@
  */
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ledstrip.status;
 
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ledstrip.intent.ConfigIntent;
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ledstrip.LedStrip;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -16,61 +16,35 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
  */
 public class ConfigStatus extends AStatus {
 
-    public int chipType;
-    public Long clockFrequencyOfICsInHz;
-    public int frameDurationInMilliseconds;
-    public int numberOfLEDs;
-
     public ConfigStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "config", mqttClient);
-	super.addDescription("chipType", "Integer", "JSON", "2801", "2811", "2812");
-	super.addDescription("clockFrequencyOfICsInHz", "Long", "JSON", "10000", "...", "2000000");
-	super.addDescription("frameDurationInMilliseconds", "Integer", "JSON", "1", "...", "" + Integer.MAX_VALUE);
-	super.addDescription("numberOfLEDs", "Integer", "1", "...", "319");
-    }
-
-    public void updateConfig(ConfigIntent intent) {
-	updateClockFrequencyOfICsInHz(intent.clockFrequencyOfICsInHz);
-	updateFrameDurationInMilliseconds(intent.frameDurationInMilliseconds);
-	updateNumberOfLEDs(intent.numberOfLEDs);
+	super.addDescription(LedStrip.CONFIG_CHIP_TYPE, Integer.class, "JSON", "2801", "2811", "2812");
+	super.addDescription(LedStrip.CONFIG_CLOCK_FREQUENCY_OF_ICS_IN_HZ, Long.class, "JSON", "10000", "...", "2000000");
+	super.addDescription(LedStrip.CONFIG_FRAME_DURATION_IN_MILLISECONDS, Integer.class, "JSON", "1", "...", "" + Integer.MAX_VALUE);
+	super.addDescription(LedStrip.CONFIG_NUMBER_OF_LEDS, Integer.class, "1", "...", "319");
     }
 
     public void updateChipType(int chipType) {
-	if (this.chipType == chipType) {
-	    return;
-	} else {
-	    this.chipType = chipType;
-	    publish("chipType", toJSONMQTTMessage(chipType));
+	if (super.getTriple(LedStrip.CONFIG_CHIP_TYPE).updateContent(chipType)) {
+	    publish(LedStrip.CONFIG_CHIP_TYPE, toJSONMQTTMessage(chipType));
 	}
     }
 
     public void updateClockFrequencyOfICsInHz(Long clockFrequencyOfICsInHz) {
-	if (this.clockFrequencyOfICsInHz == clockFrequencyOfICsInHz) {
-	    return;
-	} else {
-	    this.clockFrequencyOfICsInHz = clockFrequencyOfICsInHz;
-	    publish("clockFrequencyOfICsInHz", toJSONMQTTMessage(clockFrequencyOfICsInHz));
+	if (super.getTriple(LedStrip.CONFIG_CLOCK_FREQUENCY_OF_ICS_IN_HZ).updateContent(clockFrequencyOfICsInHz)) {
+	    publish(LedStrip.CONFIG_CLOCK_FREQUENCY_OF_ICS_IN_HZ, toJSONMQTTMessage(clockFrequencyOfICsInHz));
 	}
-	return;
     }
 
     public void updateFrameDurationInMilliseconds(int frameDurationInMilliseconds) {
-	if (this.frameDurationInMilliseconds == frameDurationInMilliseconds) {
-	    return;
-	} else {
-	    this.frameDurationInMilliseconds = frameDurationInMilliseconds;
-	    publish("frameDurationInMilliseconds", toJSONMQTTMessage(frameDurationInMilliseconds));
+	if (super.getTriple(LedStrip.CONFIG_FRAME_DURATION_IN_MILLISECONDS).updateContent(frameDurationInMilliseconds)) {
+	    publish(LedStrip.CONFIG_FRAME_DURATION_IN_MILLISECONDS, toJSONMQTTMessage(frameDurationInMilliseconds));
 	}
-	return;
     }
 
     public void updateNumberOfLEDs(int numberOfLEDs) {
-	if (this.numberOfLEDs == numberOfLEDs) {
-	    return;
-	} else {
-	    this.numberOfLEDs = numberOfLEDs;
-	    publish("numberOfLEDs", toJSONMQTTMessage(numberOfLEDs));
+	if (super.getTriple(LedStrip.CONFIG_NUMBER_OF_LEDS).updateContent(numberOfLEDs)) {
+	    publish(LedStrip.CONFIG_NUMBER_OF_LEDS, toJSONMQTTMessage(numberOfLEDs));
 	}
-	return;
     }
 }

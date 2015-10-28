@@ -20,7 +20,7 @@ public class ManagedStackHandlersStatus extends AStatus {
 
     public ManagedStackHandlersStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "managedStackHandlers", mqttClient);
-	super.addDescription("addresses", "String", "JSON");
+	super.addDescription("addresses", ManagedStackAddresses.class, "JSON");
     }
 
     public void updateManagedStackHandlers(ManagedStackAddresses managedStackHandlers) {
