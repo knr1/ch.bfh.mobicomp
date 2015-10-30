@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.i
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.RemoteSwitch;
 
 /**
  *
@@ -15,26 +15,18 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class RepeatsIntent extends AnIntent {
 
-    public short repeats;
-
     public RepeatsIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "repeats");
-	super.addDescription("repeats", Short.class, "JSON", "0", "...", "" + Short.MAX_VALUE);
+	super.addDescription(RemoteSwitch.REPEATS, Short.class, "JSON", "0", "...", "" + Short.MAX_VALUE);
     }
 
     @Override
-    protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getName() + "/repeats")) {
-	    repeats = fromMQTTMessage(mm, Short.class);
-	}
-
-    }
-
     public boolean isExecutable() {
 	return isRepeatsInRange();
     }
 
     private boolean isRepeatsInRange() {
+	short repeats = getContent(RemoteSwitch.REPEATS).getValue(Short.class);
 	return (repeats >= 0);
     }
 

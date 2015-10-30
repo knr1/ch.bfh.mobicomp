@@ -7,6 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.tilt.event;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.tilt.Tilt;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -15,20 +16,8 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
  */
 public class TiltStateEvent extends AnEvent {
 
-    public short state;
-
     public TiltStateEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "tilt", mqttClient);
-	super.addDescription("state", Short.class, "JSON", "0", "1", "2");
-    }
-
-    public void updateTiltState(short state) {
-	if (this.state == state) {
-	    return;
-	} else {
-	    this.state = state;
-	    publish("state", toJSONMQTTMessage(state));
-	}
-	return;
+	super.addDescription(Tilt.STATE, Short.class, "JSON", "0", "1", "2");
     }
 }

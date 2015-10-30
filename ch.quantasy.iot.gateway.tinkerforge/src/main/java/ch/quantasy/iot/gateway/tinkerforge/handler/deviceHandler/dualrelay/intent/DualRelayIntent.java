@@ -24,7 +24,7 @@ public class DualRelayIntent extends AnIntent {
 
     public boolean isExecutable() {
 	try {
-	    return getTriple(DualRelay.DUALRELAY_ENABLED).getValue(Boolean.class);
+	    return getContent(DualRelay.DUALRELAY_ENABLED).getValue(Boolean.class);
 	} catch (Throwable th) {
 	    return false;
 	}

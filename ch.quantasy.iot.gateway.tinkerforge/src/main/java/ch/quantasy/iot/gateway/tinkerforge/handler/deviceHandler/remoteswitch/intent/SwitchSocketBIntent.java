@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.i
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.RemoteSwitch;
 
 /**
  *
@@ -15,50 +15,37 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class SwitchSocketBIntent extends AnIntent {
 
-    public boolean enabled;
-    public long address;
-    public short unit;
-    public short switchTo;
-
     public SwitchSocketBIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "switchSocketB");
-	super.addDescription("enabled", Boolean.class, "JSON", "true", "false");
-	super.addDescription("address", Long.class, "JSON", "0", "...", "67108863");
-	super.addDescription("unit", Short.class, "JSON", "0", "...", "15");
-	super.addDescription("switchTo", Short.class, "JSON", "0", "...", "1");
+	super.addDescription(RemoteSwitch.ENABLED, Boolean.class, "JSON", "true", "false");
+	super.addDescription(RemoteSwitch.ADDRESS, Long.class, "JSON", "0", "...", "67108863");
+	super.addDescription(RemoteSwitch.UNIT, Short.class, "JSON", "0", "...", "15");
+	super.addDescription(RemoteSwitch.SWITCH_TO, Short.class, "JSON", "0", "...", "1");
 
     }
 
     @Override
-    protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getName() + "/enabled")) {
-	    enabled = fromMQTTMessage(mm, Boolean.class);
-	}
-	if (string.endsWith(getName() + "/address")) {
-	    address = fromMQTTMessage(mm, Long.class);
-	}
-	if (string.endsWith(getName() + "/unit")) {
-	    unit = fromMQTTMessage(mm, Short.class);
-	}
-	if (string.endsWith(getName() + "/switchTo")) {
-	    switchTo = fromMQTTMessage(mm, Short.class);
-	}
-
+    public boolean isExecutable() {
+	return isEnabled() && isHouseCodeInRange() && isReceiverCodeInRange() && isSwitchToInRange();
     }
 
-    public boolean isExecutable() {
-	return enabled && isHouseCodeInRange() && isReceiverCodeInRange() && isSwitchToInRange();
+    private boolean isEnabled() {
+	return getContent(RemoteSwitch.ENABLED).getValue(Boolean.class);
     }
 
     private boolean isHouseCodeInRange() {
+	long address = getContent(RemoteSwitch.ADDRESS).getValue(Long.class);
+
 	return (address >= 0 && address <= 67108863);
     }
 
     private boolean isReceiverCodeInRange() {
+	short unit = getContent(RemoteSwitch.UNIT).getValue(Short.class);
 	return (unit >= 0 && unit <= 15);
     }
 
     private boolean isSwitchToInRange() {
+	short switchTo = getContent(RemoteSwitch.SWITCH_TO).getValue(Short.class);
 	return (switchTo >= 0 || switchTo <= 1);
     }
 }

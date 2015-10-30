@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.i
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.PiezoSpeaker;
 
 /**
  *
@@ -15,40 +15,32 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class BeepIntent extends AnIntent {
 
-    public boolean enabled;
-    public long duration;
-    public int frequency;
-
     public BeepIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "beep");
-	super.addDescription("enabled", Boolean.class, "JSON", "true", "false");
-	super.addDescription("duration", Long.class, "JSON", "1", "...", "" + Long.MAX_VALUE);
-	super.addDescription("frequency", Integer.class, "JSON", "585", "...", "7100");
-    }
-
-    @Override
-    protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getName() + "/enabled")) {
-	    enabled = fromMQTTMessage(mm, Boolean.class);
-	}
-	if (string.endsWith(getName() + "/duration")) {
-	    duration = fromMQTTMessage(mm, Long.class);
-	}
-	if (string.endsWith(getName() + "/frequency")) {
-	    frequency = fromMQTTMessage(mm, Integer.class);
-	}
-
+	super.addDescription(PiezoSpeaker.ENABLED, Boolean.class, "JSON", "true", "false");
+	super.addDescription(PiezoSpeaker.DURATION, Long.class, "JSON", "1", "...", "" + Long.MAX_VALUE);
+	super.addDescription(PiezoSpeaker.FREQUENCY, Integer.class, "JSON", "585", "...", "7100");
     }
 
     public boolean isExecutable() {
-	return enabled && isDurationInRange() && isFrequencyInRange();
+	return isEnabled() && isDurationInRange() && isFrequencyInRange();
+    }
+
+    public boolean isEnabled() {
+	try {
+	    return getContent(PiezoSpeaker.ENABLED).getValue(Boolean.class);
+	} catch (Throwable th) {
+	    return false;
+	}
     }
 
     private boolean isFrequencyInRange() {
+	int frequency = getContent(PiezoSpeaker.FREQUENCY).getValue(Integer.class);
 	return (frequency >= 685 && frequency <= 7100);
     }
 
     private boolean isDurationInRange() {
+	long duration = getContent(PiezoSpeaker.DURATION).getValue(Long.class);
 	return duration > 0;
     }
 }

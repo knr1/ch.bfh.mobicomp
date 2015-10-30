@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.i
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.RemoteSwitch;
 
 /**
  *
@@ -15,50 +15,37 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class DimSocketBIntent extends AnIntent {
 
-    public boolean enabled;
-    public long address;
-    public short unit;
-    public short dimValue;
-
     public DimSocketBIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "dimSocketB");
-	super.addDescription("enabled", Boolean.class, "JSON", "true", "false");
-	super.addDescription("address", Long.class, "JSON", "0", "...", "67108863");
-	super.addDescription("unit", Short.class, "JSON", "0", "...", "15");
-	super.addDescription("dimValue", Short.class, "JSON", "0", "...", "15");
+	super.addDescription(RemoteSwitch.ENABLED, Boolean.class, "JSON", "true", "false");
+	super.addDescription(RemoteSwitch.ADDRESS, Long.class, "JSON", "0", "...", "67108863");
+	super.addDescription(RemoteSwitch.UNIT, Short.class, "JSON", "0", "...", "15");
+	super.addDescription(RemoteSwitch.DIM_VALUE, Short.class, "JSON", "0", "...", "15");
 
     }
 
     @Override
-    protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getName() + "/enabled")) {
-	    enabled = fromMQTTMessage(mm, Boolean.class);
-	}
-	if (string.endsWith(getName() + "/address")) {
-	    address = fromMQTTMessage(mm, Long.class);
-	}
-	if (string.endsWith(getName() + "/unit")) {
-	    unit = fromMQTTMessage(mm, Short.class);
-	}
-	if (string.endsWith(getName() + "/dimValue")) {
-	    dimValue = fromMQTTMessage(mm, Short.class);
-	}
-
+    public boolean isExecutable() {
+	return isEnabled() && isHouseCodeInRange() && isReceiverCodeInRange() && isDimValue();
     }
 
-    public boolean isExecutable() {
-	return enabled && isHouseCodeInRange() && isReceiverCodeInRange() && isDimValue();
+    private boolean isEnabled() {
+	return getContent(RemoteSwitch.ENABLED).getValue(Boolean.class);
+
     }
 
     private boolean isHouseCodeInRange() {
+	long address = getContent(RemoteSwitch.ADDRESS).getValue(Long.class);
 	return (address >= 0 && address <= 67108863);
     }
 
     private boolean isReceiverCodeInRange() {
+	short unit = getContent(RemoteSwitch.UNIT).getValue(Short.class);
 	return (unit >= 0 && unit <= 15);
     }
 
     private boolean isDimValue() {
+	short dimValue = getContent(RemoteSwitch.DIM_VALUE).getValue(Short.class);
 	return (dimValue >= 0 || dimValue <= 15);
     }
 }

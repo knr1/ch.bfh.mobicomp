@@ -30,6 +30,21 @@ import java.net.URI;
  */
 public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implements BrickletRemoteSwitch.SwitchingDoneListener {
 
+    public static final String SWITCHING = "switching";
+    public static final String ADDRESS = "address";
+    public static final String UNIT = "unit";
+    public static final String DIM_VALUE = "dimValue";
+
+    public static final String HOUSE_CODE = "houseCode";
+    public static final String RECEIVER_CODE = "receiverCode";
+    public static final String SWITCH_TO = "switchTo";
+
+    public static final String ENABLED = "enabled";
+    public static final String SYSTEM_CODE = "systemCode";
+    public static final String DEVICE_CODE = "deviceCode";
+
+    public static final String REPEATS = "repeats";
+
     public String getApplicationName() {
 	return "RemoteSwitch";
     }
@@ -43,10 +58,10 @@ public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implement
 
     @Override
     public void switchingDone() {
-	getEvent(SwitchSocketAEvent.class).updateSwitching(false);
-	getEvent(SwitchSocketBEvent.class).updateSwitching(false);
-	getEvent(DimSocketBEvent.class).updateSwitching(false);
-	getEvent(SwitchSocketCEvent.class).updateSwitching(false);
+	getEvent(SwitchSocketAEvent.class).update(SWITCHING, false);
+	getEvent(SwitchSocketBEvent.class).update(SWITCHING, false);
+	getEvent(DimSocketBEvent.class).update(SWITCHING, false);
+	getEvent(SwitchSocketCEvent.class).update(SWITCHING, false);
 
     }
 
@@ -87,8 +102,8 @@ public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implement
 
     public void executeIntent(RepeatsIntent intent) throws TimeoutException, NotConnectedException {
 
-	getDevice().setRepeats(intent.repeats);
-	getStatus(RepeatsStatus.class).updateRepeats(getDevice().getRepeats());
+	getDevice().setRepeats(intent.getContent(REPEATS).getValue(Short.class));
+	getStatus(RepeatsStatus.class).update(REPEATS, getDevice().getRepeats());
     }
 
     public void executeIntent(SwitchSocketAIntent intent) throws TimeoutException, NotConnectedException {
@@ -97,17 +112,17 @@ public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implement
     }
 
     public void executeIntent(SwitchSocketBIntent intent) throws TimeoutException, NotConnectedException {
-	getDevice().switchSocketB(intent.address, intent.unit, intent.switchTo);
+	getDevice().switchSocketB(intent.getContent(ADDRESS).getValue(Long.class), intent.getContent(UNIT).getValue(Short.class), intent.getContent(SWITCH_TO).getValue(Short.class));
 	getEvent(SwitchSocketBEvent.class).updateIntent(intent);
     }
 
     public void executeIntent(DimSocketBIntent intent) throws TimeoutException, NotConnectedException {
-	getDevice().dimSocketB(intent.address, intent.unit, intent.dimValue);
+	getDevice().dimSocketB(intent.getContent(ADDRESS).getValue(Long.class), intent.getContent(UNIT).getValue(Short.class), intent.getContent(DIM_VALUE).getValue(Short.class));
 	getEvent(DimSocketBEvent.class).updateIntent(intent);
     }
 
     public void executeIntent(SwitchSocketCIntent intent) throws TimeoutException, NotConnectedException {
-	getDevice().switchSocketC(intent.systemCode, intent.deviceCode, intent.switchTo);
+	getDevice().switchSocketC(intent.getContent(SYSTEM_CODE).getValue(Character.class), intent.getContent(DEVICE_CODE).getValue(Short.class), intent.getContent(SWITCH_TO).getValue(Short.class));
 	getEvent(SwitchSocketCEvent.class).updateIntent(intent);
     }
 }

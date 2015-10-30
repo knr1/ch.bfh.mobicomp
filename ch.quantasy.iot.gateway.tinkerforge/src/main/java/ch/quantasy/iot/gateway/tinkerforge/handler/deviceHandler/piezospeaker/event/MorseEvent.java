@@ -7,8 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.e
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.intent.MorseIntent;
-import java.util.Objects;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.PiezoSpeaker;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -17,52 +16,10 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
  */
 public class MorseEvent extends AnEvent {
 
-    public boolean enabled;
-    public String code;
-    public int frequency;
-
     public MorseEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "morse", mqttClient);
-	super.addDescription("enabled", Boolean.class, "JSON", "true", "false");
-	super.addDescription("code", String.class, "JSON", ".", "-", " ", "unbounded");
-	super.addDescription("frequency", Integer.class, "JSON", "585", "...", "7100");
-    }
-
-    public void updateIntent(MorseIntent intent) {
-
-	updateCode(intent.code);
-	updateEnabled(intent.enabled);
-	updateFrequency(intent.frequency);
-
-    }
-
-    public void updateEnabled(boolean enabled) {
-	if (this.enabled == enabled) {
-	    return;
-	} else {
-	    this.enabled = enabled;
-	    publish("enabled", toJSONMQTTMessage(enabled));
-	}
-	return;
-    }
-
-    public void updateCode(String code) {
-	if (Objects.equals(this.code, code)) {
-	    return;
-	} else {
-	    this.code = code;
-	    publish("code", toJSONMQTTMessage(code));
-	}
-	return;
-    }
-
-    public void updateFrequency(int frequency) {
-	if (this.frequency == frequency) {
-	    return;
-	} else {
-	    this.frequency = frequency;
-	    publish("frequency", toJSONMQTTMessage(frequency));
-	}
-	return;
+	super.addDescription(PiezoSpeaker.ENABLED, Boolean.class, "JSON", "true", "false");
+	super.addDescription(PiezoSpeaker.CODE, String.class, "JSON", ".", "-", " ", "unbounded");
+	super.addDescription(PiezoSpeaker.FREQUENCY, Integer.class, "JSON", "585", "...", "7100");
     }
 }

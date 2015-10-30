@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.statu
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.intent.DebouncePeriodIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.Moisture;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -16,24 +16,9 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
  */
 public class DebounceStatus extends AStatus {
 
-    public long period;
-
     public DebounceStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "debounce", mqttClient);
-	super.addDescription("period", Long.class, "JSON", "0", "..", "" + Long.MAX_VALUE);
+	super.addDescription(Moisture.PERIOD, Long.class, "JSON", "0", "..", "" + Long.MAX_VALUE);
     }
 
-    public void updateIntent(DebouncePeriodIntent intent) {
-	updateDebounceState(intent.period);
-    }
-
-    public void updateDebounceState(long period) {
-	if (this.period == period) {
-	    return;
-	} else {
-	    this.period = period;
-	    publish("period", toJSONMQTTMessage(period));
-	}
-	return;
-    }
 }

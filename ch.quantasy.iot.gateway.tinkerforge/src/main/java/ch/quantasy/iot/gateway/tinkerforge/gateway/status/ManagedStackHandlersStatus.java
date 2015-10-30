@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.gateway.status;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
-import java.util.Objects;
+import ch.quantasy.iot.gateway.tinkerforge.gateway.TFMQTTGateway;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -16,20 +16,9 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
  */
 public class ManagedStackHandlersStatus extends AStatus {
 
-    public ManagedStackAddresses managedStackAddresses;
-
     public ManagedStackHandlersStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "managedStackHandlers", mqttClient);
-	super.addDescription("addresses", ManagedStackAddresses.class, "JSON");
+	super.addDescription(TFMQTTGateway.MANAGED_STACK_ADDRESSES, ManagedStackAddresses.class, "JSON");
     }
 
-    public void updateManagedStackHandlers(ManagedStackAddresses managedStackHandlers) {
-	if (Objects.equals(this.managedStackAddresses, managedStackHandlers)) {
-	    return;
-	} else {
-	    this.managedStackAddresses = managedStackHandlers;
-	    publish("addresses", toJSONMQTTMessage(managedStackHandlers));
-	}
-	return;
-    }
 }

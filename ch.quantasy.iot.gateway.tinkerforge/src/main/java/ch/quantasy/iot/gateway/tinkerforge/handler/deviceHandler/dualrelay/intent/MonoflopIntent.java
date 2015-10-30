@@ -26,18 +26,18 @@ public class MonoflopIntent extends AnIntent {
 
     public boolean isExecutable() {
 	try {
-	    return getTriple(DualRelay.MONOFLOP_ENABLED).getValue(Boolean.class) && isTimeInRange() && isRelayInRange();
+	    return getContent(DualRelay.MONOFLOP_ENABLED).getValue(Boolean.class) && isTimeInRange() && isRelayInRange();
 	} catch (Throwable th) {
 	    return false;
 	}
     }
 
     private boolean isTimeInRange() {
-	return (getTriple(DualRelay.MONOFLOP_TIME).getValue(Long.class) >= 0);
+	return (getContent(DualRelay.MONOFLOP_TIME).getValue(Long.class) >= 0);
     }
 
     private boolean isRelayInRange() {
-	int relay = getTriple(DualRelay.MONOFLOP_RELAY).getValue(Integer.class);
+	int relay = getContent(DualRelay.MONOFLOP_RELAY).getValue(Integer.class);
 	return (relay == 1 || relay == 2);
     }
 

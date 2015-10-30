@@ -42,13 +42,17 @@ public abstract class AnEvent extends AMessage<EventDescription> {
 
     public void updateIntent(AnIntent intent) {
 	for (Content triple : this.getValueMap().values()) {
-	    byte[] content = intent.getTriple(triple.getProperty()).rawValue;
+	    byte[] content = intent.getContent(triple.getProperty()).rawValue;
 	    if (content != null) {
 		if (triple.updateContent(content)) {
 		    publish(triple.getProperty(), toJSONMQTTMessage(content));
 		}
 	    }
 	}
+    }
+
+    public boolean update(String property, Object value) {
+	return super.update(mqttClient, property, value);
     }
 
 }

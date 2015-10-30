@@ -23,7 +23,7 @@ public class DeviceHandlerReadyStatus extends AStatus {
     }
 
     public void updateEnabled(boolean enabled) {
-	if (super.getTriple(ADeviceHandler.ENABLED).updateContent(enabled)) {
+	if (super.getContent(ADeviceHandler.ENABLED).updateContent(enabled)) {
 	    publish(ADeviceHandler.ENABLED, toJSONMQTTMessage(enabled));
 	}
     }

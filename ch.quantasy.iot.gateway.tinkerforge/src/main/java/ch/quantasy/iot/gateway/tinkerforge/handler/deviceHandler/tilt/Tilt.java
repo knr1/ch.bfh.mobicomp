@@ -23,6 +23,10 @@ import java.net.URI;
  */
 public class Tilt extends ADeviceHandler<BrickletTilt> implements BrickletTilt.TiltStateListener {
 
+    public static final String ENABLED = "enabled";
+
+    public static final String STATE = "state";
+
     public String getApplicationName() {
 	return "Tilt";
     }
@@ -31,6 +35,7 @@ public class Tilt extends ADeviceHandler<BrickletTilt> implements BrickletTilt.T
 	super(stackApplication, mqttURI, stackAddress, identityString);
 	super.addStatusClass(TiltStateCallbackStatus.class);
 	super.addEventClass(TiltStateEvent.class);
+	super.addIntentClass(TiltStateCallbackIntent.class);
     }
 
     public Class[] getIntentClasses() {
@@ -60,7 +65,7 @@ public class Tilt extends ADeviceHandler<BrickletTilt> implements BrickletTilt.T
     }
 
     public void executeIntent(TiltStateCallbackIntent intent) throws TimeoutException, NotConnectedException {
-	if (intent.enabled) {
+	if (intent.getContent(ENABLED).getValue(Boolean.class)) {
 	    getDevice().enableTiltStateCallback();
 	} else {
 	    getDevice().disableTiltStateCallback();
@@ -70,7 +75,7 @@ public class Tilt extends ADeviceHandler<BrickletTilt> implements BrickletTilt.T
 
     @Override
     public void tiltState(short s) {
-	getEvent(TiltStateEvent.class).updateTiltState(s);
+	getEvent(TiltStateEvent.class).update(STATE, s);
     }
 
 }

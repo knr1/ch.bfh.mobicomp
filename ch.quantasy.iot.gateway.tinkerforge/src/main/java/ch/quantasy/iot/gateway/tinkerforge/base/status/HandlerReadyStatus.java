@@ -23,7 +23,7 @@ public class HandlerReadyStatus extends AStatus {
     }
 
     public void updateReachable(boolean reachable) {
-	super.getTriple("reachable");
+	super.getContent("reachable");
 	if (this.reachable == reachable) {
 	    return;
 	}

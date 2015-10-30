@@ -7,6 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.event
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.Moisture;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -15,20 +16,8 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
  */
 public class MoistureEvent extends AnEvent {
 
-    public int moisture;
-
     public MoistureEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "moisture", mqttClient);
-	super.addDescription("moisture", Integer.class, "JSON", "0", "...", "4095");
-    }
-
-    public void updateMoisture(int moisture) {
-	if (this.moisture == moisture) {
-	    return;
-	} else {
-	    this.moisture = moisture;
-	    publish("moisture", toJSONMQTTMessage(moisture));
-	}
-	return;
+	super.addDescription(Moisture.MOISTURE, Integer.class, "JSON", "0", "...", "4095");
     }
 }

@@ -43,7 +43,7 @@ public abstract class AMessage<E extends MessageDescription> {
 	this.gson = new Gson();
     }
 
-    public Content getTriple(String name) {
+    public Content getContent(String name) {
 	return valueMap.get(name);
     }
 
@@ -106,6 +106,14 @@ public abstract class AMessage<E extends MessageDescription> {
 	descriptions.add(messageDescription);
 	Content triple = new Content(messageDescription);
 	valueMap.put(triple.getProperty(), triple);
+    }
+
+    protected boolean update(MqttAsyncClient mqttClient, String property, Object value) {
+	if (getContent(property).updateContent(value)) {
+	    publish(property, toJSONMQTTMessage(value), mqttClient);
+	    return true;
+	}
+	return false;
     }
 
     protected Map<String, Content> getValueMap() {

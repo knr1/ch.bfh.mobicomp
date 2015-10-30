@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.inten
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.Moisture;
 
 /**
  *
@@ -15,18 +15,9 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class MovingAverageIntent extends AnIntent {
 
-    public short average;
-
     public MovingAverageIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "movingAverage");
-	super.addDescription("average", Short.class, "JSON", "0", "...", "100");
-    }
-
-    @Override
-    protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getName() + "/average")) {
-	    average = fromMQTTMessage(mm, Short.class);
-	}
+	super.addDescription(Moisture.AVERAGE, Short.class, "JSON", "0", "...", "100");
     }
 
     @Override
@@ -35,6 +26,7 @@ public class MovingAverageIntent extends AnIntent {
     }
 
     private boolean isAverageInRange() {
+	short average = getContent(Moisture.AVERAGE).getValue(Short.class);
 	return average >= 0 && average <= 100;
     }
 

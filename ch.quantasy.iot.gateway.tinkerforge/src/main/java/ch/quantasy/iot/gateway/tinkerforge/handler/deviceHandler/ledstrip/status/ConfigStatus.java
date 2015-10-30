@@ -25,26 +25,8 @@ public class ConfigStatus extends AStatus {
     }
 
     public void updateChipType(int chipType) {
-	if (super.getTriple(LedStrip.CONFIG_CHIP_TYPE).updateContent(chipType)) {
+	if (super.getContent(LedStrip.CONFIG_CHIP_TYPE).updateContent(chipType)) {
 	    publish(LedStrip.CONFIG_CHIP_TYPE, toJSONMQTTMessage(chipType));
-	}
-    }
-
-    public void updateClockFrequencyOfICsInHz(Long clockFrequencyOfICsInHz) {
-	if (super.getTriple(LedStrip.CONFIG_CLOCK_FREQUENCY_OF_ICS_IN_HZ).updateContent(clockFrequencyOfICsInHz)) {
-	    publish(LedStrip.CONFIG_CLOCK_FREQUENCY_OF_ICS_IN_HZ, toJSONMQTTMessage(clockFrequencyOfICsInHz));
-	}
-    }
-
-    public void updateFrameDurationInMilliseconds(int frameDurationInMilliseconds) {
-	if (super.getTriple(LedStrip.CONFIG_FRAME_DURATION_IN_MILLISECONDS).updateContent(frameDurationInMilliseconds)) {
-	    publish(LedStrip.CONFIG_FRAME_DURATION_IN_MILLISECONDS, toJSONMQTTMessage(frameDurationInMilliseconds));
-	}
-    }
-
-    public void updateNumberOfLEDs(int numberOfLEDs) {
-	if (super.getTriple(LedStrip.CONFIG_NUMBER_OF_LEDS).updateContent(numberOfLEDs)) {
-	    publish(LedStrip.CONFIG_NUMBER_OF_LEDS, toJSONMQTTMessage(numberOfLEDs));
 	}
     }
 }

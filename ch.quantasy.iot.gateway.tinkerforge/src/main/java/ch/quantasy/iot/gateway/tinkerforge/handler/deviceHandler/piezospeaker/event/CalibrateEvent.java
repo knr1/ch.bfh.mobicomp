@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.e
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.intent.CalibrateIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.PiezoSpeaker;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -16,24 +16,9 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
  */
 public class CalibrateEvent extends AnEvent {
 
-    public boolean enabled;
-
     public CalibrateEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "calibrate", mqttClient);
-	super.addDescription("enabled", Boolean.class, "JSON", "true", "false");
+	super.addDescription(PiezoSpeaker.ENABLED, Boolean.class, "JSON", "true", "false");
     }
 
-    public void updateIntent(CalibrateIntent intent) {
-	updateEnabled(intent.enabled);
-    }
-
-    public void updateEnabled(boolean enabled) {
-	if (this.enabled == enabled) {
-	    return;
-	} else {
-	    this.enabled = enabled;
-	    publish("enabled", toJSONMQTTMessage(enabled));
-	}
-	return;
-    }
 }

@@ -26,6 +26,9 @@ import java.util.Set;
  */
 public class TFMQTTGateway extends AHandler {
 
+    public static final String STACK_ADDRESS = "stackAddress";
+    public static final String MANAGED_STACK_ADDRESSES = "stackAddresses";
+
     public static final String TOPIC = "IOT/Gateway/TF";
     private final TinkerforgeStackAgency agency;
     Type stackAddressSetType = new TypeToken<Set<TinkerforgeStackAddress>>() {
@@ -58,7 +61,7 @@ public class TFMQTTGateway extends AHandler {
     public void publishAgents() {
 	Set<TinkerforgeStackAddress> stackAddresses = TinkerforgeStackAgency.getInstance().getTinkerforgeStackAddress();
 
-	getStatus(ManagedStackHandlersStatus.class).updateManagedStackHandlers(new ManagedStackAddresses(stackAddresses));
+	getStatus(ManagedStackHandlersStatus.class).update(MANAGED_STACK_ADDRESSES, new ManagedStackAddresses(stackAddresses));
     }
 
     @Override
@@ -75,7 +78,7 @@ public class TFMQTTGateway extends AHandler {
 
     public void executeIntent(StackHandlerIntent intent) throws Throwable {
 	try {
-	    TinkerforgeStackAddress address = intent.getTriple(StackHandlerIntent.STACK_ADDRESS).getValue(TinkerforgeStackAddress.class);
+	    TinkerforgeStackAddress address = intent.getContent(STACK_ADDRESS).getValue(TinkerforgeStackAddress.class);
 	    addNewAgent(address);
 	} catch (Exception ex) {
 	    ex.printStackTrace();

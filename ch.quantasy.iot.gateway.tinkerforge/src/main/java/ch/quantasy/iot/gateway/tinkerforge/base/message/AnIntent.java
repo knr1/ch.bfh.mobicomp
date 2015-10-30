@@ -21,6 +21,11 @@ public abstract class AnIntent extends AMessage {
 	super(deviceHandler, intentTopic, intentName);
     }
 
+    public <T> T getValue(String name, Class<T> classOfT) {
+
+	return getContent(name).getValue(classOfT);
+    }
+
     private boolean isProcessable(String mqttTopic) {
 	return (mqttTopic != null && mqttTopic.startsWith(getTopic()) && mqttTopic.contains(getName()));
     }
@@ -56,7 +61,7 @@ public abstract class AnIntent extends AMessage {
     protected void update(String string, MqttMessage mm) throws Throwable {
 	int offset = (getName() + "/").length();
 	String name = string.substring(string.lastIndexOf(getName() + "/") + offset);
-	Content triple = getTriple(name);
+	Content triple = getContent(name);
 	if (triple != null) {
 	    triple.rawValue = mm.getPayload();
 	}

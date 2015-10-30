@@ -56,8 +56,10 @@ public class DualRelay extends ADeviceHandler<BrickletDualRelay> implements Bric
 	BrickletDualRelay.State state;
 	try {
 	    state = getDevice().getState();
-	    getStatus(DualRelayStatus.class).updateState(state);
-	    getEvent(DualRelayEvent.class).updateState(state);
+	    getStatus(DualRelayStatus.class).update(DUALRELAY_RELAY1, state.relay1);
+	    getStatus(DualRelayStatus.class).update(DUALRELAY_RELAY2, state.relay2);
+	    getEvent(DualRelayEvent.class).update(DUALRELAY_RELAY1, state.relay1);
+	    getEvent(DualRelayEvent.class).update(DUALRELAY_RELAY2, state.relay2);
 	} catch (Throwable ex) {
 	    Logger.getLogger(DualRelay.class.getName()).log(Level.SEVERE, null, ex);
 	}
@@ -90,16 +92,16 @@ public class DualRelay extends ADeviceHandler<BrickletDualRelay> implements Bric
     }
 
     public void executeIntent(DualRelayIntent intent) throws Throwable {
-	boolean relay1 = intent.getTriple(DUALRELAY_RELAY1).getValue(Boolean.class);
-	boolean relay2 = intent.getTriple(DUALRELAY_RELAY2).getValue(Boolean.class);
+	boolean relay1 = intent.getValue(DUALRELAY_RELAY1, Boolean.class);
+	boolean relay2 = intent.getValue(DUALRELAY_RELAY2, Boolean.class);
 	getDevice().setState(relay1, relay2);
 	updateState();
     }
 
     public void executeIntent(MonoflopIntent intent) throws TimeoutException, NotConnectedException {
-	short relay = intent.getTriple(MONOFLOP_RELAY).getValue(Short.class);
-	boolean state = intent.getTriple(MONOFLOP_STATE).getValue(Boolean.class);
-	long time = intent.getTriple(MONOFLOP_TIME).getValue(Long.class);
+	short relay = intent.getValue(MONOFLOP_RELAY, Short.class);
+	boolean state = intent.getValue(MONOFLOP_STATE, Boolean.class);
+	long time = intent.getValue(MONOFLOP_TIME, Long.class);
 
 	getDevice().setMonoflop(relay, state, time);
 	updateState();

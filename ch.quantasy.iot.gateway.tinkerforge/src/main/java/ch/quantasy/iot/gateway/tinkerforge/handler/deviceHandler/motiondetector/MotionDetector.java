@@ -19,6 +19,8 @@ import java.net.URI;
  */
 public class MotionDetector extends ADeviceHandler<BrickletMotionDetector> implements BrickletMotionDetector.DetectionCycleEndedListener, BrickletMotionDetector.MotionDetectedListener {
 
+    public static final String DETECTED = "detected";
+
     public String getApplicationName() {
 	return "MotionDetector";
     }
@@ -56,12 +58,12 @@ public class MotionDetector extends ADeviceHandler<BrickletMotionDetector> imple
 
     @Override
     public void detectionCycleEnded() {
-	getEvent(MotionDetectedEvent.class).updateDetected(false);
+	getEvent(MotionDetectedEvent.class).update(DETECTED, false);
     }
 
     @Override
     public void motionDetected() {
-	getEvent(MotionDetectedEvent.class).updateDetected(true);
+	getEvent(MotionDetectedEvent.class).update(DETECTED, true);
 
     }
 

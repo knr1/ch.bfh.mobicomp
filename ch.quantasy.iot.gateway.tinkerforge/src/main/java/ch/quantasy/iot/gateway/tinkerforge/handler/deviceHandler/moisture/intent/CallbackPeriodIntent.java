@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.inten
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.Moisture;
 
 /**
  *
@@ -15,18 +15,9 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class CallbackPeriodIntent extends AnIntent {
 
-    public long period;
-
     public CallbackPeriodIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackPeriod");
-	super.addDescription("period", Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
-    }
-
-    @Override
-    protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getName() + "/period")) {
-	    period = fromMQTTMessage(mm, Long.class);
-	}
+	super.addDescription(Moisture.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
 
     @Override
@@ -35,6 +26,7 @@ public class CallbackPeriodIntent extends AnIntent {
     }
 
     private boolean isPeriodInRange() {
+	long period = getContent(Moisture.PERIOD).getValue(Long.class);
 	return period >= 0;
     }
 

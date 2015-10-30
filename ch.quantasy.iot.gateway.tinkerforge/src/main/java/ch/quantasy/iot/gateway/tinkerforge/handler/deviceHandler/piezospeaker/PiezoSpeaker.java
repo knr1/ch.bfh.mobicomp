@@ -26,6 +26,12 @@ import java.net.URI;
  */
 public class PiezoSpeaker extends ADeviceHandler<BrickletPiezoSpeaker> implements BrickletPiezoSpeaker.MorseCodeFinishedListener, BrickletPiezoSpeaker.BeepFinishedListener {
 
+    public static final String ENABLED = "enabled";
+    public static final String DURATION = "duration";
+    public static final String FREQUENCY = "frequency";
+
+    public static final String CODE = "code";
+
     public String getApplicationName() {
 	return "PiezoSpeaker";
     }
@@ -38,12 +44,12 @@ public class PiezoSpeaker extends ADeviceHandler<BrickletPiezoSpeaker> implement
 
     @Override
     public void morseCodeFinished() {
-	getEvent(MorseEvent.class).updateEnabled(false);
+	getEvent(MorseEvent.class).update(ENABLED, false);
     }
 
     @Override
     public void beepFinished() {
-	getEvent(BeepEvent.class).updateEnabled(false);
+	getEvent(BeepEvent.class).update(ENABLED, false);
     }
 
     @Override
@@ -77,7 +83,7 @@ public class PiezoSpeaker extends ADeviceHandler<BrickletPiezoSpeaker> implement
     }
 
     public void executeIntent(BeepIntent intent) throws TimeoutException, NotConnectedException {
-	getDevice().beep(intent.duration, intent.frequency);
+	getDevice().beep(intent.getValue(DURATION, Long.class), intent.getValue(FREQUENCY, Integer.class));
 	getEvent(BeepEvent.class).updateIntent(intent);
     }
 
@@ -90,7 +96,7 @@ public class PiezoSpeaker extends ADeviceHandler<BrickletPiezoSpeaker> implement
     public void executeIntent(CalibrateIntent intent) throws TimeoutException, NotConnectedException {
 	getEvent(CalibrateEvent.class).updateIntent(intent);
 	getDevice().calibrate();
-	getEvent(CalibrateEvent.class).updateEnabled(false);
+	getEvent(CalibrateEvent.class).update(ENABLED, false);
     }
 
 }

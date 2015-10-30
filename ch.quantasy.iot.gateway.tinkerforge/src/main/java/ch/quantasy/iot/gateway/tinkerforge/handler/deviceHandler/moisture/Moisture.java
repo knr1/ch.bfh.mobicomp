@@ -30,6 +30,15 @@ import java.net.URI;
  */
 public class Moisture extends ADeviceHandler<BrickletMoisture> implements BrickletMoisture.MoistureListener, BrickletMoisture.MoistureReachedListener {
 
+    public static final String PERIOD = "period";
+    public static final String THRESHOLD_OPTION = "option";
+    public static final String THRESHOLD_MIN = "min";
+    public static final String THRESHOLD_MAX = "max";
+    public static final String ENABLED = "enabled";
+    public static final String AVERAGE = "average";
+
+    public static final String MOISTURE = "moisture";
+
     public String getApplicationName() {
 	return "Moisture";
     }
@@ -72,36 +81,39 @@ public class Moisture extends ADeviceHandler<BrickletMoisture> implements Brickl
     }
 
     public void executeIntent(DebouncePeriodIntent intent) throws TimeoutException, NotConnectedException {
-
-	getDevice().setDebouncePeriod(intent.period);
-	getStatus(DebounceStatus.class).updateDebounceState(getDevice().getDebouncePeriod());
+	long period = intent.getValue(Moisture.PERIOD, Long.class);
+	getDevice().setDebouncePeriod(period);
+	getStatus(DebounceStatus.class).update(Moisture.PERIOD, getDevice().getDebouncePeriod());
     }
 
     public void executeIntent(CallbackPeriodIntent intent) throws TimeoutException, NotConnectedException {
-
-	getDevice().setMoistureCallbackPeriod(intent.period);
-	getStatus(CallbackPeriodStatus.class).updateCallbackPeriod(getDevice().getMoistureCallbackPeriod());
+	long period = intent.getValue(Moisture.PERIOD, Long.class);
+	getDevice().setMoistureCallbackPeriod(period);
+	getStatus(CallbackPeriodStatus.class).update(PERIOD, getDevice().getMoistureCallbackPeriod());
     }
 
     public void executeIntent(CallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
-
-	getDevice().setMoistureCallbackThreshold(intent.option, intent.min, intent.max);
+	char option = intent.getValue(Moisture.THRESHOLD_OPTION, Character.class);
+	int min = intent.getValue(Moisture.THRESHOLD_MIN, Integer.class);
+	int max = intent.getValue(Moisture.THRESHOLD_MAX, Integer.class);
+	getDevice().setMoistureCallbackThreshold(option, min, max);
 	getStatus(CallbackThresholdStatus.class).updateIntent(intent);
     }
 
     public void executeIntent(MovingAverageIntent intent) throws TimeoutException, NotConnectedException {
-	getDevice().setMovingAverage(intent.average);
-	getStatus(MovingAverageStatus.class).updateMovingAverage(getDevice().getMovingAverage());
+	short average = intent.getContent(Moisture.AVERAGE).getValue(Short.class);
+	getDevice().setMovingAverage(average);
+	getStatus(MovingAverageStatus.class).update(Moisture.AVERAGE, getDevice().getMovingAverage());
     }
 
     @Override
     public void moisture(int i) {
-	getEvent(MoistureEvent.class).updateMoisture(i);
+	getEvent(MoistureEvent.class).update(MOISTURE, i);
     }
 
     @Override
     public void moistureReached(int i) {
-	getEvent(MoistureReachedEvent.class).updateMoisture(i);
+	getEvent(MoistureReachedEvent.class).update(MOISTURE, i);
 
     }
 

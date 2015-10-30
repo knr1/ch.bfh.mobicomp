@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.inten
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.Moisture;
 
 /**
  *
@@ -15,40 +15,24 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class CallbackThresholdIntent extends AnIntent {
 
-    public char option;
-    public int min;
-    public int max;
-    public boolean enabled;
-
     public CallbackThresholdIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackThreshold");
-	super.addDescription("option", Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
-	super.addDescription("min", Integer.class, "JSON", "0", "...", "4095");
-	super.addDescription("max", Integer.class, "JSON", "0", "...", "4095");
-	super.addDescription("enabled", Boolean.class, "JSON", "true", "false");
-    }
-
-    @Override
-    protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getName() + "/option")) {
-	    option = fromMQTTMessage(mm, Character.class);
-	}
-	if (string.endsWith(getName() + "/min")) {
-	    min = fromMQTTMessage(mm, Integer.class);
-	}
-	if (string.endsWith(getName() + "/max")) {
-	    max = fromMQTTMessage(mm, Integer.class);
-	}
-	if (string.endsWith(getName() + "/enabled")) {
-	    enabled = fromMQTTMessage(mm, Boolean.class);
-	}
+	super.addDescription(Moisture.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(Moisture.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "4095");
+	super.addDescription(Moisture.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "4095");
+	super.addDescription(Moisture.ENABLED, Boolean.class, "JSON", "true", "false");
     }
 
     public boolean isExecutable() {
-	return enabled && isOptionInRange() && isMaxInRange() && isMaxInRange();
+	return isEnabled() && isOptionInRange() && isMaxInRange() && isMaxInRange();
+    }
+
+    private boolean isEnabled() {
+	return getContent(Moisture.ENABLED).getValue(Boolean.class);
     }
 
     private boolean isOptionInRange() {
+	char option = getContent(Moisture.THRESHOLD_OPTION).getValue(Character.class);
 	switch (option) {
 	    case 'x':
 	    case 'o':
@@ -61,10 +45,12 @@ public class CallbackThresholdIntent extends AnIntent {
     }
 
     private boolean isMinInRange() {
+	int min = getContent(Moisture.THRESHOLD_MIN).getValue(Integer.class);
 	return (min <= 4095 && min >= 0);
     }
 
     private boolean isMaxInRange() {
+	int max = getContent(Moisture.THRESHOLD_MAX).getValue(Integer.class);
 	return (max <= 4095 && max >= 0);
     }
 

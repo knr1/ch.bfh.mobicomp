@@ -29,7 +29,7 @@ public class RGBLEDFrameIntent extends AnIntent {
 //    }
     @Override
     public boolean isExecutable() {
-	short[][] rgbFrame = getTriple(LedStrip.RGB_FRAME).getValue(short[][].class);
+	short[][] rgbFrame = getContent(LedStrip.RGB_FRAME).getValue(short[][].class);
 	return (rgbFrame != null && rgbFrame.length == 3 && rgbFrame[0] != null && rgbFrame[1] != null && rgbFrame[2]
 		!= null);
     }

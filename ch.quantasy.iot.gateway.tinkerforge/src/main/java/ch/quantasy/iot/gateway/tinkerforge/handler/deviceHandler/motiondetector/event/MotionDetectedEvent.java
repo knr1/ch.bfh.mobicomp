@@ -7,6 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.motiondetector
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.motiondetector.MotionDetector;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -15,21 +16,9 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
  */
 public class MotionDetectedEvent extends AnEvent {
 
-    public boolean detected;
-
     public MotionDetectedEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "motionDetected", mqttClient);
-	super.addDescription("detected", Boolean.class, "JSON", "true", "false");
+	super.addDescription(MotionDetector.DETECTED, Boolean.class, "JSON", "true", "false");
 
-    }
-
-    public void updateDetected(boolean detected) {
-	if (this.detected == detected) {
-	    return;
-	} else {
-	    this.detected = detected;
-	    publish("detected", toJSONMQTTMessage(detected));
-	}
-	return;
     }
 }

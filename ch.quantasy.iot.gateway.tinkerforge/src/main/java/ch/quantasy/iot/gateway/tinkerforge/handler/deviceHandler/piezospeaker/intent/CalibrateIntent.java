@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.i
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.PiezoSpeaker;
 
 /**
  *
@@ -15,23 +15,14 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class CalibrateIntent extends AnIntent {
 
-    public boolean enabled;
-
     public CalibrateIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "calibrate");
-	super.addDescription("enabled", Boolean.class, "JSON", "true", "false");
-    }
-
-    @Override
-    protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getName() + "/enabled")) {
-	    enabled = fromMQTTMessage(mm, Boolean.class);
-	}
+	super.addDescription(PiezoSpeaker.ENABLED, Boolean.class, "JSON", "true", "false");
     }
 
     @Override
     public boolean isExecutable() {
-	return enabled;
+	return super.getValue(PiezoSpeaker.ENABLED, Boolean.class);
     }
 
 }
