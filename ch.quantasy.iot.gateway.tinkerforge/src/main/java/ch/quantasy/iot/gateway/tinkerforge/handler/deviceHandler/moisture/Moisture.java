@@ -78,6 +78,9 @@ public class Moisture extends ADeviceHandler<BrickletMoisture> implements Brickl
 	if (intent instanceof CallbackThresholdIntent) {
 	    executeIntent((CallbackThresholdIntent) intent);
 	}
+	if (intent instanceof MovingAverageIntent) {
+	    executeIntent((MovingAverageIntent) intent);
+	}
     }
 
     public void executeIntent(DebouncePeriodIntent intent) throws TimeoutException, NotConnectedException {

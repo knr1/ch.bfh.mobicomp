@@ -6,26 +6,34 @@
 package ch.quantasy.iot.gateway.tinkerforge.handler;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.barometer.Barometer;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.DualRelay;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.gps.GPS;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.Humidity;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ledstrip.LedStrip;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.Moisture;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.motiondetector.MotionDetector;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.multitouch.MultiTouch;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.PiezoSpeaker;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.RemoteSwitch;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.soundIntensity.SoundIntensity;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.tilt.Tilt;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
+import com.tinkerforge.BrickletBarometer;
 import com.tinkerforge.BrickletDualRelay;
 import com.tinkerforge.BrickletGPS;
+import com.tinkerforge.BrickletHumidity;
 import com.tinkerforge.BrickletLEDStrip;
 import com.tinkerforge.BrickletMoisture;
 import com.tinkerforge.BrickletMotionDetector;
 import com.tinkerforge.BrickletMultiTouch;
 import com.tinkerforge.BrickletPiezoSpeaker;
 import com.tinkerforge.BrickletRemoteSwitch;
+import com.tinkerforge.BrickletSoundIntensity;
+import com.tinkerforge.BrickletTilt;
 import com.tinkerforge.Device;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
@@ -91,15 +99,15 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		deviceHandler.enableDevice((BrickletLEDStrip) device);
 
 	    }
-	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.PiezoSpeaker) {
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.MultiTouch) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
 
 		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
 		if (deviceHandler == null) {
-		    deviceHandler = new PiezoSpeaker(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandler = new MultiTouch(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
 		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
 		}
-		deviceHandler.enableDevice((BrickletPiezoSpeaker) device);
+		deviceHandler.enableDevice((BrickletMultiTouch) device);
 
 	    }
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.PiezoSpeaker) {
@@ -124,15 +132,36 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		deviceHandler.enableDevice((BrickletGPS) device);
 
 	    }
-	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.MultiTouch) {
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.Barometer) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
 
 		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
 		if (deviceHandler == null) {
-		    deviceHandler = new MultiTouch(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandler = new Barometer(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
 		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
 		}
-		deviceHandler.enableDevice((BrickletMultiTouch) device);
+		deviceHandler.enableDevice((BrickletBarometer) device);
+
+	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.SoundIntensity) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new SoundIntensity(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletSoundIntensity) device);
+	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.Humidity) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new Humidity(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletHumidity) device);
 	    }
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.Moisture) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
@@ -173,6 +202,16 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
 		}
 		deviceHandler.enableDevice((BrickletDualRelay) device);
+	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.Tilt) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new Tilt(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletTilt) device);
 	    }
 
 	} catch (Throwable ex) {
