@@ -21,7 +21,6 @@ public class AveragingStatus extends AStatus {
 	super.addDescription(Barometer.MOVING_AVERAGE_PRESSURE, Short.class, "JSON", "0", "..", "25");
 	super.addDescription(Barometer.AVERAGE_PRESSURE, Short.class, "JSON", "0", "..", "10");
 	super.addDescription(Barometer.AVERAGE_TEMPERATURE, Short.class, "JSON", "0", "..", "255");
-
     }
 
 }

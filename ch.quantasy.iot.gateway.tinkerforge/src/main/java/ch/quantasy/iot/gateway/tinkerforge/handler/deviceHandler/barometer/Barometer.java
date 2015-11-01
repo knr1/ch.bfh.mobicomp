@@ -53,9 +53,9 @@ public class Barometer extends ADeviceHandler<BrickletBarometer> implements Bric
 
     public Barometer(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(stackApplication, mqttURI, stackAddress, identityString);
-	super.addStatusClass(AirPressureCallbackPeriodStatus.class, AirPressureCallbackThresholdStatus.class, AltitudeCallbackPeriodStatus.class, AltitudeCallbackThresholdStatus.class, DebounceStatus.class);
+	super.addStatusClass(AirPressureCallbackPeriodStatus.class, AirPressureCallbackThresholdStatus.class, AltitudeCallbackPeriodStatus.class, AltitudeCallbackThresholdStatus.class, DebounceStatus.class, AveragingStatus.class);
 	super.addEventClass(AirPressureValueEvent.class, AltitudeEvent.class, AirPressureReachedEvent.class, AltitudeReachedEvent.class);
-	super.addIntentClass(AirPressureCallbackPeriodIntent.class, AirPressureCallbackThresholdIntent.class, AltitudeCallbackPeriodIntent.class, AltitudeCallbackThresholdIntent.class, DebouncePeriodIntent.class);
+	super.addIntentClass(AirPressureCallbackPeriodIntent.class, AirPressureCallbackThresholdIntent.class, AltitudeCallbackPeriodIntent.class, AltitudeCallbackThresholdIntent.class, DebouncePeriodIntent.class, AveragingIntent.class);
     }
 
     @Override
@@ -95,6 +95,9 @@ public class Barometer extends ADeviceHandler<BrickletBarometer> implements Bric
 	}
 	if (intent instanceof AirPressureCallbackThresholdIntent) {
 	    executeIntent((AirPressureCallbackThresholdIntent) intent);
+	}
+	if (intent instanceof AveragingIntent) {
+	    executeIntent((AveragingIntent) intent);
 	}
     }
 
