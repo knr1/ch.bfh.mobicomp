@@ -17,7 +17,7 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 public class ObjectTemperatureCallbackPeriodStatus extends AStatus {
 
     public ObjectTemperatureCallbackPeriodStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
-	super(deviceHandler, statusTopic, "altitudeCallbackPeriod", mqttClient);
+	super(deviceHandler, statusTopic, "objectTemperatureCallbackPeriod", mqttClient);
 	super.addDescription(TemperatureIR.PERIOD, Long.class, "JSON", "0", "..", "" + Long.MAX_VALUE);
     }
 }

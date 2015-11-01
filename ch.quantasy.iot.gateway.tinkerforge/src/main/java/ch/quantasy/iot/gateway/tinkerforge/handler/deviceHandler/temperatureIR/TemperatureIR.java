@@ -41,7 +41,7 @@ public class TemperatureIR extends ADeviceHandler<BrickletTemperatureIR> impleme
     public static final String THRESHOLD_MIN = "min";
     public static final String THRESHOLD_MAX = "max";
     public static final String ENABLED = "enabled";
-    public static final String EMISSIVITY = "movingAveragePressure";
+    public static final String EMISSIVITY = "emissivity";
 
     public static final String VALUE = "value";
 
