@@ -27,7 +27,7 @@ public abstract class AnIntent extends AMessage {
     }
 
     private boolean isProcessable(String mqttTopic) {
-	return (mqttTopic != null && mqttTopic.startsWith(getTopic()) && mqttTopic.contains(getName()));
+	return (mqttTopic != null && mqttTopic.startsWith(getTopic()) && mqttTopic.contains("/" + getName() + "/"));
     }
 
     public void processMessage(String string, MqttMessage mm) {
@@ -59,8 +59,8 @@ public abstract class AnIntent extends AMessage {
 
     //TODO: auf Message-Ebene nehmen?
     protected void update(String string, MqttMessage mm) throws Throwable {
-	int offset = (getName() + "/").length();
-	String name = string.substring(string.lastIndexOf(getName() + "/") + offset);
+	int offset = ("/" + getName() + "/").length();
+	String name = string.substring(string.lastIndexOf("/" + getName() + "/") + offset);
 	Content triple = getContent(name);
 	if (triple != null) {
 	    triple.rawValue = mm.getPayload();

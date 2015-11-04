@@ -6,7 +6,7 @@
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.motiondetector;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
+import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.motiondetector.event.MotionDetectedEvent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;

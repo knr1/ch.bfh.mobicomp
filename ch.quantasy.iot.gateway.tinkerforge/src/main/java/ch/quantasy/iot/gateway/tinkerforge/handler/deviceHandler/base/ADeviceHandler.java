@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.gateway.TFMQTTGateway;
-import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
+import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.status.DeviceHandlerReadyStatus;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;

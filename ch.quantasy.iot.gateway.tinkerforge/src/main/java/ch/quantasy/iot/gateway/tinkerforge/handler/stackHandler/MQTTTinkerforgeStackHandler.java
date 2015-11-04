@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.handler;
+package ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
+import ch.quantasy.iot.gateway.tinkerforge.gateway.TFMQTTGateway;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.Color;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.barometer.Barometer;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
@@ -23,9 +24,11 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.Re
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.soundIntensity.SoundIntensity;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.temperatureIR.TemperatureIR;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.tilt.Tilt;
+import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.status.ManagedDeviceHandlersStatus;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
+import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletBarometer;
 import com.tinkerforge.BrickletColor;
 import com.tinkerforge.BrickletDistanceIR;
@@ -49,7 +52,9 @@ import java.math.BigInteger;
 import java.net.URI;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,13 +65,17 @@ import java.util.logging.Logger;
  */
 public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTinkerforgeApplication {
 
+    public final static String MANAGED_DEVICE_HANDLERS = "managedDeviceHandlers";
     private final Map<String, ADeviceHandler> deviceHandlers;
-    private String clientID;
     private final URI mqttURI;
     private MessageDigest digest;
+    private TFMQTTGateway gateway;
+    private TinkerforgeStackAddress stackAddress;
 
-    public MQTTTinkerforgeStackHandler(URI mqttURI) {
-	this.mqttURI = mqttURI;
+    public MQTTTinkerforgeStackHandler(TinkerforgeStackAddress stackAddress, TFMQTTGateway gateway) {
+	this.stackAddress = stackAddress;
+	this.gateway = gateway;
+	this.mqttURI = gateway.getMqttURI();
 	this.deviceHandlers = new HashMap<>();
 	try {
 	    digest = MessageDigest.getInstance("SHA-256");
@@ -262,6 +271,11 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		}
 		deviceHandler.enableDevice((BrickletTemperatureIR) device);
 	    }
+	    List<String> managedDeviceHandlerList = new ArrayList<>();
+	    for (ADeviceHandler deviceHandler : this.deviceHandlers.values()) {
+		managedDeviceHandlerList.add(this.stackAddress.hostName + "/" + this.stackAddress.port + "/" + deviceHandler.getApplicationName() + "/" + deviceHandler.getIdentityString());
+	    }
+	    gateway.getStatus(ManagedDeviceHandlersStatus.class).update(MANAGED_DEVICE_HANDLERS, managedDeviceHandlerList);
 
 	} catch (Throwable ex) {
 	    Logger.getLogger(MQTTTinkerforgeStackHandler.class.getName()).log(Level.SEVERE, null, ex);

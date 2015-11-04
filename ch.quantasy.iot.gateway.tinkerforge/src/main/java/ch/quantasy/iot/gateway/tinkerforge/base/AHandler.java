@@ -32,6 +32,8 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public abstract class AHandler implements MqttCallback {
 
+    public static final String REACHABLE = "reachable";
+
     public static final String DEVICE_DESCRIPTION_TOPIC = TFMQTTGateway.TOPIC + "/Description";
 
     private final String identityString;
@@ -62,7 +64,7 @@ public abstract class AHandler implements MqttCallback {
 	connectToMQTT();
     }
 
-    protected URI getMqttURI() {
+    public URI getMqttURI() {
 	return mqttURI;
     }
 
@@ -83,7 +85,7 @@ public abstract class AHandler implements MqttCallback {
 	connectOptions.setCleanSession(false);
 	HandlerReadyStatus readyStatus = getStatus(HandlerReadyStatus.class);
 	MqttMessage message = readyStatus.toJSONMQTTMessage(false);
-	connectOptions.setWill(readyStatus.getTopic() + "/reachable", message.getPayload(), 1, true);
+	connectOptions.setWill(readyStatus.getTopic() + "/" + REACHABLE, message.getPayload(), 1, true);
 	this.mqttClient.setCallback(this);
 	IMqttToken token = this.mqttClient.connect(connectOptions);
 	token.waitForCompletion();
@@ -91,7 +93,7 @@ public abstract class AHandler implements MqttCallback {
     }
 
     protected void disconnectFromMQTT() throws MqttException {
-	getStatus(HandlerReadyStatus.class).updateReachable(false);
+	getStatus(HandlerReadyStatus.class).update(REACHABLE, false);
 	IMqttToken token = this.mqttClient.disconnect();
 	token.waitForCompletion();
     }
@@ -213,7 +215,7 @@ public abstract class AHandler implements MqttCallback {
 	    for (AStatus status : statusMap.values()) {
 		status.publishDescriptions();
 	    }
-	    getStatus(HandlerReadyStatus.class).updateReachable(true);
+	    getStatus(HandlerReadyStatus.class).update(REACHABLE, true);
 	}
     }
 

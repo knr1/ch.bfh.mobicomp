@@ -6,7 +6,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.gps;
  * and open the template in the editor.
  */
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
+import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.gps.event.AltitudeEvent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.gps.event.CoordinatesEvent;

@@ -19,7 +19,7 @@ public class MonoflopEvent extends AnEvent {
     public MonoflopEvent(AHandler deviceHandler, String topic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, topic, "monoflop", mqttClient);
 	super.addDescription(DualRelay.MONOFLOP_TIME, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
-	super.addDescription(DualRelay.MONOFLOP_RELAY, Short.class, "JSON", "0", "...", "15");
-	super.addDescription(DualRelay.MONOFLOP_STATE, Boolean.class, "JSON", "true", "false");
+	super.addDescription(DualRelay.RELAY, Short.class, "JSON", "0", "...", "15");
+	super.addDescription(DualRelay.STATE, Boolean.class, "JSON", "true", "false");
     }
 }

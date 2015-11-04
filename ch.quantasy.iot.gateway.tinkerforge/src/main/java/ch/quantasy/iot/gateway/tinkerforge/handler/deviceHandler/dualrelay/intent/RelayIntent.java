@@ -13,32 +13,31 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.DualR
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class MonoflopIntent extends AnIntent {
+public class RelayIntent extends AnIntent {
 
-    public MonoflopIntent(AHandler deviceHandler, String topic) {
-	super(deviceHandler, topic, "monoflop");
-	super.addDescription(DualRelay.MONOFLOP_ENABLED, Boolean.class, "JSON", "true", "false");
-	super.addDescription(DualRelay.MONOFLOP_TIME, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
+    public RelayIntent(AHandler deviceHandler, String topic) {
+	super(deviceHandler, topic, "relay");
 	super.addDescription(DualRelay.RELAY, Short.class, "JSON", "1", "2");
 	super.addDescription(DualRelay.STATE, Boolean.class, "JSON", "true", "false");
+	super.addDescription(DualRelay.ENABLED, Boolean.class, "JSON", "true", "false");
 
     }
 
+    @Override
     public boolean isExecutable() {
 	try {
-	    return getContent(DualRelay.MONOFLOP_ENABLED).getValue(Boolean.class) && isTimeInRange() && isRelayInRange();
+	    return getContent(DualRelay.ENABLED).getValue(Boolean.class) && isRelayInRange() && isStateInRange();
 	} catch (Throwable th) {
 	    return false;
 	}
     }
 
-    private boolean isTimeInRange() {
-	return (getContent(DualRelay.MONOFLOP_TIME).getValue(Long.class) >= 0);
+    private boolean isStateInRange() {
+	return getContent(DualRelay.STATE).getValue(Boolean.class) | true;
     }
 
     private boolean isRelayInRange() {
-	int relay = getContent(DualRelay.RELAY).getValue(Integer.class);
+	short relay = getContent(DualRelay.RELAY).getValue(Short.class);
 	return (relay == 1 || relay == 2);
     }
-
 }

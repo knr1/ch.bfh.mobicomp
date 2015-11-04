@@ -6,13 +6,14 @@
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.event.DualRelayEvent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.event.MonoflopEvent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.intent.DualRelayIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.intent.MonoflopIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.intent.RelayIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.status.DualRelayStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletDualRelay;
 import com.tinkerforge.NotConnectedException;
@@ -29,8 +30,8 @@ public class DualRelay extends ADeviceHandler<BrickletDualRelay> implements Bric
 
     public static final String MONOFLOP_ENABLED = "enabled";
     public static final String MONOFLOP_TIME = "time";
-    public static final String MONOFLOP_RELAY = "relay";
-    public static final String MONOFLOP_STATE = "state";
+    public static final String RELAY = "relay";
+    public static final String STATE = "state";
 
     public static final String DUALRELAY_RELAY1 = "relay1";
     public static final String DUALRELAY_RELAY2 = "relay2";
@@ -42,7 +43,7 @@ public class DualRelay extends ADeviceHandler<BrickletDualRelay> implements Bric
 
     public DualRelay(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(stackApplication, mqttURI, stackAddress, identityString);
-	super.addIntentClass(MonoflopIntent.class, DualRelayIntent.class);
+	super.addIntentClass(MonoflopIntent.class, DualRelayIntent.class, RelayIntent.class);
 	super.addStatusClass(DualRelayStatus.class);
 	super.addEventClass(DualRelayEvent.class, MonoflopEvent.class);
     }
@@ -89,6 +90,16 @@ public class DualRelay extends ADeviceHandler<BrickletDualRelay> implements Bric
 	if (intent instanceof DualRelayIntent) {
 	    executeIntent((DualRelayIntent) intent);
 	}
+	if (intent instanceof RelayIntent) {
+	    executeIntent((RelayIntent) intent);
+	}
+    }
+
+    public void executeIntent(RelayIntent intent) throws Throwable {
+	short relay = intent.getValue(RELAY, Short.class);
+	boolean state = intent.getValue(STATE, Boolean.class);
+	getDevice().setSelectedState(relay, state);
+	updateState();
     }
 
     public void executeIntent(DualRelayIntent intent) throws Throwable {
@@ -99,8 +110,8 @@ public class DualRelay extends ADeviceHandler<BrickletDualRelay> implements Bric
     }
 
     public void executeIntent(MonoflopIntent intent) throws TimeoutException, NotConnectedException {
-	short relay = intent.getValue(MONOFLOP_RELAY, Short.class);
-	boolean state = intent.getValue(MONOFLOP_STATE, Boolean.class);
+	short relay = intent.getValue(RELAY, Short.class);
+	boolean state = intent.getValue(STATE, Boolean.class);
 	long time = intent.getValue(MONOFLOP_TIME, Long.class);
 
 	getDevice().setMonoflop(relay, state, time);

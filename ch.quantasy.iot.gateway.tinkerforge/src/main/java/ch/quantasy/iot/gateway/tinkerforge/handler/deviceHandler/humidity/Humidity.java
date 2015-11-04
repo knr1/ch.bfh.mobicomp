@@ -6,7 +6,7 @@
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
+import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.event.AnalogValueEvent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.event.AnalogValueReachedEvent;

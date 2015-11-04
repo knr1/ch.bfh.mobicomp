@@ -15,19 +15,9 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
  */
 public class HandlerReadyStatus extends AStatus {
 
-    public boolean reachable;
-
     public HandlerReadyStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "connectionState", mqttClient);
-	super.addDescription("reachable", Boolean.class, "JSON", "true", "false");
+	super.addDescription(AHandler.REACHABLE, Boolean.class, "JSON", "true", "false");
     }
 
-    public void updateReachable(boolean reachable) {
-	super.getContent("reachable");
-	if (this.reachable == reachable) {
-	    return;
-	}
-	this.reachable = reachable;
-	publish("reachable", toJSONMQTTMessage(reachable));
-    }
 }

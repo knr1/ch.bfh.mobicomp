@@ -6,7 +6,7 @@
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.barometer;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
+import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.barometer.event.AirPressureReachedEvent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.barometer.event.AirPressureValueEvent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.barometer.event.AltitudeEvent;

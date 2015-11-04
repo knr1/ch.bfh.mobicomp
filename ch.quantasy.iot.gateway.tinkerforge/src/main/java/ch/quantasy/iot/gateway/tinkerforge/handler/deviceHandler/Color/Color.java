@@ -6,7 +6,7 @@
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
+import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.event.ColorEvent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.event.ColorReachedEvent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.event.IlluminanceEvent;

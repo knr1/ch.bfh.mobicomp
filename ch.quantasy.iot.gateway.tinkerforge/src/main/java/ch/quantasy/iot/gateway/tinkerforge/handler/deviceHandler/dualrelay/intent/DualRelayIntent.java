@@ -18,7 +18,7 @@ public class DualRelayIntent extends AnIntent {
     public DualRelayIntent(AHandler deviceHandler, String topic) {
 	super(deviceHandler, topic, "dualRelay");
 	super.addDescription(DualRelay.DUALRELAY_RELAY1, Boolean.class, "JSON", "true", "false");
-	super.addDescription(DualRelay.DUALRELAY_RELAY1, Boolean.class, "JSON", "true", "false");
+	super.addDescription(DualRelay.DUALRELAY_RELAY2, Boolean.class, "JSON", "true", "false");
 	super.addDescription(DualRelay.DUALRELAY_ENABLED, Boolean.class, "JSON", "true", "false");
     }
 

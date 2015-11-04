@@ -10,8 +10,9 @@ import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.gateway.intent.StackHandlerIntent;
 import ch.quantasy.iot.gateway.tinkerforge.gateway.status.ManagedStackAddresses;
 import ch.quantasy.iot.gateway.tinkerforge.gateway.status.ManagedStackHandlersStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.status.DeviceHandlerReadyStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
+import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.status.ManagedDeviceHandlersStatus;
 import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgency;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
@@ -39,7 +40,7 @@ public class TFMQTTGateway extends AHandler {
 
 	this.agency = TinkerforgeStackAgency.getInstance();
 	super.addIntentClass(StackHandlerIntent.class);
-	super.addStatusClass(DeviceHandlerReadyStatus.class, ManagedStackHandlersStatus.class);
+	super.addStatusClass(DeviceHandlerReadyStatus.class, ManagedStackHandlersStatus.class, ManagedDeviceHandlersStatus.class);
     }
 
     public void addNewAgents(Set<TinkerforgeStackAddress> stackAddresses) {
@@ -53,7 +54,7 @@ public class TFMQTTGateway extends AHandler {
 
     public void addNewAgent(TinkerforgeStackAddress stackAddress) {
 	TinkerforgeStackAgent agent = this.agency.getStackAgent(stackAddress);
-	agent.addApplication(new MQTTTinkerforgeStackHandler(getMqttURI()));
+	agent.addApplication(new MQTTTinkerforgeStackHandler(stackAddress, this));
 	publishAgents();
 
     }
