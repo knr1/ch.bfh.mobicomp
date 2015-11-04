@@ -15,9 +15,9 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.distanceUS.Dist
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.DualRelay;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.gps.GPS;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.Humidity;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.joystick.Joystick;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ledstrip.LedStrip;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.Moisture;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.motiondetector.MotionDetector;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.multitouch.MultiTouch;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.PiezoSpeaker;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.RemoteSwitch;
@@ -37,10 +37,10 @@ import com.tinkerforge.BrickletDistanceUS;
 import com.tinkerforge.BrickletDualRelay;
 import com.tinkerforge.BrickletGPS;
 import com.tinkerforge.BrickletHumidity;
+import com.tinkerforge.BrickletJoystick;
 import com.tinkerforge.BrickletLEDStrip;
 import com.tinkerforge.BrickletLinearPoti;
 import com.tinkerforge.BrickletMoisture;
-import com.tinkerforge.BrickletMotionDetector;
 import com.tinkerforge.BrickletMultiTouch;
 import com.tinkerforge.BrickletPiezoSpeaker;
 import com.tinkerforge.BrickletRemoteSwitch;
@@ -243,15 +243,25 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		}
 		deviceHandler.enableDevice((BrickletLinearPoti) device);
 	    }
-	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.MotionDetector) {
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.LinearPoti) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
 
 		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
 		if (deviceHandler == null) {
-		    deviceHandler = new MotionDetector(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandler = new LinearPoti(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
 		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
 		}
-		deviceHandler.enableDevice((BrickletMotionDetector) device);
+		deviceHandler.enableDevice((BrickletLinearPoti) device);
+	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.Joystick) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new Joystick(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletJoystick) device);
 	    }
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.DualRelay) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
