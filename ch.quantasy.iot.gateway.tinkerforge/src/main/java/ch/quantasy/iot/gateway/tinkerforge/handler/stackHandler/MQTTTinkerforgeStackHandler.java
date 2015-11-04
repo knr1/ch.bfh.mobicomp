@@ -24,7 +24,7 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.Re
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.soundIntensity.SoundIntensity;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.temperatureIR.TemperatureIR;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.tilt.Tilt;
-import ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti.LinearPoti;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.LinearPoti;
 import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.status.ManagedDeviceHandlersStatus;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;

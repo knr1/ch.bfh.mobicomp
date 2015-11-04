@@ -3,24 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti;
+package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.event.AnalogValueEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti.event.AnalogValueReachedEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti.event.PositionValueEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti.event.PositionValueReachedEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti.intent.AnalogCallbackPeriodIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti.intent.AnalogCallbackThresholdIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti.intent.DebouncePeriodIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti.intent.PositionCallbackPeriodIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti.intent.PositionCallbackThresholdIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti.status.AnalogCallbackPeriodStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti.status.AnalogCallbackThresholdStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti.status.DebounceStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti.status.PositionCallbackPeriodStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti.status.PositionCallbackThresholdStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.event.AnalogValueReachedEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.event.PositionValueEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.event.PositionValueReachedEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.intent.AnalogCallbackPeriodIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.intent.AnalogCallbackThresholdIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.intent.DebouncePeriodIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.intent.PositionCallbackPeriodIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.intent.PositionCallbackThresholdIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.status.AnalogCallbackPeriodStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.status.AnalogCallbackThresholdStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.status.DebounceStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.status.PositionCallbackPeriodStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.status.PositionCallbackThresholdStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletLinearPoti;
