@@ -13,9 +13,9 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.Humidi
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class HumidityCallbackPeriodIntent extends AnIntent {
+public class PositionCallbackPeriodIntent extends AnIntent {
 
-    public HumidityCallbackPeriodIntent(AHandler deviceHandler, String intentTopic) {
+    public PositionCallbackPeriodIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "humidityCallbackPeriod");
 	super.addDescription(Humidity.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }

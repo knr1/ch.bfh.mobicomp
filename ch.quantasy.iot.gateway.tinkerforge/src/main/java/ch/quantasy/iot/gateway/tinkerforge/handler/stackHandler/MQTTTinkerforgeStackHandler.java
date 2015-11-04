@@ -24,6 +24,7 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.Re
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.soundIntensity.SoundIntensity;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.temperatureIR.TemperatureIR;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.tilt.Tilt;
+import ch.quantasy.iot.gateway.tinkerforge.handler.linearPoti.LinearPoti;
 import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.status.ManagedDeviceHandlersStatus;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
@@ -37,6 +38,7 @@ import com.tinkerforge.BrickletDualRelay;
 import com.tinkerforge.BrickletGPS;
 import com.tinkerforge.BrickletHumidity;
 import com.tinkerforge.BrickletLEDStrip;
+import com.tinkerforge.BrickletLinearPoti;
 import com.tinkerforge.BrickletMoisture;
 import com.tinkerforge.BrickletMotionDetector;
 import com.tinkerforge.BrickletMultiTouch;
@@ -230,6 +232,16 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
 		}
 		deviceHandler.enableDevice((BrickletDistanceIR) device);
+	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.LinearPoti) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new LinearPoti(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletLinearPoti) device);
 	    }
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.MotionDetector) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);

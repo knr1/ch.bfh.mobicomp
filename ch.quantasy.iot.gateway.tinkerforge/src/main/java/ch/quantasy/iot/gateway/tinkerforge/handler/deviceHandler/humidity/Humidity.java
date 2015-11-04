@@ -15,7 +15,7 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.event.
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.intent.AnalogCallbackPeriodIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.intent.AnalogCallbackThresholdIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.intent.DebouncePeriodIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.intent.HumidityCallbackPeriodIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.intent.PositionCallbackPeriodIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.intent.HumidityCallbackThresholdIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.status.AnalogCallbackPeriodStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.status.AnalogCallbackThresholdStatus;
@@ -50,7 +50,7 @@ public class Humidity extends ADeviceHandler<BrickletHumidity> implements Brickl
 	super(stackApplication, mqttURI, stackAddress, identityString);
 	super.addStatusClass(AnalogCallbackPeriodStatus.class, AnalogCallbackThresholdStatus.class, HumidityCallbackPeriodStatus.class, HumidityCallbackThresholdStatus.class, DebounceStatus.class);
 	super.addEventClass(AnalogValueEvent.class, HumidityValueEvent.class, AnalogValueReachedEvent.class, HumidityValueReachedEvent.class);
-	super.addIntentClass(AnalogCallbackPeriodIntent.class, AnalogCallbackThresholdIntent.class, HumidityCallbackPeriodIntent.class, HumidityCallbackThresholdIntent.class, DebouncePeriodIntent.class);
+	super.addIntentClass(AnalogCallbackPeriodIntent.class, AnalogCallbackThresholdIntent.class, PositionCallbackPeriodIntent.class, HumidityCallbackThresholdIntent.class, DebouncePeriodIntent.class);
     }
 
     @Override
@@ -82,8 +82,8 @@ public class Humidity extends ADeviceHandler<BrickletHumidity> implements Brickl
 	if (intent instanceof AnalogCallbackPeriodIntent) {
 	    executeIntent((AnalogCallbackPeriodIntent) intent);
 	}
-	if (intent instanceof HumidityCallbackPeriodIntent) {
-	    executeIntent((HumidityCallbackPeriodIntent) intent);
+	if (intent instanceof PositionCallbackPeriodIntent) {
+	    executeIntent((PositionCallbackPeriodIntent) intent);
 	}
 	if (intent instanceof HumidityCallbackThresholdIntent) {
 	    executeIntent((HumidityCallbackThresholdIntent) intent);
@@ -105,7 +105,7 @@ public class Humidity extends ADeviceHandler<BrickletHumidity> implements Brickl
 	getStatus(AnalogCallbackPeriodStatus.class).update(PERIOD, getDevice().getAnalogValueCallbackPeriod());
     }
 
-    public void executeIntent(HumidityCallbackPeriodIntent intent) throws TimeoutException, NotConnectedException {
+    public void executeIntent(PositionCallbackPeriodIntent intent) throws TimeoutException, NotConnectedException {
 	long period = intent.getValue(Humidity.PERIOD, Long.class);
 	getDevice().setHumidityCallbackPeriod(period);
 	getStatus(HumidityCallbackPeriodStatus.class).update(PERIOD, getDevice().getHumidityCallbackPeriod());
