@@ -3,21 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.status;
+package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.status;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.Color;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.Color;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class IlluminanceCallbackPeriodStatus extends AStatus {
+public class ColorCallbackPeriodStatus extends AStatus {
 
-    public IlluminanceCallbackPeriodStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
-	super(deviceHandler, statusTopic, "illuminanceCallbackPeriod", mqttClient);
+    public ColorCallbackPeriodStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
+	super(deviceHandler, statusTopic, "colorCallbackPeriod", mqttClient);
 	super.addDescription(Color.PERIOD, Long.class, "JSON", "0", "..", "" + Long.MAX_VALUE);
     }
 }

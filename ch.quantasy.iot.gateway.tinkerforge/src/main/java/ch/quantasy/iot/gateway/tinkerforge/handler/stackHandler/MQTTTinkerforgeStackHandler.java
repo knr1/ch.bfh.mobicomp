@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.gateway.TFMQTTGateway;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.Color;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.Color;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.barometer.Barometer;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.distanceIR.DistanceIR;

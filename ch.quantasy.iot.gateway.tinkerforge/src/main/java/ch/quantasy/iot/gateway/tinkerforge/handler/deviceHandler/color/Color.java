@@ -3,28 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color;
+package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.event.ColorEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.event.ColorReachedEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.event.IlluminanceEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.event.TemperatureEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.intent.ColorCallbackPeriodIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.intent.ColorCallbackThresholdIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.intent.ColorConfigIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.intent.ColorTemperatureCallbackPeriodIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.intent.DebouncePeriodIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.intent.IlluminanceCallbackPeriodIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.intent.LightIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.status.ColorCallbackPeriodStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.status.ColorCallbackThresholdStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.status.ColorConfigStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.status.ColorTemperatureCallbackPeriodStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.status.DebounceStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.status.IlluminanceCallbackPeriodStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.Color.status.LightStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.event.ColorEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.event.ColorReachedEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.event.IlluminanceEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.event.TemperatureEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.intent.ColorCallbackPeriodIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.intent.ColorCallbackThresholdIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.intent.ColorConfigIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.intent.ColorTemperatureCallbackPeriodIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.intent.DebouncePeriodIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.intent.IlluminanceCallbackPeriodIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.intent.LightIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.status.ColorCallbackPeriodStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.status.ColorCallbackThresholdStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.status.ColorConfigStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.status.ColorTemperatureCallbackPeriodStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.status.DebounceStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.status.IlluminanceCallbackPeriodStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.status.LightStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletColor;
