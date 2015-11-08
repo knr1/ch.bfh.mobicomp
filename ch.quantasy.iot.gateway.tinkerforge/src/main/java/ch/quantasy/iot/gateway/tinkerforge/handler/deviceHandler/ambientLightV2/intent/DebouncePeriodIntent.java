@@ -3,20 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight2.intent;
+package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.intent;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight2.AmbientLightV2;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.AmbientLightV2;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CallbackPeriodIntent extends AnIntent {
+public class DebouncePeriodIntent extends AnIntent {
 
-    public CallbackPeriodIntent(AHandler deviceHandler, String intentTopic) {
-	super(deviceHandler, intentTopic, "callbackPeriod");
+    public DebouncePeriodIntent(AHandler deviceHandler, String intentTopic) {
+	super(deviceHandler, intentTopic, "debounce");
 	super.addDescription(AmbientLightV2.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
 

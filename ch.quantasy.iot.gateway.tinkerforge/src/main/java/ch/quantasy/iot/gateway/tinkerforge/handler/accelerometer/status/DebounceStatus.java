@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight2.status;
+package ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.status;
 
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.status.*;
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.AmbientLight;
+import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.Accelerometer;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -19,7 +18,7 @@ public class DebounceStatus extends AStatus {
 
     public DebounceStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "debounce", mqttClient);
-	super.addDescription(AmbientLight.PERIOD, Long.class, "JSON", "0", "..", "" + Long.MAX_VALUE);
+	super.addDescription(Accelerometer.PERIOD, Long.class, "JSON", "0", "..", "" + Long.MAX_VALUE);
     }
 
 }

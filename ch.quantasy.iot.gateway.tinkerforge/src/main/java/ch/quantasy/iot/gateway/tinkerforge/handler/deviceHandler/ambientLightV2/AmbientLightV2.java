@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight2;
+package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.event.IlluminanceEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.event.IlluminanceReachedEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.intent.CallbackPeriodIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.intent.CallbackThresholdIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.intent.DebouncePeriodIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.status.CallbackPeriodStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.status.CallbackThresholdStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.status.DebounceStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight2.intent.ConfigIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight2.status.ConfigStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.event.IlluminanceEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.event.IlluminanceReachedEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.intent.CallbackPeriodIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.intent.CallbackThresholdIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.intent.ConfigIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.intent.DebouncePeriodIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.status.CallbackPeriodStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.status.CallbackThresholdStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.status.ConfigStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.status.DebounceStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
@@ -47,9 +47,9 @@ public class AmbientLightV2 extends ADeviceHandler<BrickletAmbientLightV2> imple
 
     public AmbientLightV2(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(stackApplication, mqttURI, stackAddress, identityString);
-	super.addStatusClass(CallbackPeriodStatus.class, CallbackThresholdStatus.class, DebounceStatus.class);
+	super.addStatusClass(CallbackPeriodStatus.class, CallbackThresholdStatus.class, DebounceStatus.class, ConfigStatus.class);
 	super.addEventClass(IlluminanceEvent.class, IlluminanceReachedEvent.class);
-	super.addIntentClass(CallbackPeriodIntent.class, CallbackThresholdIntent.class, DebouncePeriodIntent.class);
+	super.addIntentClass(CallbackPeriodIntent.class, CallbackThresholdIntent.class, DebouncePeriodIntent.class, ConfigIntent.class);
     }
 
     @Override

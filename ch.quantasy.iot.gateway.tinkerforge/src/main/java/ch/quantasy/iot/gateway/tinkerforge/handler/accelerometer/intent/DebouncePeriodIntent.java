@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight2.intent;
+package ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.intent;
 
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.intent.*;
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.AmbientLight;
+import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.Accelerometer;
 
 /**
  *
@@ -18,7 +17,7 @@ public class DebouncePeriodIntent extends AnIntent {
 
     public DebouncePeriodIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "debounce");
-	super.addDescription(AmbientLight.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
+	super.addDescription(Accelerometer.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
 
     @Override
@@ -27,7 +26,7 @@ public class DebouncePeriodIntent extends AnIntent {
     }
 
     private boolean isPeriodInRange() {
-	long period = getContent(AmbientLight.PERIOD).getValue(Long.class);
+	long period = getContent(Accelerometer.PERIOD).getValue(Long.class);
 	return period >= 0;
     }
 

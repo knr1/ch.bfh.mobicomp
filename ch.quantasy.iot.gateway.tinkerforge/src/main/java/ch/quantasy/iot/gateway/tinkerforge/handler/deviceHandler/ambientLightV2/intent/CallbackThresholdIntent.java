@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight2.intent;
+package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.intent;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.AmbientLight;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight2.AmbientLightV2;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.AmbientLightV2;
 
 /**
  *
@@ -29,7 +28,7 @@ public class CallbackThresholdIntent extends AnIntent {
     }
 
     private boolean isEnabled() {
-	return getContent(AmbientLight.ENABLED).getValue(Boolean.class);
+	return getContent(AmbientLightV2.ENABLED).getValue(Boolean.class);
     }
 
     private boolean isOptionInRange() {

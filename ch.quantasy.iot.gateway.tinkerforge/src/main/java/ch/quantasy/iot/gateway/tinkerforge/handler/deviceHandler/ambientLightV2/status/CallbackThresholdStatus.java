@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight2.status;
+package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.status;
 
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.status.*;
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.AmbientLight;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.AmbientLightV2;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -19,8 +18,8 @@ public class CallbackThresholdStatus extends AStatus {
 
     public CallbackThresholdStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "callbackThreshold", mqttClient);
-	super.addDescription(AmbientLight.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
-	super.addDescription(AmbientLight.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "4095");
-	super.addDescription(AmbientLight.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "4095");
+	super.addDescription(AmbientLightV2.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(AmbientLightV2.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "4095");
+	super.addDescription(AmbientLightV2.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "4095");
     }
 }
