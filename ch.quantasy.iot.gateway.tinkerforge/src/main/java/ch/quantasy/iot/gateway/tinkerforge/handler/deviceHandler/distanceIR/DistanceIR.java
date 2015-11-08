@@ -6,7 +6,6 @@
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.distanceIR;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.distanceIR.event.AnalogValueEvent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.distanceIR.event.AnalogValueReachedEvent;
@@ -22,6 +21,7 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.distanceIR.stat
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.distanceIR.status.CallbackPeriodStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.distanceIR.status.CallbackThresholdStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.distanceIR.status.DebounceStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletDistanceIR;
 import com.tinkerforge.NotConnectedException;
@@ -58,12 +58,16 @@ public class DistanceIR extends ADeviceHandler<BrickletDistanceIR> implements Br
     protected void addDeviceListeners() {
 	getDevice().addDistanceListener(this);
 	getDevice().addDistanceReachedListener(this);
+	getDevice().addAnalogValueListener(this);
+	getDevice().addAnalogValueReachedListener(this);
     }
 
     @Override
     protected void removeDeviceListeners() {
 	getDevice().removeDistanceListener(this);
 	getDevice().removeDistanceReachedListener(this);
+	getDevice().removeAnalogValueListener(this);
+	getDevice().removeAnalogValueReachedListener(this);
     }
 
     /**

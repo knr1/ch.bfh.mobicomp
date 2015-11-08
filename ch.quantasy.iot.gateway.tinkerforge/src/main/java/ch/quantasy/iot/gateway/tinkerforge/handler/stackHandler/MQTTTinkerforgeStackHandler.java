@@ -7,9 +7,10 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.gateway.TFMQTTGateway;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.Color;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.AmbientLight;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.barometer.Barometer;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.Color;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.distanceIR.DistanceIR;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.distanceUS.DistanceUS;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.DualRelay;
@@ -17,6 +18,7 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.gps.GPS;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.Humidity;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.joystick.Joystick;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ledstrip.LedStrip;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.LinearPoti;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.Moisture;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.multitouch.MultiTouch;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.PiezoSpeaker;
@@ -24,12 +26,12 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.Re
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.soundIntensity.SoundIntensity;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.temperatureIR.TemperatureIR;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.tilt.Tilt;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.linearPoti.LinearPoti;
 import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.status.ManagedDeviceHandlersStatus;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
+import com.tinkerforge.BrickletAmbientLight;
 import com.tinkerforge.BrickletBarometer;
 import com.tinkerforge.BrickletColor;
 import com.tinkerforge.BrickletDistanceIR;
@@ -149,6 +151,17 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
 		}
 		deviceHandler.enableDevice((BrickletGPS) device);
+
+	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.AmbientLight) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new AmbientLight(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletAmbientLight) device);
 
 	    }
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.Barometer) {
