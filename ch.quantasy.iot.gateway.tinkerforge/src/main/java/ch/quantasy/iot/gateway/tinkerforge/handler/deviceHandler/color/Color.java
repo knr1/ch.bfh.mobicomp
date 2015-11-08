@@ -6,7 +6,7 @@
 package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.event.ColorEvent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.event.ColorReachedEvent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.event.IlluminanceEvent;
@@ -25,7 +25,7 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.status.Co
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.status.DebounceStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.status.IlluminanceCallbackPeriodStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.status.LightStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
+import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletColor;
 import com.tinkerforge.NotConnectedException;
@@ -161,7 +161,7 @@ public class Color extends ADeviceHandler<BrickletColor> implements BrickletColo
 	} else {
 	    getDevice().lightOff();
 	}
-	getStatus(LightStatus.class).update(LIGHT_ON, getDevice().isLightOn());
+	getStatus(LightStatus.class).update(LIGHT_ON, getDevice().isLightOn() == BrickletColor.LIGHT_ON);
     }
 
     @Override
