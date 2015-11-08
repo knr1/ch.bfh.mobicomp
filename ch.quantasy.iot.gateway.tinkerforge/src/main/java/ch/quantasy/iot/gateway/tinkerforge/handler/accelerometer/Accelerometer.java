@@ -12,10 +12,12 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.intent.Callback
 import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.intent.CallbackThresholdIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.intent.ConfigIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.intent.DebouncePeriodIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.intent.LEDIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.status.CallbackPeriodStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.status.CallbackThresholdStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.status.ConfigStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.status.DebounceStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.status.LEDStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
@@ -55,9 +57,9 @@ public class Accelerometer extends ADeviceHandler<BrickletAccelerometer> impleme
 
     public Accelerometer(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(stackApplication, mqttURI, stackAddress, identityString);
-	super.addStatusClass(CallbackPeriodStatus.class, CallbackThresholdStatus.class, DebounceStatus.class, ConfigStatus.class);
+	super.addStatusClass(CallbackPeriodStatus.class, CallbackThresholdStatus.class, DebounceStatus.class, ConfigStatus.class, LEDStatus.class);
 	super.addEventClass(AccelerationReachedEvent.class, AccelerationReachedEvent.class);
-	super.addIntentClass(CallbackPeriodIntent.class, CallbackThresholdIntent.class, DebouncePeriodIntent.class, ConfigIntent.class);
+	super.addIntentClass(CallbackPeriodIntent.class, CallbackThresholdIntent.class, DebouncePeriodIntent.class, ConfigIntent.class, LEDIntent.class);
     }
 
     @Override
@@ -93,7 +95,21 @@ public class Accelerometer extends ADeviceHandler<BrickletAccelerometer> impleme
 	if (intent instanceof ConfigIntent) {
 	    executeIntent((ConfigIntent) intent);
 	}
+	if (intent instanceof LEDIntent) {
+	    executeIntent((LEDIntent) intent);
+	}
 
+    }
+
+    public void executeIntent(LEDIntent intent) throws TimeoutException, NotConnectedException {
+
+	boolean isLightOn = intent.getValue(VALUE, Boolean.class);
+	if (isLightOn) {
+	    getDevice().ledOn();
+	} else {
+	    getDevice().ledOff();
+	}
+	getStatus(LEDStatus.class).update(intent);
     }
 
     public void executeIntent(ConfigIntent intent) throws TimeoutException, NotConnectedException {
