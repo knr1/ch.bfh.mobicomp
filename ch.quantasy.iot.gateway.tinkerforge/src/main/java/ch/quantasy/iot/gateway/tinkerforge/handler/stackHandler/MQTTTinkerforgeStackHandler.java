@@ -7,7 +7,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.gateway.TFMQTTGateway;
-import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.Accelerometer;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.accelerometer.Accelerometer;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.AmbientLight;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLightV2.AmbientLightV2;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.barometer.Barometer;

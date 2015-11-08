@@ -3,21 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer;
+package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.accelerometer;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.event.AccelerationEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.event.AccelerationReachedEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.intent.CallbackPeriodIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.intent.CallbackThresholdIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.intent.ConfigIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.intent.DebouncePeriodIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.intent.LEDIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.status.CallbackPeriodStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.status.CallbackThresholdStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.status.ConfigStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.status.DebounceStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.accelerometer.status.LEDStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.accelerometer.event.AccelerationEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.accelerometer.event.AccelerationReachedEvent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.accelerometer.intent.CallbackPeriodIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.accelerometer.intent.CallbackThresholdIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.accelerometer.intent.ConfigIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.accelerometer.intent.DebouncePeriodIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.accelerometer.intent.LEDIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.accelerometer.status.CallbackPeriodStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.accelerometer.status.CallbackThresholdStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.accelerometer.status.ConfigStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.accelerometer.status.DebounceStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.accelerometer.status.LEDStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
