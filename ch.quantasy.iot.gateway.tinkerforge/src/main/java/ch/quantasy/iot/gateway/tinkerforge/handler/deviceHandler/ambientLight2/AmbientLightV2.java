@@ -3,27 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight;
+package ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight2;
 
 import ch.quantasy.iot.gateway.tinkerforge.base.message.AnIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.event.AnalogValueEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.event.AnalogValueReachedEvent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.event.IlluminanceEvent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.event.IlluminanceReachedEvent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.intent.AnalogCallbackPeriodIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.intent.AnalogCallbackThresholdIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.intent.CallbackPeriodIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.intent.CallbackThresholdIntent;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.intent.DebouncePeriodIntent;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.status.AnalogCallbackPeriodStatus;
-import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.status.AnalogCallbackThresholdStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.status.CallbackPeriodStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.status.CallbackThresholdStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.status.DebounceStatus;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight2.intent.ConfigIntent;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight2.status.ConfigStatus;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
-import com.tinkerforge.BrickletAmbientLight;
+import com.tinkerforge.BrickletAmbientLightV2;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
 import java.net.URI;
@@ -32,7 +28,7 @@ import java.net.URI;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class AmbientLight extends ADeviceHandler<BrickletAmbientLight> implements BrickletAmbientLight.IlluminanceListener, BrickletAmbientLight.IlluminanceReachedListener, BrickletAmbientLight.AnalogValueListener, BrickletAmbientLight.AnalogValueReachedListener {
+public class AmbientLightV2 extends ADeviceHandler<BrickletAmbientLightV2> implements BrickletAmbientLightV2.IlluminanceListener, BrickletAmbientLightV2.IlluminanceReachedListener {
 
     public static final String PERIOD = "period";
     public static final String THRESHOLD_OPTION = "option";
@@ -40,14 +36,16 @@ public class AmbientLight extends ADeviceHandler<BrickletAmbientLight> implement
     public static final String THRESHOLD_MAX = "max";
     public static final String ENABLED = "enabled";
     public static final String AVERAGE = "average";
+    public static final String ILLUMINANCE_RANGE = "illuminanceRange";
+    public static final String INTEGRATION_TIME = "integrationTime";
 
     public static final String VALUE = "value";
 
     public String getApplicationName() {
-	return "AmbientLight";
+	return "AmbientLightV2";
     }
 
-    public AmbientLight(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
+    public AmbientLightV2(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(stackApplication, mqttURI, stackAddress, identityString);
 	super.addStatusClass(CallbackPeriodStatus.class, CallbackThresholdStatus.class, DebounceStatus.class);
 	super.addEventClass(IlluminanceEvent.class, IlluminanceReachedEvent.class);
@@ -58,16 +56,12 @@ public class AmbientLight extends ADeviceHandler<BrickletAmbientLight> implement
     protected void addDeviceListeners() {
 	getDevice().addIlluminanceListener(this);
 	getDevice().addIlluminanceReachedListener(this);
-	getDevice().addAnalogValueListener(this);
-	getDevice().addAnalogValueReachedListener(this);
     }
 
     @Override
     protected void removeDeviceListeners() {
 	getDevice().removeIlluminanceListener(this);
 	getDevice().removeIlluminanceReachedListener(this);
-	getDevice().removeAnalogValueListener(this);
-	getDevice().removeAnalogValueReachedListener(this);
 
     }
 
@@ -77,6 +71,7 @@ public class AmbientLight extends ADeviceHandler<BrickletAmbientLight> implement
      *
      * @param intent
      */
+    @Override
     public void executeIntent(AnIntent intent) throws Throwable {
 	if (intent instanceof DebouncePeriodIntent) {
 	    executeIntent((DebouncePeriodIntent) intent);
@@ -87,67 +82,47 @@ public class AmbientLight extends ADeviceHandler<BrickletAmbientLight> implement
 	if (intent instanceof CallbackThresholdIntent) {
 	    executeIntent((CallbackThresholdIntent) intent);
 	}
-	if (intent instanceof AnalogCallbackPeriodIntent) {
-	    executeIntent((AnalogCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof AnalogCallbackThresholdIntent) {
-	    executeIntent((AnalogCallbackThresholdIntent) intent);
+	if (intent instanceof ConfigIntent) {
+	    executeIntent((ConfigIntent) intent);
 	}
 
+    }
+
+    public void executeIntent(ConfigIntent intent) throws TimeoutException, NotConnectedException {
+	short illuminanceRange = intent.getValue(AmbientLightV2.ILLUMINANCE_RANGE, Short.class);
+	short integrationTime = intent.getValue(AmbientLightV2.INTEGRATION_TIME, Short.class);
+	getDevice().setConfiguration(illuminanceRange, integrationTime);
+	getStatus(ConfigStatus.class).update(intent);
     }
 
     public void executeIntent(DebouncePeriodIntent intent) throws TimeoutException, NotConnectedException {
-	long period = intent.getValue(AmbientLight.PERIOD, Long.class);
+	long period = intent.getValue(AmbientLightV2.PERIOD, Long.class);
 	getDevice().setDebouncePeriod(period);
-	getStatus(DebounceStatus.class).update(AmbientLight.PERIOD, getDevice().getDebouncePeriod());
+	getStatus(DebounceStatus.class).update(AmbientLightV2.PERIOD, getDevice().getDebouncePeriod());
     }
 
     public void executeIntent(CallbackPeriodIntent intent) throws TimeoutException, NotConnectedException {
-	long period = intent.getValue(AmbientLight.PERIOD, Long.class);
+	long period = intent.getValue(AmbientLightV2.PERIOD, Long.class);
 	getDevice().setIlluminanceCallbackPeriod(period);
 	getStatus(CallbackPeriodStatus.class).update(PERIOD, getDevice().getIlluminanceCallbackPeriod());
     }
 
     public void executeIntent(CallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
-	char option = intent.getValue(AmbientLight.THRESHOLD_OPTION, Character.class);
-	short min = intent.getValue(AmbientLight.THRESHOLD_MIN, Short.class);
-	short max = intent.getValue(AmbientLight.THRESHOLD_MAX, Short.class);
+	char option = intent.getValue(AmbientLightV2.THRESHOLD_OPTION, Character.class);
+	short min = intent.getValue(AmbientLightV2.THRESHOLD_MIN, Short.class);
+	short max = intent.getValue(AmbientLightV2.THRESHOLD_MAX, Short.class);
 	getDevice().setIlluminanceCallbackThreshold(option, min, max);
 	getStatus(CallbackThresholdStatus.class).update(intent);
     }
 
-    public void executeIntent(AnalogCallbackPeriodIntent intent) throws TimeoutException, NotConnectedException {
-	long period = intent.getValue(AmbientLight.PERIOD, Long.class);
-	getDevice().setAnalogValueCallbackPeriod(period);
-	getStatus(AnalogCallbackPeriodStatus.class).update(PERIOD, getDevice().getAnalogValueCallbackPeriod());
-    }
-
-    public void executeIntent(AnalogCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
-	char option = intent.getValue(AmbientLight.THRESHOLD_OPTION, Character.class);
-	int min = intent.getValue(AmbientLight.THRESHOLD_MIN, Integer.class);
-	int max = intent.getValue(AmbientLight.THRESHOLD_MAX, Integer.class);
-	getDevice().setAnalogValueCallbackThreshold(option, min, max);
-	getStatus(AnalogCallbackThresholdStatus.class).update(intent);
+    @Override
+    public void illuminance(long l) {
+	getEvent(IlluminanceEvent.class).update(VALUE, l);
     }
 
     @Override
-    public void analogValue(int i) {
-	getEvent(AnalogValueEvent.class).update(VALUE, i);
-    }
-
-    @Override
-    public void analogValueReached(int i) {
-	getEvent(AnalogValueReachedEvent.class).update(VALUE, i);
-    }
-
-    @Override
-    public void illuminance(int i) {
-	getEvent(IlluminanceEvent.class).update(VALUE, i);
-    }
-
-    @Override
-    public void illuminanceReached(int i) {
-	getEvent(IlluminanceReachedEvent.class).update(VALUE, i);
+    public void illuminanceReached(long l) {
+	getEvent(IlluminanceReachedEvent.class).update(VALUE, l);
     }
 
 }

@@ -94,7 +94,7 @@ public class SoundIntensity extends ADeviceHandler<BrickletSoundIntensity> imple
 	int min = intent.getValue(SoundIntensity.THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(SoundIntensity.THRESHOLD_MAX, Integer.class);
 	getDevice().setIntensityCallbackThreshold(option, min, max);
-	getStatus(CallbackThresholdStatus.class).updateIntent(intent);
+	getStatus(CallbackThresholdStatus.class).update(intent);
     }
 
     @Override

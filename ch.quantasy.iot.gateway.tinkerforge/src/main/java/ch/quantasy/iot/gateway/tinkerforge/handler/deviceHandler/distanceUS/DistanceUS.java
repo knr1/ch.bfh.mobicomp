@@ -100,7 +100,7 @@ public class DistanceUS extends ADeviceHandler<BrickletDistanceUS> implements Br
 	short min = intent.getValue(DistanceUS.THRESHOLD_MIN, Short.class);
 	short max = intent.getValue(DistanceUS.THRESHOLD_MAX, Short.class);
 	getDevice().setDistanceCallbackThreshold(option, min, max);
-	getStatus(CallbackThresholdStatus.class).updateIntent(intent);
+	getStatus(CallbackThresholdStatus.class).update(intent);
     }
 
     public void executeIntent(MovingAverageIntent intent) throws TimeoutException, NotConnectedException {

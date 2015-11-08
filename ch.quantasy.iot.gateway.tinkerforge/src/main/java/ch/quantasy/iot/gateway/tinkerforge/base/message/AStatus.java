@@ -24,7 +24,7 @@ public abstract class AStatus extends AMessage<StatusDescription> {
 	this.mqttClient = mqttClient;
     }
 
-    public void updateIntent(AnIntent intent) {
+    public void update(AnIntent intent) {
 	for (Content triple : this.getValueMap().values()) {
 	    byte[] content = intent.getContent(triple.getProperty()).rawValue;
 	    if (content != null) {

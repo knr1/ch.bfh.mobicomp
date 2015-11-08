@@ -100,7 +100,7 @@ public class Moisture extends ADeviceHandler<BrickletMoisture> implements Brickl
 	int min = intent.getValue(Moisture.THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(Moisture.THRESHOLD_MAX, Integer.class);
 	getDevice().setMoistureCallbackThreshold(option, min, max);
-	getStatus(CallbackThresholdStatus.class).updateIntent(intent);
+	getStatus(CallbackThresholdStatus.class).update(intent);
     }
 
     public void executeIntent(MovingAverageIntent intent) throws TimeoutException, NotConnectedException {

@@ -137,7 +137,7 @@ public class Joystick extends ADeviceHandler<BrickletJoystick> implements Brickl
 	int minY = intent.getValue(Joystick.THRESHOLD_MIN_Y, Integer.class);
 	int maxY = intent.getValue(Joystick.THRESHOLD_MAX_Y, Integer.class);
 	getDevice().setAnalogValueCallbackThreshold(option, minX, maxX, minY, maxX);
-	getStatus(AnalogCallbackThresholdStatus.class).updateIntent(intent);
+	getStatus(AnalogCallbackThresholdStatus.class).update(intent);
     }
 
     public void executeIntent(PositionCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
@@ -147,7 +147,7 @@ public class Joystick extends ADeviceHandler<BrickletJoystick> implements Brickl
 	short minY = intent.getValue(Joystick.THRESHOLD_MIN_Y, Short.class);
 	short maxY = intent.getValue(Joystick.THRESHOLD_MAX_Y, Short.class);
 	getDevice().setPositionCallbackThreshold(option, minX, maxX, minY, minY);
-	getStatus(PositionCallbackThresholdStatus.class).updateIntent(intent);
+	getStatus(PositionCallbackThresholdStatus.class).update(intent);
     }
 
     @Override

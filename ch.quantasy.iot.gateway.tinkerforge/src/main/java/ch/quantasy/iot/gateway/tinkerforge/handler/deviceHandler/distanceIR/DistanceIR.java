@@ -112,7 +112,7 @@ public class DistanceIR extends ADeviceHandler<BrickletDistanceIR> implements Br
 	short min = intent.getValue(DistanceIR.THRESHOLD_MIN, Short.class);
 	short max = intent.getValue(DistanceIR.THRESHOLD_MAX, Short.class);
 	getDevice().setDistanceCallbackThreshold(option, min, max);
-	getStatus(CallbackThresholdStatus.class).updateIntent(intent);
+	getStatus(CallbackThresholdStatus.class).update(intent);
     }
 
     public void executeIntent(AnalogCallbackPeriodIntent intent) throws TimeoutException, NotConnectedException {
@@ -126,7 +126,7 @@ public class DistanceIR extends ADeviceHandler<BrickletDistanceIR> implements Br
 	int min = intent.getValue(DistanceIR.THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(DistanceIR.THRESHOLD_MAX, Integer.class);
 	getDevice().setAnalogValueCallbackThreshold(option, min, max);
-	getStatus(AnalogCallbackThresholdStatus.class).updateIntent(intent);
+	getStatus(AnalogCallbackThresholdStatus.class).update(intent);
     }
 
     @Override

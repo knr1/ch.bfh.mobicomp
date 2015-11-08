@@ -70,7 +70,7 @@ public class Tilt extends ADeviceHandler<BrickletTilt> implements BrickletTilt.T
 	} else {
 	    getDevice().disableTiltStateCallback();
 	}
-	getStatus(TiltStateCallbackStatus.class).updateIntent(intent);
+	getStatus(TiltStateCallbackStatus.class).update(intent);
     }
 
     @Override

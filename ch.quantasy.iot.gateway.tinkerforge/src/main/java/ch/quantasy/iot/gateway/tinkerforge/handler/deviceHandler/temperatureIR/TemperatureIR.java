@@ -122,7 +122,7 @@ public class TemperatureIR extends ADeviceHandler<BrickletTemperatureIR> impleme
 	short min = intent.getValue(TemperatureIR.THRESHOLD_MIN, Short.class);
 	short max = intent.getValue(TemperatureIR.THRESHOLD_MAX, Short.class);
 	getDevice().setAmbientTemperatureCallbackThreshold(option, min, max);
-	getStatus(AmbientTemperatureCallbackThresholdStatus.class).updateIntent(intent);
+	getStatus(AmbientTemperatureCallbackThresholdStatus.class).update(intent);
     }
 
     public void executeIntent(ObjectTemperatureCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
@@ -130,7 +130,7 @@ public class TemperatureIR extends ADeviceHandler<BrickletTemperatureIR> impleme
 	short min = intent.getValue(TemperatureIR.THRESHOLD_MIN, Short.class);
 	short max = intent.getValue(TemperatureIR.THRESHOLD_MAX, Short.class);
 	getDevice().setObjectTemperatureCallbackThreshold(option, min, max);
-	getStatus(ObjectTemperatureCallbackThresholdStatus.class).updateIntent(intent);
+	getStatus(ObjectTemperatureCallbackThresholdStatus.class).update(intent);
     }
 
     public void executeIntent(EmisivityIntent intent) throws TimeoutException, NotConnectedException {

@@ -8,6 +8,7 @@ package ch.quantasy.iot.gateway.tinkerforge.handler.stackHandler;
 import ch.quantasy.iot.gateway.tinkerforge.base.AHandler;
 import ch.quantasy.iot.gateway.tinkerforge.gateway.TFMQTTGateway;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight.AmbientLight;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.ambientLight2.AmbientLightV2;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.barometer.Barometer;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.Color;
@@ -32,6 +33,7 @@ import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerf
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletAmbientLight;
+import com.tinkerforge.BrickletAmbientLightV2;
 import com.tinkerforge.BrickletBarometer;
 import com.tinkerforge.BrickletColor;
 import com.tinkerforge.BrickletDistanceIR;
@@ -162,6 +164,17 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
 		}
 		deviceHandler.enableDevice((BrickletAmbientLight) device);
+
+	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.AmbientLightV2) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new AmbientLightV2(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletAmbientLightV2) device);
 
 	    }
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.Barometer) {
