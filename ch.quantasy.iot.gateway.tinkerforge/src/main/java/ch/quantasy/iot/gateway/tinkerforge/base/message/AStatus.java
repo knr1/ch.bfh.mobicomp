@@ -25,11 +25,11 @@ public abstract class AStatus extends AMessage<StatusDescription> {
     }
 
     public void update(AnIntent intent) {
-	for (Content triple : this.getValueMap().values()) {
-	    byte[] content = intent.getContent(triple.getProperty()).rawValue;
-	    if (content != null) {
-		if (triple.updateContent(content)) {
-		    publish(triple.getProperty(), toJSONMQTTMessage(content));
+	for (Content content : this.getValueMap().values()) {
+	    byte[] intentContent = intent.getContent(content.getProperty()).rawValue;
+	    if (intentContent != null) {
+		if (content.updateContent(intentContent)) {
+		    publish(content.getProperty(), toJSONMQTTMessage(intentContent));
 		}
 	    }
 	}

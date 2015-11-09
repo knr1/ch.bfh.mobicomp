@@ -40,6 +40,7 @@ public abstract class AnIntent extends AMessage {
 		getDeviceHandler().executeIntent(this);
 	    }
 	} catch (Throwable th) {
+	    //OK, not yet ready to be executed. //For debug reason, the stack trace is printed
 	    th.printStackTrace();
 	}
     }

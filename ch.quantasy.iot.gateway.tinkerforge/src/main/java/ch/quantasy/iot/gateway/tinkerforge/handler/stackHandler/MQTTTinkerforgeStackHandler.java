@@ -15,6 +15,7 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.base.ADeviceHan
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.color.Color;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.distanceIR.DistanceIR;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.distanceUS.DistanceUS;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualButton.DualButton;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.dualrelay.DualRelay;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.gps.GPS;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.humidity.Humidity;
@@ -40,6 +41,7 @@ import com.tinkerforge.BrickletBarometer;
 import com.tinkerforge.BrickletColor;
 import com.tinkerforge.BrickletDistanceIR;
 import com.tinkerforge.BrickletDistanceUS;
+import com.tinkerforge.BrickletDualButton;
 import com.tinkerforge.BrickletDualRelay;
 import com.tinkerforge.BrickletGPS;
 import com.tinkerforge.BrickletHumidity;
@@ -155,6 +157,17 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
 		}
 		deviceHandler.enableDevice((BrickletGPS) device);
+
+	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.DualButton) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new DualButton(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletDualButton) device);
 
 	    }
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.AmbientLight) {
