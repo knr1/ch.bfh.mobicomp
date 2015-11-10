@@ -26,6 +26,7 @@ import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.moisture.Moistu
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.multitouch.MultiTouch;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.piezospeaker.PiezoSpeaker;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.remoteswitch.RemoteSwitch;
+import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.rotaryEncoder.RotaryEncoder;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.soundIntensity.SoundIntensity;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.temperatureIR.TemperatureIR;
 import ch.quantasy.iot.gateway.tinkerforge.handler.deviceHandler.tilt.Tilt;
@@ -52,6 +53,7 @@ import com.tinkerforge.BrickletMoisture;
 import com.tinkerforge.BrickletMultiTouch;
 import com.tinkerforge.BrickletPiezoSpeaker;
 import com.tinkerforge.BrickletRemoteSwitch;
+import com.tinkerforge.BrickletRotaryEncoder;
 import com.tinkerforge.BrickletSoundIntensity;
 import com.tinkerforge.BrickletTemperatureIR;
 import com.tinkerforge.BrickletTilt;
@@ -179,6 +181,17 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
 		}
 		deviceHandler.enableDevice((BrickletAmbientLight) device);
+
+	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.RotaryEncoder) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new RotaryEncoder(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletRotaryEncoder) device);
 
 	    }
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.AmbientLightV2) {
