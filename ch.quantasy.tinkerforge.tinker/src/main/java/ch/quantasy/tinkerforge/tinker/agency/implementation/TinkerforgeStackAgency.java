@@ -29,8 +29,16 @@ public class TinkerforgeStackAgency {
 	return this.tinkerforgeStackAgents.get(address);
     }
 
+    public boolean containsStackAgent(final TinkerforgeStackAddress address) {
+	return (this.tinkerforgeStackAgents.containsKey(address));
+    }
+
     public Set<TinkerforgeStackAddress> getTinkerforgeStackAddress() {
 	return new HashSet<>(this.tinkerforgeStackAgents.keySet());
+    }
+
+    public Set<TinkerforgeStackAgent> getTinkerforgeStackAgents() {
+	return new HashSet<>(this.tinkerforgeStackAgents.values());
     }
 
 }

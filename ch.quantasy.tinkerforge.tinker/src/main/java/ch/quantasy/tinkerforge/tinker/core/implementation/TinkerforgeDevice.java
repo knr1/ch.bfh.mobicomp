@@ -5,7 +5,9 @@ import com.tinkerforge.BrickIMU;
 import com.tinkerforge.BrickMaster;
 import com.tinkerforge.BrickServo;
 import com.tinkerforge.BrickStepper;
+import com.tinkerforge.BrickletAccelerometer;
 import com.tinkerforge.BrickletAmbientLight;
+import com.tinkerforge.BrickletAmbientLightV2;
 import com.tinkerforge.BrickletAnalogIn;
 import com.tinkerforge.BrickletAnalogOut;
 import com.tinkerforge.BrickletBarometer;
@@ -16,6 +18,7 @@ import com.tinkerforge.BrickletDistanceIR;
 import com.tinkerforge.BrickletDistanceUS;
 import com.tinkerforge.BrickletDualButton;
 import com.tinkerforge.BrickletDualRelay;
+import com.tinkerforge.BrickletDustDetector;
 import com.tinkerforge.BrickletGPS;
 import com.tinkerforge.BrickletHallEffect;
 import com.tinkerforge.BrickletHumidity;
@@ -29,8 +32,10 @@ import com.tinkerforge.BrickletJoystick;
 import com.tinkerforge.BrickletLCD16x2;
 import com.tinkerforge.BrickletLCD20x4;
 import com.tinkerforge.BrickletLEDStrip;
+import com.tinkerforge.BrickletLaserRangeFinder;
 import com.tinkerforge.BrickletLine;
 import com.tinkerforge.BrickletLinearPoti;
+import com.tinkerforge.BrickletLoadCell;
 import com.tinkerforge.BrickletMoisture;
 import com.tinkerforge.BrickletMotionDetector;
 import com.tinkerforge.BrickletMultiTouch;
@@ -38,6 +43,7 @@ import com.tinkerforge.BrickletNFCRFID;
 import com.tinkerforge.BrickletPTC;
 import com.tinkerforge.BrickletPiezoBuzzer;
 import com.tinkerforge.BrickletPiezoSpeaker;
+import com.tinkerforge.BrickletRS232;
 import com.tinkerforge.BrickletRemoteSwitch;
 import com.tinkerforge.BrickletRotaryEncoder;
 import com.tinkerforge.BrickletRotaryPoti;
@@ -62,23 +68,23 @@ import com.tinkerforge.Device.Identity;
 public enum TinkerforgeDevice {
 
     DC(BrickDC.class), IMU(BrickIMU.class), Master(BrickMaster.class), Servo(BrickServo.class), Stepper(
-	    BrickStepper.class), AmbientLight(BrickletAmbientLight.class), AnalogIn(BrickletAnalogIn.class), AnalogOut(
-		    BrickletAnalogOut.class), Barometer(BrickletBarometer.class), Current12(BrickletCurrent12.class), Current25(
+	    BrickStepper.class), Accelerometer(BrickletAccelerometer.class), AmbientLight(BrickletAmbientLight.class), AmbientLightV2(BrickletAmbientLightV2.class), AnalogIn(BrickletAnalogIn.class), AnalogOut(
+		    BrickletAnalogOut.class), Barometer(BrickletBarometer.class), Color(
+		    BrickletColor.class), Current12(BrickletCurrent12.class), Current25(
 		    BrickletCurrent25.class), DistanceIR(BrickletDistanceIR.class), DistanceUS(BrickletDistanceUS.class), DualButton(
-		    BrickletDualButton.class), DualRelay(BrickletDualRelay.class), GPS(BrickletGPS.class), HallEffect(
+		    BrickletDualButton.class), DualRelay(BrickletDualRelay.class), DustDetector(BrickletDustDetector.class), GPS(BrickletGPS.class), HallEffect(
 		    BrickletHallEffect.class), Humidity(BrickletHumidity.class), IndustrialDigitalIn4(
 		    BrickletIndustrialDigitalIn4.class), IndustrialDigitalOut4(BrickletIndustrialDigitalOut4.class), IndustrialDual020mA(
 		    BrickletIndustrialDual020mA.class), IndustrialQuadRelay(BrickletIndustrialQuadRelay.class), IO16(
-		    BrickletIO16.class), IO4(BrickletIO4.class), Joystick(BrickletJoystick.class), LCD16x2(
+		    BrickletIO16.class), IO4(BrickletIO4.class), Joystick(BrickletJoystick.class), LaserRangeFinder(BrickletLaserRangeFinder.class), LCD16x2(
 		    BrickletLCD16x2.class), LCD20x4(BrickletLCD20x4.class), LEDStrip(BrickletLEDStrip.class), Line(
-		    BrickletLine.class), LinearPoti(BrickletLinearPoti.class), Moisture(BrickletMoisture.class), MotionDetector(
-		    BrickletMotionDetector.class), MultiTouch(BrickletMultiTouch.class), PiezoBuzzer(BrickletPiezoBuzzer.class), PiezoSpeaker(
+		    BrickletLine.class), LinearPoti(BrickletLinearPoti.class), LoadCell(BrickletLoadCell.class), Moisture(BrickletMoisture.class), MotionDetector(
+		    BrickletMotionDetector.class), MultiTouch(BrickletMultiTouch.class), NfcRfid(BrickletNFCRFID.class), PiezoBuzzer(BrickletPiezoBuzzer.class), PiezoSpeaker(
 		    BrickletPiezoSpeaker.class), PTC(BrickletPTC.class), RemoteSwitch(BrickletRemoteSwitch.class), RotaryEncoder(
-		    BrickletRotaryEncoder.class), RotaryPoti(BrickletRotaryPoti.class), SegmentDisplay4x7(
-		    BrickletSegmentDisplay4x7.class), SoundIntensity(BrickletSoundIntensity.class), Temperature(
+		    BrickletRotaryEncoder.class), RotaryPoti(BrickletRotaryPoti.class), RS232(BrickletRS232.class), SegmentDisplay4x7(
+		    BrickletSegmentDisplay4x7.class), SolidState(BrickletSolidStateRelay.class), SoundIntensity(BrickletSoundIntensity.class), Temperature(
 		    BrickletTemperature.class), TemperatureIR(BrickletTemperatureIR.class), Tilt(BrickletTilt.class), Voltage(
-		    BrickletVoltage.class), VoltageCurrent(BrickletVoltageCurrent.class), NfcRfid(BrickletNFCRFID.class), Color(
-		    BrickletColor.class), SolidState(BrickletSolidStateRelay.class);
+		    BrickletVoltage.class), VoltageCurrent(BrickletVoltageCurrent.class);
 
     public final int identifier;
     public final Class<?> deviceClass;
