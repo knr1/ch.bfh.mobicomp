@@ -9,7 +9,7 @@ import ch.quantasy.iot.mqtt.base.message.AStatus;
 import ch.quantasy.iot.mqtt.base.message.AnEvent;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.base.status.HandlerReadyStatus;
-import ch.quantasy.iot.mqtt.tinkerforge.gateway.MQTT2TFGateway;
+import ch.quantasy.iot.mqtt.tinkerforge.gateway.MQTT2TF;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.HashMap;
@@ -25,6 +25,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 /**
  *
@@ -33,8 +34,9 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 public abstract class AHandler implements MqttCallback {
 
     public static final String REACHABLE = "reachable";
+    public static final String DESCRIPTION = "description";
 
-    public static final String DEVICE_DESCRIPTION_TOPIC = MQTT2TFGateway.TOPIC + "/Description";
+    public static final String DEVICE_DESCRIPTION_TOPIC = MQTT2TF.TOPIC + "/" + DESCRIPTION;
 
     private final String identityString;
     private final Set<Class> intentSet;
@@ -55,7 +57,8 @@ public abstract class AHandler implements MqttCallback {
 	this.intentTopic = getDeviceBaseTopic() + "/intent";
 	this.eventTopic = getDeviceBaseTopic() + "/event";
 	this.statusTopic = getDeviceBaseTopic() + "/status";
-	this.mqttClient = new MqttAsyncClient(mqttURI.toString(), identityString);
+
+	this.mqttClient = new MqttAsyncClient(mqttURI.toString(), identityString, new MemoryPersistence());
 	this.intentSet = new HashSet<>();
 	this.intentsMap = new HashMap<>();
 	this.eventMap = new HashMap<>();

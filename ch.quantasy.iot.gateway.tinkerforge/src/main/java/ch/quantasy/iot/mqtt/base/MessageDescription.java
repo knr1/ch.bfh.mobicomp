@@ -11,8 +11,8 @@ package ch.quantasy.iot.mqtt.base;
  */
 public abstract class MessageDescription {
 
-    public final String applicationMessageTopic;
-    public final String messageTopic;
+    public final transient String applicationMessageTopic;
+    public final transient String messageTopic;
     public final String messagePropertyTopic;
     public final String type;
     public final transient Class typeOfClass;
@@ -20,7 +20,7 @@ public abstract class MessageDescription {
     public final String[] range;
 
     public MessageDescription(String applicationMessageTopic, String applicationName, String messageTopic, String messagePropertyTopic, Class type, String representation, String... range) {
-	this.applicationMessageTopic = "/" + applicationMessageTopic + "/" + applicationName + "/[identificationString]/" + getMessageType();
+	this.applicationMessageTopic = applicationMessageTopic + "/" + applicationName + "/[identificationString]/" + getMessageType();
 	this.messageTopic = "/" + messageTopic;
 	this.messagePropertyTopic = "/" + messagePropertyTopic;
 	this.typeOfClass = type;

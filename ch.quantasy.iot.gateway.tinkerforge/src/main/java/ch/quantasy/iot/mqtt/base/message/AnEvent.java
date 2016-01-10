@@ -42,10 +42,17 @@ public abstract class AnEvent extends AMessage<EventDescription> {
 
     public void update(AnIntent intent) {
 	for (Content triple : this.getValueMap().values()) {
-	    byte[] content = intent.getContent(triple.getProperty()).rawValue;
-	    if (content != null) {
-		if (triple.updateContent(content)) {
-		    publish(triple.getProperty(), toJSONMQTTMessage(content));
+	    byte[] rawContent = null;
+	    String property = triple.getProperty();
+	    if (property != null) {
+		Content content = intent.getContent(property);
+		if (content != null) {
+		    rawContent = content.rawValue;
+		}
+	    }
+	    if (rawContent != null) {
+		if (triple.updateContent(rawContent)) {
+		    publish(triple.getProperty(), toJSONMQTTMessage(rawContent));
 		}
 	    }
 	}

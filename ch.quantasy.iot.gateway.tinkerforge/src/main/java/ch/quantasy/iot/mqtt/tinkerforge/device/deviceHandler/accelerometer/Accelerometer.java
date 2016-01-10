@@ -109,7 +109,7 @@ public class Accelerometer extends ADeviceHandler<BrickletAccelerometer> impleme
 	} else {
 	    getDevice().ledOff();
 	}
-	getStatus(LEDStatus.class).update(intent);
+	getStatus(LEDStatus.class).update(VALUE, getDevice().isLEDOn());
     }
 
     public void executeIntent(ConfigIntent intent) throws TimeoutException, NotConnectedException {

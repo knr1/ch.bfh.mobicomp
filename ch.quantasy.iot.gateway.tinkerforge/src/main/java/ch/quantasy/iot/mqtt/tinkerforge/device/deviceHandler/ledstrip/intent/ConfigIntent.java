@@ -18,16 +18,16 @@ public class ConfigIntent extends AnIntent {
     public ConfigIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "config");
 	super.addDescription(LedStrip.CONFIG_CHIP_TYPE, Integer.class, "JSON", "2801", "2811", "2812");
-	super.addDescription(LedStrip.CONFIG_ENABLED, Boolean.class, "JSON", "true", "false");
 	super.addDescription(LedStrip.CONFIG_CLOCK_FREQUENCY_OF_ICS_IN_HZ, Long.class, "JSON", "10000", "...", "2000000");
 	super.addDescription(LedStrip.CONFIG_FRAME_DURATION_IN_MILLISECONDS, Integer.class, "JSON", "1", "...", "" + Integer.MAX_VALUE);
 	super.addDescription(LedStrip.CONFIG_NUMBER_OF_LEDS, Integer.class, "1", "...", "319");
+	super.addDescription(LedStrip.ENABLED, Boolean.class, "JSON", "true", "false");
 
     }
 
     @Override
     public boolean isExecutable() {
-	return getContent(LedStrip.CONFIG_ENABLED).getValue(Boolean.class) && isClockFrequencyOfICsInHzInRange() && isFrameDurationInMillisecondsInRange() && isNumberOfLEDsInRange();
+	return getContent(LedStrip.ENABLED).getValue(Boolean.class) && isClockFrequencyOfICsInHzInRange() && isFrameDurationInMillisecondsInRange() && isNumberOfLEDsInRange();
     }
 
     private boolean isChipTypeInRange() {

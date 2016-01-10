@@ -6,7 +6,6 @@
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker;
 
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.event.BeepEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.event.CalibrateEvent;
@@ -14,6 +13,7 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.event.
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.intent.BeepIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.intent.CalibrateIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.intent.MorseIntent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletPiezoSpeaker;
 import com.tinkerforge.NotConnectedException;
@@ -88,7 +88,9 @@ public class PiezoSpeaker extends ADeviceHandler<BrickletPiezoSpeaker> implement
     }
 
     public void executeIntent(MorseIntent intent) throws TimeoutException, NotConnectedException {
-	getDevice().morseCode(intent.code, intent.frequency);
+	int frequency = intent.getValue(FREQUENCY, Integer.class);
+	String code = intent.getValue(CODE, String.class);
+	getDevice().morseCode(code, frequency);
 
 	getEvent(MorseEvent.class).update(intent);
     }

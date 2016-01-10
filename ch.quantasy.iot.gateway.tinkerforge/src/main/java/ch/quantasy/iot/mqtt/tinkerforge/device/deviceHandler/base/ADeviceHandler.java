@@ -6,7 +6,7 @@
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base;
 
 import ch.quantasy.iot.mqtt.base.AHandler;
-import ch.quantasy.iot.mqtt.tinkerforge.gateway.MQTT2TFGateway;
+import ch.quantasy.iot.mqtt.tinkerforge.gateway.MQTT2TF;
 import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.status.DeviceHandlerReadyStatus;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
@@ -29,7 +29,7 @@ public abstract class ADeviceHandler<D extends Device> extends AHandler {
     private final MQTTTinkerforgeStackHandler stackApplication;
 
     public ADeviceHandler(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
-	super(mqttURI, MQTT2TFGateway.TOPIC + "/" + stackAddress.hostName + "/" + stackAddress.port, identityString);
+	super(mqttURI, MQTT2TF.TOPIC + "/" + stackAddress.hostName + "/" + stackAddress.port, identityString);
 	super.addStatusClass(DeviceHandlerReadyStatus.class);
 	this.stackApplication = stackApplication;
     }

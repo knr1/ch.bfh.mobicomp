@@ -21,7 +21,7 @@ public class SwitchSocketCEvent extends AnEvent {
 	super(deviceHandler, eventTopic, "switchSocketC", mqttClient);
 	super.addDescription(RemoteSwitch.SYSTEM_CODE, Character.class, "JSON", "A", "...", "P");
 	super.addDescription(RemoteSwitch.DEVICE_CODE, Short.class, "JSON", "1", "...", "16");
-	super.addDescription(RemoteSwitch.SWITCH_TO, Short.class, "JSON", "0", "...", "1");
+	super.addDescription(RemoteSwitch.SWITCH_TO, Short.class, "JSON", "0,1");
 	super.addDescription(RemoteSwitch.SWITCHING, Boolean.class, "JSON", "true", "false");
     }
 

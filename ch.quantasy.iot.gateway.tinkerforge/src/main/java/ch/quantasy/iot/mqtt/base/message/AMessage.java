@@ -7,7 +7,7 @@ package ch.quantasy.iot.mqtt.base.message;
 
 import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.MessageDescription;
-import ch.quantasy.iot.mqtt.tinkerforge.gateway.MQTT2TFGateway;
+import ch.quantasy.iot.mqtt.tinkerforge.gateway.MQTT2TF;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -73,7 +73,7 @@ public abstract class AMessage<E extends MessageDescription> {
 	try {
 	    mqttClient.publish(AHandler.DEVICE_DESCRIPTION_TOPIC + "/" + deviceHandler.getApplicationName() + "/" + getMessageType() + "/" + name, message);
 	} catch (Exception ex) {
-	    Logger.getLogger(MQTT2TFGateway.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(MQTT2TF.class.getName()).log(Level.SEVERE, null, ex);
 	}
 
     }
@@ -82,9 +82,9 @@ public abstract class AMessage<E extends MessageDescription> {
 	mqttMessage.setQos(1);
 	mqttMessage.setRetained(true);
 	try {
-	    mqttClient.publish(topic + "/" + name + "/" + statusPropertyName, mqttMessage);
+	    mqttClient.publish(topic + "/" + name + "/" + statusPropertyName, mqttMessage).waitForCompletion(100);
 	} catch (Exception ex) {
-	    Logger.getLogger(MQTT2TFGateway.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(MQTT2TF.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
 

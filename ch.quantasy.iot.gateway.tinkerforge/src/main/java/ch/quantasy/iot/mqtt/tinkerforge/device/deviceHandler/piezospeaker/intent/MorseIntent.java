@@ -7,7 +7,7 @@ package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.inten
 
 import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.PiezoSpeaker;
 
 /**
  *
@@ -15,36 +15,33 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class MorseIntent extends AnIntent {
 
-    public boolean enabled;
-    public String code;
-    public int frequency;
-
     public MorseIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "morse");
-	super.addDescription("enabled", Boolean.class, "JSON", "true", "false");
-	super.addDescription("code", String.class, "JSON", ".", "-", " ", "unbounded");
-	super.addDescription("frequency", Integer.class, "JSON", "685", "...", "7100");
-    }
-
-    @Override
-    protected void update(String string, MqttMessage mm) throws Throwable {
-	if (string.endsWith(getName() + "/enabled")) {
-	    enabled = fromMQTTMessage(mm, Boolean.class);
-	}
-	if (string.endsWith(getName() + "/code")) {
-	    code = fromMQTTMessage(mm, String.class);
-	}
-	if (string.endsWith(getName() + "/frequency")) {
-	    frequency = fromMQTTMessage(mm, Integer.class);
-	}
+	super.addDescription(PiezoSpeaker.ENABLED, Boolean.class, "JSON", "true", "false");
+	super.addDescription(PiezoSpeaker.CODE, String.class, "JSON", ".", "-", " ", "unbounded");
+	super.addDescription(PiezoSpeaker.FREQUENCY, Integer.class, "JSON", "685", "...", "7100");
     }
 
     @Override
     public boolean isExecutable() {
-	return enabled && code != null && isFrequencyInRange();
+	return isEnabled() && isCodeInRange() && isFrequencyInRange();
+    }
+
+    public boolean isEnabled() {
+	try {
+	    return getContent(PiezoSpeaker.ENABLED).getValue(Boolean.class);
+	} catch (Throwable th) {
+	    return false;
+	}
     }
 
     private boolean isFrequencyInRange() {
+	int frequency = getContent(PiezoSpeaker.FREQUENCY).getValue(Integer.class);
 	return (frequency >= 685 && frequency <= 7100);
+    }
+
+    private boolean isCodeInRange() {
+	String code = getContent(PiezoSpeaker.CODE).getValue(String.class);
+	return code != null && code != "";
     }
 }

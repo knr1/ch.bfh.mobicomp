@@ -43,7 +43,7 @@
 		    </descriptorRefs>
 		    <archive>
 			<manifest>
-			    <mainClass>ch.quantasy.iot.gateway.tinkerforge.Gateway</mainClass>
+			    <mainClass>ch.quantasy.iot.mqtt.tinkerforge.gateway.MQTT2TF</mainClass>
 			</manifest>
 		    </archive>
 		</configuration>
@@ -59,4 +59,5 @@
 	    </plugin>
 	</plugins>
     </build>
+    <name>ch.quantasy.iot.bridge.mqtt.tinkerforge</name>
 </project>

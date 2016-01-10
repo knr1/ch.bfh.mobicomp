@@ -7,12 +7,12 @@ package ch.quantasy.iot.mqtt.tinkerforge.gateway;
 
 import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.gateway.intent.StackHandlerIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.gateway.status.ManagedStackAddresses;
-import ch.quantasy.iot.mqtt.tinkerforge.gateway.status.ManagedStackHandlersStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.status.DeviceHandlerReadyStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.status.ManagedDeviceHandlersStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.gateway.intent.StackHandlerIntent;
+import ch.quantasy.iot.mqtt.tinkerforge.gateway.status.ManagedStackAddresses;
+import ch.quantasy.iot.mqtt.tinkerforge.gateway.status.ManagedStackHandlersStatus;
 import ch.quantasy.tinkerforge.tinker.agency.implementation.TinkerforgeStackAgency;
 import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
@@ -25,17 +25,17 @@ import java.util.Set;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class MQTT2TFGateway extends AHandler {
+public class MQTT2TF extends AHandler {
 
     public static final String STACK_ADDRESS = "stackAddress";
     public static final String MANAGED_STACK_ADDRESSES = "stackAddresses";
 
-    public static final String TOPIC = "IOT/Gateway/TF";
+    public static final String TOPIC = "iot/tf";
     private final TinkerforgeStackAgency agency;
     Type stackAddressSetType = new TypeToken<Set<TinkerforgeStackAddress>>() {
     }.getType();
 
-    public MQTT2TFGateway(String clientID, URI mqttURI) throws Throwable {
+    public MQTT2TF(String clientID, URI mqttURI) throws Throwable {
 	super(mqttURI, TOPIC, clientID);
 
 	this.agency = TinkerforgeStackAgency.getInstance();
@@ -53,9 +53,11 @@ public class MQTT2TFGateway extends AHandler {
     }
 
     public void addNewAgent(TinkerforgeStackAddress stackAddress) {
-	TinkerforgeStackAgent agent = this.agency.getStackAgent(stackAddress);
-	agent.addApplication(new MQTTTinkerforgeStackHandler(stackAddress, this));
-	publishAgents();
+	if (!this.agency.containsStackAgent(stackAddress)) {
+	    TinkerforgeStackAgent agent = this.agency.getStackAgent(stackAddress);
+	    agent.addApplication(new MQTTTinkerforgeStackHandler(stackAddress, this));
+	    publishAgents();
+	}
 
     }
 
@@ -67,7 +69,7 @@ public class MQTT2TFGateway extends AHandler {
 
     @Override
     public String getApplicationName() {
-	return "TFMQTTGateway";
+	return "MQTT2TF";
     }
 
     @Override
@@ -87,9 +89,14 @@ public class MQTT2TFGateway extends AHandler {
     }
 
     public static void main(String[] args) throws Throwable {
-	final TinkerforgeStackAddress identifier = new TinkerforgeStackAddress(
-		"localhost");
-	MQTT2TFGateway gw = new MQTT2TFGateway("TFMQTTGateway", URI.create("tcp://localhost:1883"));
+	final TinkerforgeStackAddress identifier = new TinkerforgeStackAddress("localhost");
+	URI uri = URI.create("tcp://localhost:1883");
+	if (args.length > 0) {
+	    uri = URI.create(args[0]);
+	} else {
+	    System.out.printf("%s will be used as broker address.\n You can provide one as first argument such as: tcp://iot.eclipse.org:1883\n", uri);
+	}
+	MQTT2TF gw = new MQTT2TF("0", uri);
 	gw.addNewAgent(identifier);
 	System.in.read();
 	gw.disconnectFromMQTT();

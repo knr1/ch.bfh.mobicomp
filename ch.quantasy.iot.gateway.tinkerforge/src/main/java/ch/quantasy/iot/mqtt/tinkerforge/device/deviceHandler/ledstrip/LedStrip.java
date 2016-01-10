@@ -6,11 +6,11 @@
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ledstrip;
 
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ledstrip.intent.ConfigIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ledstrip.intent.RGBLEDFrameIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ledstrip.status.ConfigStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletLEDStrip;
 import com.tinkerforge.NotConnectedException;
@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 public class LedStrip extends ADeviceHandler<BrickletLEDStrip> implements BrickletLEDStrip.FrameRenderedListener {
 
     public static final String CONFIG_CLOCK_FREQUENCY_OF_ICS_IN_HZ = "clockFrequencyOfICsInHz";
-    public static final String CONFIG_ENABLED = "enabled";
     public static final String CONFIG_FRAME_DURATION_IN_MILLISECONDS = "frameDurationInMilliseconds";
     public static final String CONFIG_CHIP_TYPE = "chipType";
     public static final String CONFIG_NUMBER_OF_LEDS = "numberOfLEDs";
@@ -89,6 +88,7 @@ public class LedStrip extends ADeviceHandler<BrickletLEDStrip> implements Brickl
 	this.sendState = LedStrip.SendState.FREE;
 	System.out.println("sendingState set");
 	this.setNumberOfLEDs(LedStrip.DEFAULT_NUMBER_OF_LEDS);
+
 	System.out.println("NumLEDs set");
     }
 

@@ -6,7 +6,6 @@
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch;
 
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.event.DimSocketBEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.event.SwitchSocketAEvent;
@@ -18,6 +17,7 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.intent
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.intent.SwitchSocketBIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.intent.SwitchSocketCIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.status.RepeatsStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletRemoteSwitch;
 import com.tinkerforge.NotConnectedException;
@@ -58,6 +58,9 @@ public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implement
 
     @Override
     public void switchingDone() {
+	synchronized (this) {
+	    this.notifyAll();
+	}
 	getEvent(SwitchSocketAEvent.class).update(SWITCHING, false);
 	getEvent(SwitchSocketBEvent.class).update(SWITCHING, false);
 	getEvent(DimSocketBEvent.class).update(SWITCHING, false);
@@ -107,22 +110,58 @@ public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implement
     }
 
     public void executeIntent(SwitchSocketAIntent intent) throws TimeoutException, NotConnectedException {
-	getDevice().switchSocketA(intent.houseCode, intent.receiverCode, intent.switchTo);
+	synchronized (this) {
+	    while (getDevice().getSwitchingState() == BrickletRemoteSwitch.SWITCHING_STATE_BUSY) {
+		try {
+		    this.wait(1000);
+		} catch (InterruptedException ex) {
+		    //We have been interrupted (by the listener)
+		}
+	    }
+	    getDevice().switchSocketA(intent.houseCode, intent.receiverCode, intent.switchTo);
+	}
 	getEvent(SwitchSocketAEvent.class).updateIntent(intent);
     }
 
     public void executeIntent(SwitchSocketBIntent intent) throws TimeoutException, NotConnectedException {
-	getDevice().switchSocketB(intent.getContent(ADDRESS).getValue(Long.class), intent.getContent(UNIT).getValue(Short.class), intent.getContent(SWITCH_TO).getValue(Short.class));
+	synchronized (this) {
+	    while (getDevice().getSwitchingState() == BrickletRemoteSwitch.SWITCHING_STATE_BUSY) {
+		try {
+		    this.wait(1000);
+		} catch (InterruptedException ex) {
+		    //We have been interrupted (by the listener)
+		}
+	    }
+	    getDevice().switchSocketB(intent.getContent(ADDRESS).getValue(Long.class), intent.getContent(UNIT).getValue(Short.class), intent.getContent(SWITCH_TO).getValue(Short.class));
+	}
 	getEvent(SwitchSocketBEvent.class).updateIntent(intent);
     }
 
     public void executeIntent(DimSocketBIntent intent) throws TimeoutException, NotConnectedException {
-	getDevice().dimSocketB(intent.getContent(ADDRESS).getValue(Long.class), intent.getContent(UNIT).getValue(Short.class), intent.getContent(DIM_VALUE).getValue(Short.class));
+	synchronized (this) {
+	    while (getDevice().getSwitchingState() == BrickletRemoteSwitch.SWITCHING_STATE_BUSY) {
+		try {
+		    this.wait(1000);
+		} catch (InterruptedException ex) {
+		    //We have been interrupted (by the listener)
+		}
+	    }
+	    getDevice().dimSocketB(intent.getContent(ADDRESS).getValue(Long.class), intent.getContent(UNIT).getValue(Short.class), intent.getContent(DIM_VALUE).getValue(Short.class));
+	}
 	getEvent(DimSocketBEvent.class).updateIntent(intent);
     }
 
     public void executeIntent(SwitchSocketCIntent intent) throws TimeoutException, NotConnectedException {
-	getDevice().switchSocketC(intent.getContent(SYSTEM_CODE).getValue(Character.class), intent.getContent(DEVICE_CODE).getValue(Short.class), intent.getContent(SWITCH_TO).getValue(Short.class));
+	synchronized (this) {
+	    while (getDevice().getSwitchingState() == BrickletRemoteSwitch.SWITCHING_STATE_BUSY) {
+		try {
+		    this.wait(1000);
+		} catch (InterruptedException ex) {
+		    //We have been interrupted (by the listener)
+		}
+	    }
+	    getDevice().switchSocketC(intent.getContent(SYSTEM_CODE).getValue(Character.class), intent.getContent(DEVICE_CODE).getValue(Short.class), intent.getContent(SWITCH_TO).getValue(Short.class));
+	}
 	getEvent(SwitchSocketCEvent.class).updateIntent(intent);
     }
 }
