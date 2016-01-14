@@ -5,12 +5,11 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.tilt;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.tilt.event.TiltStateEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.tilt.intent.TiltStateCallbackIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.tilt.status.TiltStateCallbackStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletTilt;
 import com.tinkerforge.NotConnectedException;
@@ -50,18 +49,6 @@ public class Tilt extends ADeviceHandler<BrickletTilt> implements BrickletTilt.T
     @Override
     protected void removeDeviceListeners() {
 	getDevice().removeTiltStateListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof TiltStateCallbackIntent) {
-	    executeIntent((TiltStateCallbackIntent) intent);
-	}
     }
 
     public void executeIntent(TiltStateCallbackIntent intent) throws TimeoutException, NotConnectedException {

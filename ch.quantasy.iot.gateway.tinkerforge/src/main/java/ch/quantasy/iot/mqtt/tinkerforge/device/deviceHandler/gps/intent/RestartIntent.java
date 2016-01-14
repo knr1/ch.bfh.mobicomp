@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.gps.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.gps.GPS;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.gps.GPS;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class RestartIntent extends AnIntent {
+public class RestartIntent extends AnIntent<GPS> {
 
-    public RestartIntent(AHandler deviceHandler, String intentTopic) {
+    public RestartIntent(GPS deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "restart");
 	super.addDescription(GPS.RESTART_TYPE, Short.class, "JSON", "0", "1", "2", "3");
     }
@@ -23,6 +22,11 @@ public class RestartIntent extends AnIntent {
     @Override
     public boolean isExecutable() {
 	return super.getValue(GPS.RESTART_TYPE, Short.class) <= 3;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

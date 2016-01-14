@@ -15,9 +15,9 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public abstract class AnIntent extends AMessage {
+public abstract class AnIntent<H extends AHandler> extends AMessage<H, IntentDescription> {
 
-    public AnIntent(AHandler deviceHandler, String intentTopic, String intentName) {
+    public AnIntent(H deviceHandler, String intentTopic, String intentName) {
 	super(deviceHandler, intentTopic, intentName);
     }
 
@@ -37,7 +37,7 @@ public abstract class AnIntent extends AMessage {
 	try {
 	    update(string, mm);
 	    if (isExecutable()) {
-		getDeviceHandler().executeIntent(this);
+		execute();
 	    }
 	} catch (Throwable th) {
 	    //OK, not yet ready to be executed. //For debug reason, the stack trace is printed
@@ -67,6 +67,9 @@ public abstract class AnIntent extends AMessage {
 	    triple.rawValue = mm.getPayload();
 	}
     }
+
+    //Visitor
+    public abstract void execute() throws Throwable;
 
     public abstract boolean isExecutable();
 

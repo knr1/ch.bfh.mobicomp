@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLightV2;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLightV2.event.IlluminanceEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLightV2.event.IlluminanceReachedEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLightV2.intent.CallbackPeriodIntent;
@@ -62,29 +61,6 @@ public class AmbientLightV2 extends ADeviceHandler<BrickletAmbientLightV2> imple
     protected void removeDeviceListeners() {
 	getDevice().removeIlluminanceListener(this);
 	getDevice().removeIlluminanceReachedListener(this);
-
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    @Override
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof DebouncePeriodIntent) {
-	    executeIntent((DebouncePeriodIntent) intent);
-	}
-	if (intent instanceof CallbackPeriodIntent) {
-	    executeIntent((CallbackPeriodIntent) intent);
-	}
-	if (intent instanceof CallbackThresholdIntent) {
-	    executeIntent((CallbackThresholdIntent) intent);
-	}
-	if (intent instanceof ConfigIntent) {
-	    executeIntent((ConfigIntent) intent);
-	}
 
     }
 

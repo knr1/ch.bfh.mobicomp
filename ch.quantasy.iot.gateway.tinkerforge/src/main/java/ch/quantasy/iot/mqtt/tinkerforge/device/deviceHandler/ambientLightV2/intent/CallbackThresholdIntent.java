@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLightV2.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLightV2.AmbientLightV2;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLightV2.Ambi
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CallbackThresholdIntent extends AnIntent {
+public class CallbackThresholdIntent extends AnIntent<AmbientLightV2> {
 
-    public CallbackThresholdIntent(AHandler deviceHandler, String intentTopic) {
+    public CallbackThresholdIntent(AmbientLightV2 deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackThreshold");
 	super.addDescription(AmbientLightV2.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
 	super.addDescription(AmbientLightV2.THRESHOLD_MIN, Short.class, "JSON", "0", "...", "4095");
@@ -52,6 +51,11 @@ public class CallbackThresholdIntent extends AnIntent {
     private boolean isMaxInRange() {
 	int max = getContent(AmbientLightV2.THRESHOLD_MAX).getValue(Integer.class);
 	return (max <= 4095 && max >= 0);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

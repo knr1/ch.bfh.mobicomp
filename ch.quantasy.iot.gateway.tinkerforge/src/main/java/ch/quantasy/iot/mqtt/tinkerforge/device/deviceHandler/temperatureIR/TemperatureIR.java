@@ -5,8 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.event.AmbientTemperatureEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.event.AmbientTemperatureReachedEvent;
@@ -24,6 +22,7 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.statu
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.status.EmissivityStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.status.ObjectTemperatureCallbackPeriodStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.status.ObjectTemperatureCallbackThresholdStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletTemperatureIR;
 import com.tinkerforge.NotConnectedException;
@@ -70,33 +69,6 @@ public class TemperatureIR extends ADeviceHandler<BrickletTemperatureIR> impleme
 	getDevice().removeAmbientTemperatureReachedListener(this);
 	getDevice().removeObjectTemperatureListener(this);
 	getDevice().removeObjectTemperatureReachedListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof DebouncePeriodIntent) {
-	    executeIntent((DebouncePeriodIntent) intent);
-	}
-	if (intent instanceof AmbientTemperatureCallbackPeriodIntent) {
-	    executeIntent((AmbientTemperatureCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof ObjectTemperatureCallbackPeriodIntent) {
-	    executeIntent((ObjectTemperatureCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof ObjectTemperatureCallbackThresholdIntent) {
-	    executeIntent((ObjectTemperatureCallbackThresholdIntent) intent);
-	}
-	if (intent instanceof AmbientTemperatureCallbackThresholdIntent) {
-	    executeIntent((AmbientTemperatureCallbackThresholdIntent) intent);
-	}
-	if (intent instanceof EmisivityIntent) {
-	    executeIntent((EmisivityIntent) intent);
-	}
     }
 
     public void executeIntent(DebouncePeriodIntent intent) throws TimeoutException, NotConnectedException {

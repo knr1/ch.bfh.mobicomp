@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.lcd20x4.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.lcd20x4.LCD20x4;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.lcd20x4.LCD20x4;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class LCD20x4WriteIntent extends AnIntent {
+public class LCD20x4WriteIntent extends AnIntent<LCD20x4> {
 
-    public LCD20x4WriteIntent(AHandler deviceHandler, String topic) {
+    public LCD20x4WriteIntent(LCD20x4 deviceHandler, String topic) {
 	super(deviceHandler, topic, "write");
 	super.addDescription(LCD20x4.LINE, Short.class, "JSON", "0,1,2,3");
 	super.addDescription(LCD20x4.FROM, Short.class, "JSON", "0..19");
@@ -55,5 +54,10 @@ public class LCD20x4WriteIntent extends AnIntent {
 	    return false;
 	}
 	return true;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 }

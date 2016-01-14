@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.Humidity;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.Humidity;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class DebouncePeriodIntent extends AnIntent {
+public class DebouncePeriodIntent extends AnIntent<Humidity> {
 
-    public DebouncePeriodIntent(AHandler deviceHandler, String intentTopic) {
+    public DebouncePeriodIntent(Humidity deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "debouncePeriod");
 	super.addDescription(Humidity.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
@@ -28,6 +27,11 @@ public class DebouncePeriodIntent extends AnIntent {
     private boolean isPeriodInRange() {
 	long period = getContent(Humidity.PERIOD).getValue(Long.class);
 	return period >= 0;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

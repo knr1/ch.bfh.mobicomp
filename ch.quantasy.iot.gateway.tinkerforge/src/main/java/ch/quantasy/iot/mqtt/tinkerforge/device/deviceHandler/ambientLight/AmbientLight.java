@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLight;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLight.event.AnalogValueEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLight.event.AnalogValueReachedEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLight.event.IlluminanceEvent;
@@ -68,31 +67,6 @@ public class AmbientLight extends ADeviceHandler<BrickletAmbientLight> implement
 	getDevice().removeIlluminanceReachedListener(this);
 	getDevice().removeAnalogValueListener(this);
 	getDevice().removeAnalogValueReachedListener(this);
-
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof DebouncePeriodIntent) {
-	    executeIntent((DebouncePeriodIntent) intent);
-	}
-	if (intent instanceof CallbackPeriodIntent) {
-	    executeIntent((CallbackPeriodIntent) intent);
-	}
-	if (intent instanceof CallbackThresholdIntent) {
-	    executeIntent((CallbackThresholdIntent) intent);
-	}
-	if (intent instanceof AnalogCallbackPeriodIntent) {
-	    executeIntent((AnalogCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof AnalogCallbackThresholdIntent) {
-	    executeIntent((AnalogCallbackThresholdIntent) intent);
-	}
 
     }
 

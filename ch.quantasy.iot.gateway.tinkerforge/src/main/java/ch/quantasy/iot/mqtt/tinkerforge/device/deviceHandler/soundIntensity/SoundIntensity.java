@@ -5,8 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.soundIntensity;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.soundIntensity.event.SoundIntensityEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.soundIntensity.event.SoundIntensityReachedEvent;
@@ -16,6 +14,7 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.soundIntensity.inte
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.soundIntensity.status.CallbackPeriodStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.soundIntensity.status.CallbackThresholdStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.soundIntensity.status.DebounceStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletSoundIntensity;
 import com.tinkerforge.NotConnectedException;
@@ -57,24 +56,6 @@ public class SoundIntensity extends ADeviceHandler<BrickletSoundIntensity> imple
     protected void removeDeviceListeners() {
 	getDevice().removeIntensityListener(this);
 	getDevice().removeIntensityReachedListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof DebouncePeriodIntent) {
-	    executeIntent((DebouncePeriodIntent) intent);
-	}
-	if (intent instanceof CallbackPeriodIntent) {
-	    executeIntent((CallbackPeriodIntent) intent);
-	}
-	if (intent instanceof CallbackThresholdIntent) {
-	    executeIntent((CallbackThresholdIntent) intent);
-	}
     }
 
     public void executeIntent(DebouncePeriodIntent intent) throws TimeoutException, NotConnectedException {

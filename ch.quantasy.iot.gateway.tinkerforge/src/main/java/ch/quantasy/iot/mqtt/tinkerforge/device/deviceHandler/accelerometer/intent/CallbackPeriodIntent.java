@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.Accelerometer;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.Accel
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CallbackPeriodIntent extends AnIntent {
+public class CallbackPeriodIntent extends AnIntent<Accelerometer> {
 
-    public CallbackPeriodIntent(AHandler deviceHandler, String intentTopic) {
+    public CallbackPeriodIntent(Accelerometer deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackPeriod");
 	super.addDescription(Accelerometer.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
@@ -28,6 +27,11 @@ public class CallbackPeriodIntent extends AnIntent {
     private boolean isPeriodInRange() {
 	long period = getContent(Accelerometer.PERIOD).getValue(Long.class);
 	return period >= 0;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

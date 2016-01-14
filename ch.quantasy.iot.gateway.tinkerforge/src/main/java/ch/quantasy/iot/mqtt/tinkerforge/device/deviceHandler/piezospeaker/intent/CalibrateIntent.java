@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.PiezoSpeaker;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.PiezoS
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CalibrateIntent extends AnIntent {
+public class CalibrateIntent extends AnIntent<PiezoSpeaker> {
 
-    public CalibrateIntent(AHandler deviceHandler, String intentTopic) {
+    public CalibrateIntent(PiezoSpeaker deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "calibrate");
 	super.addDescription(PiezoSpeaker.ENABLED, Boolean.class, "JSON", "true", "false");
     }
@@ -23,6 +22,11 @@ public class CalibrateIntent extends AnIntent {
     @Override
     public boolean isExecutable() {
 	return super.getValue(PiezoSpeaker.ENABLED, Boolean.class);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

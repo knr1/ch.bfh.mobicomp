@@ -5,8 +5,6 @@ package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.gps;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.gps.event.AltitudeEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.gps.event.CoordinatesEvent;
@@ -24,6 +22,7 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.gps.status.DateTime
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.gps.status.GPSStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.gps.status.MotionCallbackPeriodStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.gps.status.StatusCallbackPeriodStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletGPS;
 import com.tinkerforge.NotConnectedException;
@@ -84,33 +83,6 @@ public class GPS extends ADeviceHandler<BrickletGPS> implements BrickletGPS.Alti
 	getDevice().removeDateTimeListener(this);
 	getDevice().removeMotionListener(this);
 	getDevice().removeStatusListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof RestartIntent) {
-	    executeIntent((RestartIntent) intent);
-	}
-	if (intent instanceof StatusCallbackPeriodIntent) {
-	    executeIntent((StatusCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof AltitudeCallbackPeriodIntent) {
-	    executeIntent((AltitudeCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof MotionCallbackPeriodIntent) {
-	    executeIntent((MotionCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof DateTimeCallbackPeriodIntent) {
-	    executeIntent((DateTimeCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof CoordinatesCallbackPeriodIntent) {
-	    executeIntent((CoordinatesCallbackPeriodIntent) intent);
-	}
     }
 
     public void executeIntent(RestartIntent intent) throws TimeoutException, NotConnectedException {

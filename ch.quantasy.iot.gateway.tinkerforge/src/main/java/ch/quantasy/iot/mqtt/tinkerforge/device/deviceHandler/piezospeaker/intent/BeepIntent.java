@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.PiezoSpeaker;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.PiezoS
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class BeepIntent extends AnIntent {
+public class BeepIntent extends AnIntent<PiezoSpeaker> {
 
-    public BeepIntent(AHandler deviceHandler, String intentTopic) {
+    public BeepIntent(PiezoSpeaker deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "beep");
 	super.addDescription(PiezoSpeaker.ENABLED, Boolean.class, "JSON", "true", "false");
 	super.addDescription(PiezoSpeaker.DURATION, Long.class, "JSON", "1", "...", "" + Long.MAX_VALUE);
@@ -42,5 +41,10 @@ public class BeepIntent extends AnIntent {
     private boolean isDurationInRange() {
 	long duration = getContent(PiezoSpeaker.DURATION).getValue(Long.class);
 	return duration > 0;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 }

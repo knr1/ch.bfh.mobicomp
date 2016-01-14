@@ -5,8 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.event.AirPressureReachedEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.event.AirPressureValueEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.event.AltitudeEvent;
@@ -24,6 +22,7 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.status.Al
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.status.AveragingStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.status.DebounceStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
+import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletBarometer;
 import com.tinkerforge.NotConnectedException;
@@ -72,33 +71,6 @@ public class Barometer extends ADeviceHandler<BrickletBarometer> implements Bric
 	getDevice().removeAirPressureReachedListener(this);
 	getDevice().removeAltitudeListener(this);
 	getDevice().removeAltitudeReachedListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof DebouncePeriodIntent) {
-	    executeIntent((DebouncePeriodIntent) intent);
-	}
-	if (intent instanceof AirPressureCallbackPeriodIntent) {
-	    executeIntent((AirPressureCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof AltitudeCallbackPeriodIntent) {
-	    executeIntent((AltitudeCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof AltitudeCallbackThresholdIntent) {
-	    executeIntent((AltitudeCallbackThresholdIntent) intent);
-	}
-	if (intent instanceof AirPressureCallbackThresholdIntent) {
-	    executeIntent((AirPressureCallbackThresholdIntent) intent);
-	}
-	if (intent instanceof AveragingIntent) {
-	    executeIntent((AveragingIntent) intent);
-	}
     }
 
     public void executeIntent(DebouncePeriodIntent intent) throws TimeoutException, NotConnectedException {

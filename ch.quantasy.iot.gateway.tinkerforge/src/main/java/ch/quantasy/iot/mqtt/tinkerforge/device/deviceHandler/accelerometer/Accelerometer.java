@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.event.AccelerationEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.event.AccelerationReachedEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.intent.CallbackPeriodIntent;
@@ -42,8 +41,8 @@ public class Accelerometer extends ADeviceHandler<BrickletAccelerometer> impleme
     public static final String THRESHOLD_MAX_Z = "maxZ";
     public static final String ENABLED = "enabled";
     public static final String AVERAGE = "average";
-    public static final String DATA_RATE = "illuminanceRange";
-    public static final String FULL_SCALE = "integrationTime";
+    public static final String DATA_RATE = "dataRate";
+    public static final String FULL_SCALE = "fullScale";
     public static final String FILTER_BANDWIDTH = "filterBandwidth";
     public static final String X = "x";
     public static final String Y = "y";
@@ -72,32 +71,6 @@ public class Accelerometer extends ADeviceHandler<BrickletAccelerometer> impleme
     protected void removeDeviceListeners() {
 	getDevice().removeAccelerationListener(this);
 	getDevice().removeAccelerationReachedListener(this);
-
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    @Override
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof DebouncePeriodIntent) {
-	    executeIntent((DebouncePeriodIntent) intent);
-	}
-	if (intent instanceof CallbackPeriodIntent) {
-	    executeIntent((CallbackPeriodIntent) intent);
-	}
-	if (intent instanceof CallbackThresholdIntent) {
-	    executeIntent((CallbackThresholdIntent) intent);
-	}
-	if (intent instanceof ConfigIntent) {
-	    executeIntent((ConfigIntent) intent);
-	}
-	if (intent instanceof LEDIntent) {
-	    executeIntent((LEDIntent) intent);
-	}
 
     }
 
@@ -146,16 +119,12 @@ public class Accelerometer extends ADeviceHandler<BrickletAccelerometer> impleme
 
     @Override
     public void acceleration(short s, short s1, short s2) {
-	getEvent(AccelerationEvent.class).update(X, s);
-	getEvent(AccelerationEvent.class).update(Y, s1);
-	getEvent(AccelerationEvent.class).update(Z, s2);
+	getEvent(AccelerationEvent.class).update(VALUE, new Short[]{s, s1, s2});
     }
 
     @Override
     public void accelerationReached(short s, short s1, short s2) {
-	getEvent(AccelerationReachedEvent.class).update(X, s);
-	getEvent(AccelerationReachedEvent.class).update(Y, s1);
-	getEvent(AccelerationReachedEvent.class).update(Z, s2);
+	getEvent(AccelerationReachedEvent.class).update(VALUE, new Short[]{s, s1, s2});
     }
 
 }

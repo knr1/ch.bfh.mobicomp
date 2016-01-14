@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.joystick;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.event.AnalogValueEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.joystick.event.AnalogValueReachedEvent;
@@ -78,33 +77,6 @@ public class Joystick extends ADeviceHandler<BrickletJoystick> implements Brickl
 	getDevice().removePositionReachedListener(this);
 	getDevice().removePressedListener(this);
 	getDevice().removeReleasedListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof DebouncePeriodIntent) {
-	    executeIntent((DebouncePeriodIntent) intent);
-	}
-	if (intent instanceof AnalogCallbackPeriodIntent) {
-	    executeIntent((AnalogCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof PositionCallbackPeriodIntent) {
-	    executeIntent((PositionCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof PositionCallbackThresholdIntent) {
-	    executeIntent((PositionCallbackThresholdIntent) intent);
-	}
-	if (intent instanceof AnalogCallbackThresholdIntent) {
-	    executeIntent((AnalogCallbackThresholdIntent) intent);
-	}
-	if (intent instanceof CalibrateIntent) {
-	    executeIntent((CalibrateIntent) intent);
-	}
     }
 
     public void executeIntent(CalibrateIntent intent) throws TimeoutException, NotConnectedException {

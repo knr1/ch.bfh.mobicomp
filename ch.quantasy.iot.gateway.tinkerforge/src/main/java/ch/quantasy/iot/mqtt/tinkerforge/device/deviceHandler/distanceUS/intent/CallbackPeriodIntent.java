@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceUS.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceUS.DistanceUS;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceUS.Distance
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CallbackPeriodIntent extends AnIntent {
+public class CallbackPeriodIntent extends AnIntent<DistanceUS> {
 
-    public CallbackPeriodIntent(AHandler deviceHandler, String intentTopic) {
+    public CallbackPeriodIntent(DistanceUS deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackPeriod");
 	super.addDescription(DistanceUS.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
@@ -30,4 +29,8 @@ public class CallbackPeriodIntent extends AnIntent {
 	return period >= 0;
     }
 
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
+    }
 }

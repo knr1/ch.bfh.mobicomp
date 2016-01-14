@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.Accelerometer;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.Accel
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class LEDIntent extends AnIntent {
+public class LEDIntent extends AnIntent<Accelerometer> {
 
-    public LEDIntent(AHandler deviceHandler, String intentTopic) {
+    public LEDIntent(Accelerometer deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "LEDon");
 	super.addDescription(Accelerometer.VALUE, Boolean.class, "JSON", "true", "false");
 
@@ -24,6 +23,11 @@ public class LEDIntent extends AnIntent {
     @Override
     public boolean isExecutable() {
 	return getContent(Accelerometer.VALUE).rawValue != null;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.dualButton;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.dualButton.event.StateChangedEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.dualButton.intent.DualLEDIntent;
@@ -63,22 +62,6 @@ public class DualButton extends ADeviceHandler<BrickletDualButton> implements Br
     @Override
     protected void removeDeviceListeners() {
 	getDevice().removeStateChangedListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    @Override
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof DualLEDIntent) {
-	    executeIntent((DualLEDIntent) intent);
-	}
-	if (intent instanceof LEDIntent) {
-	    executeIntent((LEDIntent) intent);
-	}
     }
 
     public void executeIntent(LEDIntent intent) throws Throwable {

@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.gps.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.gps.GPS;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.gps.GPS;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class StatusCallbackPeriodIntent extends AnIntent {
+public class StatusCallbackPeriodIntent extends AnIntent<GPS> {
 
-    public StatusCallbackPeriodIntent(AHandler deviceHandler, String intentTopic) {
+    public StatusCallbackPeriodIntent(GPS deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "statusCallbackPeriod");
 	super.addDescription(GPS.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
@@ -23,6 +22,11 @@ public class StatusCallbackPeriodIntent extends AnIntent {
     @Override
     public boolean isExecutable() {
 	return super.getValue(GPS.PERIOD, Long.class) >= 0;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

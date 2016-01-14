@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.TemperatureIR;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.Tempe
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class DebouncePeriodIntent extends AnIntent {
+public class DebouncePeriodIntent extends AnIntent<TemperatureIR> {
 
-    public DebouncePeriodIntent(AHandler deviceHandler, String intentTopic) {
+    public DebouncePeriodIntent(TemperatureIR deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "debouncePeriod");
 	super.addDescription(TemperatureIR.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
@@ -30,4 +29,8 @@ public class DebouncePeriodIntent extends AnIntent {
 	return period >= 0;
     }
 
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
+    }
 }

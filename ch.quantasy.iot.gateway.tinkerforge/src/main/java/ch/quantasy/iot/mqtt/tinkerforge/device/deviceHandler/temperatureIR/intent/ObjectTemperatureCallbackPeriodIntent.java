@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.TemperatureIR;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.Tempe
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ObjectTemperatureCallbackPeriodIntent extends AnIntent {
+public class ObjectTemperatureCallbackPeriodIntent extends AnIntent<TemperatureIR> {
 
-    public ObjectTemperatureCallbackPeriodIntent(AHandler deviceHandler, String intentTopic) {
+    public ObjectTemperatureCallbackPeriodIntent(TemperatureIR deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "objectTemperatureCallbackPeriod");
 	super.addDescription(TemperatureIR.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
@@ -28,6 +27,11 @@ public class ObjectTemperatureCallbackPeriodIntent extends AnIntent {
     private boolean isPeriodInRange() {
 	long period = getContent(TemperatureIR.PERIOD).getValue(Long.class);
 	return period >= 0;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

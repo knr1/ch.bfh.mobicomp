@@ -5,8 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceUS;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceUS.event.DistanceEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceUS.event.DistanceReachedEvent;
@@ -18,6 +16,7 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceUS.status.C
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceUS.status.CallbackThresholdStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceUS.status.DebounceStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceUS.status.MovingAverageStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletDistanceUS;
 import com.tinkerforge.NotConnectedException;
@@ -60,27 +59,6 @@ public class DistanceUS extends ADeviceHandler<BrickletDistanceUS> implements Br
     protected void removeDeviceListeners() {
 	getDevice().removeDistanceListener(this);
 	getDevice().removeDistanceReachedListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof DebouncePeriodIntent) {
-	    executeIntent((DebouncePeriodIntent) intent);
-	}
-	if (intent instanceof CallbackPeriodIntent) {
-	    executeIntent((CallbackPeriodIntent) intent);
-	}
-	if (intent instanceof CallbackThresholdIntent) {
-	    executeIntent((CallbackThresholdIntent) intent);
-	}
-	if (intent instanceof MovingAverageIntent) {
-	    executeIntent((MovingAverageIntent) intent);
-	}
     }
 
     public void executeIntent(DebouncePeriodIntent intent) throws TimeoutException, NotConnectedException {

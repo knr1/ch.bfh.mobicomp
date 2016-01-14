@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.Humidity;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.Humidity;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class HumidityCallbackThresholdIntent extends AnIntent {
+public class HumidityCallbackThresholdIntent extends AnIntent<Humidity> {
 
-    public HumidityCallbackThresholdIntent(AHandler deviceHandler, String intentTopic) {
+    public HumidityCallbackThresholdIntent(Humidity deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "humidityCallbackThreshold");
 	super.addDescription(Humidity.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
 	super.addDescription(Humidity.THRESHOLD_MIN, Short.class, "JSON", "0", "...", "1000");
@@ -52,6 +51,11 @@ public class HumidityCallbackThresholdIntent extends AnIntent {
     private boolean isMaxInRange() {
 	int max = getContent(Humidity.THRESHOLD_MAX).getValue(Integer.class);
 	return (max <= 4095 && max >= 0);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

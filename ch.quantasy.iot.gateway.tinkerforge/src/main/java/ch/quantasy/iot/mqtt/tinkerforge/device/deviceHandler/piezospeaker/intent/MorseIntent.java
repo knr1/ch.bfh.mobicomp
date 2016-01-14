@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.PiezoSpeaker;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.PiezoS
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class MorseIntent extends AnIntent {
+public class MorseIntent extends AnIntent<PiezoSpeaker> {
 
-    public MorseIntent(AHandler deviceHandler, String intentTopic) {
+    public MorseIntent(PiezoSpeaker deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "morse");
 	super.addDescription(PiezoSpeaker.ENABLED, Boolean.class, "JSON", "true", "false");
 	super.addDescription(PiezoSpeaker.CODE, String.class, "JSON", ".", "-", " ", "unbounded");
@@ -43,5 +42,10 @@ public class MorseIntent extends AnIntent {
     private boolean isCodeInRange() {
 	String code = getContent(PiezoSpeaker.CODE).getValue(String.class);
 	return code != null && code != "";
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 }

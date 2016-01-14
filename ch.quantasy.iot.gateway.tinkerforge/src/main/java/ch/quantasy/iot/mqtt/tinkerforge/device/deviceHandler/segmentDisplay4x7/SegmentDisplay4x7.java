@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.segmentDisplay4x7;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.segmentDisplay4x7.event.CounterFinishedEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.segmentDisplay4x7.event.SegmentsEvent;
@@ -51,21 +50,6 @@ public class SegmentDisplay4x7 extends ADeviceHandler<BrickletSegmentDisplay4x7>
     @Override
     protected void removeDeviceListeners() {
 	getDevice().removeCounterFinishedListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof CounterIntent) {
-	    executeIntent((CounterIntent) intent);
-	}
-	if (intent instanceof SegmentsIntent) {
-	    executeIntent((SegmentsIntent) intent);
-	}
     }
 
     public void executeIntent(CounterIntent intent) throws TimeoutException, NotConnectedException {

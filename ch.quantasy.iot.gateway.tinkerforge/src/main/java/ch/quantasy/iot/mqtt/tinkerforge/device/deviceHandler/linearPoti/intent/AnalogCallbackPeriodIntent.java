@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.LinearPoti;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.LinearPo
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class AnalogCallbackPeriodIntent extends AnIntent {
+public class AnalogCallbackPeriodIntent extends AnIntent<LinearPoti> {
 
-    public AnalogCallbackPeriodIntent(AHandler deviceHandler, String intentTopic) {
+    public AnalogCallbackPeriodIntent(LinearPoti deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "analogCallbackPeriod");
 	super.addDescription(LinearPoti.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
@@ -28,6 +27,11 @@ public class AnalogCallbackPeriodIntent extends AnIntent {
     private boolean isPeriodInRange() {
 	long period = getContent(LinearPoti.PERIOD).getValue(Long.class);
 	return period >= 0;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

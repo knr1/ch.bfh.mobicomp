@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.dualButton.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.dualButton.DualButton;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.dualButton.DualButt
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class DualLEDIntent extends AnIntent {
+public class DualLEDIntent extends AnIntent<DualButton> {
 
-    public DualLEDIntent(AHandler deviceHandler, String topic) {
+    public DualLEDIntent(DualButton deviceHandler, String topic) {
 	super(deviceHandler, topic, "dualLED");
 	super.addDescription(DualButton.LED_L, Short.class, "JSON", "0", "1", "2", "3");
 	super.addDescription(DualButton.LED_R, Short.class, "JSON", "0", "1", "2", "3");
@@ -34,5 +33,10 @@ public class DualLEDIntent extends AnIntent {
     private boolean isLEDRInRange() {
 	int led = getContent(DualButton.LED_R).getValue(Integer.class);
 	return (led >= 0 || led <= 3);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 }

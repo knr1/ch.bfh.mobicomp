@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.color.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.color.Color;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.color.Color;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ColorCallbackPeriodIntent extends AnIntent {
+public class ColorCallbackPeriodIntent extends AnIntent<Color> {
 
-    public ColorCallbackPeriodIntent(AHandler deviceHandler, String intentTopic) {
+    public ColorCallbackPeriodIntent(Color deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "colorCallbackPeriod");
 	super.addDescription(Color.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
@@ -28,6 +27,11 @@ public class ColorCallbackPeriodIntent extends AnIntent {
     private boolean isPeriodInRange() {
 	long period = getContent(Color.PERIOD).getValue(Long.class);
 	return period >= 0;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

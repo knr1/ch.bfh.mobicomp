@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.LinearPoti;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.LinearPo
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class PositionCallbackThresholdIntent extends AnIntent {
+public class PositionCallbackThresholdIntent extends AnIntent<LinearPoti> {
 
-    public PositionCallbackThresholdIntent(AHandler deviceHandler, String intentTopic) {
+    public PositionCallbackThresholdIntent(LinearPoti deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "positionCallbackThreshold");
 	super.addDescription(LinearPoti.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
 	super.addDescription(LinearPoti.THRESHOLD_MIN, Short.class, "JSON", "0", "...", "100");
@@ -52,6 +51,11 @@ public class PositionCallbackThresholdIntent extends AnIntent {
     private boolean isMaxInRange() {
 	int max = getContent(LinearPoti.THRESHOLD_MAX).getValue(Integer.class);
 	return (max <= 4095 && max >= 0);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

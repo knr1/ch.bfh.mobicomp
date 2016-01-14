@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.segmentDisplay4x7.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.segmentDisplay4x7.SegmentDisplay4x7;
 
@@ -13,10 +12,10 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.segmentDisplay4x7.S
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class SegmentsIntent extends AnIntent {
+public class SegmentsIntent extends AnIntent<SegmentDisplay4x7> {
 //public void setSegments(short[] segments, short brightness, boolean colon)
 
-    public SegmentsIntent(AHandler deviceHandler, String intentTopic) {
+    public SegmentsIntent(SegmentDisplay4x7 deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "segments");
 	super.addDescription(SegmentDisplay4x7.ENABLED, Boolean.class, "JSON", "true", "false");
 	super.addDescription(SegmentDisplay4x7.SEGMENTS, short[].class, "JSON", "0", "...", "127", "4");
@@ -50,6 +49,11 @@ public class SegmentsIntent extends AnIntent {
     private boolean isBrightnessInRange() {
 	short value = getContent(SegmentDisplay4x7.BRIGHTNESS).getValue(Short.class);
 	return (value >= 0 && value <= 7);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

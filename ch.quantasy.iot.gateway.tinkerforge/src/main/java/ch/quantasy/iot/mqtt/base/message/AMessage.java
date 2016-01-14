@@ -23,7 +23,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public abstract class AMessage<E extends MessageDescription> {
+public abstract class AMessage<H extends AHandler, E extends MessageDescription> {
 
     private final Gson gson;
     private final String topic;
@@ -32,9 +32,9 @@ public abstract class AMessage<E extends MessageDescription> {
     private Map<String, Content> valueMap;
     //public final Type descriptionsType = new TypeToken<List<E>>() {
     //}.getType();
-    private final AHandler deviceHandler;
+    private final H deviceHandler;
 
-    public AMessage(AHandler deviceHandler, String messageTopic, String messageName) {
+    public AMessage(H deviceHandler, String messageTopic, String messageName) {
 	valueMap = new HashMap<>();
 	this.name = messageName;
 	this.deviceHandler = deviceHandler;
@@ -50,7 +50,7 @@ public abstract class AMessage<E extends MessageDescription> {
 	return gson;
     }
 
-    public AHandler getDeviceHandler() {
+    public H getDeviceHandler() {
 	return deviceHandler;
     }
 
@@ -118,7 +118,7 @@ public abstract class AMessage<E extends MessageDescription> {
 	return false;
     }
 
-    protected Map<String, Content> getContentMap() {
+    protected Map<String, Content> getValueMap() {
 	return valueMap;
     }
 

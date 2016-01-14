@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ledstrip.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ledstrip.LedStrip;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ledstrip.LedStrip;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ConfigIntent extends AnIntent {
+public class ConfigIntent extends AnIntent<LedStrip> {
 
-    public ConfigIntent(AHandler deviceHandler, String intentTopic) {
+    public ConfigIntent(LedStrip deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "config");
 	super.addDescription(LedStrip.CONFIG_CHIP_TYPE, Integer.class, "JSON", "2801", "2811", "2812");
 	super.addDescription(LedStrip.CONFIG_CLOCK_FREQUENCY_OF_ICS_IN_HZ, Long.class, "JSON", "10000", "...", "2000000");
@@ -48,6 +47,11 @@ public class ConfigIntent extends AnIntent {
     private boolean isNumberOfLEDsInRange() {
 	int numberOfLEDs = getContent(LedStrip.CONFIG_NUMBER_OF_LEDS).getValue(Integer.class);
 	return (numberOfLEDs >= 1 && numberOfLEDs <= 319);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

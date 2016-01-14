@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ledstrip.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ledstrip.LedStrip;
 
@@ -13,10 +12,10 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ledstrip.LedStrip;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class RGBLEDFrameIntent extends AnIntent {
+public class RGBLEDFrameIntent extends AnIntent<LedStrip> {
 
     //[red1,red2,red...],[green1,green2,green...],[blue1,blue2,blue3]
-    public RGBLEDFrameIntent(AHandler deviceHandler, String intentTopic) {
+    public RGBLEDFrameIntent(LedStrip deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "RGBFrame");
 	super.addDescription("rgbFrame", Short[][].class, "JSON", "[[]<=319,[]<=319,[]<=319]=3", "[[0],[0],[0]]", "...", "[[255],[255],[255]]");
     }
@@ -32,5 +31,10 @@ public class RGBLEDFrameIntent extends AnIntent {
 	short[][] rgbFrame = getContent(LedStrip.RGB_FRAME).getValue(short[][].class);
 	return (rgbFrame != null && rgbFrame.length == 3 && rgbFrame[0] != null && rgbFrame[1] != null && rgbFrame[2]
 		!= null);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 }

@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.lcd20x4;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.lcd20x4.event.LCD20x4ButtonEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.lcd20x4.intent.LCD20x4BacklightIntent;
@@ -67,25 +66,6 @@ public class LCD20x4 extends ADeviceHandler<BrickletLCD20x4> implements Bricklet
     protected void removeDeviceListeners() {
 	getDevice().removeButtonPressedListener(this);
 	getDevice().removeButtonReleasedListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    @Override
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof LCD20x4BacklightIntent) {
-	    executeIntent((LCD20x4BacklightIntent) intent);
-	}
-	if (intent instanceof LCD20x4CursorConfigIntent) {
-	    executeIntent((LCD20x4CursorConfigIntent) intent);
-	}
-	if (intent instanceof LCD20x4WriteIntent) {
-	    executeIntent((LCD20x4WriteIntent) intent);
-	}
     }
 
     public void executeIntent(LCD20x4BacklightIntent intent) throws Throwable {

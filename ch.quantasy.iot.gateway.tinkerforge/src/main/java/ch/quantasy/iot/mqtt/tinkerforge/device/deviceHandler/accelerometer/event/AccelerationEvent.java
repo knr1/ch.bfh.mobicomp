@@ -18,9 +18,7 @@ public class AccelerationEvent extends AnEvent {
 
     public AccelerationEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "acceleration", mqttClient);
-	super.addDescription(Accelerometer.X, Short.class, "JSON", "" + Short.MIN_VALUE, "...", "" + Short.MAX_VALUE);
-	super.addDescription(Accelerometer.Y, Short.class, "JSON", "" + Short.MIN_VALUE, "...", "" + Short.MAX_VALUE);
-	super.addDescription(Accelerometer.Z, Short.class, "JSON", "" + Short.MIN_VALUE, "...", "" + Short.MAX_VALUE);
+	super.addDescription(Accelerometer.VALUE, Short[].class, "JSON", "[" + Short.MIN_VALUE + "," + Short.MIN_VALUE + "," + Short.MIN_VALUE + "]", "...", "[" + Short.MAX_VALUE + "," + Short.MAX_VALUE + "," + Short.MAX_VALUE + "]");
 
     }
 }

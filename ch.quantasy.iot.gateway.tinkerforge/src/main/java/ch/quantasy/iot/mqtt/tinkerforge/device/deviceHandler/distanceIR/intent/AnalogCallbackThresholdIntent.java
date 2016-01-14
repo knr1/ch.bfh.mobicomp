@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceIR.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceIR.DistanceIR;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceIR.Distance
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class AnalogCallbackThresholdIntent extends AnIntent {
+public class AnalogCallbackThresholdIntent extends AnIntent<DistanceIR> {
 
-    public AnalogCallbackThresholdIntent(AHandler deviceHandler, String intentTopic) {
+    public AnalogCallbackThresholdIntent(DistanceIR deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "analogCallbackThreshold");
 	super.addDescription(DistanceIR.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
 	super.addDescription(DistanceIR.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "4095");
@@ -52,6 +51,11 @@ public class AnalogCallbackThresholdIntent extends AnIntent {
     private boolean isMaxInRange() {
 	int max = getContent(DistanceIR.THRESHOLD_MAX).getValue(Integer.class);
 	return (max <= 4095 && max >= 0);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

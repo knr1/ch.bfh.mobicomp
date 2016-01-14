@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.color.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.color.Color;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.color.Color;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ColorConfigIntent extends AnIntent {
+public class ColorConfigIntent extends AnIntent<Color> {
 
-    public ColorConfigIntent(AHandler deviceHandler, String intentTopic) {
+    public ColorConfigIntent(Color deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "config");
 	super.addDescription(Color.GAIN, short.class, "JSON", "0", "1", "2", "3");
 	super.addDescription(Color.INTEGRATION_TIME, short.class, "JSON", "0", "1", "2", "3", "4");
@@ -39,6 +38,11 @@ public class ColorConfigIntent extends AnIntent {
     private boolean isIntegrationTimeInRange() {
 	short integrationTime = getContent(Color.GAIN).getValue(Short.class);
 	return (integrationTime <= 4 && integrationTime >= 0);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

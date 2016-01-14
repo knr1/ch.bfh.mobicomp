@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.Barometer;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.Barometer
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class AltitudeCallbackThresholdIntent extends AnIntent {
+public class AltitudeCallbackThresholdIntent extends AnIntent<Barometer> {
 
-    public AltitudeCallbackThresholdIntent(AHandler deviceHandler, String intentTopic) {
+    public AltitudeCallbackThresholdIntent(Barometer deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "altitudeCallbackThreshold");
 	super.addDescription(Barometer.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
 	super.addDescription(Barometer.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "1000");
@@ -52,6 +51,11 @@ public class AltitudeCallbackThresholdIntent extends AnIntent {
     private boolean isMaxInRange() {
 	int max = getContent(Barometer.THRESHOLD_MAX).getValue(Integer.class);
 	return (max <= 4095 && max >= 0);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

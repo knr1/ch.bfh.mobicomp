@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.TemperatureIR;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.Tempe
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ObjectTemperatureCallbackThresholdIntent extends AnIntent {
+public class ObjectTemperatureCallbackThresholdIntent extends AnIntent<TemperatureIR> {
 
-    public ObjectTemperatureCallbackThresholdIntent(AHandler deviceHandler, String intentTopic) {
+    public ObjectTemperatureCallbackThresholdIntent(TemperatureIR deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "objectTemperatureCallbackThreshold");
 	super.addDescription(TemperatureIR.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
 	super.addDescription(TemperatureIR.THRESHOLD_MIN, Integer.class, "JSON", "-700", "...", "8300");
@@ -52,6 +51,11 @@ public class ObjectTemperatureCallbackThresholdIntent extends AnIntent {
     private boolean isMaxInRange() {
 	int max = getContent(TemperatureIR.THRESHOLD_MAX).getValue(Integer.class);
 	return (max <= 8300 && max >= -700);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

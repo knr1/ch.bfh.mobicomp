@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.soundIntensity.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.soundIntensity.SoundIntensity;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.soundIntensity.Soun
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CallbackPeriodIntent extends AnIntent {
+public class CallbackPeriodIntent extends AnIntent<SoundIntensity> {
 
-    public CallbackPeriodIntent(AHandler deviceHandler, String intentTopic) {
+    public CallbackPeriodIntent(SoundIntensity deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackPeriod");
 	super.addDescription(SoundIntensity.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
@@ -28,6 +27,11 @@ public class CallbackPeriodIntent extends AnIntent {
     private boolean isPeriodInRange() {
 	long period = getContent(SoundIntensity.PERIOD).getValue(Long.class);
 	return period >= 0;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

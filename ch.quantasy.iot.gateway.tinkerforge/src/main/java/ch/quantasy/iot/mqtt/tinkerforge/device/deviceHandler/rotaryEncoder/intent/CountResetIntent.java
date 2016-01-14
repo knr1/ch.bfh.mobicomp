@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryEncoder.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryEncoder.RotaryEncoder;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryEncoder.Rotar
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CountResetIntent extends AnIntent {
+public class CountResetIntent extends AnIntent<RotaryEncoder> {
 
-    public CountResetIntent(AHandler deviceHandler, String intentTopic) {
+    public CountResetIntent(RotaryEncoder deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "countReset");
 	super.addDescription(RotaryEncoder.ENABLED, Boolean.class, "JSON", "true", "false");
     }
@@ -23,5 +22,10 @@ public class CountResetIntent extends AnIntent {
     @Override
     public boolean isExecutable() {
 	return super.getValue(RotaryEncoder.ENABLED, Boolean.class);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 }

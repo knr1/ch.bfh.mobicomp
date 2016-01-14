@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLightV2.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLightV2.AmbientLightV2;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLightV2.Ambi
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ConfigIntent extends AnIntent {
+public class ConfigIntent extends AnIntent<AmbientLightV2> {
 
-    public ConfigIntent(AHandler deviceHandler, String intentTopic) {
+    public ConfigIntent(AmbientLightV2 deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "config");
 	super.addDescription(AmbientLightV2.ILLUMINANCE_RANGE, Short.class, "JSON", "0,1,2,3,4,5,6");
 	super.addDescription(AmbientLightV2.INTEGRATION_TIME, Short.class, "JSON", "0,1,2,3,4,5,6,7");
@@ -40,6 +39,11 @@ public class ConfigIntent extends AnIntent {
     private boolean isIntegrationTimeInRange() {
 	short integrationTime = getContent(AmbientLightV2.INTEGRATION_TIME).getValue(Short.class);
 	return integrationTime >= 0 && integrationTime <= 7;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

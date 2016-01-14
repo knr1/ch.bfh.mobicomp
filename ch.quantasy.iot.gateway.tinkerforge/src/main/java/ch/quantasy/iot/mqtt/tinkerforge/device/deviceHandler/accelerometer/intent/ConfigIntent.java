@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.Accelerometer;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.Accel
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ConfigIntent extends AnIntent {
+public class ConfigIntent extends AnIntent<Accelerometer> {
 
-    public ConfigIntent(AHandler deviceHandler, String intentTopic) {
+    public ConfigIntent(Accelerometer deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "config");
 	super.addDescription(Accelerometer.DATA_RATE, Short.class, "JSON", "0,1,2,3,4,5,6,7,8,9");
 	super.addDescription(Accelerometer.FULL_SCALE, Short.class, "JSON", "0,1,2,3,4");
@@ -46,6 +45,11 @@ public class ConfigIntent extends AnIntent {
     private boolean isFilterBandwidthInRange() {
 	short filterBandwidth = getContent(Accelerometer.FILTER_BANDWIDTH).getValue(Short.class);
 	return filterBandwidth >= 0 && filterBandwidth <= 3;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

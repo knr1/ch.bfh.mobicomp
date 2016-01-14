@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.TemperatureIR;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.temperatureIR.Tempe
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class EmisivityIntent extends AnIntent {
+public class EmisivityIntent extends AnIntent<TemperatureIR> {
 
-    public EmisivityIntent(AHandler deviceHandler, String intentTopic) {
+    public EmisivityIntent(TemperatureIR deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "Emisivity");
 	super.addDescription(TemperatureIR.EMISSIVITY, Integer.class, "JSON", "0", "..", "65535");
 
@@ -30,6 +29,11 @@ public class EmisivityIntent extends AnIntent {
     private boolean isEmissivityInRange() {
 	short average = getContent(TemperatureIR.EMISSIVITY).getValue(Short.class);
 	return average >= 0 && average <= 65535;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

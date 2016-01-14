@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.RemoteSwitch;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.Remote
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class DimSocketBIntent extends AnIntent {
+public class DimSocketBIntent extends AnIntent<RemoteSwitch> {
 
-    public DimSocketBIntent(AHandler deviceHandler, String intentTopic) {
+    public DimSocketBIntent(RemoteSwitch deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "dimSocketB");
 	super.addDescription(RemoteSwitch.ENABLED, Boolean.class, "JSON", "true", "false");
 	super.addDescription(RemoteSwitch.ADDRESS, Long.class, "JSON", "0", "...", "67108863");
@@ -47,5 +46,10 @@ public class DimSocketBIntent extends AnIntent {
     private boolean isDimValue() {
 	short dimValue = getContent(RemoteSwitch.DIM_VALUE).getValue(Short.class);
 	return (dimValue >= 0 || dimValue <= 15);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 }

@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.color;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.color.event.ColorEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.color.event.ColorReachedEvent;
@@ -89,37 +88,17 @@ public class Color extends ADeviceHandler<BrickletColor> implements BrickletColo
 	getDevice().removeIlluminanceListener(this);
     }
 
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof DebouncePeriodIntent) {
-	    executeIntent((DebouncePeriodIntent) intent);
-	}
-	if (intent instanceof ColorCallbackPeriodIntent) {
-	    executeIntent((ColorCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof IlluminanceCallbackPeriodIntent) {
-	    executeIntent((IlluminanceCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof ColorTemperatureCallbackPeriodIntent) {
-	    executeIntent((ColorTemperatureCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof ColorCallbackThresholdIntent) {
-	    executeIntent((ColorCallbackThresholdIntent) intent);
-	}
-	if (intent instanceof LightIntent) {
-	    executeIntent((LightIntent) intent);
-	}
-    }
-
     public void executeIntent(DebouncePeriodIntent intent) throws TimeoutException, NotConnectedException {
 	long period = intent.getValue(Color.PERIOD, Long.class);
 	getDevice().setDebouncePeriod(period);
 	getStatus(DebounceStatus.class).update(Color.PERIOD, getDevice().getDebouncePeriod());
+    }
+
+    public void executeIntent(ColorConfigIntent intent) throws TimeoutException, NotConnectedException {
+	short gain = intent.getValue(Color.GAIN, Short.class);
+	short integrationTime = intent.getValue(Color.INTEGRATION_TIME, Short.class);
+	getDevice().setConfig(gain, integrationTime);
+	getStatus(ColorConfigStatus.class).update(intent);
     }
 
     public void executeIntent(ColorCallbackPeriodIntent intent) throws TimeoutException, NotConnectedException {

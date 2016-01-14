@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.multitouch.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.multitouch.MultiTouch;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.multitouch.MultiTou
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ElectrodeSensitivityIntent extends AnIntent {
+public class ElectrodeSensitivityIntent extends AnIntent<MultiTouch> {
 
-    public ElectrodeSensitivityIntent(AHandler deviceHandler, String intentTopic) {
+    public ElectrodeSensitivityIntent(MultiTouch deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "electrodeSensitivity");
 	super.addDescription(MultiTouch.SENSITIVITY, Short.class, "JSON", "5", "201");
     }
@@ -24,6 +23,11 @@ public class ElectrodeSensitivityIntent extends AnIntent {
     public boolean isExecutable() {
 	short sensitivity = super.getValue(MultiTouch.SENSITIVITY, Short.class);
 	return sensitivity >= 5 && sensitivity <= 201;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

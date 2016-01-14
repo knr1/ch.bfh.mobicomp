@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.RemoteSwitch;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.Remote
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class SwitchSocketBIntent extends AnIntent {
+public class SwitchSocketBIntent extends AnIntent<RemoteSwitch> {
 
-    public SwitchSocketBIntent(AHandler deviceHandler, String intentTopic) {
+    public SwitchSocketBIntent(RemoteSwitch deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "switchSocketB");
 	super.addDescription(RemoteSwitch.ENABLED, Boolean.class, "JSON", "true", "false");
 	super.addDescription(RemoteSwitch.ADDRESS, Long.class, "JSON", "0", "...", "67108863");
@@ -47,5 +46,10 @@ public class SwitchSocketBIntent extends AnIntent {
     private boolean isSwitchToInRange() {
 	short switchTo = getContent(RemoteSwitch.SWITCH_TO).getValue(Short.class);
 	return (switchTo >= 0 || switchTo <= 1);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 }

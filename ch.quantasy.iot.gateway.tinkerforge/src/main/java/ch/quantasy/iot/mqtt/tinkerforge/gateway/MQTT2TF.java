@@ -6,7 +6,6 @@
 package ch.quantasy.iot.mqtt.tinkerforge.gateway;
 
 import ch.quantasy.iot.mqtt.base.AHandler;
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.status.DeviceHandlerReadyStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.status.ManagedDeviceHandlersStatus;
@@ -70,13 +69,6 @@ public class MQTT2TF extends AHandler {
     @Override
     public String getApplicationName() {
 	return "MQTT2TF";
-    }
-
-    @Override
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof StackHandlerIntent) {
-	    executeIntent((StackHandlerIntent) intent);
-	}
     }
 
     public void executeIntent(StackHandlerIntent intent) throws Throwable {

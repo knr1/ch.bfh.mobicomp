@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.Accelerometer;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.Accel
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CallbackThresholdIntent extends AnIntent {
+public class CallbackThresholdIntent extends AnIntent<Accelerometer> {
 
-    public CallbackThresholdIntent(AHandler deviceHandler, String intentTopic) {
+    public CallbackThresholdIntent(Accelerometer deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackThreshold");
 	super.addDescription(Accelerometer.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
 	super.addDescription(Accelerometer.THRESHOLD_MIN_X, Short.class, "JSON", "" + Short.MIN_VALUE, "...", "4095");
@@ -77,6 +76,11 @@ public class CallbackThresholdIntent extends AnIntent {
     private boolean isMaxZInRange() {
 	int max = getContent(Accelerometer.THRESHOLD_MAX_Z).getValue(Integer.class);
 	return (max <= 4095 && max >= Short.MIN_VALUE);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceIR;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceIR.event.AnalogValueEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceIR.event.AnalogValueReachedEvent;
@@ -68,31 +67,6 @@ public class DistanceIR extends ADeviceHandler<BrickletDistanceIR> implements Br
 	getDevice().removeDistanceReachedListener(this);
 	getDevice().removeAnalogValueListener(this);
 	getDevice().removeAnalogValueReachedListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof DebouncePeriodIntent) {
-	    executeIntent((DebouncePeriodIntent) intent);
-	}
-	if (intent instanceof CallbackPeriodIntent) {
-	    executeIntent((CallbackPeriodIntent) intent);
-	}
-	if (intent instanceof CallbackThresholdIntent) {
-	    executeIntent((CallbackThresholdIntent) intent);
-	}
-	if (intent instanceof AnalogCallbackPeriodIntent) {
-	    executeIntent((AnalogCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof AnalogCallbackThresholdIntent) {
-	    executeIntent((AnalogCallbackThresholdIntent) intent);
-	}
-
     }
 
     public void executeIntent(DebouncePeriodIntent intent) throws TimeoutException, NotConnectedException {

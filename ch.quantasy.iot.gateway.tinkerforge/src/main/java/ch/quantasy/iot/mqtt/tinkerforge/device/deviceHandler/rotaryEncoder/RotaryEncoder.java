@@ -5,7 +5,6 @@ package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryEncoder;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryEncoder.event.CountResetEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryEncoder.event.CountValueEvent;
@@ -61,24 +60,6 @@ public class RotaryEncoder extends ADeviceHandler<BrickletRotaryEncoder> impleme
 	getDevice().removeCountReachedListener(this);
 	getDevice().removePressedListener(this);
 	getDevice().removeReleasedListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof CountResetIntent) {
-	    executeIntent((CountResetIntent) intent);
-	}
-	if (intent instanceof CountCallbackPeriodIntent) {
-	    executeIntent((CountCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof CountCallbackThresholdIntent) {
-	    executeIntent((CountCallbackThresholdIntent) intent);
-	}
     }
 
     public void executeIntent(CountResetIntent intent) throws TimeoutException, NotConnectedException {

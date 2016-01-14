@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceUS.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceUS.DistanceUS;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceUS.Distance
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class MovingAverageIntent extends AnIntent {
+public class MovingAverageIntent extends AnIntent<DistanceUS> {
 
-    public MovingAverageIntent(AHandler deviceHandler, String intentTopic) {
+    public MovingAverageIntent(DistanceUS deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "movingAverage");
 	super.addDescription(DistanceUS.AVERAGE, Short.class, "JSON", "0", "...", "100");
     }
@@ -28,6 +27,11 @@ public class MovingAverageIntent extends AnIntent {
     private boolean isAverageInRange() {
 	short average = getContent(DistanceUS.AVERAGE).getValue(Short.class);
 	return average >= 0 && average <= 100;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.motiondetector;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.motiondetector.event.MotionDetectedEvent;
@@ -44,16 +43,6 @@ public class MotionDetector extends ADeviceHandler<BrickletMotionDetector> imple
     protected void removeDeviceListeners() {
 	getDevice().removeDetectionCycleEndedListener(this);
 	getDevice().removeMotionDetectedListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	//This Device does not have any specific intents.
     }
 
     @Override

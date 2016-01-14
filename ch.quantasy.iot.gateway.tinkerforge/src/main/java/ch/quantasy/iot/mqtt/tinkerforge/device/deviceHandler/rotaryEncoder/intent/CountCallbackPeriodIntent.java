@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryEncoder.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryEncoder.RotaryEncoder;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryEncoder.Rotar
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CountCallbackPeriodIntent extends AnIntent {
+public class CountCallbackPeriodIntent extends AnIntent<RotaryEncoder> {
 
-    public CountCallbackPeriodIntent(AHandler deviceHandler, String intentTopic) {
+    public CountCallbackPeriodIntent(RotaryEncoder deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "countCallbackPeriod");
 	super.addDescription(RotaryEncoder.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
@@ -28,6 +27,11 @@ public class CountCallbackPeriodIntent extends AnIntent {
     private boolean isPeriodInRange() {
 	long period = getContent(RotaryEncoder.PERIOD).getValue(Long.class);
 	return period >= 0;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

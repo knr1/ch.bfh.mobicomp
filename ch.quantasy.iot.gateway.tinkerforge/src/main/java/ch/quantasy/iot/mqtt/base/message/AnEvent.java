@@ -14,11 +14,11 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public abstract class AnEvent extends AMessage<EventDescription> {
+public abstract class AnEvent<H extends AHandler> extends AMessage<H, EventDescription> {
 
     private final MqttAsyncClient mqttClient;
 
-    public AnEvent(AHandler deviceHandler, String eventTopic, String eventName, MqttAsyncClient mqttClient) {
+    public AnEvent(H deviceHandler, String eventTopic, String eventName, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, eventName);
 	this.mqttClient = mqttClient;
     }
@@ -41,7 +41,7 @@ public abstract class AnEvent extends AMessage<EventDescription> {
     }
 
     public void update(AnIntent intent) {
-	for (Content triple : this.getContentMap().values()) {
+	for (Content triple : this.getValueMap().values()) {
 	    byte[] rawContent = null;
 	    String property = triple.getProperty();
 	    if (property != null) {

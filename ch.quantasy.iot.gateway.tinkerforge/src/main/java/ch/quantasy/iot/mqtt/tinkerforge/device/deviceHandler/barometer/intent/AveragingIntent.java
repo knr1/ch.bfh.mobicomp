@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.Barometer;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.Barometer
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class AveragingIntent extends AnIntent {
+public class AveragingIntent extends AnIntent<Barometer> {
 
-    public AveragingIntent(AHandler deviceHandler, String intentTopic) {
+    public AveragingIntent(Barometer deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "averaging");
 	super.addDescription(Barometer.MOVING_AVERAGE_PRESSURE, Short.class, "JSON", "0", "..", "25");
 	super.addDescription(Barometer.AVERAGE_PRESSURE, Short.class, "JSON", "0", "..", "10");
@@ -47,6 +46,11 @@ public class AveragingIntent extends AnIntent {
     private boolean isAverageTemperatureInRange() {
 	short average = getContent(Barometer.AVERAGE_TEMPERATURE).getValue(Short.class);
 	return average >= 0 && average <= 255;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

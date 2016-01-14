@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryEncoder.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryEncoder.RotaryEncoder;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryEncoder.Rotar
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CountCallbackThresholdIntent extends AnIntent {
+public class CountCallbackThresholdIntent extends AnIntent<RotaryEncoder> {
 
-    public CountCallbackThresholdIntent(AHandler deviceHandler, String intentTopic) {
+    public CountCallbackThresholdIntent(RotaryEncoder deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "countCallbackThreshold");
 	super.addDescription(RotaryEncoder.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
 	super.addDescription(RotaryEncoder.THRESHOLD_MIN, Short.class, "JSON", "" + Integer.MIN_VALUE, "...", "" + Integer.MAX_VALUE);
@@ -52,6 +51,11 @@ public class CountCallbackThresholdIntent extends AnIntent {
     private boolean isMaxInRange() {
 	int max = getContent(RotaryEncoder.THRESHOLD_MAX).getValue(Integer.class);
 	return (max <= Integer.MAX_VALUE && max >= Integer.MIN_VALUE);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

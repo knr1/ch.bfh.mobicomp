@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.segmentDisplay4x7.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.segmentDisplay4x7.SegmentDisplay4x7;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.segmentDisplay4x7.S
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CounterIntent extends AnIntent {
+public class CounterIntent extends AnIntent<SegmentDisplay4x7> {
 
-    public CounterIntent(AHandler deviceHandler, String intentTopic) {
+    public CounterIntent(SegmentDisplay4x7 deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "counter");
 	super.addDescription(SegmentDisplay4x7.ENABLED, Boolean.class, "JSON", "true", "false");
 	super.addDescription(SegmentDisplay4x7.LENGTH, Long.class, "JSON", "1", "...", "" + Long.MAX_VALUE);
@@ -54,5 +53,10 @@ public class CounterIntent extends AnIntent {
     private boolean isLengthInRange() {
 	long duration = getContent(SegmentDisplay4x7.LENGTH).getValue(Long.class);
 	return duration > 0;
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 }

@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.event.BeepEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.piezospeaker.event.CalibrateEvent;
@@ -62,24 +61,6 @@ public class PiezoSpeaker extends ADeviceHandler<BrickletPiezoSpeaker> implement
     protected void removeDeviceListeners() {
 	getDevice().removeBeepFinishedListener(this);
 	getDevice().removeMorseCodeFinishedListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof BeepIntent) {
-	    executeIntent((BeepIntent) intent);
-	}
-	if (intent instanceof MorseIntent) {
-	    executeIntent((MorseIntent) intent);
-	}
-	if (intent instanceof CalibrateIntent) {
-	    executeIntent((CalibrateIntent) intent);
-	}
     }
 
     public void executeIntent(BeepIntent intent) throws TimeoutException, NotConnectedException {

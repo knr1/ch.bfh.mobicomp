@@ -5,8 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.event.AnalogValueEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.event.AnalogValueReachedEvent;
@@ -15,13 +13,14 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.event.Humi
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.intent.AnalogCallbackPeriodIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.intent.AnalogCallbackThresholdIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.intent.DebouncePeriodIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.intent.PositionCallbackPeriodIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.intent.HumidityCallbackThresholdIntent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.intent.PositionCallbackPeriodIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.status.AnalogCallbackPeriodStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.status.AnalogCallbackThresholdStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.status.DebounceStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.status.HumidityCallbackPeriodStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.status.HumidityCallbackThresholdStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickletHumidity;
 import com.tinkerforge.NotConnectedException;
@@ -67,30 +66,6 @@ public class Humidity extends ADeviceHandler<BrickletHumidity> implements Brickl
 	getDevice().removeAnalogValueReachedListener(this);
 	getDevice().removeHumidityListener(this);
 	getDevice().removeHumidityReachedListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof DebouncePeriodIntent) {
-	    executeIntent((DebouncePeriodIntent) intent);
-	}
-	if (intent instanceof AnalogCallbackPeriodIntent) {
-	    executeIntent((AnalogCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof PositionCallbackPeriodIntent) {
-	    executeIntent((PositionCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof HumidityCallbackThresholdIntent) {
-	    executeIntent((HumidityCallbackThresholdIntent) intent);
-	}
-	if (intent instanceof AnalogCallbackThresholdIntent) {
-	    executeIntent((AnalogCallbackThresholdIntent) intent);
-	}
     }
 
     public void executeIntent(DebouncePeriodIntent intent) throws TimeoutException, NotConnectedException {

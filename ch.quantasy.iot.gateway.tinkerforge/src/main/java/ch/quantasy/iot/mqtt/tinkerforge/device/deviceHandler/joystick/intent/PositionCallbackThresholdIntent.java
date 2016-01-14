@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.joystick.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.joystick.Joystick;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.joystick.Joystick;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class PositionCallbackThresholdIntent extends AnIntent {
+public class PositionCallbackThresholdIntent extends AnIntent<Joystick> {
 
-    public PositionCallbackThresholdIntent(AHandler deviceHandler, String intentTopic) {
+    public PositionCallbackThresholdIntent(Joystick deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "positionCallbackThreshold");
 	super.addDescription(Joystick.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
 	super.addDescription(Joystick.THRESHOLD_MIN_X, Short.class, "JSON", "-100", "...", "100");
@@ -64,5 +63,10 @@ public class PositionCallbackThresholdIntent extends AnIntent {
     private boolean isMaxYInRange() {
 	int max = getContent(Joystick.THRESHOLD_MAX_Y).getValue(Integer.class);
 	return (max <= 100 && max >= -100);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 }

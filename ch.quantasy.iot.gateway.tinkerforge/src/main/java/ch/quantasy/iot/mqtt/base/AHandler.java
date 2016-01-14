@@ -225,13 +225,6 @@ public abstract class AHandler implements MqttCallback {
 
     public abstract String getApplicationName();
 
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent.
-     *
-     * @param intent
-     */
-    public abstract void executeIntent(AnIntent intent) throws Throwable;
-
     @Override
     public int hashCode() {
 	int hash = 7;

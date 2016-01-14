@@ -14,18 +14,18 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public abstract class AStatus extends AMessage<StatusDescription> {
+public abstract class AStatus<H extends AHandler> extends AMessage<H, StatusDescription> {
 
     private final MqttAsyncClient mqttClient;
 
-    public AStatus(AHandler deviceHandler, String statusTopic, String statusName, MqttAsyncClient mqttClient) {
+    public AStatus(H deviceHandler, String statusTopic, String statusName, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, statusName);
 
 	this.mqttClient = mqttClient;
     }
 
     public void update(AnIntent intent) {
-	for (Content content : this.getContentMap().values()) {
+	for (Content content : this.getValueMap().values()) {
 	    byte[] intentContent = intent.getContent(content.getProperty()).rawValue;
 	    if (intentContent != null) {
 		if (content.updateContent(intentContent)) {

@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.color.intent;
 
-import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.color.Color;
 
@@ -13,9 +12,9 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.color.Color;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class ColorCallbackThresholdIntent extends AnIntent {
+public class ColorCallbackThresholdIntent extends AnIntent<Color> {
 
-    public ColorCallbackThresholdIntent(AHandler deviceHandler, String intentTopic) {
+    public ColorCallbackThresholdIntent(Color deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "colorCallbackThreshold");
 	super.addDescription(Color.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
 	super.addDescription(Color.THRESHOLD_MIN_R, Integer.class, "JSON", "0", "...", "65535");
@@ -89,6 +88,11 @@ public class ColorCallbackThresholdIntent extends AnIntent {
     private boolean isMaxCInRange() {
 	int max = getContent(Color.THRESHOLD_MAX_C).getValue(Integer.class);
 	return (max <= 65535 && max >= 0);
+    }
+
+    @Override
+    public void execute() throws Throwable {
+	getDeviceHandler().executeIntent(this);
     }
 
 }

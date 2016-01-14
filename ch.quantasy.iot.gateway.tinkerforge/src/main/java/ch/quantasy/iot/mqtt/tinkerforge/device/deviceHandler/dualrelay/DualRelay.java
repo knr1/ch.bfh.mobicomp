@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.dualrelay;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.dualrelay.event.DualRelayEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.dualrelay.event.MonoflopEvent;
@@ -74,25 +73,6 @@ public class DualRelay extends ADeviceHandler<BrickletDualRelay> implements Bric
     @Override
     protected void removeDeviceListeners() {
 	getDevice().removeMonoflopDoneListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    @Override
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof MonoflopIntent) {
-	    executeIntent((MonoflopIntent) intent);
-	}
-	if (intent instanceof DualRelayIntent) {
-	    executeIntent((DualRelayIntent) intent);
-	}
-	if (intent instanceof RelayIntent) {
-	    executeIntent((RelayIntent) intent);
-	}
     }
 
     public void executeIntent(RelayIntent intent) throws Throwable {

@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.event.AnalogValueEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.event.AnalogValueReachedEvent;
@@ -67,30 +66,6 @@ public class LinearPoti extends ADeviceHandler<BrickletLinearPoti> implements Br
 	getDevice().removeAnalogValueReachedListener(this);
 	getDevice().removePositionListener(this);
 	getDevice().removePositionReachedListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof DebouncePeriodIntent) {
-	    executeIntent((DebouncePeriodIntent) intent);
-	}
-	if (intent instanceof AnalogCallbackPeriodIntent) {
-	    executeIntent((AnalogCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof PositionCallbackPeriodIntent) {
-	    executeIntent((PositionCallbackPeriodIntent) intent);
-	}
-	if (intent instanceof PositionCallbackThresholdIntent) {
-	    executeIntent((PositionCallbackThresholdIntent) intent);
-	}
-	if (intent instanceof AnalogCallbackThresholdIntent) {
-	    executeIntent((AnalogCallbackThresholdIntent) intent);
-	}
     }
 
     public void executeIntent(DebouncePeriodIntent intent) throws TimeoutException, NotConnectedException {

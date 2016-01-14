@@ -5,7 +5,6 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch;
 
-import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.event.DimSocketBEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.event.SwitchSocketAEvent;
@@ -76,31 +75,6 @@ public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implement
     @Override
     protected void removeDeviceListeners() {
 	getDevice().removeSwitchingDoneListener(this);
-    }
-
-    /**
-     * This method allows to describe the strategy of the DeviceHandler for any incoming intent. In this specific case
-     * it simply dispatches every intent to the concrete execution.
-     *
-     * @param intent
-     */
-    @Override
-    public void executeIntent(AnIntent intent) throws Throwable {
-	if (intent instanceof RepeatsIntent) {
-	    executeIntent((RepeatsIntent) intent);
-	}
-	if (intent instanceof SwitchSocketAIntent) {
-	    executeIntent((SwitchSocketAIntent) intent);
-	}
-	if (intent instanceof SwitchSocketBIntent) {
-	    executeIntent((SwitchSocketBIntent) intent);
-	}
-	if (intent instanceof DimSocketBIntent) {
-	    executeIntent((DimSocketBIntent) intent);
-	}
-	if (intent instanceof SwitchSocketCIntent) {
-	    executeIntent((SwitchSocketCIntent) intent);
-	}
     }
 
     public void executeIntent(RepeatsIntent intent) throws TimeoutException, NotConnectedException {
