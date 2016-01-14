@@ -74,6 +74,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -103,13 +104,29 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
     }
 
     @Override
-    public boolean equals(Object obj) {
-	return this == obj;
+    public int hashCode() {
+	int hash = 5;
+	hash = 79 * hash + Objects.hashCode(this.gateway);
+	hash = 79 * hash + Objects.hashCode(this.stackAddress);
+	return hash;
     }
 
     @Override
-    public int hashCode() {
-	return 0;
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final MQTTTinkerforgeStackHandler<?> other = (MQTTTinkerforgeStackHandler<?>) obj;
+	if (!Objects.equals(this.gateway, other.gateway)) {
+	    return false;
+	}
+	if (!Objects.equals(this.stackAddress, other.stackAddress)) {
+	    return false;
+	}
+	return true;
     }
 
     public synchronized String digestIdentityString(Device device) throws TimeoutException, NotConnectedException {

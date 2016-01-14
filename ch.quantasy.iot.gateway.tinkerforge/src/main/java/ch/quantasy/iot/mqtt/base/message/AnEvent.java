@@ -41,7 +41,7 @@ public abstract class AnEvent extends AMessage<EventDescription> {
     }
 
     public void update(AnIntent intent) {
-	for (Content triple : this.getValueMap().values()) {
+	for (Content triple : this.getContentMap().values()) {
 	    byte[] rawContent = null;
 	    String property = triple.getProperty();
 	    if (property != null) {

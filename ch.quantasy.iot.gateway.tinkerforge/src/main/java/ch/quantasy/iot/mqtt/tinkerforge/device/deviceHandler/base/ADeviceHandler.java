@@ -6,9 +6,9 @@
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base;
 
 import ch.quantasy.iot.mqtt.base.AHandler;
-import ch.quantasy.iot.mqtt.tinkerforge.gateway.MQTT2TF;
-import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.status.DeviceHandlerReadyStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
+import ch.quantasy.iot.mqtt.tinkerforge.gateway.MQTT2TF;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.Device;

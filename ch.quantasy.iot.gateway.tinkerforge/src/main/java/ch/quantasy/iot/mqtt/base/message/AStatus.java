@@ -25,7 +25,7 @@ public abstract class AStatus extends AMessage<StatusDescription> {
     }
 
     public void update(AnIntent intent) {
-	for (Content content : this.getValueMap().values()) {
+	for (Content content : this.getContentMap().values()) {
 	    byte[] intentContent = intent.getContent(content.getProperty()).rawValue;
 	    if (intentContent != null) {
 		if (content.updateContent(intentContent)) {

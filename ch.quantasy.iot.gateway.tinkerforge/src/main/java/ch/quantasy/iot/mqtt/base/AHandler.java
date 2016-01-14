@@ -15,6 +15,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -230,5 +231,31 @@ public abstract class AHandler implements MqttCallback {
      * @param intent
      */
     public abstract void executeIntent(AnIntent intent) throws Throwable;
+
+    @Override
+    public int hashCode() {
+	int hash = 7;
+	hash = 59 * hash + Objects.hashCode(this.identityString);
+	hash = 59 * hash + Objects.hashCode(this.mqttURI);
+	return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (obj == null) {
+	    return false;
+	}
+	if (getClass() != obj.getClass()) {
+	    return false;
+	}
+	final AHandler other = (AHandler) obj;
+	if (!Objects.equals(this.identityString, other.identityString)) {
+	    return false;
+	}
+	if (!Objects.equals(this.mqttURI, other.mqttURI)) {
+	    return false;
+	}
+	return true;
+    }
 
 }

@@ -118,7 +118,7 @@ public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implement
 		    //We have been interrupted (by the listener)
 		}
 	    }
-	    getDevice().switchSocketA(intent.houseCode, intent.receiverCode, intent.switchTo);
+	    getDevice().switchSocketA(intent.getContent(HOUSE_CODE).getValue(Short.class), intent.getContent(RECEIVER_CODE).getValue(Short.class), intent.getContent(SWITCH_TO).getValue(Short.class));
 	}
 	getEvent(SwitchSocketAEvent.class).updateIntent(intent);
     }

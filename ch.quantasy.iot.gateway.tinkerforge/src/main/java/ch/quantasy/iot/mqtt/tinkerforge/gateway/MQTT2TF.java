@@ -91,6 +91,9 @@ public class MQTT2TF extends AHandler {
     public static void main(String[] args) throws Throwable {
 	final TinkerforgeStackAddress identifier = new TinkerforgeStackAddress("localhost");
 	URI uri = URI.create("tcp://localhost:1883");
+	//URI uri = URI.create("tcp://147.87.112.222:1883");
+	//URI uri = URI.create("tcp://iot.eclipse.org:1883");
+
 	if (args.length > 0) {
 	    uri = URI.create(args[0]);
 	} else {

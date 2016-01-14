@@ -15,11 +15,6 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.Remote
  */
 public class SwitchSocketAIntent extends AnIntent {
 
-    public boolean enabled;
-    public short houseCode;
-    public short receiverCode;
-    public short switchTo;
-
     public SwitchSocketAIntent(AHandler deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "switchSocketA");
 	super.addDescription(RemoteSwitch.ENABLED, Boolean.class, "JSON", "true", "false");
@@ -31,7 +26,7 @@ public class SwitchSocketAIntent extends AnIntent {
 
     @Override
     public boolean isExecutable() {
-	return enabled && isHouseCodeInRange() && isReceiverCodeInRange() && isSwitchToInRange();
+	return isExecutable() && isHouseCodeInRange() && isReceiverCodeInRange() && isSwitchToInRange();
     }
 
     private boolean isHouseCodeInRange() {

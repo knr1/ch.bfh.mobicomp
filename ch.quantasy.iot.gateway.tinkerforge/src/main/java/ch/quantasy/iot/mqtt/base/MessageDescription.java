@@ -13,7 +13,7 @@ public abstract class MessageDescription {
 
     public final transient String applicationMessageTopic;
     public final transient String messageTopic;
-    public final String messagePropertyTopic;
+    public final transient String messagePropertyTopic;
     public final String type;
     public final transient Class typeOfClass;
     public final String representation;

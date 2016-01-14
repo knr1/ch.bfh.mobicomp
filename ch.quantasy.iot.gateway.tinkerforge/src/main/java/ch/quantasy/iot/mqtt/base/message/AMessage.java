@@ -9,7 +9,6 @@ import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.MessageDescription;
 import ch.quantasy.iot.mqtt.tinkerforge.gateway.MQTT2TF;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,8 +30,8 @@ public abstract class AMessage<E extends MessageDescription> {
     private final String name;
     List<E> descriptions = new ArrayList<>();
     private Map<String, Content> valueMap;
-    public final Type descriptionsType = new TypeToken<List<E>>() {
-    }.getType();
+    //public final Type descriptionsType = new TypeToken<List<E>>() {
+    //}.getType();
     private final AHandler deviceHandler;
 
     public AMessage(AHandler deviceHandler, String messageTopic, String messageName) {
@@ -66,14 +65,17 @@ public abstract class AMessage<E extends MessageDescription> {
     public abstract String getMessageType();
 
     public void publishDescriptions(MqttAsyncClient mqttClient) {
-	String json = gson.toJson(getDescriptions(), descriptionsType);
-	MqttMessage message = new MqttMessage(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-	message.setQos(1);
-	message.setRetained(true);
-	try {
-	    mqttClient.publish(AHandler.DEVICE_DESCRIPTION_TOPIC + "/" + deviceHandler.getApplicationName() + "/" + getMessageType() + "/" + name, message);
-	} catch (Exception ex) {
-	    Logger.getLogger(MQTT2TF.class.getName()).log(Level.SEVERE, null, ex);
+	for (E description : getDescriptions()) {
+	    String json = gson.toJson(description);
+	    MqttMessage message = new MqttMessage(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+	    message.setQos(1);
+	    message.setRetained(true);
+	    try {
+		mqttClient.publish(AHandler.DEVICE_DESCRIPTION_TOPIC + "/" + deviceHandler.getApplicationName() + "/" + getMessageType() + "/" + name + description.messagePropertyTopic, message).waitForCompletion(500);
+
+	    } catch (Exception ex) {
+		Logger.getLogger(MQTT2TF.class.getName()).log(Level.SEVERE, null, ex);
+	    }
 	}
 
     }
@@ -82,7 +84,7 @@ public abstract class AMessage<E extends MessageDescription> {
 	mqttMessage.setQos(1);
 	mqttMessage.setRetained(true);
 	try {
-	    mqttClient.publish(topic + "/" + name + "/" + statusPropertyName, mqttMessage).waitForCompletion(100);
+	    mqttClient.publish(topic + "/" + name + "/" + statusPropertyName, mqttMessage).waitForCompletion(500);
 	} catch (Exception ex) {
 	    Logger.getLogger(MQTT2TF.class.getName()).log(Level.SEVERE, null, ex);
 	}
@@ -104,8 +106,8 @@ public abstract class AMessage<E extends MessageDescription> {
 
     protected void addDescription(E messageDescription) {
 	descriptions.add(messageDescription);
-	Content triple = new Content(messageDescription);
-	valueMap.put(triple.getProperty(), triple);
+	Content content = new Content(messageDescription);
+	valueMap.put(content.getProperty(), content);
     }
 
     protected boolean update(MqttAsyncClient mqttClient, String property, Object value) {
@@ -116,7 +118,7 @@ public abstract class AMessage<E extends MessageDescription> {
 	return false;
     }
 
-    protected Map<String, Content> getValueMap() {
+    protected Map<String, Content> getContentMap() {
 	return valueMap;
     }
 
