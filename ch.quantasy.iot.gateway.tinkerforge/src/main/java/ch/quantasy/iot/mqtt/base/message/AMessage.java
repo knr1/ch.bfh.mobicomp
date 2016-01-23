@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
@@ -80,14 +81,15 @@ public abstract class AMessage<H extends AHandler, E extends MessageDescription>
 
     }
 
-    public void publish(String statusPropertyName, MqttMessage mqttMessage, MqttAsyncClient mqttClient) {
+    public IMqttDeliveryToken publish(String messagePropertyName, MqttMessage mqttMessage, MqttAsyncClient mqttClient) {
 	mqttMessage.setQos(1);
 	mqttMessage.setRetained(true);
 	try {
-	    mqttClient.publish(topic + "/" + name + "/" + statusPropertyName, mqttMessage).waitForCompletion(500);
+	    return mqttClient.publish(topic + "/" + name + "/" + messagePropertyName, mqttMessage);
 	} catch (Exception ex) {
 	    Logger.getLogger(MQTT2TF.class.getName()).log(Level.SEVERE, null, ex);
 	}
+	return null;
     }
 
     public MqttMessage toJSONMQTTMessage(Object object, Type type) {
@@ -112,8 +114,13 @@ public abstract class AMessage<H extends AHandler, E extends MessageDescription>
 
     protected boolean update(MqttAsyncClient mqttClient, String property, Object value) {
 	if (getContent(property).updateContent(value)) {
-	    publish(property, toJSONMQTTMessage(value), mqttClient);
-	    return true;
+	    try {
+		publish(property, toJSONMQTTMessage(value), mqttClient);
+		return true;
+	    } catch (Exception ex) {
+		System.out.println("During publish, the following exception occured:" + ex.getStackTrace());
+	    }
+
 	}
 	return false;
     }

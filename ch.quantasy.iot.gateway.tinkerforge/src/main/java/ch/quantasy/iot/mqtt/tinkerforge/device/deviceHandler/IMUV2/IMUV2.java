@@ -5,14 +5,14 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2;
 
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.event.AccelerationEvent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.event.AllDataEvent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.event.AngularVelocityEvent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.event.GravityVectorEvent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event.AccelerationEvent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event.AllDataEvent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event.AngularVelocityEvent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event.GravityVectorEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.event.LinearAccelerationEvent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.event.MagneticFieldEvent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.event.OrientationEvent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.event.QuaternionEvent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event.MagneticFieldEvent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event.OrientationEvent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event.QuaternionEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.intent.AccelerationPeriodIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.intent.AllDataPeriodIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.intent.AngularVelocityPeriodIntent;

@@ -8,7 +8,6 @@ package ch.quantasy.iot.mqtt.base.message;
 import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.EventDescription;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
  *
@@ -32,10 +31,6 @@ public abstract class AnEvent<H extends AHandler> extends AMessage<H, EventDescr
 	super.publishDescriptions(mqttClient);
     }
 
-    public void publish(String statusPropertyName, MqttMessage mqttMessage) {
-	super.publish(statusPropertyName, mqttMessage, mqttClient);
-    }
-
     protected void addDescription(String propertyName, Class type, String representation, String... range) {
 	super.addDescription(new EventDescription(AHandler.DEVICE_DESCRIPTION_TOPIC, getDeviceHandler().getApplicationName(), getName(), propertyName, type, representation, range));
     }
@@ -52,7 +47,7 @@ public abstract class AnEvent<H extends AHandler> extends AMessage<H, EventDescr
 	    }
 	    if (rawContent != null) {
 		if (triple.updateContent(rawContent)) {
-		    publish(triple.getProperty(), toJSONMQTTMessage(rawContent));
+		    publish(triple.getProperty(), toJSONMQTTMessage(rawContent), mqttClient);
 		}
 	    }
 	}

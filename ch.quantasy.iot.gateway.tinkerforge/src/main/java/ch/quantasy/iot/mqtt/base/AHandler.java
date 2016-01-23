@@ -151,7 +151,7 @@ public abstract class AHandler implements MqttCallback {
 	Map<Class, AnIntent> intentMap = new HashMap<>();
 	for (Class intentClass : intentSet) {
 	    try {
-		intentMap.put(intentClass, (AnIntent) intentClass.getConstructor(AHandler.class, String.class
+		intentMap.put(intentClass, (AnIntent) intentClass.getConstructor(this.getClass(), String.class
 		      ).newInstance(this, intentTopic));
 	    } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 		Logger.getLogger(AHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -167,7 +167,7 @@ public abstract class AHandler implements MqttCallback {
 	    try {
 		for (Map<Class, AnIntent> intentEntry : intentsMap.values()) {
 		    if (!intentEntry.containsKey(intentClass)) {
-			intentEntry.put(intentClass, (AnIntent) intentClass.getConstructor(AHandler.class, String.class
+			intentEntry.put(intentClass, (AnIntent) intentClass.getConstructor(this.getClass(), String.class
 				).newInstance(this, intentTopic));
 		    }
 		}
@@ -180,7 +180,7 @@ public abstract class AHandler implements MqttCallback {
 	if (mqttClient != null && mqttClient.isConnected()) {
 	    for (Class intentClass : intentSet) {
 		try {
-		    AnIntent intent = (AnIntent) intentClass.getConstructor(AHandler.class, String.class).newInstance(this, intentTopic);
+		    AnIntent intent = (AnIntent) intentClass.getConstructor(this.getClass(), String.class).newInstance(this, intentTopic);
 		    intent.publishDescriptions(mqttClient);
 		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 		    Logger.getLogger(AHandler.class.getName()).log(Level.SEVERE, null, ex);

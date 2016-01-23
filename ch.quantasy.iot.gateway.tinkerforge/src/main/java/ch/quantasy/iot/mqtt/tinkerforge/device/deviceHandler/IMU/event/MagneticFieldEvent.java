@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.event;
+package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event;
 
 import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnEvent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.IMUV2;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.IMU;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -18,6 +18,6 @@ public class MagneticFieldEvent extends AnEvent {
 
     public MagneticFieldEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "acceleration", mqttClient);
-	super.addDescription(IMUV2.VALUE, Short[].class, "JSON", "[" + Short.MIN_VALUE + "," + Short.MIN_VALUE + "," + Short.MIN_VALUE + "]", "...", "[" + Short.MAX_VALUE + "," + Short.MAX_VALUE + "," + Short.MAX_VALUE + "]");
+	super.addDescription(IMU.VALUE, Short[].class, "JSON", "[" + Short.MIN_VALUE + "," + Short.MIN_VALUE + "," + Short.MIN_VALUE + "]", "...", "[" + Short.MAX_VALUE + "," + Short.MAX_VALUE + "," + Short.MAX_VALUE + "]");
     }
 }

@@ -13,6 +13,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
+ * @param <H>
  */
 public abstract class AStatus<H extends AHandler> extends AMessage<H, StatusDescription> {
 

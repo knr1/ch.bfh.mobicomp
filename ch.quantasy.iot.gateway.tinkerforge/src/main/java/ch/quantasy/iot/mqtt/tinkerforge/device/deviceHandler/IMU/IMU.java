@@ -9,7 +9,6 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event.Accelerat
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event.AllDataEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event.AngularVelocityEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event.GravityVectorEvent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event.LinearAccelerationEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event.MagneticFieldEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event.OrientationEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event.QuaternionEvent;
@@ -25,15 +24,13 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.intent.Quaterni
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.status.AccelerationPeriodStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.status.AllDataPeriodStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.status.AngularVelocityPeriodStatus;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.status.GravityPeriodStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.status.ConvergenceSpeedStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.status.LEDStatus;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.status.LinearAccelerationPeriodStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.status.MagneticFieldPeriodStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.status.OrientationCalculationStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.status.OrientationPeriodStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.status.QuaternionPeriodStatus;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.status.TemperaturePeriodStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.color.event.TemperatureEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
 import com.tinkerforge.BrickIMU;
@@ -62,8 +59,8 @@ public class IMU extends ADeviceHandler<BrickIMU> implements BrickIMU.Accelerati
 
     public IMU(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(stackApplication, mqttURI, stackAddress, identityString);
-	super.addStatusClass(AccelerationPeriodStatus.class, AllDataPeriodStatus.class, AngularVelocityPeriodStatus.class, GravityPeriodStatus.class, LinearAccelerationPeriodStatus.class, MagneticFieldPeriodStatus.class, QuaternionPeriodStatus.class, TemperaturePeriodStatus.class, LEDStatus.class);
-	super.addEventClass(AccelerationEvent.class, AllDataEvent.class, AngularVelocityEvent.class, GravityVectorEvent.class, LinearAccelerationEvent.class, MagneticFieldEvent.class, OrientationEvent.class, QuaternionEvent.class, TemperatureEvent.class);
+	super.addStatusClass(AccelerationPeriodStatus.class, AllDataPeriodStatus.class, AngularVelocityPeriodStatus.class, MagneticFieldPeriodStatus.class, QuaternionPeriodStatus.class, LEDStatus.class);
+	super.addEventClass(AccelerationEvent.class, AllDataEvent.class, AngularVelocityEvent.class, GravityVectorEvent.class, MagneticFieldEvent.class, OrientationEvent.class, QuaternionEvent.class);
 	super.addIntentClass(AccelerationPeriodIntent.class, AllDataPeriodIntent.class, AngularVelocityPeriodIntent.class, MagneticFieldPeriodIntent.class, OrientationPeriodIntent.class, QuaternionPeriodIntent.class, LEDIntent.class);
     }
 
