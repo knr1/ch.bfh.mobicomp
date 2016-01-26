@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /**
@@ -34,6 +35,7 @@ public abstract class AMessage<H extends AHandler, E extends MessageDescription>
     //public final Type descriptionsType = new TypeToken<List<E>>() {
     //}.getType();
     private final H deviceHandler;
+    private IMqttDeliveryToken mqttDeliveryToken;
 
     public AMessage(H deviceHandler, String messageTopic, String messageName) {
 	valueMap = new HashMap<>();
@@ -112,15 +114,34 @@ public abstract class AMessage<H extends AHandler, E extends MessageDescription>
 	valueMap.put(content.getProperty(), content);
     }
 
+    protected void update(MqttAsyncClient mqttClient, AnIntent intent) throws MqttException {
+	for (Content content : this.getValueMap().values()) {
+	    byte[] rawContent = null;
+	    String property = content.getProperty();
+	    if (property != null) {
+		Content intentContent = intent.getContent(property);
+		if (intentContent != null) {
+		    rawContent = intentContent.rawValue;
+		}
+	    }
+	    if (rawContent != null) {
+		while (!update(mqttClient, property, rawContent)) {
+		    mqttDeliveryToken.waitForCompletion(100);
+		};
+	    }
+	}
+    }
+
     protected boolean update(MqttAsyncClient mqttClient, String property, Object value) {
 	if (getContent(property).updateContent(value)) {
-	    try {
-		publish(property, toJSONMQTTMessage(value), mqttClient);
-		return true;
-	    } catch (Exception ex) {
-		System.out.println("During publish, the following exception occured:" + ex.getStackTrace());
+	    if (mqttDeliveryToken == null || mqttDeliveryToken.isComplete()) {
+		try {
+		    mqttDeliveryToken = publish(property, toJSONMQTTMessage(value), mqttClient);
+		    return true;
+		} catch (Exception ex) {
+		    System.out.println("During publish, the following exception occured:" + ex.getStackTrace());
+		}
 	    }
-
 	}
 	return false;
     }

@@ -13,10 +13,10 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.Barometer
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class AirPressureCallbackThresholdIntent extends AnIntent<CO2> {
+public class CO2ConcentrationCallbackThresholdIntent extends AnIntent<CO2> {
 
-    public AirPressureCallbackThresholdIntent(CO2 deviceHandler, String intentTopic) {
-	super(deviceHandler, intentTopic, "airPressureCallbackThreshold");
+    public CO2ConcentrationCallbackThresholdIntent(CO2 deviceHandler, String intentTopic) {
+	super(deviceHandler, intentTopic, "CO2ConcentrationCallbackThreshold");
 	super.addDescription(Barometer.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
 	super.addDescription(Barometer.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(Barometer.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "4095");

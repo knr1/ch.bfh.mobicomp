@@ -5,13 +5,13 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2;
 
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.event.AirPressureReachedEvent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.event.AirPressureValueEvent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.intent.AirPressureCallbackPeriodIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.intent.AirPressureCallbackThresholdIntent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.event.CO2ConcentrationReachedEvent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.event.CO2ConcentrationValueEvent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.intent.CO2ConcentrationCallbackPeriodIntent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.intent.CO2ConcentrationCallbackThresholdIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.intent.DebouncePeriodIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.status.CO2ConcentrationCallbackPeriodStatus;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.status.AirPressureCallbackThresholdStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.status.CO2ConcentrationCallbackThresholdStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.status.DebounceStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
@@ -31,7 +31,6 @@ public class CO2 extends ADeviceHandler<BrickletCO2> implements BrickletCO2.CO2C
     public static final String THRESHOLD_OPTION = "option";
     public static final String THRESHOLD_MIN = "min";
     public static final String THRESHOLD_MAX = "max";
-    public static final String ENABLED = "enabled";
 
     public static final String VALUE = "value";
 
@@ -41,9 +40,9 @@ public class CO2 extends ADeviceHandler<BrickletCO2> implements BrickletCO2.CO2C
 
     public CO2(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(stackApplication, mqttURI, stackAddress, identityString);
-	super.addStatusClass(CO2ConcentrationCallbackPeriodStatus.class, AirPressureCallbackThresholdStatus.class, DebounceStatus.class);
-	super.addEventClass(AirPressureValueEvent.class, AirPressureReachedEvent.class);
-	super.addIntentClass(AirPressureCallbackPeriodIntent.class, AirPressureCallbackThresholdIntent.class, DebouncePeriodIntent.class);
+	super.addStatusClass(CO2ConcentrationCallbackPeriodStatus.class, CO2ConcentrationCallbackThresholdStatus.class, DebounceStatus.class);
+	super.addEventClass(CO2ConcentrationValueEvent.class, CO2ConcentrationReachedEvent.class);
+	super.addIntentClass(CO2ConcentrationCallbackPeriodIntent.class, CO2ConcentrationCallbackThresholdIntent.class, DebouncePeriodIntent.class);
     }
 
     @Override
@@ -64,28 +63,28 @@ public class CO2 extends ADeviceHandler<BrickletCO2> implements BrickletCO2.CO2C
 	getStatus(DebounceStatus.class).update(CO2.PERIOD, getDevice().getDebouncePeriod());
     }
 
-    public void executeIntent(AirPressureCallbackPeriodIntent intent) throws TimeoutException, NotConnectedException {
+    public void executeIntent(CO2ConcentrationCallbackPeriodIntent intent) throws TimeoutException, NotConnectedException {
 	long period = intent.getValue(CO2.PERIOD, Long.class);
 	getDevice().setCO2ConcentrationCallbackPeriod(period);
 	getStatus(CO2ConcentrationCallbackPeriodStatus.class).update(PERIOD, getDevice().getCO2ConcentrationCallbackPeriod());
     }
 
-    public void executeIntent(AirPressureCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
+    public void executeIntent(CO2ConcentrationCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(CO2.THRESHOLD_OPTION, Character.class);
 	int min = intent.getValue(CO2.THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(CO2.THRESHOLD_MAX, Integer.class);
 	getDevice().setCO2ConcentrationCallbackThreshold(option, min, max);
-	getStatus(AirPressureCallbackThresholdStatus.class).update(intent);
+	getStatus(CO2ConcentrationCallbackThresholdStatus.class).update(intent);
     }
 
     @Override
     public void co2Concentration(int i) {
-	getEvent(AirPressureValueEvent.class).update(VALUE, i);
+	getEvent(CO2ConcentrationValueEvent.class).update(VALUE, i);
     }
 
     @Override
     public void co2ConcentrationReached(int i) {
-	getEvent(AirPressureReachedEvent.class).update(VALUE, i);
+	getEvent(CO2ConcentrationReachedEvent.class).update(VALUE, i);
     }
 
 }

@@ -7,8 +7,10 @@ package ch.quantasy.iot.mqtt.base.message;
 
 import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.StatusDescription;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
  *
@@ -26,22 +28,15 @@ public abstract class AStatus<H extends AHandler> extends AMessage<H, StatusDesc
     }
 
     public void update(AnIntent intent) {
-	for (Content content : this.getValueMap().values()) {
-	    byte[] intentContent = intent.getContent(content.getProperty()).rawValue;
-	    if (intentContent != null) {
-		if (content.updateContent(intentContent)) {
-		    publish(content.getProperty(), toJSONMQTTMessage(intentContent));
-		}
-	    }
+	try {
+	    super.update(mqttClient, intent);
+	} catch (MqttException ex) {
+	    Logger.getLogger(AStatus.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
 
     public boolean update(String property, Object value) {
 	return super.update(mqttClient, property, value);
-    }
-
-    public void publish(String statusPropertyName, MqttMessage mqttMessage) {
-	super.publish(statusPropertyName, mqttMessage, mqttClient);
     }
 
     public void publishDescriptions() {

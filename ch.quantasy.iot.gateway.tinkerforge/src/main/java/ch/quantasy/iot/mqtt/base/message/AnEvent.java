@@ -7,7 +7,10 @@ package ch.quantasy.iot.mqtt.base.message;
 
 import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.EventDescription;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
  *
@@ -36,25 +39,17 @@ public abstract class AnEvent<H extends AHandler> extends AMessage<H, EventDescr
     }
 
     public void update(AnIntent intent) {
-	for (Content triple : this.getValueMap().values()) {
-	    byte[] rawContent = null;
-	    String property = triple.getProperty();
-	    if (property != null) {
-		Content content = intent.getContent(property);
-		if (content != null) {
-		    rawContent = content.rawValue;
-		}
-	    }
-	    if (rawContent != null) {
-		if (triple.updateContent(rawContent)) {
-		    publish(triple.getProperty(), toJSONMQTTMessage(rawContent), mqttClient);
-		}
-	    }
+	try {
+	    super.update(mqttClient, intent);
+	} catch (MqttException ex) {
+	    Logger.getLogger(AnEvent.class.getName()).log(Level.SEVERE, null, ex);
 	}
     }
 
     public boolean update(String property, Object value) {
-	return super.update(mqttClient, property, value);
+	boolean success = super.update(mqttClient, property, value);
+	System.out.println("success: " + success);
+	return success;
     }
 
 }

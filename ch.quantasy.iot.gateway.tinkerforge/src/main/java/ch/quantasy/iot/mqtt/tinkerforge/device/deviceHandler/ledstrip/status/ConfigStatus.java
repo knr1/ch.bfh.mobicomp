@@ -24,9 +24,8 @@ public class ConfigStatus extends AStatus {
 	super.addDescription(LedStrip.CONFIG_NUMBER_OF_LEDS, Integer.class, "1", "...", "319");
     }
 
-    public void updateChipType(int chipType) {
-	if (super.getContent(LedStrip.CONFIG_CHIP_TYPE).updateContent(chipType)) {
-	    publish(LedStrip.CONFIG_CHIP_TYPE, toJSONMQTTMessage(chipType));
-	}
-    }
+    //TODO: Is that really needed?
+    // public void updateChipType(int chipType) {
+    //super.update(LedStrip.CONFIG_CHIP_TYPE, chipType);
+    //}
 }

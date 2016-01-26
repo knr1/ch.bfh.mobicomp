@@ -47,7 +47,8 @@ public abstract class ADeviceHandler<D extends Device> extends AHandler {
 	}
 	this.device = device;
 	addDeviceListeners();
-	getStatus(DeviceHandlerReadyStatus.class).updateEnabled(true);
+	getStatus(DeviceHandlerReadyStatus.class).update(ENABLED, true);
+
     }
 
     public void disableDevice(Device device) {
@@ -56,7 +57,7 @@ public abstract class ADeviceHandler<D extends Device> extends AHandler {
 	}
 	removeDeviceListeners();
 	this.device = null;
-	getStatus(DeviceHandlerReadyStatus.class).updateEnabled(false);
+	getStatus(DeviceHandlerReadyStatus.class).update(ENABLED, false);
 
     }
 

@@ -14,10 +14,10 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.Humidity;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class AirPressureCallbackPeriodIntent extends AnIntent<CO2> {
+public class CO2ConcentrationCallbackPeriodIntent extends AnIntent<CO2> {
 
-    public AirPressureCallbackPeriodIntent(CO2 deviceHandler, String intentTopic) {
-	super(deviceHandler, intentTopic, "airPressureCallbackPeriod");
+    public CO2ConcentrationCallbackPeriodIntent(CO2 deviceHandler, String intentTopic) {
+	super(deviceHandler, intentTopic, "CO2ConcentrationCallbackPeriod");
 	super.addDescription(Barometer.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
 
