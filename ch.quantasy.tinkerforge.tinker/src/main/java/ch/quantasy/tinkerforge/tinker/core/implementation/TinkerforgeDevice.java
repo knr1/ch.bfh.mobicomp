@@ -2,6 +2,7 @@ package ch.quantasy.tinkerforge.tinker.core.implementation;
 
 import com.tinkerforge.BrickDC;
 import com.tinkerforge.BrickIMU;
+import com.tinkerforge.BrickIMUV2;
 import com.tinkerforge.BrickMaster;
 import com.tinkerforge.BrickServo;
 import com.tinkerforge.BrickStepper;
@@ -11,6 +12,7 @@ import com.tinkerforge.BrickletAmbientLightV2;
 import com.tinkerforge.BrickletAnalogIn;
 import com.tinkerforge.BrickletAnalogOut;
 import com.tinkerforge.BrickletBarometer;
+import com.tinkerforge.BrickletCO2;
 import com.tinkerforge.BrickletColor;
 import com.tinkerforge.BrickletCurrent12;
 import com.tinkerforge.BrickletCurrent25;
@@ -67,9 +69,9 @@ import com.tinkerforge.Device.Identity;
  */
 public enum TinkerforgeDevice {
 
-    DC(BrickDC.class), IMU(BrickIMU.class), Master(BrickMaster.class), Servo(BrickServo.class), Stepper(
+    DC(BrickDC.class), IMU(BrickIMU.class), IMUV2(BrickIMUV2.class), Master(BrickMaster.class), Servo(BrickServo.class), Stepper(
 	    BrickStepper.class), Accelerometer(BrickletAccelerometer.class), AmbientLight(BrickletAmbientLight.class), AmbientLightV2(BrickletAmbientLightV2.class), AnalogIn(BrickletAnalogIn.class), AnalogOut(
-		    BrickletAnalogOut.class), Barometer(BrickletBarometer.class), Color(
+		    BrickletAnalogOut.class), Barometer(BrickletBarometer.class), CO2(BrickletCO2.class), Color(
 		    BrickletColor.class), Current12(BrickletCurrent12.class), Current25(
 		    BrickletCurrent25.class), DistanceIR(BrickletDistanceIR.class), DistanceUS(BrickletDistanceUS.class), DualButton(
 		    BrickletDualButton.class), DualRelay(BrickletDualRelay.class), DustDetector(BrickletDustDetector.class), GPS(BrickletGPS.class), HallEffect(
