@@ -5,10 +5,9 @@
  */
 package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.status;
 
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.status.*;
 import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AStatus;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.Barometer;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.CO2;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -19,7 +18,7 @@ public class DebounceStatus extends AStatus {
 
     public DebounceStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "debouncePeriod", mqttClient);
-	super.addDescription(Barometer.PERIOD, Long.class, "JSON", "0", "..", "" + Long.MAX_VALUE);
+	super.addDescription(CO2.PERIOD, Long.class, "JSON", "0", "..", "" + Long.MAX_VALUE);
     }
 
 }

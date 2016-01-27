@@ -7,7 +7,6 @@ package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.intent;
 
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.CO2;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.Barometer;
 
 /**
  *
@@ -17,7 +16,7 @@ public class DebouncePeriodIntent extends AnIntent<CO2> {
 
     public DebouncePeriodIntent(CO2 deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "debouncePeriod");
-	super.addDescription(Barometer.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
+	super.addDescription(CO2.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
 
     @Override
@@ -26,7 +25,7 @@ public class DebouncePeriodIntent extends AnIntent<CO2> {
     }
 
     private boolean isPeriodInRange() {
-	long period = getContent(Barometer.PERIOD).getValue(Long.class);
+	long period = getContent(CO2.PERIOD).getValue(Long.class);
 	return period >= 0;
     }
 
