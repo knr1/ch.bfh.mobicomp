@@ -27,6 +27,7 @@ public class Button {
 
     public static final String CONNECTION = "tcp://iot.eclipse.org:1883";
     //public static final String CONNECTION = "tcp://localhost:1883";
+    //public static final String CONNECTION = "tcp://147.87.112.222:1883";
 
     public static final String UID = "Button";
 
@@ -74,26 +75,26 @@ public class Button {
 	@Override
 	public void messageArrived(String string, MqttMessage mm) throws Exception {
 	    System.out.printf("Hey, some message arrived: Topic: %s, message: %s \n", string, mm.toString());
-	    if (string.endsWith("dzczh7/event/buttonPressed/0")) {
+	    if (string.endsWith("dzbt1t/event/buttonPressed/0")) {
 		if (Arrays.equals(mm.getPayload(), "true".getBytes())) {
-		    client.publish("iot/tf/localhost/4223/LCD20x4/dzczh7/intent/<" + UID + ">/write/enabled", ("false").getBytes(), 1, true);
-		    client.publish("iot/tf/localhost/4223/LCD20x4/dzczh7/intent/<" + UID + ">/write/line", ("3").getBytes(), 1, true);
-		    client.publish("iot/tf/localhost/4223/LCD20x4/dzczh7/intent/<" + UID + ">/write/from", ("0").getBytes(), 1, true);
-		    client.publish("iot/tf/localhost/4223/LCD20x4/dzczh7/intent/<" + UID + ">/write/text", ("----------" + (trigger++) + "----------").getBytes(), 1, true);
-		    client.publish("iot/tf/localhost/4223/LCD20x4/dzczh7/intent/<" + UID + ">/write/enabled", ("true").getBytes(), 1, true);
+		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/enabled", ("false").getBytes(), 1, true);
+		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/line", ("3").getBytes(), 1, true);
+		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/from", ("0").getBytes(), 1, true);
+		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/text", ("----------" + (trigger++) + "----------").getBytes(), 1, true);
+		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/enabled", ("true").getBytes(), 1, true);
 		}
 	    }
 
-	    if (string.endsWith("dzczh7/event/buttonPressed/3")) {
-		client.publish("iot/tf/localhost/4223/LCD20x4/dzczh7/intent/<" + UID + ">/backlight/enabled", mm.getPayload(), 1, true);
+	    if (string.endsWith("dzbt1t/event/buttonPressed/3")) {
+		client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/backlight/enabled", mm.getPayload(), 1, true);
 
 	    }
-	    if (string.endsWith("dzczh7/event/buttonPressed/2")) {
-		client.publish("iot/tf/localhost/4223/LCD20x4/dzczh7/intent/<" + UID + ">/backlight/enabled", ("" + true).getBytes(), 1, true);
+	    if (string.endsWith("dzbt1t/event/buttonPressed/2")) {
+		client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/backlight/enabled", ("" + true).getBytes(), 1, true);
 
 	    }
-	    if (string.endsWith("dzczh7/event/buttonPressed/1")) {
-		client.publish("iot/tf/localhost/4223/LCD20x4/dzczh7/intent/<" + UID + ">/backlight/enabled", ("" + false).getBytes(), 1, true);
+	    if (string.endsWith("dzbt1t/event/buttonPressed/1")) {
+		client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/backlight/enabled", ("" + false).getBytes(), 1, true);
 
 	    }
 
