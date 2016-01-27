@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.event;
+package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.event;
 
 import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnEvent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.IMU;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.IMUV2;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -18,6 +18,6 @@ public class QuaternionEvent extends AnEvent {
 
     public QuaternionEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "quaternion", mqttClient);
-	super.addDescription(IMU.VALUE, Float[].class, "JSON", "[" + Float.MIN_VALUE + "," + Float.MIN_VALUE + "," + Float.MIN_VALUE + "," + Float.MIN_VALUE + "]", "...", "[" + Float.MAX_VALUE + "," + Float.MAX_VALUE + "," + Float.MAX_VALUE + "," + Float.MAX_VALUE + "]");
+	super.addDescription(IMUV2.VALUE, Short[].class, "JSON", "[" + Short.MIN_VALUE + "," + Short.MIN_VALUE + "," + Short.MIN_VALUE + "," + Short.MIN_VALUE + "]", "...", "[" + Short.MAX_VALUE + "," + Short.MAX_VALUE + "," + Short.MAX_VALUE + "," + Short.MAX_VALUE + "]");
     }
 }

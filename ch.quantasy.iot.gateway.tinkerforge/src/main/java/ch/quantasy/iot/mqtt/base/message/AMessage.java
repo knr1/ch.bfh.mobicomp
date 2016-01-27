@@ -125,16 +125,22 @@ public abstract class AMessage<H extends AHandler, E extends MessageDescription>
 		}
 	    }
 	    if (rawContent != null) {
-		while (!update(mqttClient, property, rawContent)) {
-		    mqttDeliveryToken.waitForCompletion(100);
-		};
+		synchronized (this) {
+		    while (!update(mqttClient, property, rawContent)) {
+			mqttDeliveryToken.waitForCompletion(100);
+		    };
+		}
 	    }
 	}
     }
 
     protected boolean update(MqttAsyncClient mqttClient, String property, Object value) {
 	if (getContent(property).updateContent(value)) {
-	    if (mqttDeliveryToken == null || mqttDeliveryToken.isComplete()) {
+	    IMqttDeliveryToken token = null;
+	    synchronized (this) {
+		token = mqttDeliveryToken;
+	    }
+	    if (token == null || token.isComplete()) {
 		try {
 		    mqttDeliveryToken = publish(property, toJSONMQTTMessage(value), mqttClient);
 		    return true;

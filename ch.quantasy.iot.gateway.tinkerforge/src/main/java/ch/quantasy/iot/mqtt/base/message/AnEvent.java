@@ -48,7 +48,6 @@ public abstract class AnEvent<H extends AHandler> extends AMessage<H, EventDescr
 
     public boolean update(String property, Object value) {
 	boolean success = super.update(mqttClient, property, value);
-	System.out.println("success: " + success);
 	return success;
     }
 
