@@ -14,8 +14,8 @@ import java.util.Objects;
 public class TinkerforgeStackAddress {
 
     public static final int DEFAULT_PORT = 4223;
-    public final String hostName;
-    public final int port;
+    public String hostName;
+    public int port;
 
     public TinkerforgeStackAddress(String hostName, int port) {
 	if ((hostName == null) || hostName.equals("")) {
@@ -30,6 +30,10 @@ public class TinkerforgeStackAddress {
 
     public TinkerforgeStackAddress(String host) {
 	this(host, DEFAULT_PORT);
+    }
+
+    public TinkerforgeStackAddress() {
+
     }
 
     @Override
