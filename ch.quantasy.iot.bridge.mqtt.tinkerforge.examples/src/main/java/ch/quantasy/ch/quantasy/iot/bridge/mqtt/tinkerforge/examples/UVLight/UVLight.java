@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.CO2;
+package ch.quantasy.ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.UVLight;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -22,17 +22,17 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CO2 {
+public class UVLight {
 
     //public static final String CONNECTION = "tcp://iot.eclipse.org:1883";
     public static final String CONNECTION = "tcp://localhost:1883";
     //public static final String CONNECTION = "tcp://147.87.112.222:1883";
 
-    public static final String UID = "CO2-Example";
+    public static final String UID = "UVLight-Example";
 
     private MqttAsyncClient client;
 
-    public CO2() throws MqttException, InterruptedException {
+    public UVLight() throws MqttException, InterruptedException {
 	client = new MqttAsyncClient(CONNECTION, UID, new MemoryPersistence());
 	client.setCallback(new MQTTCallbackHandler());
     }
@@ -46,14 +46,14 @@ public class CO2 {
 	IMqttToken token = client.connect(options, null, new MQTTActionHandler());
 	token.waitForCompletion();
 	try {
-	    client.subscribe("iot/tf/description/CO2/#", 0);
-	    client.subscribe("iot/tf/localhost/4223/CO2/#", 0);
+	    client.subscribe("iot/tf/description/UVLight/#", 0);
+	    client.subscribe("iot/tf/localhost/4223/UVLight/#", 0);
 	    client.subscribe("iot/tf/#", 1);
 	    client.publish("iot/tf/MQTT2TF/0/intent/<" + UID + ">/stackHandler/stackAddress", "{\"hostName\":\"localhost\",\"port\":4223}".getBytes(), 1, true).waitForCompletion();
 
-	    client.publish("iot/tf/localhost/4223/CO2/e0542c/intent/<" + UID + ">/CO2ConcentrationCallbackPeriod/period", "1".getBytes(), 1, false);
+	    client.publish("iot/tf/localhost/4223/UVLight/eu463p/intent/<" + UID + ">/UVLightCallbackPeriod/period", "1".getBytes(), 1, false);
 	} catch (Exception ex) {
-	    Logger.getLogger(CO2.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(UVLight.class.getName()).log(Level.SEVERE, null, ex);
 	}
 
     }
@@ -98,7 +98,7 @@ public class CO2 {
     }
 
     public static void main(String[] args) throws MqttException, InterruptedException, IOException {
-	CO2 button = new CO2();
+	UVLight button = new UVLight();
 	button.connect();
 
 	System.in.read();
