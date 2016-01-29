@@ -3,20 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.intent;
+package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.dustDetector.intent;
 
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.CO2;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.Barometer;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.dustDetector.DustDetector;
 
 /**
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CO2ConcentrationCallbackPeriodIntent extends AnIntent<CO2> {
+public class DustDensityCallbackPeriodIntent extends AnIntent<DustDetector> {
 
-    public CO2ConcentrationCallbackPeriodIntent(CO2 deviceHandler, String intentTopic) {
-	super(deviceHandler, intentTopic, "CO2ConcentrationCallbackPeriod");
+    public DustDensityCallbackPeriodIntent(DustDetector deviceHandler, String intentTopic) {
+	super(deviceHandler, intentTopic, "dustDensityCallbackPeriod");
 	super.addDescription(Barometer.PERIOD, Long.class, "JSON", "0", "...", "" + Long.MAX_VALUE);
     }
 
@@ -26,7 +26,7 @@ public class CO2ConcentrationCallbackPeriodIntent extends AnIntent<CO2> {
     }
 
     private boolean isPeriodInRange() {
-	long period = getContent(CO2.PERIOD).getValue(Long.class);
+	long period = getContent(DustDetector.PERIOD).getValue(Long.class);
 	return period >= 0;
     }
 
