@@ -160,7 +160,7 @@ public abstract class AHandler implements MqttCallback {
 	return intentMap;
     }
 
-    public void addIntentClass(Class... classes) {
+    public synchronized void addIntentClass(Class... classes) {
 	for (Class intentClass : classes) {
 	    intentSet.add(intentClass);
 

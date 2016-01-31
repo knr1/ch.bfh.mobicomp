@@ -7,6 +7,7 @@ package ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler;
 
 import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.CO2;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.DC.DC;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.IMU;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.IMUV2;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.UVLight.UVLight;
@@ -43,6 +44,7 @@ import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
+import com.tinkerforge.BrickDC;
 import com.tinkerforge.BrickIMU;
 import com.tinkerforge.BrickIMUV2;
 import com.tinkerforge.BrickletAccelerometer;
@@ -385,6 +387,16 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
 		}
 		deviceHandler.enableDevice((BrickletCO2) device);
+	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.DC) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new DC(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickDC) device);
 	    }
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.DistanceUS) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
