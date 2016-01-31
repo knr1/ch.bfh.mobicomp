@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.IMU;
+package ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.DC;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -23,17 +22,17 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class IMU {
+public class DC {
 
     //public static final String CONNECTION = "tcp://iot.eclipse.org:1883";
     public static final String CONNECTION = "tcp://localhost:1883";
     //public static final String CONNECTION = "tcp://147.87.112.222:1883";
 
-    public static final String UID = "IMU-Example";
+    public static final String UID = "DC-Example";
 
     private MqttAsyncClient client;
 
-    public IMU() throws MqttException, InterruptedException {
+    public DC() throws MqttException, InterruptedException {
 	client = new MqttAsyncClient(CONNECTION, UID, new MemoryPersistence());
 	client.setCallback(new MQTTCallbackHandler());
     }
@@ -47,14 +46,19 @@ public class IMU {
 	IMqttToken token = client.connect(options, null, new MQTTActionHandler());
 	token.waitForCompletion();
 	try {
-	    client.subscribe("iot/tf/description/IMU/#", 1);
-	    client.subscribe("iot/tf/localhost/4223/IMU/#", 1);
+	    client.subscribe("iot/tf/description/DC/#", 1);
+	    client.subscribe("iot/tf/localhost/4223/DC/#", 1);
 	    client.subscribe("iot/tf/#", 1);
 	    client.publish("iot/tf/MQTT2TF/0/intent/<" + UID + ">/stackHandler/stackAddress", "{\"hostName\":\"localhost\",\"port\":4223}".getBytes(), 1, true).waitForCompletion();
 
-	    client.publish("iot/tf/localhost/4223/IMU/6lyl0m/intent/<" + UID + ">/allData/period", "0".getBytes(), 1, false);
+	    client.publish("iot/tf/localhost/4223/DC/e1cw8v/intent/<" + UID + ">/driveMode/value", "0".getBytes(), 1, false);
+	    client.publish("iot/tf/localhost/4223/DC/e1cw8v/intent/<" + UID + ">/enabled/value", "true".getBytes(), 1, false);
+	    client.publish("iot/tf/localhost/4223/DC/e1cw8v/intent/<" + UID + ">/currentVelocityPeriod/period", "1".getBytes(), 1, false);
+	    client.publish("iot/tf/localhost/4223/DC/e1cw8v/intent/<" + UID + ">/acceleration/value", "2000".getBytes(), 1, false);
+	    client.publish("iot/tf/localhost/4223/DC/e1cw8v/intent/<" + UID + ">/velocity/value", "7000".getBytes(), 1, false);
+
 	} catch (Exception ex) {
-	    Logger.getLogger(IMU.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(DC.class.getName()).log(Level.SEVERE, null, ex);
 	}
 
     }
@@ -75,15 +79,6 @@ public class IMU {
 	@Override
 	public void messageArrived(String string, MqttMessage mm) throws Exception {
 	    System.out.printf("Hey, some message arrived: Topic: %s, message: %s \n", string, mm.toString());
-	    if (string.endsWith("dzbt1t/event/buttonPressed/0")) {
-		if (Arrays.equals(mm.getPayload(), "true".getBytes())) {
-//		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/enabled", ("false").getBytes(), 1, true);
-//		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/line", ("3").getBytes(), 1, true);
-//		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/from", ("0").getBytes(), 1, true);
-//		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/text", ("----------" + (trigger++) + "----------").getBytes(), 1, true);
-//		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/enabled", ("true").getBytes(), 1, true);
-		}
-	    }
 
 	}
 
@@ -109,7 +104,7 @@ public class IMU {
     }
 
     public static void main(String[] args) throws MqttException, InterruptedException, IOException {
-	IMU button = new IMU();
+	DC button = new DC();
 	button.connect();
 
 	System.in.read();

@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.LCD20x4;
+package ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.LCD20x4;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -22,14 +23,17 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class Blink {
+public class Button {
 
-    public static final String CONNECTION = "tcp://localhost:1883";
-    public static final String UID = "Blinker";
+    public static final String CONNECTION = "tcp://iot.eclipse.org:1883";
+    //public static final String CONNECTION = "tcp://localhost:1883";
+    //public static final String CONNECTION = "tcp://147.87.112.222:1883";
+
+    public static final String UID = "Button";
 
     private MqttAsyncClient client;
 
-    public Blink() throws MqttException, InterruptedException {
+    public Button() throws MqttException, InterruptedException {
 	client = new MqttAsyncClient(CONNECTION, UID, new MemoryPersistence());
 	client.setCallback(new MQTTCallbackHandler());
     }
@@ -48,18 +52,9 @@ public class Blink {
 	    client.subscribe("iot/tf/#", 1);
 	    client.publish("iot/tf/MQTT2TF/0/intent/<" + UID + ">/stackHandler/stackAddress", "{\"hostName\":\"localhost\",\"port\":4223}".getBytes(), 1, true);
 	    Thread.sleep(1000);
-//	    client.publish("iot/tf/localhost/4223/LCD20x4/dpu9q2/intent/<" + UID + ">/config/enabled", "false".getBytes(), 1, true);
-//	    Thread.sleep(1000);
-//
-//	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/chipType", "2801".getBytes(), 1, true);
-//	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/clockFrequencyOfICsInHz", "2000000".getBytes(), 1, true);
-//	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/frameDurationInMilliseconds", "10".getBytes(), 1, true);
-//	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/numberOfLEDs", "250".getBytes(), 1, true);
-//	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/enabled", "true".getBytes(), 1, true);
-//	    Thread.sleep(1000);
 
 	} catch (Exception ex) {
-	    Logger.getLogger(Blink.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(Button.class.getName()).log(Level.SEVERE, null, ex);
 	}
 
     }
@@ -75,9 +70,34 @@ public class Blink {
 	    System.out.printf("Ou: We lost connection: %s \n", thrwbl);
 	}
 
+	private int trigger = 0;
+
 	@Override
 	public void messageArrived(String string, MqttMessage mm) throws Exception {
 	    System.out.printf("Hey, some message arrived: Topic: %s, message: %s \n", string, mm.toString());
+	    if (string.endsWith("dzbt1t/event/buttonPressed/0")) {
+		if (Arrays.equals(mm.getPayload(), "true".getBytes())) {
+		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/enabled", ("false").getBytes(), 1, true);
+		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/line", ("3").getBytes(), 1, true);
+		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/from", ("0").getBytes(), 1, true);
+		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/text", ("----------" + (trigger++) + "----------").getBytes(), 1, true);
+		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/enabled", ("true").getBytes(), 1, true);
+		}
+	    }
+
+	    if (string.endsWith("dzbt1t/event/buttonPressed/3")) {
+		client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/backlight/enabled", mm.getPayload(), 1, true);
+
+	    }
+	    if (string.endsWith("dzbt1t/event/buttonPressed/2")) {
+		client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/backlight/enabled", ("" + true).getBytes(), 1, true);
+
+	    }
+	    if (string.endsWith("dzbt1t/event/buttonPressed/1")) {
+		client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/backlight/enabled", ("" + false).getBytes(), 1, true);
+
+	    }
+
 	}
 
 	@Override
@@ -101,21 +121,12 @@ public class Blink {
 
     }
 
-    public void backlight(boolean isOn) throws MqttException {
-	client.publish("iot/tf/localhost/4223/LCD20x4/dzczh7/intent/<" + UID + ">/backlight/enabled", ("" + isOn).getBytes(), 1, true);
-    }
-
     public static void main(String[] args) throws MqttException, InterruptedException, IOException {
-	Blink blink = new Blink();
-	blink.connect();
-	boolean isOn = true;
-	while (true) {
-	    Thread.sleep(1000);
-	    blink.backlight(isOn);
-	    isOn = !isOn;
-	}
-	//System.in.read();
-	//blink.disconnect();
+	Button button = new Button();
+	button.connect();
+
+	System.in.read();
+	button.disconnect();
     }
 
 }

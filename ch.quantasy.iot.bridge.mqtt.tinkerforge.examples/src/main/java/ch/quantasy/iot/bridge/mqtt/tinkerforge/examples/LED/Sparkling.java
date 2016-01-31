@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.LED;
+package ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.LED;
 
 import com.google.gson.Gson;
 import java.io.IOException;

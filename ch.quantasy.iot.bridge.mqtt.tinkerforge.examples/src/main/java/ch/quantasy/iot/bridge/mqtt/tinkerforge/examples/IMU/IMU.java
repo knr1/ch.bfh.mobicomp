@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.CO2;
+package ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.IMU;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -22,17 +23,17 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class CO2 {
+public class IMU {
 
     //public static final String CONNECTION = "tcp://iot.eclipse.org:1883";
     public static final String CONNECTION = "tcp://localhost:1883";
     //public static final String CONNECTION = "tcp://147.87.112.222:1883";
 
-    public static final String UID = "CO2-Example";
+    public static final String UID = "IMU-Example";
 
     private MqttAsyncClient client;
 
-    public CO2() throws MqttException, InterruptedException {
+    public IMU() throws MqttException, InterruptedException {
 	client = new MqttAsyncClient(CONNECTION, UID, new MemoryPersistence());
 	client.setCallback(new MQTTCallbackHandler());
     }
@@ -46,14 +47,14 @@ public class CO2 {
 	IMqttToken token = client.connect(options, null, new MQTTActionHandler());
 	token.waitForCompletion();
 	try {
-	    client.subscribe("iot/tf/description/CO2/#", 0);
-	    client.subscribe("iot/tf/localhost/4223/CO2/#", 0);
+	    client.subscribe("iot/tf/description/IMU/#", 1);
+	    client.subscribe("iot/tf/localhost/4223/IMU/#", 1);
 	    client.subscribe("iot/tf/#", 1);
 	    client.publish("iot/tf/MQTT2TF/0/intent/<" + UID + ">/stackHandler/stackAddress", "{\"hostName\":\"localhost\",\"port\":4223}".getBytes(), 1, true).waitForCompletion();
 
-	    client.publish("iot/tf/localhost/4223/CO2/e0542c/intent/<" + UID + ">/CO2ConcentrationCallbackPeriod/period", "1".getBytes(), 1, false);
+	    client.publish("iot/tf/localhost/4223/IMU/6lyl0m/intent/<" + UID + ">/allData/period", "0".getBytes(), 1, false);
 	} catch (Exception ex) {
-	    Logger.getLogger(CO2.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(IMU.class.getName()).log(Level.SEVERE, null, ex);
 	}
 
     }
@@ -74,6 +75,16 @@ public class CO2 {
 	@Override
 	public void messageArrived(String string, MqttMessage mm) throws Exception {
 	    System.out.printf("Hey, some message arrived: Topic: %s, message: %s \n", string, mm.toString());
+	    if (string.endsWith("dzbt1t/event/buttonPressed/0")) {
+		if (Arrays.equals(mm.getPayload(), "true".getBytes())) {
+//		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/enabled", ("false").getBytes(), 1, true);
+//		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/line", ("3").getBytes(), 1, true);
+//		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/from", ("0").getBytes(), 1, true);
+//		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/text", ("----------" + (trigger++) + "----------").getBytes(), 1, true);
+//		    client.publish("iot/tf/localhost/4223/LCD20x4/dzbt1t/intent/<" + UID + ">/write/enabled", ("true").getBytes(), 1, true);
+		}
+	    }
+
 	}
 
 	@Override
@@ -98,7 +109,7 @@ public class CO2 {
     }
 
     public static void main(String[] args) throws MqttException, InterruptedException, IOException {
-	CO2 button = new CO2();
+	IMU button = new IMU();
 	button.connect();
 
 	System.in.read();

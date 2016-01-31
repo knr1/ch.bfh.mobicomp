@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.barometer;
+package ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.UVLight;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -22,7 +22,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class Barometer {
+public class UVLight {
 
     //public static final String CONNECTION = "tcp://iot.eclipse.org:1883";
     public static final String CONNECTION = "tcp://localhost:1883";
@@ -32,7 +32,7 @@ public class Barometer {
 
     private MqttAsyncClient client;
 
-    public Barometer() throws MqttException, InterruptedException {
+    public UVLight() throws MqttException, InterruptedException {
 	client = new MqttAsyncClient(CONNECTION, UID, new MemoryPersistence());
 	client.setCallback(new MQTTCallbackHandler());
     }
@@ -46,17 +46,14 @@ public class Barometer {
 	IMqttToken token = client.connect(options, null, new MQTTActionHandler());
 	token.waitForCompletion();
 	try {
-	    client.subscribe("iot/tf/description/Barometer/#", 0);
-	    client.subscribe("iot/tf/localhost/4223/Barometer/#", 0);
+	    client.subscribe("iot/tf/description/UVLight/#", 0);
+	    client.subscribe("iot/tf/localhost/4223/UVLight/#", 0);
 	    client.subscribe("iot/tf/#", 1);
 	    client.publish("iot/tf/MQTT2TF/0/intent/<" + UID + ">/stackHandler/stackAddress", "{\"hostName\":\"localhost\",\"port\":4223}".getBytes(), 1, true).waitForCompletion();
-	    client.publish("iot/tf/localhost/4223/Barometer/dpm5s8/intent/<" + UID + ">/averaging/averagePressure", "0".getBytes(), 1, false);
-	    client.publish("iot/tf/localhost/4223/Barometer/dpm5s8/intent/<" + UID + ">/averaging/movingAveragePressure", "0".getBytes(), 1, false);
-	    client.publish("iot/tf/localhost/4223/Barometer/dpm5s8/intent/<" + UID + ">/averaging/averageTemperature", "0".getBytes(), 1, false);
-	    client.publish("iot/tf/localhost/4223/Barometer/dpm5s8/intent/<" + UID + ">/averaging/enabled", "true".getBytes(), 1, false);
-	    client.publish("iot/tf/localhost/4223/Barometer/dpm5s8/intent/<" + UID + ">/airPressureCallbackPeriod/period", "2".getBytes(), 1, false);
+
+	    client.publish("iot/tf/localhost/4223/UVLight/eu463p/intent/<" + UID + ">/UVLightCallbackPeriod/period", "1".getBytes(), 1, false);
 	} catch (Exception ex) {
-	    Logger.getLogger(Barometer.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(UVLight.class.getName()).log(Level.SEVERE, null, ex);
 	}
 
     }
@@ -101,7 +98,7 @@ public class Barometer {
     }
 
     public static void main(String[] args) throws MqttException, InterruptedException, IOException {
-	Barometer button = new Barometer();
+	UVLight button = new UVLight();
 	button.connect();
 
 	System.in.read();

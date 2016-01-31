@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.DustDetector;
+package ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.CO2;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -22,17 +22,17 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class DustDetector {
+public class CO2 {
 
     //public static final String CONNECTION = "tcp://iot.eclipse.org:1883";
     public static final String CONNECTION = "tcp://localhost:1883";
     //public static final String CONNECTION = "tcp://147.87.112.222:1883";
 
-    public static final String UID = "Dust-Detector-Example";
+    public static final String UID = "CO2-Example";
 
     private MqttAsyncClient client;
 
-    public DustDetector() throws MqttException, InterruptedException {
+    public CO2() throws MqttException, InterruptedException {
 	client = new MqttAsyncClient(CONNECTION, UID, new MemoryPersistence());
 	client.setCallback(new MQTTCallbackHandler());
     }
@@ -46,14 +46,14 @@ public class DustDetector {
 	IMqttToken token = client.connect(options, null, new MQTTActionHandler());
 	token.waitForCompletion();
 	try {
-	    client.subscribe("iot/tf/description/DustDetector/#", 0);
-	    client.subscribe("iot/tf/localhost/4223/DustDetector/#", 0);
+	    client.subscribe("iot/tf/description/CO2/#", 0);
+	    client.subscribe("iot/tf/localhost/4223/CO2/#", 0);
 	    client.subscribe("iot/tf/#", 1);
 	    client.publish("iot/tf/MQTT2TF/0/intent/<" + UID + ">/stackHandler/stackAddress", "{\"hostName\":\"localhost\",\"port\":4223}".getBytes(), 1, true).waitForCompletion();
 
-	    client.publish("iot/tf/localhost/4223/DustDetector/dg4p7n/intent/<" + UID + ">/dustDensityCallbackPeriod/period", "1".getBytes(), 1, false);
+	    client.publish("iot/tf/localhost/4223/CO2/e0542c/intent/<" + UID + ">/CO2ConcentrationCallbackPeriod/period", "1".getBytes(), 1, false);
 	} catch (Exception ex) {
-	    Logger.getLogger(DustDetector.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(CO2.class.getName()).log(Level.SEVERE, null, ex);
 	}
 
     }
@@ -98,7 +98,7 @@ public class DustDetector {
     }
 
     public static void main(String[] args) throws MqttException, InterruptedException, IOException {
-	DustDetector button = new DustDetector();
+	CO2 button = new CO2();
 	button.connect();
 
 	System.in.read();

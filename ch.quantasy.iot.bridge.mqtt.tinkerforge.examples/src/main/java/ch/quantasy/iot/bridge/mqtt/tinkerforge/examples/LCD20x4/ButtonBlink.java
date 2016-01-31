@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.TemperatureIR;
+package ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.LCD20x4;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -22,17 +22,15 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class TemperatureIR {
+public class ButtonBlink {
 
     //public static final String CONNECTION = "tcp://iot.eclipse.org:1883";
-    public static final String CONNECTION = "tcp://localhost:1883";
-    //public static final String CONNECTION = "tcp://147.87.112.222:1883";
-
-    public static final String UID = "Temperature-IR-Example";
+    public static final String CONNECTION = "tcp://147.87.112.222:1883";
+    public static final String UID = "Blinker";
 
     private MqttAsyncClient client;
 
-    public TemperatureIR() throws MqttException, InterruptedException {
+    public ButtonBlink() throws MqttException, InterruptedException {
 	client = new MqttAsyncClient(CONNECTION, UID, new MemoryPersistence());
 	client.setCallback(new MQTTCallbackHandler());
     }
@@ -46,14 +44,23 @@ public class TemperatureIR {
 	IMqttToken token = client.connect(options, null, new MQTTActionHandler());
 	token.waitForCompletion();
 	try {
-	    client.subscribe("iot/tf/description/TemperatureIR/#", 0);
-	    client.subscribe("iot/tf/localhost/4223/TemperatureIR/#", 0);
+	    client.subscribe("iot/tf/description/LCD20x4/#", 1);
+	    client.subscribe("iot/tf/localhost/4223/LCD20x4/#", 1);
 	    client.subscribe("iot/tf/#", 1);
-	    client.publish("iot/tf/MQTT2TF/0/intent/<" + UID + ">/stackHandler/stackAddress", "{\"hostName\":\"localhost\",\"port\":4223}".getBytes(), 1, true).waitForCompletion();
+	    client.publish("iot/tf/MQTT2TF/0/intent/<" + UID + ">/stackHandler/stackAddress", "{\"hostName\":\"localhost\",\"port\":4223}".getBytes(), 1, true);
+	    Thread.sleep(1000);
+//	    client.publish("iot/tf/localhost/4223/LCD20x4/dpu9q2/intent/<" + UID + ">/config/enabled", "false".getBytes(), 1, true);
+//	    Thread.sleep(1000);
+//
+//	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/chipType", "2801".getBytes(), 1, true);
+//	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/clockFrequencyOfICsInHz", "2000000".getBytes(), 1, true);
+//	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/frameDurationInMilliseconds", "10".getBytes(), 1, true);
+//	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/numberOfLEDs", "250".getBytes(), 1, true);
+//	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/enabled", "true".getBytes(), 1, true);
+//	    Thread.sleep(1000);
 
-	    client.publish("iot/tf/localhost/4223/TemperatureIR/fdjob6/intent/<" + UID + ">/objectTemperatureCallbackPeriod/period", "1".getBytes(), 1, false);
 	} catch (Exception ex) {
-	    Logger.getLogger(TemperatureIR.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(ButtonBlink.class.getName()).log(Level.SEVERE, null, ex);
 	}
 
     }
@@ -68,8 +75,6 @@ public class TemperatureIR {
 	public void connectionLost(Throwable thrwbl) {
 	    System.out.printf("Ou: We lost connection: %s \n", thrwbl);
 	}
-
-	private int trigger = 0;
 
 	@Override
 	public void messageArrived(String string, MqttMessage mm) throws Exception {
@@ -97,12 +102,21 @@ public class TemperatureIR {
 
     }
 
-    public static void main(String[] args) throws MqttException, InterruptedException, IOException {
-	TemperatureIR button = new TemperatureIR();
-	button.connect();
+    public void backlight(boolean isOn) throws MqttException {
+	client.publish("iot/tf/localhost/4223/LCD20x4/dzd02j/intent/<" + UID + ">/backlight/enabled", ("" + isOn).getBytes(), 1, true);
+    }
 
-	System.in.read();
-	button.disconnect();
+    public static void main(String[] args) throws MqttException, InterruptedException, IOException {
+	ButtonBlink blink = new ButtonBlink();
+	blink.connect();
+	boolean isOn = true;
+	while (true) {
+	    Thread.sleep(1000);
+	    blink.backlight(isOn);
+	    isOn = !isOn;
+	}
+	//System.in.read();
+	//blink.disconnect();
     }
 
 }
