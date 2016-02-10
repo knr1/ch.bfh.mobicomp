@@ -125,22 +125,19 @@ public abstract class AMessage<H extends AHandler, E extends MessageDescription>
 		}
 	    }
 	    if (rawContent != null) {
-		synchronized (this) {
-		    while (!update(mqttClient, property, rawContent)) {
-			mqttDeliveryToken.waitForCompletion(100);
-		    };
-		}
+		while (!update(mqttClient, property, rawContent));
 	    }
 	}
+
     }
 
     protected boolean update(MqttAsyncClient mqttClient, String property, Object value) {
-	if (getContent(property).updateContent(value)) {
-	    IMqttDeliveryToken token = null;
-	    synchronized (this) {
-		token = mqttDeliveryToken;
-	    }
-	    if (token == null || token.isComplete()) {
+	if (!getContent(property).updateContent(value)) {
+	    return true;
+	}
+
+	synchronized (this) {
+	    if (mqttDeliveryToken == null || mqttDeliveryToken.isComplete()) {
 		try {
 		    mqttDeliveryToken = publish(property, toJSONMQTTMessage(value), mqttClient);
 		    return true;
@@ -148,8 +145,8 @@ public abstract class AMessage<H extends AHandler, E extends MessageDescription>
 		    System.out.println("During publish, the following exception occured:" + ex.getStackTrace());
 		}
 	    }
+	    return false;
 	}
-	return false;
     }
 
     protected Map<String, Content> getValueMap() {
