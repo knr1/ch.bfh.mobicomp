@@ -82,15 +82,15 @@ public class MQTT2TF extends AHandler {
 
     public static void main(String[] args) throws Throwable {
 	final TinkerforgeStackAddress identifier = new TinkerforgeStackAddress("localhost");
-	//URI uri = URI.create("tcp://localhost:1883");
-	URI uri = URI.create("tcp://matrix:1883");
+	URI uri = URI.create("tcp://localhost:1883");
+	//URI uri = URI.create("tcp://matrix:1883");
 
 	//URI uri = URI.create("tcp://147.87.112.222:1883");
 	//URI uri = URI.create("tcp://iot.eclipse.org:1883");
 	if (args.length > 0) {
 	    uri = URI.create(args[0]);
 	} else {
-	    System.out.printf("%s will be used as broker address.\n You can provide one as first argument such as: tcp://iot.eclipse.org:1883\n", uri);
+	    System.out.printf("%s \n will be used as broker address.\n You can provide one as first argument such as: tcp://iot.eclipse.org:1883\n", uri);
 	}
 	MQTT2TF gw = new MQTT2TF("0", uri);
 	gw.addNewAgent(identifier);

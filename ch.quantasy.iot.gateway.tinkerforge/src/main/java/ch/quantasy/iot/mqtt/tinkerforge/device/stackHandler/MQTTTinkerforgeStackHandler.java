@@ -25,6 +25,7 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.dustDetector.DustDe
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.gps.GPS;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.Humidity;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.joystick.Joystick;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.laserRangeFinder.LaserRangeFinder;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.lcd20x4.LCD20x4;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ledstrip.LedStrip;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.LinearPoti;
@@ -63,6 +64,7 @@ import com.tinkerforge.BrickletHumidity;
 import com.tinkerforge.BrickletJoystick;
 import com.tinkerforge.BrickletLCD20x4;
 import com.tinkerforge.BrickletLEDStrip;
+import com.tinkerforge.BrickletLaserRangeFinder;
 import com.tinkerforge.BrickletLinearPoti;
 import com.tinkerforge.BrickletMoisture;
 import com.tinkerforge.BrickletMotionDetector;
@@ -228,6 +230,17 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
 		}
 		deviceHandler.enableDevice((BrickletSegmentDisplay4x7) device);
+
+	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.LaserRangeFinder) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new LaserRangeFinder(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletLaserRangeFinder) device);
 
 	    }
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.DualButton) {

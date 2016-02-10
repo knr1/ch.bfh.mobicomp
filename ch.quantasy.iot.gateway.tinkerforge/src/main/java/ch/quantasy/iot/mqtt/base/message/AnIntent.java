@@ -41,7 +41,7 @@ public abstract class AnIntent<H extends AHandler> extends AMessage<H, IntentDes
 	    }
 	} catch (Throwable th) {
 	    //OK, not yet ready to be executed. //For debug reason, the stack trace is printed
-	    th.printStackTrace();
+	    //th.printStackTrace();
 	}
     }
 
