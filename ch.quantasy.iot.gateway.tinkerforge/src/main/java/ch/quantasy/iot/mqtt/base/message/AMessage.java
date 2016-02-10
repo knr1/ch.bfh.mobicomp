@@ -125,7 +125,13 @@ public abstract class AMessage<H extends AHandler, E extends MessageDescription>
 		}
 	    }
 	    if (rawContent != null) {
-		while (!update(mqttClient, property, rawContent));
+		try {
+		    while (!update(mqttClient, property, rawContent)) {
+			Thread.sleep(10);
+		    }
+		} catch (InterruptedException ex) {
+		    Logger.getLogger(AMessage.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	    }
 	}
 
