@@ -116,32 +116,18 @@ public abstract class AMessage<H extends AHandler, E extends MessageDescription>
 
     protected void update(MqttAsyncClient mqttClient, AnIntent intent) throws MqttException {
 	for (Content content : this.getValueMap().values()) {
-	    byte[] rawContent = null;
 	    String property = content.getProperty();
 	    if (property != null) {
 		Content intentContent = intent.getContent(property);
 		if (intentContent != null) {
-		    rawContent = intentContent.rawValue;
-		}
-	    }
-	    if (rawContent != null) {
-		try {
-		    while (!update(mqttClient, property, rawContent)) {
-			Thread.sleep(10);
-		    }
-		} catch (InterruptedException ex) {
-		    Logger.getLogger(AMessage.class.getName()).log(Level.SEVERE, null, ex);
+		    IMqttDeliveryToken token = publish(property, toJSONMQTTMessage(intentContent.getValue(intentContent.description.typeOfClass)), mqttClient);
+		    token.waitForCompletion(10);
 		}
 	    }
 	}
-
     }
 
     protected boolean update(MqttAsyncClient mqttClient, String property, Object value) {
-	if (!getContent(property).updateContent(value)) {
-	    return true;
-	}
-
 	synchronized (this) {
 	    if (mqttDeliveryToken == null || mqttDeliveryToken.isComplete()) {
 		try {
