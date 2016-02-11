@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.barometer;
+package ch.quantasy.iot.bridge.mqtt.tinkerforge.examples.soundIntensity;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -22,17 +22,17 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class Barometer {
+public class SoundIntensity {
 
     //public static final String CONNECTION = "tcp://iot.eclipse.org:1883";
     public static final String CONNECTION = "tcp://localhost:1883";
     //public static final String CONNECTION = "tcp://147.87.112.222:1883";
 
-    public static final String UID = "Barometer-Example";
+    public static final String UID = "SoundIntensity-Example";
 
     private MqttAsyncClient client;
 
-    public Barometer() throws MqttException, InterruptedException {
+    public SoundIntensity() throws MqttException, InterruptedException {
 	client = new MqttAsyncClient(CONNECTION, UID, new MemoryPersistence());
 	client.setCallback(new MQTTCallbackHandler());
     }
@@ -46,22 +46,32 @@ public class Barometer {
 	IMqttToken token = client.connect(options, null, new MQTTActionHandler());
 	token.waitForCompletion();
 	try {
-	    client.subscribe("iot/tf/description/Barometer/#", 0);
-	    client.subscribe("iot/tf/localhost/4223/Barometer/#", 0);
+	    client.subscribe("iot/tf/description/SoundIntensity/#", 0);
+	    client.subscribe("iot/tf/localhost/4223/SoundIntensity/#", 0);
 	    client.subscribe("iot/tf/#", 1);
 	    client.publish("iot/tf/MQTT2TF/0/intent/<" + UID + ">/stackHandler/stackAddress", "{\"hostName\":\"localhost\",\"port\":4223}".getBytes(), 1, true).waitForCompletion();
-	    client.publish("iot/tf/localhost/4223/Barometer/dpm5s8/intent/<" + UID + ">/averaging/averagePressure", "0".getBytes(), 1, false);
-	    client.publish("iot/tf/localhost/4223/Barometer/dpm5s8/intent/<" + UID + ">/averaging/movingAveragePressure", "0".getBytes(), 1, false);
-	    client.publish("iot/tf/localhost/4223/Barometer/dpm5s8/intent/<" + UID + ">/averaging/averageTemperature", "0".getBytes(), 1, false);
-	    client.publish("iot/tf/localhost/4223/Barometer/dpm5s8/intent/<" + UID + ">/averaging/enabled", "true".getBytes(), 1, false);
-	    client.publish("iot/tf/localhost/4223/Barometer/dpm5s8/intent/<" + UID + ">/airPressureCallbackPeriod/period", "2".getBytes(), 1, false);
+	    client.publish("iot/tf/localhost/4223/SoundIntensity/fnniyg/intent/<" + UID + ">/callbackThreshold/option", "g".getBytes(), 1, false);
+	    client.publish("iot/tf/localhost/4223/SoundIntensity/fnniyg/intent/<" + UID + ">/callbackThreshold/min", "2".getBytes(), 1, false);
+	    client.publish("iot/tf/localhost/4223/SoundIntensity/fnniyg/intent/<" + UID + ">/callbackThreshold/max", "2".getBytes(), 1, false);
+	    client.publish("iot/tf/localhost/4223/SoundIntensity/fnniyg/intent/<" + UID + ">/callbackThreshold/enabled", "true".getBytes(), 1, false);
 	} catch (Exception ex) {
-	    Logger.getLogger(Barometer.class.getName()).log(Level.SEVERE, null, ex);
+	    Logger.getLogger(SoundIntensity.class.getName()).log(Level.SEVERE, null, ex);
 	}
 
     }
 
     public void disconnect() throws MqttException {
+	client.publish("iot/tf/localhost/4223/SoundIntensity/fnniyg/intent/<" + UID + ">/callbackThreshold/enabled", "false".getBytes(), 1, false);
+
+	client.publish("iot/tf/localhost/4223/SoundIntensity/fnniyg/intent/<" + UID + ">/callbackThreshold/option", "x".getBytes(), 1, false);
+	client.publish("iot/tf/localhost/4223/SoundIntensity/fnniyg/intent/<" + UID + ">/callbackThreshold/min", "0".getBytes(), 1, false);
+	client.publish("iot/tf/localhost/4223/SoundIntensity/fnniyg/intent/<" + UID + ">/callbackThreshold/max", "0".getBytes(), 1, false);
+	client.publish("iot/tf/localhost/4223/SoundIntensity/fnniyg/intent/<" + UID + ">/callbackThreshold/enabled", "true".getBytes(), 1, false);
+	try {
+	    Thread.sleep(1000);
+	} catch (InterruptedException ex) {
+	    Logger.getLogger(SoundIntensity.class.getName()).log(Level.SEVERE, null, ex);
+	}
 	client.disconnect();
     }
 
@@ -101,7 +111,7 @@ public class Barometer {
     }
 
     public static void main(String[] args) throws MqttException, InterruptedException, IOException {
-	Barometer button = new Barometer();
+	SoundIntensity button = new SoundIntensity();
 	button.connect();
 
 	System.in.read();
