@@ -16,7 +16,7 @@ public class CallbackThresholdIntent extends AnIntent<AmbientLight> {
 
     public CallbackThresholdIntent(AmbientLight deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackThreshold");
-	super.addDescription(AmbientLight.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(AmbientLight.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(AmbientLight.THRESHOLD_MIN, Short.class, "JSON", "0", "...", "4095");
 	super.addDescription(AmbientLight.THRESHOLD_MAX, Short.class, "JSON", "0", "...", "4095");
 	super.addDescription(AmbientLight.ENABLED, Boolean.class, "JSON", "true", "false");
@@ -36,8 +36,8 @@ public class CallbackThresholdIntent extends AnIntent<AmbientLight> {
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;

@@ -93,6 +93,12 @@ public class Barometer extends ADeviceHandler<BrickletBarometer> implements Bric
 
     public void executeIntent(AirPressureCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(Barometer.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	int min = intent.getValue(Barometer.THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(Barometer.THRESHOLD_MAX, Integer.class);
 	getDevice().setAirPressureCallbackThreshold(option, min, max);
@@ -101,6 +107,12 @@ public class Barometer extends ADeviceHandler<BrickletBarometer> implements Bric
 
     public void executeIntent(AltitudeCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(Barometer.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	int min = intent.getValue(Barometer.THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(Barometer.THRESHOLD_MAX, Integer.class);
 	getDevice().setAltitudeCallbackThreshold(option, min, max);

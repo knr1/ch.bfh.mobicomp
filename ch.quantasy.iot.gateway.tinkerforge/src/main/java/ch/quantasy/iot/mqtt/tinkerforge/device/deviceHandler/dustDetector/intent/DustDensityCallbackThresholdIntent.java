@@ -16,7 +16,7 @@ public class DustDensityCallbackThresholdIntent extends AnIntent<DustDetector> {
 
     public DustDensityCallbackThresholdIntent(DustDetector deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "DustDensityCallbackThreshold");
-	super.addDescription(DustDetector.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(DustDetector.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(DustDetector.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "500");
 	super.addDescription(DustDetector.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "500");
 	super.addDescription(DustDetector.ENABLED, Boolean.class, "JSON", "true", "false");
@@ -36,8 +36,8 @@ public class DustDensityCallbackThresholdIntent extends AnIntent<DustDetector> {
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;

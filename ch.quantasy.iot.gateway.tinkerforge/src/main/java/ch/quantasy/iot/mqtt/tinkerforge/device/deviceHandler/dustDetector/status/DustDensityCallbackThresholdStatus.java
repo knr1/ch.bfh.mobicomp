@@ -18,7 +18,7 @@ public class DustDensityCallbackThresholdStatus extends AStatus {
 
     public DustDensityCallbackThresholdStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "dustDensityCallbackThreshold", mqttClient);
-	super.addDescription(DustDetector.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(DustDetector.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(DustDetector.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "500");
 	super.addDescription(DustDetector.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "500");
     }

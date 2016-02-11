@@ -18,7 +18,7 @@ public class UVLightCallbackThresholdStatus extends AStatus {
 
     public UVLightCallbackThresholdStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "UVLightCallbackThreshold", mqttClient);
-	super.addDescription(UVLight.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(UVLight.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(UVLight.THRESHOLD_MIN, Long.class, "JSON", "0", "...", "328000");
 	super.addDescription(UVLight.THRESHOLD_MAX, Long.class, "JSON", "0", "...", "328000");
     }

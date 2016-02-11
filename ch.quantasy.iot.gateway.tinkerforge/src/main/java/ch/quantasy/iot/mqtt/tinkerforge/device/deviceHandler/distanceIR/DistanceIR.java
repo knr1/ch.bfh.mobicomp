@@ -83,6 +83,12 @@ public class DistanceIR extends ADeviceHandler<BrickletDistanceIR> implements Br
 
     public void executeIntent(CallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(DistanceIR.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	short min = intent.getValue(DistanceIR.THRESHOLD_MIN, Short.class);
 	short max = intent.getValue(DistanceIR.THRESHOLD_MAX, Short.class);
 	getDevice().setDistanceCallbackThreshold(option, min, max);
@@ -97,6 +103,12 @@ public class DistanceIR extends ADeviceHandler<BrickletDistanceIR> implements Br
 
     public void executeIntent(AnalogCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(DistanceIR.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	int min = intent.getValue(DistanceIR.THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(DistanceIR.THRESHOLD_MAX, Integer.class);
 	getDevice().setAnalogValueCallbackThreshold(option, min, max);

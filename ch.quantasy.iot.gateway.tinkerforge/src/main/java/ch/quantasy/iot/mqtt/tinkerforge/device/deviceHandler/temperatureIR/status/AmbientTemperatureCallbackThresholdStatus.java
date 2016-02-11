@@ -18,7 +18,7 @@ public class AmbientTemperatureCallbackThresholdStatus extends AStatus {
 
     public AmbientTemperatureCallbackThresholdStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "ambientTemperatureCallbackThreshold", mqttClient);
-	super.addDescription(TemperatureIR.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(TemperatureIR.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(TemperatureIR.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(TemperatureIR.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "4095");
     }

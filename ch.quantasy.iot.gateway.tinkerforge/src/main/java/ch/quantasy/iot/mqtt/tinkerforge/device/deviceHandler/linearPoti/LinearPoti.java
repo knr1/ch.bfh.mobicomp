@@ -88,6 +88,12 @@ public class LinearPoti extends ADeviceHandler<BrickletLinearPoti> implements Br
 
     public void executeIntent(AnalogCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(LinearPoti.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	int min = intent.getValue(LinearPoti.THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(LinearPoti.THRESHOLD_MAX, Integer.class);
 	getDevice().setAnalogValueCallbackThreshold(option, min, max);
@@ -96,6 +102,12 @@ public class LinearPoti extends ADeviceHandler<BrickletLinearPoti> implements Br
 
     public void executeIntent(PositionCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(LinearPoti.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	short min = intent.getValue(LinearPoti.THRESHOLD_MIN, Short.class);
 	short max = intent.getValue(LinearPoti.THRESHOLD_MAX, Short.class);
 	getDevice().setPositionCallbackThreshold(option, min, max);

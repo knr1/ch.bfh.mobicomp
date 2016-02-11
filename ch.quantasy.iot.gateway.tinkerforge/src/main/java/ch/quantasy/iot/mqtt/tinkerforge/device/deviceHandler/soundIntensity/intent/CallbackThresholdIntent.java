@@ -16,7 +16,7 @@ public class CallbackThresholdIntent extends AnIntent<SoundIntensity> {
 
     public CallbackThresholdIntent(SoundIntensity deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackThreshold");
-	super.addDescription(SoundIntensity.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(SoundIntensity.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(SoundIntensity.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(SoundIntensity.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(SoundIntensity.ENABLED, Boolean.class, "JSON", "true", "false");
@@ -36,8 +36,8 @@ public class CallbackThresholdIntent extends AnIntent<SoundIntensity> {
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;

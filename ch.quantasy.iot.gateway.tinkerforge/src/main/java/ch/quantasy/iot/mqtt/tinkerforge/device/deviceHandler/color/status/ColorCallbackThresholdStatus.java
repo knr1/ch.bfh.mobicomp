@@ -18,7 +18,7 @@ public class ColorCallbackThresholdStatus extends AStatus {
 
     public ColorCallbackThresholdStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "colorCallbackThreshold", mqttClient);
-	super.addDescription(Color.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(Color.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(Color.THRESHOLD_MIN_R, Integer.class, "JSON", "0", "...", "65535");
 	super.addDescription(Color.THRESHOLD_MAX_R, Integer.class, "JSON", "0", "...", "65535");
 	super.addDescription(Color.THRESHOLD_MIN_G, Integer.class, "JSON", "0", "...", "65535");

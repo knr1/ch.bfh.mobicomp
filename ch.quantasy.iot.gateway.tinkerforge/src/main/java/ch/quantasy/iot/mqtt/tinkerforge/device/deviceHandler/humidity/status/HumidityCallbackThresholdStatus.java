@@ -18,7 +18,7 @@ public class HumidityCallbackThresholdStatus extends AStatus {
 
     public HumidityCallbackThresholdStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "humidityCallbackThreshold", mqttClient);
-	super.addDescription(Humidity.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(Humidity.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(Humidity.THRESHOLD_MIN, Short.class, "JSON", "0", "...", "1000");
 	super.addDescription(Humidity.THRESHOLD_MAX, Short.class, "JSON", "0", "...", "1000");
     }

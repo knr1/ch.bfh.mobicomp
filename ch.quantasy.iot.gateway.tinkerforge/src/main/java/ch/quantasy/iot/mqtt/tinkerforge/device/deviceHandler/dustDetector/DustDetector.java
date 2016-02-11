@@ -71,6 +71,12 @@ public class DustDetector extends ADeviceHandler<BrickletDustDetector> implement
 
     public void executeIntent(DustDensityCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(DustDetector.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	int min = intent.getValue(DustDetector.THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(DustDetector.THRESHOLD_MAX, Integer.class);
 	getDevice().setDustDensityCallbackThreshold(option, min, max);

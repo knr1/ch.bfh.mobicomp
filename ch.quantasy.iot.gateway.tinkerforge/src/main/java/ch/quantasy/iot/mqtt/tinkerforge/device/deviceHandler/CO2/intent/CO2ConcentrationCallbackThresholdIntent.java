@@ -16,7 +16,7 @@ public class CO2ConcentrationCallbackThresholdIntent extends AnIntent<CO2> {
 
     public CO2ConcentrationCallbackThresholdIntent(CO2 deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "CO2ConcentrationCallbackThreshold");
-	super.addDescription(CO2.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(CO2.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(CO2.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(CO2.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(CO2.ENABLED, Boolean.class, "JSON", "true", "false");

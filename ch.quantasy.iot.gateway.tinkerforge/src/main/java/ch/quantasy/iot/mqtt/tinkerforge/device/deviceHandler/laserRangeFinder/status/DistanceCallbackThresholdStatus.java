@@ -18,7 +18,7 @@ public class DistanceCallbackThresholdStatus extends AStatus {
 
     public DistanceCallbackThresholdStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "distanceCallbackThreshold", mqttClient);
-	super.addDescription(LaserRangeFinder.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(LaserRangeFinder.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(LaserRangeFinder.THRESHOLD_MIN, Short.class, "JSON", "0", "...", "4000");
 	super.addDescription(LaserRangeFinder.THRESHOLD_MAX, Short.class, "JSON", "0", "...", "4000");
     }

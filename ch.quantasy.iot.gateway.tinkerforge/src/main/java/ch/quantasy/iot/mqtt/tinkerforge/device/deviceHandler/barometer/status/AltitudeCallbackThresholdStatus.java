@@ -18,7 +18,7 @@ public class AltitudeCallbackThresholdStatus extends AStatus {
 
     public AltitudeCallbackThresholdStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "altitudeCallbackThreshold", mqttClient);
-	super.addDescription(Barometer.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(Barometer.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(Barometer.THRESHOLD_MIN, Short.class, "JSON", "0", "...", "1000");
 	super.addDescription(Barometer.THRESHOLD_MAX, Short.class, "JSON", "0", "...", "1000");
     }

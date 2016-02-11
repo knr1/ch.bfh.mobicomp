@@ -16,7 +16,7 @@ public class HumidityCallbackThresholdIntent extends AnIntent<Humidity> {
 
     public HumidityCallbackThresholdIntent(Humidity deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "humidityCallbackThreshold");
-	super.addDescription(Humidity.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(Humidity.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(Humidity.THRESHOLD_MIN, Short.class, "JSON", "0", "...", "1000");
 	super.addDescription(Humidity.THRESHOLD_MAX, Short.class, "JSON", "0", "...", "1000");
 	super.addDescription(Humidity.ENABLED, Boolean.class, "JSON", "true", "false");
@@ -36,8 +36,8 @@ public class HumidityCallbackThresholdIntent extends AnIntent<Humidity> {
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;

@@ -71,6 +71,12 @@ public class UVLight extends ADeviceHandler<BrickletUVLight> implements Bricklet
 
     public void executeIntent(UVLightCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(UVLight.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	int min = intent.getValue(UVLight.THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(UVLight.THRESHOLD_MAX, Integer.class);
 	getDevice().setUVLightCallbackThreshold(option, min, max);

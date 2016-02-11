@@ -16,7 +16,7 @@ public class AnalogCallbackThresholdIntent extends AnIntent<LinearPoti> {
 
     public AnalogCallbackThresholdIntent(LinearPoti deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "analogCallbackThreshold");
-	super.addDescription(LinearPoti.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(LinearPoti.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(LinearPoti.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(LinearPoti.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(LinearPoti.ENABLED, Boolean.class, "JSON", "true", "false");
@@ -36,8 +36,8 @@ public class AnalogCallbackThresholdIntent extends AnIntent<LinearPoti> {
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;

@@ -16,7 +16,7 @@ public class CallbackThresholdIntent extends AnIntent<DistanceUS> {
 
     public CallbackThresholdIntent(DistanceUS deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackThreshold");
-	super.addDescription(DistanceUS.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(DistanceUS.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(DistanceUS.THRESHOLD_MIN, Short.class, "JSON", "0", "...", "4095");
 	super.addDescription(DistanceUS.THRESHOLD_MAX, Short.class, "JSON", "0", "...", "4095");
 	super.addDescription(DistanceUS.ENABLED, Boolean.class, "JSON", "true", "false");
@@ -36,8 +36,8 @@ public class CallbackThresholdIntent extends AnIntent<DistanceUS> {
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;

@@ -76,6 +76,12 @@ public class RotaryEncoder extends ADeviceHandler<BrickletRotaryEncoder> impleme
 
     public void executeIntent(CountCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	int min = intent.getValue(THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(THRESHOLD_MAX, Integer.class);
 	getDevice().setCountCallbackThreshold(option, min, max);
