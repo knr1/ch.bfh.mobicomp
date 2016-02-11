@@ -90,6 +90,7 @@ public abstract class AHandler implements MqttCallback {
 	HandlerReadyStatus readyStatus = getStatus(HandlerReadyStatus.class);
 	MqttMessage message = readyStatus.toJSONMQTTMessage(false);
 	connectOptions.setWill(readyStatus.getTopic() + "/" + REACHABLE, message.getPayload(), 1, true);
+	connectOptions.setConnectionTimeout(0);
 	this.mqttClient.setCallback(this);
 	IMqttToken token = this.mqttClient.connect(connectOptions);
 	token.waitForCompletion();
@@ -104,7 +105,7 @@ public abstract class AHandler implements MqttCallback {
 
     @Override
     public void connectionLost(Throwable thrwbl) {
-
+	thrwbl.printStackTrace();
     }
 
     //HIER checken ob ein Intent mit einem (neuen) Tenent-Indikator reingekommen ist...
@@ -160,7 +161,7 @@ public abstract class AHandler implements MqttCallback {
 	return intentMap;
     }
 
-    public void addIntentClass(Class... classes) {
+    public synchronized void addIntentClass(Class... classes) {
 	for (Class intentClass : classes) {
 	    intentSet.add(intentClass);
 

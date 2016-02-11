@@ -7,8 +7,10 @@ package ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler;
 
 import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.CO2;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.DC.DC;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMU.IMU;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.IMUV2.IMUV2;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.UVLight.UVLight;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.accelerometer.Accelerometer;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLight.AmbientLight;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ambientLightV2.AmbientLightV2;
@@ -19,9 +21,11 @@ import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceIR.Distance
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.distanceUS.DistanceUS;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.dualButton.DualButton;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.dualrelay.DualRelay;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.dustDetector.DustDetector;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.gps.GPS;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.Humidity;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.joystick.Joystick;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.laserRangeFinder.LaserRangeFinder;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.lcd20x4.LCD20x4;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.ledstrip.LedStrip;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.LinearPoti;
@@ -41,6 +45,7 @@ import ch.quantasy.tinkerforge.tinker.agent.implementation.TinkerforgeStackAgent
 import ch.quantasy.tinkerforge.tinker.application.implementation.AbstractTinkerforgeApplication;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeDevice;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
+import com.tinkerforge.BrickDC;
 import com.tinkerforge.BrickIMU;
 import com.tinkerforge.BrickIMUV2;
 import com.tinkerforge.BrickletAccelerometer;
@@ -53,11 +58,13 @@ import com.tinkerforge.BrickletDistanceIR;
 import com.tinkerforge.BrickletDistanceUS;
 import com.tinkerforge.BrickletDualButton;
 import com.tinkerforge.BrickletDualRelay;
+import com.tinkerforge.BrickletDustDetector;
 import com.tinkerforge.BrickletGPS;
 import com.tinkerforge.BrickletHumidity;
 import com.tinkerforge.BrickletJoystick;
 import com.tinkerforge.BrickletLCD20x4;
 import com.tinkerforge.BrickletLEDStrip;
+import com.tinkerforge.BrickletLaserRangeFinder;
 import com.tinkerforge.BrickletLinearPoti;
 import com.tinkerforge.BrickletMoisture;
 import com.tinkerforge.BrickletMotionDetector;
@@ -69,6 +76,7 @@ import com.tinkerforge.BrickletSegmentDisplay4x7;
 import com.tinkerforge.BrickletSoundIntensity;
 import com.tinkerforge.BrickletTemperatureIR;
 import com.tinkerforge.BrickletTilt;
+import com.tinkerforge.BrickletUVLight;
 import com.tinkerforge.Device;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
@@ -224,6 +232,17 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		deviceHandler.enableDevice((BrickletSegmentDisplay4x7) device);
 
 	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.LaserRangeFinder) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new LaserRangeFinder(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletLaserRangeFinder) device);
+
+	    }
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.DualButton) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
 
@@ -342,6 +361,16 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		}
 		deviceHandler.enableDevice((BrickletMoisture) device);
 	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.DustDetector) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new DustDetector(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletDustDetector) device);
+	    }
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.RemoteSwitch) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
 
@@ -352,6 +381,16 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		}
 		deviceHandler.enableDevice((BrickletRemoteSwitch) device);
 	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.UVLight) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new UVLight(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickletUVLight) device);
+	    }
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.CO2) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
 
@@ -361,6 +400,16 @@ public class MQTTTinkerforgeStackHandler<D extends AHandler> extends AbstractTin
 		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
 		}
 		deviceHandler.enableDevice((BrickletCO2) device);
+	    }
+	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.DC) {
+		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);
+
+		ADeviceHandler deviceHandler = this.deviceHandlers.get(digestedIdentityString);
+		if (deviceHandler == null) {
+		    deviceHandler = new DC(this, mqttURI, tinkerforgeStackAgent.getStackAddress(), digestedIdentityString);
+		    deviceHandlers.put(deviceHandler.getIdentityString(), deviceHandler);
+		}
+		deviceHandler.enableDevice((BrickDC) device);
 	    }
 	    if (TinkerforgeDevice.getDevice(device) == TinkerforgeDevice.DistanceUS) {
 		System.out.println("Connected: " + tinkerforgeStackAgent + " " + device);

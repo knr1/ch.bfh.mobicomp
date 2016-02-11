@@ -8,7 +8,6 @@ package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.event
 import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.message.AnEvent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.RemoteSwitch;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.remoteswitch.intent.SwitchSocketBIntent;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 
 /**
@@ -25,8 +24,8 @@ public class SwitchSocketBEvent extends AnEvent {
 	super.addDescription(RemoteSwitch.SWITCHING, Boolean.class, "JSON", "true", "false");
     }
 
-    public void updateIntent(SwitchSocketBIntent intent) {
-	update(RemoteSwitch.SWITCHING, intent.getContent(RemoteSwitch.ENABLED).getValue(Boolean.class));
-	super.update(intent);
-    }
+//    public void updateIntent(SwitchSocketBIntent intent) {
+//	//update(RemoteSwitch.SWITCHING, intent.getContent(RemoteSwitch.ENABLED).getValue(Boolean.class));
+//	super.update(intent);
+//    }
 }

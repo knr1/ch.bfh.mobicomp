@@ -8,7 +8,6 @@ package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.intent;
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.CO2.CO2;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.Barometer;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.Humidity;
 
 /**
  *
@@ -27,7 +26,7 @@ public class CO2ConcentrationCallbackPeriodIntent extends AnIntent<CO2> {
     }
 
     private boolean isPeriodInRange() {
-	long period = getContent(Humidity.PERIOD).getValue(Long.class);
+	long period = getContent(CO2.PERIOD).getValue(Long.class);
 	return period >= 0;
     }
 

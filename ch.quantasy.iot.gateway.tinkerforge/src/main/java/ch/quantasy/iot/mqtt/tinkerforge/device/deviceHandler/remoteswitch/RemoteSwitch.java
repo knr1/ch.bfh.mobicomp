@@ -22,6 +22,8 @@ import com.tinkerforge.BrickletRemoteSwitch;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
 import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -60,10 +62,34 @@ public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implement
 	synchronized (this) {
 	    this.notifyAll();
 	}
-	getEvent(SwitchSocketAEvent.class).update(SWITCHING, false);
-	getEvent(SwitchSocketBEvent.class).update(SWITCHING, false);
-	getEvent(DimSocketBEvent.class).update(SWITCHING, false);
-	getEvent(SwitchSocketCEvent.class).update(SWITCHING, false);
+	while (!getEvent(SwitchSocketAEvent.class).update(SWITCHING, false)) {
+	    try {
+		Thread.sleep(100);
+	    } catch (InterruptedException ex) {
+		Logger.getLogger(RemoteSwitch.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
+	while (!getEvent(SwitchSocketBEvent.class).update(SWITCHING, false)) {
+	    try {
+		Thread.sleep(100);
+	    } catch (InterruptedException ex) {
+		Logger.getLogger(RemoteSwitch.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
+	while (!getEvent(DimSocketBEvent.class).update(SWITCHING, false)) {
+	    try {
+		Thread.sleep(100);
+	    } catch (InterruptedException ex) {
+		Logger.getLogger(RemoteSwitch.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
+	while (!getEvent(SwitchSocketCEvent.class).update(SWITCHING, false)) {
+	    try {
+		Thread.sleep(100);
+	    } catch (InterruptedException ex) {
+		Logger.getLogger(RemoteSwitch.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	}
 
     }
 
@@ -94,7 +120,7 @@ public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implement
 	    }
 	    getDevice().switchSocketA(intent.getContent(HOUSE_CODE).getValue(Short.class), intent.getContent(RECEIVER_CODE).getValue(Short.class), intent.getContent(SWITCH_TO).getValue(Short.class));
 	}
-	getEvent(SwitchSocketAEvent.class).updateIntent(intent);
+	getEvent(SwitchSocketAEvent.class).update(intent);
     }
 
     public void executeIntent(SwitchSocketBIntent intent) throws TimeoutException, NotConnectedException {
@@ -108,7 +134,7 @@ public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implement
 	    }
 	    getDevice().switchSocketB(intent.getContent(ADDRESS).getValue(Long.class), intent.getContent(UNIT).getValue(Short.class), intent.getContent(SWITCH_TO).getValue(Short.class));
 	}
-	getEvent(SwitchSocketBEvent.class).updateIntent(intent);
+	getEvent(SwitchSocketBEvent.class).update(intent);
     }
 
     public void executeIntent(DimSocketBIntent intent) throws TimeoutException, NotConnectedException {
@@ -122,7 +148,7 @@ public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implement
 	    }
 	    getDevice().dimSocketB(intent.getContent(ADDRESS).getValue(Long.class), intent.getContent(UNIT).getValue(Short.class), intent.getContent(DIM_VALUE).getValue(Short.class));
 	}
-	getEvent(DimSocketBEvent.class).updateIntent(intent);
+	getEvent(DimSocketBEvent.class).update(intent);
     }
 
     public void executeIntent(SwitchSocketCIntent intent) throws TimeoutException, NotConnectedException {
@@ -136,6 +162,6 @@ public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implement
 	    }
 	    getDevice().switchSocketC(intent.getContent(SYSTEM_CODE).getValue(Character.class), intent.getContent(DEVICE_CODE).getValue(Short.class), intent.getContent(SWITCH_TO).getValue(Short.class));
 	}
-	getEvent(SwitchSocketCEvent.class).updateIntent(intent);
+	getEvent(SwitchSocketCEvent.class).update(intent);
     }
 }

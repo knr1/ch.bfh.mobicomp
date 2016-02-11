@@ -7,7 +7,6 @@ package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.intent;
 
 import ch.quantasy.iot.mqtt.base.message.AnIntent;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.barometer.Barometer;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.Humidity;
 
 /**
  *
@@ -26,7 +25,7 @@ public class AirPressureCallbackPeriodIntent extends AnIntent<Barometer> {
     }
 
     private boolean isPeriodInRange() {
-	long period = getContent(Humidity.PERIOD).getValue(Long.class);
+	long period = getContent(Barometer.PERIOD).getValue(Long.class);
 	return period >= 0;
     }
 
