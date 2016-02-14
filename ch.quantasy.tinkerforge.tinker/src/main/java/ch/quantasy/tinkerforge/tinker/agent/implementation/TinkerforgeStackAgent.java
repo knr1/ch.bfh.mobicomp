@@ -152,6 +152,7 @@ public class TinkerforgeStackAgent extends AbstractTinkerforgeStackManager imple
     @Override
     protected void deviceReConnected(final Device device) {
 	for (final TinkerforgeApplication tinkerforgeApplication : this.tinkerforgeApplications) {
+
 	    tinkerforgeApplication.deviceConnected(this, device);
 	}
     }
@@ -159,6 +160,7 @@ public class TinkerforgeStackAgent extends AbstractTinkerforgeStackManager imple
     @Override
     protected void deviceDisconnected(final Device device) {
 	for (final TinkerforgeApplication tinkerforgeApplication : this.tinkerforgeApplications) {
+
 	    tinkerforgeApplication.deviceDisconnected(this, device);
 	}
     }
