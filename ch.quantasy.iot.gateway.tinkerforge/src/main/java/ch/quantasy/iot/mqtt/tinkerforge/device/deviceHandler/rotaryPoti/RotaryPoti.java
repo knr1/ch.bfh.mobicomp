@@ -3,26 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti;
+package ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryPoti;
 
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.base.ADeviceHandler;
 import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.humidity.event.AnalogValueEvent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.event.AnalogValueReachedEvent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.event.PositionValueEvent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.event.PositionValueReachedEvent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.intent.AnalogCallbackPeriodIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.intent.AnalogCallbackThresholdIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.intent.DebouncePeriodIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.intent.PositionCallbackPeriodIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.intent.PositionCallbackThresholdIntent;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.status.AnalogCallbackPeriodStatus;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.status.AnalogCallbackThresholdStatus;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.status.DebounceStatus;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.status.PositionCallbackPeriodStatus;
-import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.linearPoti.status.PositionCallbackThresholdStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryPoti.event.AnalogValueReachedEvent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryPoti.event.PositionValueEvent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryPoti.event.PositionValueReachedEvent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryPoti.intent.AnalogCallbackPeriodIntent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryPoti.intent.AnalogCallbackThresholdIntent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryPoti.intent.DebouncePeriodIntent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryPoti.intent.PositionCallbackPeriodIntent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryPoti.intent.PositionCallbackThresholdIntent;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryPoti.status.AnalogCallbackPeriodStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryPoti.status.AnalogCallbackThresholdStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryPoti.status.DebounceStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryPoti.status.PositionCallbackPeriodStatus;
+import ch.quantasy.iot.mqtt.tinkerforge.device.deviceHandler.rotaryPoti.status.PositionCallbackThresholdStatus;
 import ch.quantasy.iot.mqtt.tinkerforge.device.stackHandler.MQTTTinkerforgeStackHandler;
 import ch.quantasy.tinkerforge.tinker.core.implementation.TinkerforgeStackAddress;
-import com.tinkerforge.BrickletLinearPoti;
+import com.tinkerforge.BrickletRotaryPoti;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
 import java.net.URI;
@@ -31,7 +31,7 @@ import java.net.URI;
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>
  */
-public class LinearPoti extends ADeviceHandler<BrickletLinearPoti> implements BrickletLinearPoti.AnalogValueListener, BrickletLinearPoti.AnalogValueReachedListener, BrickletLinearPoti.PositionListener, BrickletLinearPoti.PositionReachedListener {
+public class RotaryPoti extends ADeviceHandler<BrickletRotaryPoti> implements BrickletRotaryPoti.AnalogValueListener, BrickletRotaryPoti.AnalogValueReachedListener, BrickletRotaryPoti.PositionListener, BrickletRotaryPoti.PositionReachedListener {
 
     public static final String PERIOD = "period";
     public static final String THRESHOLD_OPTION = "option";
@@ -40,14 +40,15 @@ public class LinearPoti extends ADeviceHandler<BrickletLinearPoti> implements Br
 
     public static final String VALUE = "value";
 
+    @Override
     public String getApplicationName() {
-	return "LinearPoti";
+	return "RotaryPoti";
     }
 
-    public LinearPoti(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
+    public RotaryPoti(MQTTTinkerforgeStackHandler stackApplication, URI mqttURI, TinkerforgeStackAddress stackAddress, String identityString) throws Throwable {
 	super(stackApplication, mqttURI, stackAddress, identityString);
 	super.addStatusClass(AnalogCallbackPeriodStatus.class, AnalogCallbackThresholdStatus.class, PositionCallbackPeriodStatus.class, PositionCallbackThresholdStatus.class, DebounceStatus.class);
-	super.addEventClass(AnalogValueEvent.class, PositionValueEvent.class, AnalogValueReachedEvent.class, PositionValueReachedEvent.class);
+	super.addEventClass(AnalogValueEvent.class, PositionValueReachedEvent.class, AnalogValueReachedEvent.class, PositionValueEvent.class);
 	super.addIntentClass(AnalogCallbackPeriodIntent.class, AnalogCallbackThresholdIntent.class, PositionCallbackPeriodIntent.class, PositionCallbackThresholdIntent.class, DebouncePeriodIntent.class);
     }
 
@@ -68,47 +69,47 @@ public class LinearPoti extends ADeviceHandler<BrickletLinearPoti> implements Br
     }
 
     public void executeIntent(DebouncePeriodIntent intent) throws TimeoutException, NotConnectedException {
-	long period = intent.getValue(LinearPoti.PERIOD, Long.class);
+	long period = intent.getValue(RotaryPoti.PERIOD, Long.class);
 	getDevice().setDebouncePeriod(period);
-	getStatus(DebounceStatus.class).update(LinearPoti.PERIOD, getDevice().getDebouncePeriod());
+	getStatus(DebounceStatus.class).update(RotaryPoti.PERIOD, getDevice().getDebouncePeriod());
     }
 
     public void executeIntent(AnalogCallbackPeriodIntent intent) throws TimeoutException, NotConnectedException {
-	long period = intent.getValue(LinearPoti.PERIOD, Long.class);
+	long period = intent.getValue(RotaryPoti.PERIOD, Long.class);
 	getDevice().setAnalogValueCallbackPeriod(period);
 	getStatus(AnalogCallbackPeriodStatus.class).update(PERIOD, getDevice().getAnalogValueCallbackPeriod());
     }
 
     public void executeIntent(PositionCallbackPeriodIntent intent) throws TimeoutException, NotConnectedException {
-	long period = intent.getValue(LinearPoti.PERIOD, Long.class);
+	long period = intent.getValue(RotaryPoti.PERIOD, Long.class);
 	getDevice().setPositionCallbackPeriod(period);
 	getStatus(PositionCallbackPeriodStatus.class).update(PERIOD, getDevice().getPositionCallbackPeriod());
     }
 
     public void executeIntent(AnalogCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
-	char option = intent.getValue(LinearPoti.THRESHOLD_OPTION, Character.class);
+	char option = intent.getValue(RotaryPoti.THRESHOLD_OPTION, Character.class);
 	if (option == 's') {
 	    option = '<';
 	}
 	if (option == 'g') {
 	    option = '>';
 	}
-	int min = intent.getValue(LinearPoti.THRESHOLD_MIN, Integer.class);
-	int max = intent.getValue(LinearPoti.THRESHOLD_MAX, Integer.class);
+	int min = intent.getValue(RotaryPoti.THRESHOLD_MIN, Integer.class);
+	int max = intent.getValue(RotaryPoti.THRESHOLD_MAX, Integer.class);
 	getDevice().setAnalogValueCallbackThreshold(option, min, max);
 	getStatus(AnalogCallbackThresholdStatus.class).update(intent);
     }
 
     public void executeIntent(PositionCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
-	char option = intent.getValue(LinearPoti.THRESHOLD_OPTION, Character.class);
+	char option = intent.getValue(RotaryPoti.THRESHOLD_OPTION, Character.class);
 	if (option == 's') {
 	    option = '<';
 	}
 	if (option == 'g') {
 	    option = '>';
 	}
-	short min = intent.getValue(LinearPoti.THRESHOLD_MIN, Short.class);
-	short max = intent.getValue(LinearPoti.THRESHOLD_MAX, Short.class);
+	short min = intent.getValue(RotaryPoti.THRESHOLD_MIN, Short.class);
+	short max = intent.getValue(RotaryPoti.THRESHOLD_MAX, Short.class);
 	getDevice().setPositionCallbackThreshold(option, min, max);
 	getStatus(PositionCallbackThresholdStatus.class).update(intent);
     }
@@ -124,13 +125,13 @@ public class LinearPoti extends ADeviceHandler<BrickletLinearPoti> implements Br
     }
 
     @Override
-    public void position(int i) {
-	getEvent(PositionValueEvent.class).update(VALUE, i);
+    public void position(short s) {
+	getEvent(PositionValueEvent.class).update(VALUE, s);
     }
 
     @Override
-    public void positionReached(int i) {
-	getEvent(PositionValueReachedEvent.class).update(VALUE, i);
+    public void positionReached(short s) {
+	getEvent(PositionValueReachedEvent.class).update(VALUE, s);
     }
 
 }
