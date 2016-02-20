@@ -29,6 +29,9 @@ import com.tinkerforge.BrickletJoystick;
 import com.tinkerforge.NotConnectedException;
 import com.tinkerforge.TimeoutException;
 import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
 
 /**
  *
@@ -136,37 +139,86 @@ public class Joystick extends ADeviceHandler<BrickletJoystick> implements Brickl
 
     @Override
     public void analogValue(int i, int i1) {
-	getEvent(AnalogValueEvent.class).update(VALUE_X, i);
-	getEvent(AnalogValueEvent.class).update(VALUE_Y, i1);
+	IMqttToken token = null;
+	try {
+	    getEvent(AnalogValueEvent.class).update(VALUE_X, i);
+	    while (token == null) {
+		getEvent(AnalogValueEvent.class).update(VALUE_Y, i1);
+	    }
+	    token.waitForCompletion(10);
+	} catch (Exception ex) {
+	    Logger.getLogger(Joystick.class.getName()).log(Level.SEVERE, null, ex);
+	    System.out.println(token.getException());
+	}
     }
 
     @Override
     public void analogValueReached(int i, int i1) {
-	getEvent(AnalogValueReachedEvent.class).update(VALUE_X, i);
-	getEvent(AnalogValueReachedEvent.class).update(VALUE_Y, i);
+	try {
+	    getEvent(AnalogValueReachedEvent.class).update(VALUE_X, i);
+	    IMqttToken token = null;
+	    while (token == null) {
+		getEvent(AnalogValueReachedEvent.class).update(VALUE_Y, i);
+	    }
+	    token.waitForCompletion(10);
+
+	} catch (Exception ex) {
+	    Logger.getLogger(Joystick.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
 
     @Override
     public void position(short s, short s1) {
-	getEvent(PositionValueEvent.class).update(VALUE_X, s);
-	getEvent(PositionValueEvent.class).update(VALUE_Y, s1);
+	IMqttToken token = null;
+
+	try {
+	    getEvent(PositionValueEvent.class
+	    ).update(VALUE_X, s);
+	    while (token
+		    == null) {
+		token = getEvent(PositionValueEvent.class).update(VALUE_Y, s1);
+	    }
+
+	    token.waitForCompletion(
+		    10);
+	} catch (Exception ex) {
+	    Logger.getLogger(Joystick.class
+		    .getName()).log(Level.SEVERE, null, ex);
+	    System.out.println(token.getException());
+
+	}
 
     }
 
     @Override
-    public void positionReached(short s, short s1) {
-	getEvent(PositionValueEvent.class).update(VALUE_X, s);
-	getEvent(PositionValueEvent.class).update(VALUE_Y, s1);
+    public
+	    void positionReached(short s, short s1) {
+	try {
+	    getEvent(PositionValueEvent.class
+	    ).update(VALUE_X, s);
+	    IMqttToken token = null;
+	    while (token == null) {
+		getEvent(PositionValueEvent.class
+		).update(VALUE_Y, s1);
+	    }
+	    token.waitForCompletion(10);
+	} catch (Exception ex) {
+	    Logger.getLogger(Joystick.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
 
     @Override
-    public void pressed() {
-	getEvent(PressedEvent.class).update(VALUE, true);
+    public
+	    void pressed() {
+	getEvent(PressedEvent.class
+	).update(VALUE, true);
     }
 
     @Override
-    public void released() {
-	getEvent(PressedEvent.class).update(VALUE, false);
+    public
+	    void released() {
+	getEvent(PressedEvent.class
+	).update(VALUE, false);
     }
 
 }

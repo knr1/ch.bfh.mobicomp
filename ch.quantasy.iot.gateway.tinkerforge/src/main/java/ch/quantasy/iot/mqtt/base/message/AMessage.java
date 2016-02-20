@@ -121,23 +121,27 @@ public abstract class AMessage<H extends AHandler, E extends MessageDescription>
 		Content intentContent = intent.getContent(property);
 		if (intentContent != null) {
 		    IMqttDeliveryToken token = publish(property, toJSONMQTTMessage(intentContent.getValue(intentContent.description.typeOfClass)), mqttClient);
-		    token.waitForCompletion(10);
+		    try {
+			token.waitForCompletion(10);
+		    } catch (Exception ex) {
+			System.out.println(token.getException());
+		    }
 		}
 	    }
 	}
     }
 
-    protected boolean update(MqttAsyncClient mqttClient, String property, Object value) {
+    protected IMqttDeliveryToken update(MqttAsyncClient mqttClient, String property, Object value) {
 	synchronized (this) {
 	    if (mqttDeliveryToken == null || mqttDeliveryToken.isComplete()) {
 		try {
 		    mqttDeliveryToken = publish(property, toJSONMQTTMessage(value), mqttClient);
-		    return true;
+		    return mqttDeliveryToken;
 		} catch (Exception ex) {
 		    System.out.println("During publish, the following exception occured:" + ex.getStackTrace());
 		}
 	    }
-	    return false;
+	    return null;
 	}
     }
 

@@ -17,6 +17,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -38,7 +40,7 @@ public abstract class AHandler implements MqttCallback {
     public static final String DESCRIPTION = "description";
 
     public static final String DEVICE_DESCRIPTION_TOPIC = MQTT2TF.TOPIC + "/" + DESCRIPTION;
-
+    private ExecutorService executorPool = Executors.newCachedThreadPool();
     private final String identityString;
     private final Set<Class> intentSet;
     private final Map<String, Map<Class, AnIntent>> intentsMap;
@@ -112,7 +114,7 @@ public abstract class AHandler implements MqttCallback {
     //Ein tenent is in < > Brackets gehalten.
     //TODO: This is a boiler plate. Use a good REGEX for that.
     @Override
-    public void messageArrived(String string, MqttMessage mm) throws Exception {
+    public void messageArrived(final String string, final MqttMessage mm) throws Exception {
 	if (string.startsWith(intentTopic)) {
 	    String substring = string.substring(string.indexOf("intent/") + 7);
 	    Map<Class, AnIntent> intents;
@@ -133,10 +135,29 @@ public abstract class AHandler implements MqttCallback {
 		}
 
 		for (AnIntent intent : intents.values()) {
-		    intent.processMessage(string, mm);
+		    executorPool.execute(new IntentProcessor(intent, string, mm));
 		}
 	    }
 	}
+    }
+
+    class IntentProcessor implements Runnable {
+
+	public final AnIntent intent;
+	public final String string;
+	public final MqttMessage mm;
+
+	public IntentProcessor(AnIntent intent, String string, MqttMessage mm) {
+	    this.intent = intent;
+	    this.string = string;
+	    this.mm = mm;
+	}
+
+	@Override
+	public void run() {
+	    intent.processMessage(string, mm);
+	}
+
     }
 
     @Override

@@ -9,6 +9,7 @@ import ch.quantasy.iot.mqtt.base.AHandler;
 import ch.quantasy.iot.mqtt.base.StatusDescription;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -35,7 +36,7 @@ public abstract class AStatus<H extends AHandler> extends AMessage<H, StatusDesc
 	}
     }
 
-    public boolean update(String property, Object value) {
+    public IMqttDeliveryToken update(String property, Object value) {
 	return super.update(mqttClient, property, value);
     }
 
