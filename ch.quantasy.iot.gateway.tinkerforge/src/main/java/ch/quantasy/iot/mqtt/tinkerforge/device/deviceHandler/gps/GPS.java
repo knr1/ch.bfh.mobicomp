@@ -115,7 +115,7 @@ public class GPS extends ADeviceHandler<BrickletGPS> implements BrickletGPS.Alti
     }
 
     @Override
-    public void altitude(long l, long l1) {
+    public void altitude(int l, int l1) {
 	getEvent(AltitudeEvent.class).update(ALTITUDE, l);
 	getEvent(AltitudeEvent.class).update(GEOIDAL_SEPARATION, l1);
 

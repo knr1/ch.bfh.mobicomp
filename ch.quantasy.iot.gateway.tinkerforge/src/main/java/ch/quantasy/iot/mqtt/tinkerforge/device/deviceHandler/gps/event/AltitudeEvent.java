@@ -18,8 +18,8 @@ public class AltitudeEvent extends AnEvent {
 
     public AltitudeEvent(AHandler deviceHandler, String eventTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, eventTopic, "altitude", mqttClient);
-	super.addDescription(GPS.ALTITUDE, Long.class, "JSON", "" + Long.MIN_VALUE, "" + Long.MAX_VALUE);
-	super.addDescription(GPS.GEOIDAL_SEPARATION, Long.class, "JSON", "" + Long.MIN_VALUE, "" + Long.MAX_VALUE);
+	super.addDescription(GPS.ALTITUDE, Integer.class, "JSON", "" + Integer.MIN_VALUE, "" + Integer.MAX_VALUE);
+	super.addDescription(GPS.GEOIDAL_SEPARATION, Integer.class, "JSON", "" + Integer.MIN_VALUE, "" + Integer.MAX_VALUE);
 
     }
 
