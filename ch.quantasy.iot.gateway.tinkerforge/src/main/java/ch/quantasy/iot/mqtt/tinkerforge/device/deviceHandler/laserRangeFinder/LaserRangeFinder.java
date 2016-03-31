@@ -112,6 +112,12 @@ public class LaserRangeFinder extends ADeviceHandler<BrickletLaserRangeFinder> i
 
     public void executeIntent(DistanceCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(LaserRangeFinder.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	int min = intent.getValue(LaserRangeFinder.THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(LaserRangeFinder.THRESHOLD_MAX, Integer.class);
 	getDevice().setDistanceCallbackThreshold(option, min, max);
@@ -120,6 +126,12 @@ public class LaserRangeFinder extends ADeviceHandler<BrickletLaserRangeFinder> i
 
     public void executeIntent(VelocityCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(LaserRangeFinder.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	short min = intent.getValue(LaserRangeFinder.THRESHOLD_MIN, Short.class);
 	short max = intent.getValue(LaserRangeFinder.THRESHOLD_MAX, Short.class);
 	getDevice().setVelocityCallbackThreshold(option, min, max);

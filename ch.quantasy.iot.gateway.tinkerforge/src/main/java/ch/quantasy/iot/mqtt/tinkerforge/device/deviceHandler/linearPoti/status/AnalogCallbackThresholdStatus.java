@@ -18,7 +18,7 @@ public class AnalogCallbackThresholdStatus extends AStatus {
 
     public AnalogCallbackThresholdStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "analogCallbackThreshold", mqttClient);
-	super.addDescription(LinearPoti.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(LinearPoti.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(LinearPoti.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(LinearPoti.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "4095");
     }

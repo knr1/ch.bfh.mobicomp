@@ -51,7 +51,7 @@ public class IMUV2 {
 	    client.subscribe("iot/tf/#", 1);
 	    client.publish("iot/tf/MQTT2TF/0/intent/<" + UID + ">/stackHandler/stackAddress", "{\"hostName\":\"localhost\",\"port\":4223}".getBytes(), 1, true).waitForCompletion();
 
-	    client.publish("iot/tf/localhost/4223/IMUV2/9xblji/intent/<" + UID + ">/linearAcceleration/period", "0".getBytes(), 1, false);
+	    client.publish("iot/tf/localhost/4223/IMUV2/9xblji/intent/<" + UID + ">/linearAcceleration/period", "10".getBytes(), 1, false);
 	} catch (Exception ex) {
 	    Logger.getLogger(IMUV2.class.getName()).log(Level.SEVERE, null, ex);
 	}
@@ -59,6 +59,7 @@ public class IMUV2 {
     }
 
     public void disconnect() throws MqttException {
+	client.publish("iot/tf/localhost/4223/IMUV2/9xblji/intent/<" + UID + ">/linearAcceleration/period", "0".getBytes(), 1, false);
 	client.disconnect();
     }
 

@@ -16,7 +16,7 @@ public class CallbackThresholdIntent extends AnIntent<Moisture> {
 
     public CallbackThresholdIntent(Moisture deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "callbackThreshold");
-	super.addDescription(Moisture.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(Moisture.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(Moisture.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(Moisture.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(Moisture.ENABLED, Boolean.class, "JSON", "true", "false");
@@ -36,8 +36,8 @@ public class CallbackThresholdIntent extends AnIntent<Moisture> {
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;

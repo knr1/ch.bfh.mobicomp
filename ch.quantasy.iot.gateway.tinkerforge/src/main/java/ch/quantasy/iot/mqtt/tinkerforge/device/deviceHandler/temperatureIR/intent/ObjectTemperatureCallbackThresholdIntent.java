@@ -16,7 +16,7 @@ public class ObjectTemperatureCallbackThresholdIntent extends AnIntent<Temperatu
 
     public ObjectTemperatureCallbackThresholdIntent(TemperatureIR deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "objectTemperatureCallbackThreshold");
-	super.addDescription(TemperatureIR.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(TemperatureIR.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(TemperatureIR.THRESHOLD_MIN, Integer.class, "JSON", "-700", "...", "8300");
 	super.addDescription(TemperatureIR.THRESHOLD_MAX, Integer.class, "JSON", "-700", "...", "8300");
 	super.addDescription(TemperatureIR.ENABLED, Boolean.class, "JSON", "true", "false");
@@ -36,8 +36,8 @@ public class ObjectTemperatureCallbackThresholdIntent extends AnIntent<Temperatu
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;

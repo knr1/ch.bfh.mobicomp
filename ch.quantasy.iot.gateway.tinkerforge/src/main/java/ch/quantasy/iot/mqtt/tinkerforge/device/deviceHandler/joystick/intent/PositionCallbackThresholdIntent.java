@@ -16,7 +16,7 @@ public class PositionCallbackThresholdIntent extends AnIntent<Joystick> {
 
     public PositionCallbackThresholdIntent(Joystick deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "positionCallbackThreshold");
-	super.addDescription(Joystick.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(Joystick.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(Joystick.THRESHOLD_MIN_X, Short.class, "JSON", "-100", "...", "100");
 	super.addDescription(Joystick.THRESHOLD_MAX_X, Short.class, "JSON", "-100", "...", "100");
 	super.addDescription(Joystick.THRESHOLD_MIN_Y, Short.class, "JSON", "-100", "...", "100");
@@ -38,8 +38,8 @@ public class PositionCallbackThresholdIntent extends AnIntent<Joystick> {
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;

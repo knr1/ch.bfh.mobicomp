@@ -24,6 +24,8 @@ import com.tinkerforge.TimeoutException;
 import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
  *
@@ -62,31 +64,36 @@ public class RemoteSwitch extends ADeviceHandler<BrickletRemoteSwitch> implement
 	synchronized (this) {
 	    this.notifyAll();
 	}
-	while (!getEvent(SwitchSocketAEvent.class).update(SWITCHING, false)) {
+	IMqttToken token = null;
+	while (token == null || !token.isComplete() || token.getException() == null) {
 	    try {
-		Thread.sleep(100);
-	    } catch (InterruptedException ex) {
+		token = (getEvent(SwitchSocketAEvent.class).update(SWITCHING, false));
+		token.waitForCompletion(100);
+	    } catch (MqttException ex) {
 		Logger.getLogger(RemoteSwitch.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	}
-	while (!getEvent(SwitchSocketBEvent.class).update(SWITCHING, false)) {
+	while (token == null || !token.isComplete() || token.getException() == null) {
 	    try {
-		Thread.sleep(100);
-	    } catch (InterruptedException ex) {
+		token = (getEvent(SwitchSocketBEvent.class).update(SWITCHING, false));
+		token.waitForCompletion(100);
+	    } catch (MqttException ex) {
 		Logger.getLogger(RemoteSwitch.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	}
-	while (!getEvent(DimSocketBEvent.class).update(SWITCHING, false)) {
+	while (token == null || !token.isComplete() || token.getException() == null) {
 	    try {
-		Thread.sleep(100);
-	    } catch (InterruptedException ex) {
+		token = (getEvent(DimSocketBEvent.class).update(SWITCHING, false));
+		token.waitForCompletion(100);
+	    } catch (MqttException ex) {
 		Logger.getLogger(RemoteSwitch.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	}
-	while (!getEvent(SwitchSocketCEvent.class).update(SWITCHING, false)) {
+	while (token == null || !token.isComplete() || token.getException() == null) {
 	    try {
-		Thread.sleep(100);
-	    } catch (InterruptedException ex) {
+		token = (getEvent(SwitchSocketCEvent.class).update(SWITCHING, false));
+		token.waitForCompletion(100);
+	    } catch (MqttException ex) {
 		Logger.getLogger(RemoteSwitch.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	}

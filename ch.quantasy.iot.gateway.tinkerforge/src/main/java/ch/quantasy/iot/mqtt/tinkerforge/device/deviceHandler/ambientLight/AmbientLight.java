@@ -84,6 +84,12 @@ public class AmbientLight extends ADeviceHandler<BrickletAmbientLight> implement
 
     public void executeIntent(CallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(AmbientLight.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	short min = intent.getValue(AmbientLight.THRESHOLD_MIN, Short.class);
 	short max = intent.getValue(AmbientLight.THRESHOLD_MAX, Short.class);
 	getDevice().setIlluminanceCallbackThreshold(option, min, max);
@@ -98,6 +104,12 @@ public class AmbientLight extends ADeviceHandler<BrickletAmbientLight> implement
 
     public void executeIntent(AnalogCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(AmbientLight.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	int min = intent.getValue(AmbientLight.THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(AmbientLight.THRESHOLD_MAX, Integer.class);
 	getDevice().setAnalogValueCallbackThreshold(option, min, max);

@@ -88,6 +88,12 @@ public class Humidity extends ADeviceHandler<BrickletHumidity> implements Brickl
 
     public void executeIntent(AnalogCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(Humidity.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	int min = intent.getValue(Humidity.THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(Humidity.THRESHOLD_MAX, Integer.class);
 	getDevice().setAnalogValueCallbackThreshold(option, min, max);
@@ -96,6 +102,12 @@ public class Humidity extends ADeviceHandler<BrickletHumidity> implements Brickl
 
     public void executeIntent(HumidityCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(Humidity.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	short min = intent.getValue(Humidity.THRESHOLD_MIN, Short.class);
 	short max = intent.getValue(Humidity.THRESHOLD_MAX, Short.class);
 	getDevice().setHumidityCallbackThreshold(option, min, max);

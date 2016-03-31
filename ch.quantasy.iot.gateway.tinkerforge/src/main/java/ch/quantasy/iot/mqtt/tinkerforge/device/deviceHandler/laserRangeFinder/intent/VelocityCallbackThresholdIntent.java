@@ -16,7 +16,7 @@ public class VelocityCallbackThresholdIntent extends AnIntent<LaserRangeFinder> 
 
     public VelocityCallbackThresholdIntent(LaserRangeFinder deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "velocityCallbackThreshold");
-	super.addDescription(LaserRangeFinder.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(LaserRangeFinder.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(LaserRangeFinder.THRESHOLD_MIN, Short.class, "JSON", "-12700", "...", "12700");
 	super.addDescription(LaserRangeFinder.THRESHOLD_MAX, Short.class, "JSON", "-12700", "...", "12700");
 	super.addDescription(LaserRangeFinder.ENABLED, Boolean.class, "JSON", "true", "false");
@@ -36,8 +36,8 @@ public class VelocityCallbackThresholdIntent extends AnIntent<LaserRangeFinder> 
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;

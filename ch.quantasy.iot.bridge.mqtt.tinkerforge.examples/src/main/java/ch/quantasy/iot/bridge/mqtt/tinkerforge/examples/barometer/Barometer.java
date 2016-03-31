@@ -28,7 +28,7 @@ public class Barometer {
     public static final String CONNECTION = "tcp://localhost:1883";
     //public static final String CONNECTION = "tcp://147.87.112.222:1883";
 
-    public static final String UID = "UVLight-Example";
+    public static final String UID = "Barometer-Example";
 
     private MqttAsyncClient client;
 

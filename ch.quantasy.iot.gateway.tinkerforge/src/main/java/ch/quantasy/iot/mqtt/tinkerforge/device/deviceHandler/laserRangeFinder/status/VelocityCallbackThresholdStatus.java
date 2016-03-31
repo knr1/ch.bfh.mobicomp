@@ -18,7 +18,7 @@ public class VelocityCallbackThresholdStatus extends AStatus {
 
     public VelocityCallbackThresholdStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "velocityCallbackThreshold", mqttClient);
-	super.addDescription(LaserRangeFinder.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(LaserRangeFinder.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(LaserRangeFinder.THRESHOLD_MIN, Short.class, "JSON", "0", "...", "12700");
 	super.addDescription(LaserRangeFinder.THRESHOLD_MAX, Short.class, "JSON", "0", "...", "12700");
     }

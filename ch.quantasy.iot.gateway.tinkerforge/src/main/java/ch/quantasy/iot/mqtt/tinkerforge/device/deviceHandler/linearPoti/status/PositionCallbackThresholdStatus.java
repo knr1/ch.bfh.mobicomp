@@ -18,7 +18,7 @@ public class PositionCallbackThresholdStatus extends AStatus {
 
     public PositionCallbackThresholdStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "positionCallbackThreshold", mqttClient);
-	super.addDescription(LinearPoti.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(LinearPoti.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(LinearPoti.THRESHOLD_MIN, Short.class, "JSON", "0", "...", "100");
 	super.addDescription(LinearPoti.THRESHOLD_MAX, Short.class, "JSON", "0", "...", "100");
     }

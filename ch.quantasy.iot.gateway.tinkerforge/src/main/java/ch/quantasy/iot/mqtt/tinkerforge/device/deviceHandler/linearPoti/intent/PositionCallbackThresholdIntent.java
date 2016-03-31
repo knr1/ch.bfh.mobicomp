@@ -16,7 +16,7 @@ public class PositionCallbackThresholdIntent extends AnIntent<LinearPoti> {
 
     public PositionCallbackThresholdIntent(LinearPoti deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "positionCallbackThreshold");
-	super.addDescription(LinearPoti.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(LinearPoti.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(LinearPoti.THRESHOLD_MIN, Short.class, "JSON", "0", "...", "100");
 	super.addDescription(LinearPoti.THRESHOLD_MAX, Short.class, "JSON", "0", "...", "100");
 	super.addDescription(LinearPoti.ENABLED, Boolean.class, "JSON", "true", "false");
@@ -36,8 +36,8 @@ public class PositionCallbackThresholdIntent extends AnIntent<LinearPoti> {
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;

@@ -16,7 +16,7 @@ public class AnalogCallbackThresholdIntent extends AnIntent<Joystick> {
 
     public AnalogCallbackThresholdIntent(Joystick deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "analogCallbackThreshold");
-	super.addDescription(Joystick.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(Joystick.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(Joystick.THRESHOLD_MIN_X, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(Joystick.THRESHOLD_MAX_X, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(Joystick.THRESHOLD_MIN_Y, Integer.class, "JSON", "0", "...", "4095");
@@ -38,8 +38,8 @@ public class AnalogCallbackThresholdIntent extends AnIntent<Joystick> {
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;

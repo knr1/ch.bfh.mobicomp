@@ -72,6 +72,12 @@ public class SoundIntensity extends ADeviceHandler<BrickletSoundIntensity> imple
 
     public void executeIntent(CallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(SoundIntensity.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	int min = intent.getValue(SoundIntensity.THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(SoundIntensity.THRESHOLD_MAX, Integer.class);
 	getDevice().setIntensityCallbackThreshold(option, min, max);

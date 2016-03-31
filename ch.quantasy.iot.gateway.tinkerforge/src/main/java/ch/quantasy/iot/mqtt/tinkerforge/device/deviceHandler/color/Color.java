@@ -115,6 +115,12 @@ public class Color extends ADeviceHandler<BrickletColor> implements BrickletColo
 
     public void executeIntent(ColorCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(Color.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	int minR = intent.getValue(Color.THRESHOLD_MIN_R, Integer.class);
 	int maxR = intent.getValue(Color.THRESHOLD_MAX_R, Integer.class);
 	int minG = intent.getValue(Color.THRESHOLD_MIN_G, Integer.class);

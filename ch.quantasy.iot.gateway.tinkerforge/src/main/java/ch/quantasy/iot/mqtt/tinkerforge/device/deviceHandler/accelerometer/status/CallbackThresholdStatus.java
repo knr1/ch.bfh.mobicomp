@@ -18,7 +18,7 @@ public class CallbackThresholdStatus extends AStatus {
 
     public CallbackThresholdStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "callbackThreshold", mqttClient);
-	super.addDescription(Accelerometer.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(Accelerometer.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(Accelerometer.THRESHOLD_MIN_X, Short.class, "JSON", "" + Short.MIN_VALUE, "...", "4095");
 	super.addDescription(Accelerometer.THRESHOLD_MIN_Y, Short.class, "JSON", "" + Short.MIN_VALUE, "...", "4095");
 	super.addDescription(Accelerometer.THRESHOLD_MIN_Z, Short.class, "JSON", "" + Short.MIN_VALUE, "...", "4095");

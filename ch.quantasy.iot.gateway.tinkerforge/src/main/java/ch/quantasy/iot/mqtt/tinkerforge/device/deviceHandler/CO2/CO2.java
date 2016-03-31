@@ -71,6 +71,12 @@ public class CO2 extends ADeviceHandler<BrickletCO2> implements BrickletCO2.CO2C
 
     public void executeIntent(CO2ConcentrationCallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(CO2.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	int min = intent.getValue(CO2.THRESHOLD_MIN, Integer.class);
 	int max = intent.getValue(CO2.THRESHOLD_MAX, Integer.class);
 	getDevice().setCO2ConcentrationCallbackThreshold(option, min, max);

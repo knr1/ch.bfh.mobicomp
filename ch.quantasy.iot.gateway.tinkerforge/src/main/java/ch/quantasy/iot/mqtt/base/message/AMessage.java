@@ -116,42 +116,32 @@ public abstract class AMessage<H extends AHandler, E extends MessageDescription>
 
     protected void update(MqttAsyncClient mqttClient, AnIntent intent) throws MqttException {
 	for (Content content : this.getValueMap().values()) {
-	    byte[] rawContent = null;
 	    String property = content.getProperty();
 	    if (property != null) {
 		Content intentContent = intent.getContent(property);
 		if (intentContent != null) {
-		    rawContent = intentContent.rawValue;
-		}
-	    }
-	    if (rawContent != null) {
-		try {
-		    while (!update(mqttClient, property, rawContent)) {
-			Thread.sleep(10);
+		    IMqttDeliveryToken token = publish(property, toJSONMQTTMessage(intentContent.getValue(intentContent.description.typeOfClass)), mqttClient);
+		    try {
+			token.waitForCompletion(10);
+		    } catch (Exception ex) {
+			System.out.println(token.getException());
 		    }
-		} catch (InterruptedException ex) {
-		    Logger.getLogger(AMessage.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	    }
 	}
-
     }
 
-    protected boolean update(MqttAsyncClient mqttClient, String property, Object value) {
-	if (!getContent(property).updateContent(value)) {
-	    return true;
-	}
-
+    protected IMqttDeliveryToken update(MqttAsyncClient mqttClient, String property, Object value) {
 	synchronized (this) {
 	    if (mqttDeliveryToken == null || mqttDeliveryToken.isComplete()) {
 		try {
 		    mqttDeliveryToken = publish(property, toJSONMQTTMessage(value), mqttClient);
-		    return true;
+		    return mqttDeliveryToken;
 		} catch (Exception ex) {
 		    System.out.println("During publish, the following exception occured:" + ex.getStackTrace());
 		}
 	    }
-	    return false;
+	    return null;
 	}
     }
 

@@ -16,7 +16,7 @@ public class ColorCallbackThresholdIntent extends AnIntent<Color> {
 
     public ColorCallbackThresholdIntent(Color deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "colorCallbackThreshold");
-	super.addDescription(Color.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(Color.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(Color.THRESHOLD_MIN_R, Integer.class, "JSON", "0", "...", "65535");
 	super.addDescription(Color.THRESHOLD_MAX_R, Integer.class, "JSON", "0", "...", "65535");
 	super.addDescription(Color.THRESHOLD_MIN_G, Integer.class, "JSON", "0", "...", "65535");
@@ -43,8 +43,8 @@ public class ColorCallbackThresholdIntent extends AnIntent<Color> {
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;

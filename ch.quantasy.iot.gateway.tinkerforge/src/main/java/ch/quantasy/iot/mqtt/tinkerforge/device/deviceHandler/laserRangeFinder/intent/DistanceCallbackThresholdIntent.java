@@ -16,7 +16,7 @@ public class DistanceCallbackThresholdIntent extends AnIntent<LaserRangeFinder> 
 
     public DistanceCallbackThresholdIntent(LaserRangeFinder deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "distanceCallbackThreshold");
-	super.addDescription(LaserRangeFinder.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(LaserRangeFinder.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(LaserRangeFinder.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "4000");
 	super.addDescription(LaserRangeFinder.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "4000");
 	super.addDescription(LaserRangeFinder.ENABLED, Boolean.class, "JSON", "true", "false");
@@ -36,8 +36,8 @@ public class DistanceCallbackThresholdIntent extends AnIntent<LaserRangeFinder> 
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;

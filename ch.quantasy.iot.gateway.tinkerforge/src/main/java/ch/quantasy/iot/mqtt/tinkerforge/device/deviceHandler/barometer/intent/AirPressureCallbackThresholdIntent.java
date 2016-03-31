@@ -16,7 +16,7 @@ public class AirPressureCallbackThresholdIntent extends AnIntent<Barometer> {
 
     public AirPressureCallbackThresholdIntent(Barometer deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "airPressureCallbackThreshold");
-	super.addDescription(Barometer.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(Barometer.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(Barometer.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(Barometer.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(Barometer.ENABLED, Boolean.class, "JSON", "true", "false");
@@ -36,8 +36,8 @@ public class AirPressureCallbackThresholdIntent extends AnIntent<Barometer> {
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;

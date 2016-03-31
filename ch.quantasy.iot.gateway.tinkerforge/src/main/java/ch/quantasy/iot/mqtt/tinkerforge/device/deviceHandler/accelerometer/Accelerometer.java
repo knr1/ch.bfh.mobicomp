@@ -107,6 +107,12 @@ public class Accelerometer extends ADeviceHandler<BrickletAccelerometer> impleme
 
     public void executeIntent(CallbackThresholdIntent intent) throws TimeoutException, NotConnectedException {
 	char option = intent.getValue(Accelerometer.THRESHOLD_OPTION, Character.class);
+	if (option == 's') {
+	    option = '<';
+	}
+	if (option == 'g') {
+	    option = '>';
+	}
 	short minX = intent.getValue(Accelerometer.THRESHOLD_MIN_X, Short.class);
 	short maxX = intent.getValue(Accelerometer.THRESHOLD_MAX_X, Short.class);
 	short minY = intent.getValue(Accelerometer.THRESHOLD_MIN_Y, Short.class);

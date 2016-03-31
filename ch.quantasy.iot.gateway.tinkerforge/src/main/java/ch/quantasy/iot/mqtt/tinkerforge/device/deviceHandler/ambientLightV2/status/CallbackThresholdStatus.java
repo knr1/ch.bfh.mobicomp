@@ -18,7 +18,7 @@ public class CallbackThresholdStatus extends AStatus {
 
     public CallbackThresholdStatus(AHandler deviceHandler, String statusTopic, MqttAsyncClient mqttClient) {
 	super(deviceHandler, statusTopic, "callbackThreshold", mqttClient);
-	super.addDescription(AmbientLightV2.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(AmbientLightV2.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(AmbientLightV2.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "4095");
 	super.addDescription(AmbientLightV2.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "4095");
     }

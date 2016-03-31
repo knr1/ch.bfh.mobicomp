@@ -16,7 +16,7 @@ public class UVLightCallbackThresholdIntent extends AnIntent<UVLight> {
 
     public UVLightCallbackThresholdIntent(UVLight deviceHandler, String intentTopic) {
 	super(deviceHandler, intentTopic, "UVLightCallbackThreshold");
-	super.addDescription(UVLight.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "\\<", "\\>");
+	super.addDescription(UVLight.THRESHOLD_OPTION, Character.class, "JSON", "x", "o", "i", "s", "g");
 	super.addDescription(UVLight.THRESHOLD_MIN, Integer.class, "JSON", "0", "...", "325000");
 	super.addDescription(UVLight.THRESHOLD_MAX, Integer.class, "JSON", "0", "...", "325000");
 	super.addDescription(UVLight.ENABLED, Boolean.class, "JSON", "true", "false");
@@ -36,8 +36,8 @@ public class UVLightCallbackThresholdIntent extends AnIntent<UVLight> {
 	    case 'x':
 	    case 'o':
 	    case 'i':
-	    case '<': //<
-	    case '>': //>
+	    case 's': //<
+	    case 'g': //>
 		return true;
 	}
 	return false;
