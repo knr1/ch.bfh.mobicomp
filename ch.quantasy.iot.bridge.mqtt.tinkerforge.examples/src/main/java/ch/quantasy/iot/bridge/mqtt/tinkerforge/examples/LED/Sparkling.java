@@ -26,12 +26,13 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  */
 public class Sparkling {
 
+    public static final int AMOUNT_OF_LEDS=25;
     public static final String CONNECTION = "tcp://localhost:1883";
     public static final String UID = "Sparkling";
 
     private MqttAsyncClient client;
 
-    private short[][] sparklers = new short[3][250];
+    private short[][] sparklers = new short[3][AMOUNT_OF_LEDS];
     private Random random;
     public static final int RED = 2;
     public static final int GREEN = 1;
@@ -63,7 +64,7 @@ public class Sparkling {
 	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/chipType", "2801".getBytes(), 1, true);
 	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/clockFrequencyOfICsInHz", "2000000".getBytes(), 1, true);
 	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/frameDurationInMilliseconds", "10".getBytes(), 1, true);
-	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/numberOfLEDs", "250".getBytes(), 1, true);
+	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/numberOfLEDs", (""+AMOUNT_OF_LEDS).getBytes(), 1, true);
 	    client.publish("iot/tf/xmas/4223/LEDStrip/dpu9q2/intent/<" + UID + ">/config/enabled", "true".getBytes(), 1, true);
 	    Thread.sleep(1000);
 
@@ -74,13 +75,13 @@ public class Sparkling {
     }
 
     public void sparkle() throws MqttException, InterruptedException {
-	for (int i = 0; i < 250; i++) {
+	for (int i = 0; i < sparklers[RED].length; i++) {
 	    sparklers[RED][i] = (short) (240 + random.nextInt(30) - 15);
 	}
-	for (int i = 0; i < 250; i++) {
+	for (int i = 0; i < sparklers[GREEN].length; i++) {
 	    sparklers[GREEN][i] = (short) (70 + random.nextInt(20) - 10);
 	}
-	for (int i = 0; i < 250; i++) {
+	for (int i = 0; i < sparklers[BLUE].length; i++) {
 	    sparklers[BLUE][i] = (short) (6 + random.nextInt(12) - 6);
 	}
 	int spark = random.nextInt(250);
