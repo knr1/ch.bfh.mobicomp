@@ -9,7 +9,6 @@ import com.tinkerforge.BrickletBarometer;
 import com.tinkerforge.BrickletBarometer.AltitudeListener;
 import com.tinkerforge.Device;
 import com.tinkerforge.NotConnectedException;
-import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -104,8 +103,8 @@ public class BarometerApplication extends AbstractTinkerforgeApplication impleme
     @Override
     public void altitude(int altitude) {
 
-	buffer.sendAsync(ByteBuffer.allocate(4).putInt(altitude).array());
-	//buffer.sendAsync(Integer.toString(altitude).getBytes());
+	//buffer.sendAsync(ByteBuffer.allocate(4).putInt(altitude).array());
+	buffer.sendAsync(Integer.toString(altitude).getBytes());
     }
 
     @Override

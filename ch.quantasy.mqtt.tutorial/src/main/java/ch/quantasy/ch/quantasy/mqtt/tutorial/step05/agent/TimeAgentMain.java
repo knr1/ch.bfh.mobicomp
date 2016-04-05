@@ -4,7 +4,7 @@ import java.io.IOException;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
- * This example demonstrates thow a subscriber can listen to multiple topics on a single connection.<br/>
+ * This example demonstrates how a subscriber can listen to multiple topics on a single connection.<br/>
  * If a subscriber wants to listen to multiple topics, it can register itself explicitly.
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>

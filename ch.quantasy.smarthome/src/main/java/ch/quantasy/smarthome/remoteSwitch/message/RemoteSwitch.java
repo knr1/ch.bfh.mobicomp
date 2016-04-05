@@ -33,7 +33,7 @@ public class RemoteSwitch {
 		floor = Floor.valueOf(this.json.getString("floor"));
 		address = this.json.getInt("address");
 		unit = this.json.getInt("unit");
-		switchOn = this.json.getBoolean("switchOn");
+		switchOn = this.json.getBoolean("switchTo");
 		dimValue = this.json.getInt("dimValue", -1);
 		System.out.println("Type: " + type + " Floor: " + floor + " Address: " + address + " Unit: " + unit + " SwitchOn: " + switchOn + " Dim: " + dimValue);
 	    } catch (Exception ex) {

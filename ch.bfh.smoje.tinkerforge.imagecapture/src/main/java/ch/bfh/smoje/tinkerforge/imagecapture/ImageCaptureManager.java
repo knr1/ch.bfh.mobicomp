@@ -127,8 +127,8 @@ public class ImageCaptureManager {
     }
 
     public ImageCaptureManager() {
-	manageMQTT();
 	manageTinkerforge();
+	manageMQTT();
 
 	while (true) {
 	    {
@@ -199,10 +199,8 @@ public class ImageCaptureManager {
 	MqttMessage mqttMessage = new MqttMessage();
 
 	mqttMessage.setPayload(message.getBytes());
-	mqttMessage.setQos(
-		1);
-	mqttMessage.setRetained(
-		true);
+	mqttMessage.setQos(1);
+	mqttMessage.setRetained(true);
 
 	try {
 	    mqttClient.publish(MQTT_TOPIC, mqttMessage);
@@ -219,8 +217,15 @@ public class ImageCaptureManager {
 
 	ImageCaptureManager manager = new ImageCaptureManager();
 	manager.captureImage();
-	System.out.println("Hit a key to terminate program");
-	System.in.read();
+	try {
+	    while (true) {
+		Thread.sleep(100000);
+	    }
+	} catch (InterruptedException ex) {
+	    //
+	}
+	//System.out.println("Hit a key to terminate program");
+	//System.in.read();
 	manager.finish();
 	System.out.println("Program terminated.");
 	System.exit(0);

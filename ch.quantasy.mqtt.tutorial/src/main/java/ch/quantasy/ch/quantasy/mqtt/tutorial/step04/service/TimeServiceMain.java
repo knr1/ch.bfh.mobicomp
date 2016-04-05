@@ -11,7 +11,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
  * established again, the messages will be sent to the broker.<br/>
  *
  * This requires a persistence capability at the publisher's side (which is not always given).<br/>
- * As a side effect, if a new subscirber subscribes to the publisher's topic with cleanSession=false, some of the
+ * As a side effect, if a new subscriber subscribes to the publisher's topic with cleanSession=false, some of the
  * historic data can be sent from the publisher via broker to the subscriber...
  *
  * @author Reto E. Koenig <reto.koenig@bfh.ch>

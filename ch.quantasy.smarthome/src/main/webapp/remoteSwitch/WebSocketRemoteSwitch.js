@@ -26,6 +26,7 @@
 //var wsUri = "ws://" + document.location.host + document.location.pathname + "remoteswitchendpoint";
 //alert(document.location.pathname);
 var wsUri = "ws://" + document.location.host + "/ch_quantasy_smarthome/remoteswitchendpoint";
+//var wsUri = "ws://" + document.location.host + "/smarthome/remoteswitchendpoint";
 var webSocket = new WebSocket(wsUri);
 
 var output = document.getElementById("output");

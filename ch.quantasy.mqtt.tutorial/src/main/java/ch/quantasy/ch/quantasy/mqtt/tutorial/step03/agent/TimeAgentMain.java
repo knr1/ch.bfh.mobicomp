@@ -33,7 +33,7 @@ public class TimeAgentMain {
 	System.in.read();
 	timeService.stopReceivingTicks();
 	timeService.disconnectFromBroker();
-	System.out.println("Done.");
+	System.out.println("Finished.");
 	System.exit(0);
     }
 }
