@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.mqtt.tutorial.step05a.agent;
+package ch.quantasy.iot.mqtt.timer.agent;
 
-import ch.quantasy.iot.mqtt.tutorial.step05a.communication.MQTTCommunication;
-import ch.quantasy.iot.mqtt.tutorial.step05a.communication.MQTTParameters;
-import ch.quantasy.iot.mqtt.tutorial.step05a.service.TimerService;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTCommunication;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTParameters;
+import ch.quantasy.iot.mqtt.timer.service.TimerService;
+import ch.quantasy.iot.mqtt.timer.service.ConsoleService;
 import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,7 +63,7 @@ public class TimerAgent implements MqttCallback {
                 Thread.sleep(10000);
                 MqttMessage stateMessageRun = new MqttMessage(TimerService.INTENT_RUN.getBytes());
                 stateMessageRun.setQos(1);
-                stateMessagePause.setRetained(true);
+                stateMessageRun.setRetained(true);
                 communication.publish(TimerService.INTENT_TOPIC_STATE, stateMessageRun);
                 Thread.sleep(10000);
 
@@ -80,8 +81,11 @@ public class TimerAgent implements MqttCallback {
 
     @Override
     public void messageArrived(String string, MqttMessage mm) throws Exception {
-
-        System.out.printf("Message has arrived. Topic: %s, Message: %s \n", string, new String(mm.getPayload()));
+        if (TimerService.EVENT_TOPIC_TIME.equals(string)) {
+            MqttMessage printMessage = new MqttMessage(mm.getPayload());
+            printMessage.setQos(1);
+            communication.publish(ConsoleService.INTENT_TOPIC_PRINT_TEXT, printMessage);
+        }
     }
 
     @Override

@@ -15,13 +15,13 @@
  * This allows parallel development (e.g. one person one service)
  * The important thing is the contract-description of the service.
  */
-package ch.quantasy.iot.mqtt.tutorial.step06a.service;
+package ch.quantasy.iot.mqtt.timer.service;
 
-import ch.quantasy.iot.mqtt.tutorial.step06a.communication.MQTTCommunication;
-import ch.quantasy.iot.mqtt.tutorial.step06a.communication.MQTTParameters;
-import ch.quantasy.iot.mqtt.tutorial.step06a.timer.TickTimer;
-import ch.quantasy.iot.mqtt.tutorial.step06a.timer.TickTimerCallback;
-import ch.quantasy.iot.mqtt.tutorial.step06a.timer.TickTimerParameters;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTCommunication;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTParameters;
+import ch.quantasy.iot.mqtt.timer.timer.TickTimer;
+import ch.quantasy.iot.mqtt.timer.timer.TickTimerCallback;
+import ch.quantasy.iot.mqtt.timer.timer.TickTimerParameters;
 import java.net.URI;
 import java.time.LocalDateTime;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;

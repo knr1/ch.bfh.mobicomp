@@ -5,15 +5,18 @@
  * The 'business-logic' sends the result via Callback
  * This way we have a Model-'View'-Presenter (MVP) Where the presenter (the service) is glueing together
  * the Model ('business-logic') and the 'View' (the MQTT-Communication)
+ * The service is promoting more status information to the status topic about the underlying 'business-logic'.
+ *
+ * This time, an agent is communicating with the service and controls it.
+ * This way we delve into the Service based Agent oriented programming
  */
-package ch.quantasy.iot.mqtt.tutorial.step03a.service;
+package ch.quantasy.iot.mqtt.timer.service;
 
-
-import ch.quantasy.iot.mqtt.tutorial.step03a.communication.MQTTCommunication;
-import ch.quantasy.iot.mqtt.tutorial.step03a.communication.MQTTParameters;
-import ch.quantasy.iot.mqtt.tutorial.step03a.timer.TickTimer;
-import ch.quantasy.iot.mqtt.tutorial.step03a.timer.TickTimerCallback;
-import ch.quantasy.iot.mqtt.tutorial.step03a.timer.TickTimerParameters;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTCommunication;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTParameters;
+import ch.quantasy.iot.mqtt.timer.timer.TickTimer;
+import ch.quantasy.iot.mqtt.timer.timer.TickTimerCallback;
+import ch.quantasy.iot.mqtt.timer.timer.TickTimerParameters;
 import java.net.URI;
 import java.time.LocalDateTime;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -25,25 +28,29 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  *
  * @author reto
  */
-public class TimerService implements MqttCallback, TickTimerCallback {
+public class ConsoleService implements MqttCallback {
 
-    public final static String CLIENT_ID="Tick_Tack";
-    
-    public final static String BASE_TOPIC = "TimerService";
+    public final static String CLIENT_ID = "Console";
+
+    public final static String BASE_TOPIC = "ConsoleService";
     public final static String STATUS_TOPIC = BASE_TOPIC + "/status";
     public final static String EVENT_TOPIC = BASE_TOPIC + "/event";
+    public final static String INTENT_TOPIC = BASE_TOPIC + "/intent";
 
     public final static String STATUS_TOPIC_CONNECTION = STATUS_TOPIC + "/connection";
-    public final static String STATUS_CONNECTION_OFFLINE="offline";
-    public final static String STATUS_CONNECTION_ONLINE="online";
-    
+    public final static String STATUS_CONNECTION_OFFLINE = "offline";
+    public final static String STATUS_CONNECTION_ONLINE = "online";
 
-    public static final String EVENT_TOPIC_TIME = EVENT_TOPIC+"/time";
+    public static final String INTENT_TOPIC_PRINT = INTENT_TOPIC + "/print";
+    public static final String TEXT = "/text";
+    public static final String INTENT_TOPIC_PRINT_TEXT = INTENT_TOPIC_PRINT + TEXT;
 
-    private final MQTTCommunication communication;
-    private final TickTimer tickTimer;
+    public static final String EVENT_TOPIC_PRINTED = EVENT_TOPIC + "/printed";
 
-    public TimerService() throws MqttException {
+    private MQTTCommunication communication;
+    private TickTimer tickTimer;
+
+    public ConsoleService() throws MqttException {
         communication = new MQTTCommunication();
         MQTTParameters parameters = new MQTTParameters();
         parameters.setClientID(CLIENT_ID);
@@ -56,13 +63,8 @@ public class TimerService implements MqttCallback, TickTimerCallback {
         parameters.setMqttCallback(this);
         communication.connect(parameters);
         communication.publishActualWill(STATUS_CONNECTION_ONLINE.getBytes());
-        communication.subscribe(BASE_TOPIC+"/#", 0);
 
-        tickTimer = new TickTimer();
-        TickTimerParameters tickTimerParameters = new TickTimerParameters();
-        tickTimerParameters.setPeriodInMilliSeconds(1000);
-        tickTimerParameters.setTimerCallback(this);
-        tickTimer.tick(tickTimerParameters);
+        communication.subscribe(INTENT_TOPIC_PRINT + "/#", 0);
 
     }
 
@@ -73,7 +75,15 @@ public class TimerService implements MqttCallback, TickTimerCallback {
 
     @Override
     public void messageArrived(String string, MqttMessage mm) throws Exception {
-        System.out.printf("Message has been delivered and is back again. Topic: %s, Message: %s \n", string, new String(mm.getPayload()));
+        if (string.startsWith(INTENT_TOPIC_PRINT) && string.endsWith(TEXT)) {
+            System.out.println(">>"+new String(mm.getPayload()));
+
+            MqttMessage eventMessage = new MqttMessage(mm.getPayload());
+            eventMessage.setQos(1);
+            eventMessage.setRetained(true);
+            communication.publish(EVENT_TOPIC_PRINTED, eventMessage);
+
+        }
     }
 
     @Override
@@ -81,17 +91,8 @@ public class TimerService implements MqttCallback, TickTimerCallback {
         System.out.println("Delivery is done.");
     }
 
-    @Override
-    public void tick(LocalDateTime result) {
-        MqttMessage message = new MqttMessage(result.toString().getBytes());
-        message.setQos(1);
-        message.setRetained(true);
-        this.communication.publish(EVENT_TOPIC_TIME, (message));
-    }
-    
     public static void main(String[] args) throws MqttException {
-        TimerService service=new TimerService();
-        
+        ConsoleService service = new ConsoleService();
     }
 
 }
