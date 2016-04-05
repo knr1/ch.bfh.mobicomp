@@ -48,7 +48,6 @@ public class ConsoleService implements MqttCallback {
     public static final String EVENT_TOPIC_PRINTED = EVENT_TOPIC + "/printed";
 
     private MQTTCommunication communication;
-    private TickTimer tickTimer;
 
     public ConsoleService() throws MqttException {
         communication = new MQTTCommunication();

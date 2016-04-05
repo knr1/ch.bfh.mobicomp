@@ -14,6 +14,19 @@
  * It is always done via an agent. Hence, the agent is processing the 'super-business case' by requesting and available services.
  * This allows parallel development (e.g. one person one service)
  * The important thing is the contract-description of the service.
+ *
+ * If there are more services, complexity will remain at the same level. (Or rise slightly)
+ * Usually a new service will enhance the capabilities of the overall system.
+ * Everyone is 'invited' to create a service. If it meets the requested needs, it will be used, otherwise it will be idle.
+ * The more the better (as a rule of thumb)
+ *
+ *
+ * If there are more agents, complexity will rise exponentially.
+ *
+ * As one can see in this example, agents may talk to each other implicitly via services.
+ * However, agents will interfear with each other as they do not know the other agent's abilities and desires.
+ * 
+ * Hence, the designers / developers that create agents must talk to eachother... The fewer the better (as a rule of thumb)
  */
 package ch.quantasy.iot.mqtt.timer.service;
 
