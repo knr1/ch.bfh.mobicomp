@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.mqtt.tutorial.step02a.timer;
+package ch.quantasy.iot.mqtt.timer.timer;
 
 import java.time.LocalDateTime;
 

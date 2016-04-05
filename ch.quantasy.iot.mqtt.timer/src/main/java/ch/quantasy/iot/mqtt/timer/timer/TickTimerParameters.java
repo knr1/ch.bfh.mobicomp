@@ -3,9 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.mqtt.tutorial.step06a.timer;
-
-
+package ch.quantasy.iot.mqtt.timer.timer;
 
 /**
  *
@@ -13,20 +11,10 @@ package ch.quantasy.iot.mqtt.tutorial.step06a.timer;
  */
 public class TickTimerParameters {
 
-    private TickTimerCallback timerCallback;
     private int periodInMilliSeconds;
     private boolean inUse;
 
-    public TickTimerCallback getTimerCallback() {
-        return timerCallback;
-    }
-
-    public void setTimerCallback(TickTimerCallback timerCallback) {
-        if (isInUse()) {
-            return;
-        }
-        this.timerCallback = timerCallback;
-    }
+    
 
     public int getPeriodInMilliSeconds() {
         return periodInMilliSeconds;
@@ -40,7 +28,7 @@ public class TickTimerParameters {
     }
 
     public boolean isValid() {
-        return this.timerCallback != null && periodInMilliSeconds > 10;
+        return  periodInMilliSeconds > 10;
     }
 
     @Override
