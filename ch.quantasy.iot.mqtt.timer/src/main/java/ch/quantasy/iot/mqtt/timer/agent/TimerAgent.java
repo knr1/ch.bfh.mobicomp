@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.mqtt.tutorial.step05a.agent;
+package ch.quantasy.iot.mqtt.timer.agent;
 
-import ch.quantasy.iot.mqtt.tutorial.step05a.communication.MQTTCommunication;
-import ch.quantasy.iot.mqtt.tutorial.step05a.communication.MQTTParameters;
-import ch.quantasy.iot.mqtt.tutorial.step05a.service.TimerService;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTCommunication;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTParameters;
+import ch.quantasy.iot.mqtt.timer.service.TimerService;
 import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -8,20 +8,15 @@
  * The service is promoting more status information to the status topic about the underlying 'business-logic'.
  *
  * This time, an agent is communicating with the service and controls it.
- * This way we delve into the "service based agent oriented" programming
- * 
- * There are now two services ready. However, services do not have a direct communication with each other
- * It is always done via an agent. Hence, the agent is processing the 'super-business case' by requesting and available services.
- * This allows parallel development (e.g. one person one service)
- * The important thing is the contract-description of the service.
+ * This way we delve into the Service based Agent oriented programming
  */
-package ch.quantasy.iot.mqtt.tutorial.step06a.service;
+package ch.quantasy.iot.mqtt.timer.service;
 
-import ch.quantasy.iot.mqtt.tutorial.step06a.communication.MQTTCommunication;
-import ch.quantasy.iot.mqtt.tutorial.step06a.communication.MQTTParameters;
-import ch.quantasy.iot.mqtt.tutorial.step06a.timer.TickTimer;
-import ch.quantasy.iot.mqtt.tutorial.step06a.timer.TickTimerCallback;
-import ch.quantasy.iot.mqtt.tutorial.step06a.timer.TickTimerParameters;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTCommunication;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTParameters;
+import ch.quantasy.iot.mqtt.timer.timer.TickTimer;
+import ch.quantasy.iot.mqtt.timer.timer.TickTimerCallback;
+import ch.quantasy.iot.mqtt.timer.timer.TickTimerParameters;
 import java.net.URI;
 import java.time.LocalDateTime;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
