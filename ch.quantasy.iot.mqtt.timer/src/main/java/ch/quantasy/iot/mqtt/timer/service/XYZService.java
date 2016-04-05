@@ -2,11 +2,11 @@
  * Within this step, a service is using the MQTTCommunication.
  * It shows primitive state information about online / offline via last will topic
  */
-package ch.quantasy.iot.mqtt.tutorial.step01a.service;
+package ch.quantasy.iot.mqtt.timer.service;
 
 
-import ch.quantasy.iot.mqtt.tutorial.step01a.communication.MQTTCommunication;
-import ch.quantasy.iot.mqtt.tutorial.step01a.communication.MQTTParameters;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTCommunication;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTParameters;
 
 import java.net.URI;
 import java.time.LocalDateTime;
