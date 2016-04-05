@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.mqtt.tutorial.step05a.timer;
+package ch.quantasy.iot.mqtt.timer.timer;
 
 import java.time.LocalDateTime;
 
@@ -13,48 +13,28 @@ import java.time.LocalDateTime;
  */
 public class TickTimer {
 
-    private Thread thread;
-    private TickTimerParameters parameters;
-    private boolean isPaused;
-
+private  Thread thread;
+private TickTimerParameters parameters;
     public TickTimer() {
         thread = new Thread(new TimerRunner());
-
+       
     }
-
-    public void tick(TickTimerParameters parameters) {
+    
+    public void tick(TickTimerParameters parameters){
         if (parameters == null || !parameters.isValid()) {
             return;
         }
         parameters.setInUse(true);
-        this.parameters = parameters;
+        this.parameters=parameters;
         thread.start();
     }
 
-    public synchronized void setPause(boolean pause) {
-        if (this.isPaused == pause) {
-            return;
-        }
-        this.isPaused = pause;
-        this.notifyAll();
-        thread.interrupt();
-    }
-
-    public synchronized boolean isPaused() {
-        return isPaused;
-    }
-    
     class TimerRunner implements Runnable {
 
         @Override
         public void run() {
             while (true) {
                 try {
-                    synchronized (this) {
-                        while (isPaused) {
-                            this.wait();
-                        }
-                    }
                     Thread.sleep(parameters.getPeriodInMilliSeconds());
                     parameters.getTimerCallback().tick(LocalDateTime.now());
                 } catch (InterruptedException ex) {

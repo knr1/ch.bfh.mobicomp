@@ -6,14 +6,14 @@
  * This way we have a Model-'View'-Presenter (MVP) Where the presenter (the service) is glueing together
  * the Model ('business-logic') and the 'View' (the MQTT-Communication)
  */
-package ch.quantasy.iot.mqtt.tutorial.step03a.service;
+package ch.quantasy.iot.mqtt.timer.service;
 
 
-import ch.quantasy.iot.mqtt.tutorial.step03a.communication.MQTTCommunication;
-import ch.quantasy.iot.mqtt.tutorial.step03a.communication.MQTTParameters;
-import ch.quantasy.iot.mqtt.tutorial.step03a.timer.TickTimer;
-import ch.quantasy.iot.mqtt.tutorial.step03a.timer.TickTimerCallback;
-import ch.quantasy.iot.mqtt.tutorial.step03a.timer.TickTimerParameters;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTCommunication;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTParameters;
+import ch.quantasy.iot.mqtt.timer.timer.TickTimer;
+import ch.quantasy.iot.mqtt.timer.timer.TickTimerCallback;
+import ch.quantasy.iot.mqtt.timer.timer.TickTimerParameters;
 import java.net.URI;
 import java.time.LocalDateTime;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
