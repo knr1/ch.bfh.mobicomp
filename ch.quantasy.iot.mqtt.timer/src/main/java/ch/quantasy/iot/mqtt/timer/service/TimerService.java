@@ -5,15 +5,16 @@
  * The 'business-logic' sends the result via Callback
  * This way we have a Model-'View'-Presenter (MVP) Where the presenter (the service) is glueing together
  * the Model ('business-logic') and the 'View' (the MQTT-Communication)
+ * The service is promoting more status information to the status topic about the underlying 'business-logic'.
  */
-package ch.quantasy.iot.mqtt.tutorial.step03a.service;
+package ch.quantasy.iot.mqtt.timer.service;
 
 
-import ch.quantasy.iot.mqtt.tutorial.step03a.communication.MQTTCommunication;
-import ch.quantasy.iot.mqtt.tutorial.step03a.communication.MQTTParameters;
-import ch.quantasy.iot.mqtt.tutorial.step03a.timer.TickTimer;
-import ch.quantasy.iot.mqtt.tutorial.step03a.timer.TickTimerCallback;
-import ch.quantasy.iot.mqtt.tutorial.step03a.timer.TickTimerParameters;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTCommunication;
+import ch.quantasy.iot.mqtt.timer.communication.MQTTParameters;
+import ch.quantasy.iot.mqtt.timer.timer.TickTimer;
+import ch.quantasy.iot.mqtt.timer.timer.TickTimerCallback;
+import ch.quantasy.iot.mqtt.timer.timer.TickTimerParameters;
 import java.net.URI;
 import java.time.LocalDateTime;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -33,10 +34,16 @@ public class TimerService implements MqttCallback, TickTimerCallback {
     public final static String STATUS_TOPIC = BASE_TOPIC + "/status";
     public final static String EVENT_TOPIC = BASE_TOPIC + "/event";
 
+    public final static String STATUS_TOPIC_PERIOD = STATUS_TOPIC + "/period";
     public final static String STATUS_TOPIC_CONNECTION = STATUS_TOPIC + "/connection";
     public final static String STATUS_CONNECTION_OFFLINE="offline";
     public final static String STATUS_CONNECTION_ONLINE="online";
     
+    
+    public final static String STATUS_TOPIC_STATE = STATUS_TOPIC + "/state";
+    public final static String STATE_RUNNING = "running";
+    public final static String STATE_PAUSE = "pause";
+
 
     public static final String EVENT_TOPIC_TIME = EVENT_TOPIC+"/time";
 

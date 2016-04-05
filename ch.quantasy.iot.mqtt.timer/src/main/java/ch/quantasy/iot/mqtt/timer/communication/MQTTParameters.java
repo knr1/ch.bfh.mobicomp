@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.quantasy.iot.mqtt.tutorial.step02a.communication;
+package ch.quantasy.iot.mqtt.timer.communication;
 
 import java.net.URI;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
